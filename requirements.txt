@@ -6,6 +6,16 @@ pyarrow>=15.0.0
 exchange-calendars>=4.5.0
 duckdb>=1.0.0
 pandas-ta-classic>=0.3.0
+scikit-learn>=1.8.0
+scipy>=1.17.0
+lightgbm>=4.6.0
+mlflow>=3.1.4
+shap>=0.52.0
+joblib>=1.4.0
+optuna>=4.0.0
+xgboost>=3.0.0
+catboost>=1.2.0
+dvc>=3.0.0
 
 # 可选依赖（用于高级功能）
 # matplotlib>=3.7.0  # 如需本地生成图表

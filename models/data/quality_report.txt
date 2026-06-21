@@ -1,0 +1,26 @@
+======================================================================
+QUALITY REPORT — 2026-06-21T23:24:23
+store_root   : /Users/fuziqiang/Desktop/stock-analysis/models/data
+universe_key : hs100
+======================================================================
+
+[INFO ] universe: Membership rows: 100, open (out_date=NULL): 100
+[WARN ] universe: SURVIVORSHIP BIAS: universe uses current constituents only. Unknown universe — cannot retrieve survivorship note.
+[INFO ] calendar: Source: akshare_sina | Range: 2023-01-01 → 2027-06-21 | Trading days: 969 / 1633
+[INFO ] calendar: Accuracy note: Trading calendar source: exchange_calendars (XSHG). Accuracy is ~99%+. Known limitation: occasional Spring Festival make-up trading days (补班) may be misclassified by ±1 day. For highest accuracy, run in an environment where AKShare / Sina Finance is reachable so the official SSE calendar can be used instead.
+[INFO ] calendar: Weekend invariant: no weekend is a trading day. ✓
+[INFO ] ohlcv: OHLCV files found: 100 symbols
+[INFO ] ohlcv: All universe symbols have OHLCV data. ✓
+[INFO ] ohlcv: Total rows: 83,531 | Date range: 2023-01-03 00:00:00 → 2026-06-18 00:00:00
+[INFO ] ohlcv: No duplicate (symbol, date) pairs. ✓
+[INFO ] ohlcv: No NULL values in OHLCV price/volume columns. ✓
+[INFO ] ohlcv: Price/volume sanity checks passed. ✓
+[INFO ] ohlcv: No calendar gaps in 10 sampled symbols. ✓
+[WARN ] catalog: Catalog Parquet not found — no collection run has completed yet.
+[INFO ] fundamentals: Fundamentals files: 63 symbols
+[ERROR] fundamentals: 1 rows have announce_date < period_end — impossible: a company cannot announce before the period ends. Data is corrupt; check normalisation logic.
+
+----------------------------------------------------------------------
+Total: 15 findings  |  1 errors  |  2 warnings
+FAIL — fix errors before training
+======================================================================

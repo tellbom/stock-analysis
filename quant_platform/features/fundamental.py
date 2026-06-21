@@ -96,6 +96,14 @@ def build_fundamental_features(
         if fund_df.empty:
             continue
 
+        metric_cols = [c for c in ("revenue", "net_profit", "eps", "roe") if c in fund_df.columns]
+        if metric_cols:
+            fund_df = fund_df[fund_df[metric_cols].notna().any(axis=1)].copy()
+        else:
+            fund_df = fund_df.iloc[0:0].copy()
+        if fund_df.empty:
+            continue
+
         fund_df["announce_date"] = pd.to_datetime(fund_df["announce_date"]).dt.date
         fund_df = fund_df.sort_values("announce_date").reset_index(drop=True)
 

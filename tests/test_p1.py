@@ -315,6 +315,50 @@ def test_fundamental_pit_join_excludes_future_announcements():
     print("  [OK] T1.4 PIT join: future announcements excluded, same-day and after included")
 
 
+def test_fundamental_features_ignore_forecast_only_rows():
+    """Forecast-only yjyg rows must not overwrite latest formal metrics."""
+    from quant_platform.features.fundamental import build_fundamental_features
+
+    with tempfile.TemporaryDirectory() as tmp:
+        fund_dir = Path(tmp) / "silver" / "fundamentals"
+        fund_dir.mkdir(parents=True, exist_ok=True)
+        fund_df = pd.DataFrame([
+            {
+                "symbol": "600519",
+                "announce_date": "2022-08-30",
+                "period_end": "2022-06-30",
+                "period_type": "H1",
+                "source": "yjkb_em",
+                "revenue": 5_000_000.0,
+                "net_profit": 1_000_000.0,
+                "eps": 2.5,
+                "roe": 15.0,
+            },
+            {
+                "symbol": "600519",
+                "announce_date": "2022-09-10",
+                "period_end": "2022-09-30",
+                "period_type": "Q3",
+                "source": "yjyg_em",
+                "forecast_metric": "归属于上市公司股东的净利润",
+            },
+        ])
+        fund_df.to_parquet(fund_dir / "600519.parquet", index=False)
+
+        panel = pd.DataFrame({
+            "symbol": ["600519"],
+            "date": [dt.date(2022, 9, 15)],
+            "close": [100.0],
+            "volume": [1e6],
+        })
+        result = build_fundamental_features(panel, store_root=tmp)
+
+        row = result.iloc[0]
+        assert row["fund_revenue"] == 5_000_000.0
+        assert row["fund_announce_date"] == dt.date(2022, 8, 30)
+    print("  [OK] T1.4 fundamental: forecast-only rows do not overwrite formal metrics")
+
+
 def test_fundamental_no_data_returns_nan():
     """If no fundamentals file exists, all fund_* columns are NaN."""
     from quant_platform.features.fundamental import build_fundamental_features

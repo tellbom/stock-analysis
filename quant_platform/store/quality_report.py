@@ -501,9 +501,10 @@ def check_fundamentals(
 
     symbols = sample_symbols or [p.stem for p in parquet_files[:10]]
     heuristic_count = 0
-    pit_violations  = 0
-    invalid_dates   = 0
-    total_rows      = 0
+    pit_violations = 0
+    invalid_dates = 0
+    forecast_pre_period_rows = 0
+    total_rows = 0
 
     for symbol in symbols:
         path = fund_d / f"{symbol}.parquet"
@@ -518,19 +519,27 @@ def check_fundamentals(
                 df["source"].astype(str).str.contains("heuristic").sum()
             )
 
-        # PIT invariant: announce_date must not precede period_end
-        # (a company can't announce before the period closes)
+        # Formal announcements must not precede period_end. Performance
+        # forecasts (yjyg_em) can be disclosed before the period closes, but
+        # still use announce_date as the PIT as-of key.
         if "announce_date" in df.columns and "period_end" in df.columns:
             ad = pd.to_datetime(df["announce_date"], errors="coerce")
             pe = pd.to_datetime(df["period_end"], errors="coerce")
             mask_valid = ad.notna() & pe.notna()
             invalid_dates += int((~mask_valid).sum())
-            violations = int((ad[mask_valid] < pe[mask_valid]).sum())
-            pit_violations += violations
+            early = ad[mask_valid] < pe[mask_valid]
+            if "source" in df.columns:
+                source = df.loc[mask_valid, "source"].astype(str)
+                forecast_early = early & source.eq("yjyg_em")
+                forecast_pre_period_rows += int(forecast_early.sum())
+                pit_violations += int((early & ~source.eq("yjyg_em")).sum())
+            else:
+                pit_violations += int(early.sum())
 
     report.stats["fundamentals_total_rows_sampled"] = total_rows
     report.stats["fundamentals_heuristic_rows"] = heuristic_count
     report.stats["fundamentals_invalid_date_rows"] = invalid_dates
+    report.stats["fundamentals_forecast_pre_period_rows"] = forecast_pre_period_rows
 
     if heuristic_count > 0:
         report.add("WARN", check,
@@ -550,9 +559,14 @@ def check_fundamentals(
                    "impossible: a company cannot announce before the period ends. "
                    "Data is corrupt; check normalisation logic.")
     elif invalid_dates == 0 and total_rows > 0:
+        if forecast_pre_period_rows > 0:
+            report.add("INFO", check,
+                       f"{forecast_pre_period_rows} yjyg_em forecast rows have "
+                       "announce_date < period_end; this is valid forecast timing "
+                       "and still uses exact announce_date for PIT joins.")
         report.add("INFO", check,
                    f"PIT invariant (announce_date >= period_end) holds for all "
-                   f"{total_rows} sampled rows. ✓")
+                   f"non-forecast sampled rows. ✓")
 
 
 # ---------------------------------------------------------------------------

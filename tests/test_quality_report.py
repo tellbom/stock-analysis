@@ -313,6 +313,31 @@ def test_check_fundamentals_pit_violation():
     print("  [OK] check_fundamentals: ERROR for announce_date < period_end (PIT violation)")
 
 
+def test_check_fundamentals_yjyg_pre_period_allowed():
+    """yjyg_em forecast rows may be announced before period_end."""
+    from quant_platform.store.quality_report import QualityReport, check_fundamentals
+
+    with tempfile.TemporaryDirectory() as tmp:
+        fund_dir = Path(tmp) / "silver" / "fundamentals"
+        fund_dir.mkdir(parents=True, exist_ok=True)
+        df = pd.DataFrame([{
+            "symbol": "600519",
+            "announce_date": "2023-03-20",
+            "period_end": "2023-03-31",
+            "period_type": "Q1",
+            "source": "yjyg_em",
+            "forecast_metric": "归属于上市公司股东的净利润",
+        }])
+        df.to_parquet(fund_dir / "600519.parquet", index=False)
+
+        report = QualityReport()
+        check_fundamentals(report, Path(tmp), sample_symbols=["600519"])
+        errors = [f for f in report.findings if f.severity == "ERROR"]
+        assert not errors, f"yjyg_em forecast timing should not be an ERROR: {report.findings}"
+        assert report.stats["fundamentals_forecast_pre_period_rows"] == 1
+    print("  [OK] check_fundamentals: yjyg_em pre-period forecast timing is allowed")
+
+
 def test_check_fundamentals_invalid_dates():
     """check_fundamentals emits ERROR when PIT dates are empty or unparsable."""
     from quant_platform.store.quality_report import QualityReport, check_fundamentals

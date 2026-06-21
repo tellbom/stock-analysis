@@ -1,0 +1,3 @@
+has_effective_dates=False
+index_code=000903
+index_name=CSI A100
