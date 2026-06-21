@@ -115,3 +115,41 @@ def init_lake(store_root: Path | str) -> None:
         "catalog",
     ):
         (root / sub).mkdir(parents=True, exist_ok=True)
+
+
+# ---------------------------------------------------------------------------
+# Features (T1.1-T1.5)
+# ---------------------------------------------------------------------------
+
+def features_root(store_root: Path | str) -> Path:
+    return Path(store_root) / "features"
+
+
+def feature_set_dir(store_root: Path | str, feature_set_id: str) -> Path:
+    """Directory for one versioned feature set: features/<feature_set_id>/."""
+    return features_root(store_root) / feature_set_id
+
+
+def feature_path(store_root: Path | str, feature_set_id: str, symbol: str) -> Path:
+    return feature_set_dir(store_root, feature_set_id) / f"{symbol}.parquet"
+
+
+def feature_spec_path(store_root: Path | str) -> Path:
+    """Registry of all feature-set specs."""
+    return features_root(store_root) / "feature_specs.parquet"
+
+
+# ---------------------------------------------------------------------------
+# Labels (T1.6)
+# ---------------------------------------------------------------------------
+
+def labels_root(store_root: Path | str) -> Path:
+    return Path(store_root) / "labels"
+
+
+def label_dir(store_root: Path | str, label_name: str) -> Path:
+    return labels_root(store_root) / label_name
+
+
+def label_path(store_root: Path | str, label_name: str, symbol: str) -> Path:
+    return label_dir(store_root, label_name) / f"{symbol}.parquet"
