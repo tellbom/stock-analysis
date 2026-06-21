@@ -122,8 +122,22 @@ def enforce_fundamentals(df: pd.DataFrame, symbol: str) -> pd.DataFrame:
             "Do NOT join on period_end alone."
         )
 
-    df["symbol"]        = symbol
-    df["announce_date"] = pd.to_datetime(df["announce_date"]).dt.date
-    df["period_end"]    = pd.to_datetime(df["period_end"]).dt.date
+    df["symbol"] = symbol
+    announce_date = pd.to_datetime(df["announce_date"], errors="coerce")
+    period_end    = pd.to_datetime(df["period_end"], errors="coerce")
+    invalid = {
+        "announce_date": int(announce_date.isna().sum()),
+        "period_end":    int(period_end.isna().sum()),
+    }
+    invalid = {k: v for k, v in invalid.items() if v > 0}
+    if invalid:
+        raise ValueError(
+            f"Fundamentals schema violation for {symbol!r}: invalid PIT dates {invalid}. "
+            "Both announce_date and period_end must be real dates; no estimated or empty "
+            "dates may be written."
+        )
+
+    df["announce_date"] = announce_date.dt.date
+    df["period_end"]    = period_end.dt.date
     df = df.sort_values("announce_date").reset_index(drop=True)
     return df

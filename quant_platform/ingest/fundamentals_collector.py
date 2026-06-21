@@ -27,16 +27,11 @@ Schema (silver/fundamentals/<symbol>.parquet):
 
 Fetch strategy
 --------------
-Primary:   ``stock_yjyg_em`` (业绩预告) — has both 公告日期 + 报告日期
-           ``stock_yjkb_em`` (业绩快报) — has both 公告日期 + 报告日期
-           These two endpoints provide early earnings disclosures with the
-           exact announce_date we need.
-
-Secondary: ``stock_financial_abstract`` (财务摘要, Sina) — has period data
-           but NO announce_date.  When this is the only source available,
-           we apply a **conservative delay heuristic**: announce_date is
-           estimated as period_end + 45 days (A-share disclosure deadline
-           for quarterly reports).  This is documented in the quality report.
+``stock_yjyg_em`` (业绩预告) and ``stock_yjkb_em`` (业绩快报) are collected
+by explicit report-period request date (e.g. ``date="20251231"``) and exact
+``公告日期`` from the endpoint response.  Endpoints without exact
+``announce_date`` are intentionally excluded; no estimated disclosure dates
+are written.
 
 All endpoints return 403 in the sandbox.  The collector fails loudly with
 ``FundamentalsFetchError``; tests use monkeypatching.
@@ -45,8 +40,6 @@ Network failure handling
 ------------------------
 - Fail loudly: raises ``FundamentalsFetchError`` when all endpoints fail.
 - No silent fallback or estimated data is written to the Parquet.
-- The heuristic announce_date (period_end + 45d) is ONLY used when data
-  actually arrives but lacks an announce_date column — never fabricated.
 """
 
 from __future__ import annotations
@@ -62,11 +55,6 @@ from quant_platform.store.lake import fundamentals_path, fundamentals_dir, init_
 from quant_platform.store.schemas import enforce_fundamentals
 
 logger = get_logger(__name__)
-
-# Conservative heuristic: A-share quarterly report disclosure deadline
-# (45 days after period end).  Only used when announce_date is unavailable
-# in the raw data — never applied to fabricate data.
-_ANNOUNCE_HEURISTIC_DAYS = 45
 
 # Reporting period end dates for standard quarters
 _PERIOD_ENDS = {
@@ -85,26 +73,38 @@ class FundamentalsFetchError(RuntimeError):
 # Column normalisation helpers
 # ---------------------------------------------------------------------------
 
-def _normalise_yjyg(df: pd.DataFrame, symbol: str) -> pd.DataFrame:
+def _normalise_yjyg(
+    df: pd.DataFrame,
+    symbol: str,
+    period_end: str | dt.date | None = None,
+) -> pd.DataFrame:
     """
     Normalise stock_yjyg_em (业绩预告) output.
     Returns columns: symbol, announce_date, period_end, period_type, source,
-                     net_profit_low, net_profit_high, yoy_low, yoy_high.
+                     forecast_metric, forecast_value, forecast_change_pct.
     """
     df = df.copy()
     rename = {
         "公告日期": "announce_date",
         "报告日期": "period_end",
+        "预测指标": "forecast_metric",
+        "业绩变动": "forecast_text",
+        "预测数值": "forecast_value",
+        "业绩变动幅度": "forecast_change_pct",
+        "业绩变动原因": "forecast_reason",
         "净利润下限":  "net_profit_low",
         "净利润上限":  "net_profit_high",
         "同比增长下限": "yoy_low",
         "同比增长上限": "yoy_high",
         "预告类型":   "forecast_type",
+        "上年同期值": "prior_value",
     }
     df = df.rename(columns={k: v for k, v in rename.items() if k in df.columns})
 
     df["symbol"] = symbol
     df["source"] = "yjyg_em"
+    if period_end is not None:
+        df["period_end"] = _parse_period_end(period_end)
 
     for col in ("announce_date", "period_end"):
         if col in df.columns:
@@ -116,7 +116,11 @@ def _normalise_yjyg(df: pd.DataFrame, symbol: str) -> pd.DataFrame:
     return df
 
 
-def _normalise_yjkb(df: pd.DataFrame, symbol: str) -> pd.DataFrame:
+def _normalise_yjkb(
+    df: pd.DataFrame,
+    symbol: str,
+    period_end: str | dt.date | None = None,
+) -> pd.DataFrame:
     """
     Normalise stock_yjkb_em (业绩快报) output.
     Returns columns: symbol, announce_date, period_end, period_type, source,
@@ -126,61 +130,26 @@ def _normalise_yjkb(df: pd.DataFrame, symbol: str) -> pd.DataFrame:
     rename = {
         "公告日期": "announce_date",
         "报告日期": "period_end",
-        "营业收入":  "revenue",
+        "营业收入": "revenue",
+        "营业收入-营业收入": "revenue",
         "归母净利润": "net_profit",
-        "每股收益":  "eps",
+        "净利润-净利润": "net_profit",
+        "每股收益": "eps",
         "净资产收益率": "roe",
+        "每股净资产": "nav_per_share",
+        "所处行业": "industry",
     }
     df = df.rename(columns={k: v for k, v in rename.items() if k in df.columns})
 
     df["symbol"] = symbol
     df["source"] = "yjkb_em"
+    if period_end is not None:
+        df["period_end"] = _parse_period_end(period_end)
 
     for col in ("announce_date", "period_end"):
         if col in df.columns:
             df[col] = pd.to_datetime(df[col], errors="coerce").dt.date
 
-    if "period_end" in df.columns:
-        df["period_type"] = df["period_end"].apply(_infer_period_type)
-
-    return df
-
-
-def _normalise_abstract(df: pd.DataFrame, symbol: str) -> pd.DataFrame:
-    """
-    Normalise stock_financial_abstract (财务摘要, Sina) output.
-
-    This endpoint provides ONLY period_end, not announce_date.
-    We apply the conservative +45-day heuristic and flag it in the 'source'
-    column so quality reports can identify heuristic-dated rows.
-    """
-    df = df.copy()
-    # Sina abstract: first column is typically 报告期 or similar
-    date_col = next(
-        (c for c in df.columns
-         if any(k in c for k in ("报告期", "日期", "date", "Date", "period"))),
-        df.columns[0] if len(df.columns) > 0 else None,
-    )
-    if date_col:
-        df = df.rename(columns={date_col: "period_end"})
-        df["period_end"] = pd.to_datetime(df["period_end"], errors="coerce").dt.date
-        # Heuristic announce_date — documented, never silent
-        df["announce_date"] = df["period_end"].apply(
-            lambda d: d + dt.timedelta(days=_ANNOUNCE_HEURISTIC_DAYS)
-            if pd.notna(d) and d is not None else None
-        )
-        logger.warning(
-            "%s: announce_date estimated as period_end + %d days (heuristic) "
-            "because stock_financial_abstract does not expose actual disclosure dates. "
-            "Features using these rows may have minor lookahead bias of up to %d days.",
-            symbol, _ANNOUNCE_HEURISTIC_DAYS, _ANNOUNCE_HEURISTIC_DAYS,
-        )
-    else:
-        df["period_end"]    = None
-        df["announce_date"] = None
-
-    df["symbol"] = symbol
-    df["source"] = "financial_abstract_sina_heuristic"
     if "period_end" in df.columns:
         df["period_type"] = df["period_end"].apply(_infer_period_type)
 
@@ -193,6 +162,16 @@ def _infer_period_type(period_end: dt.date | None) -> str:
         return "unknown"
     m = period_end.month
     return {3: "Q1", 6: "H1", 9: "Q3", 12: "annual"}.get(m, "unknown")
+
+
+def _parse_period_end(value: str | dt.date) -> dt.date:
+    """Parse the report-period date passed to AKShare, e.g. 20251231."""
+    parsed = pd.to_datetime(value, format="%Y%m%d", errors="coerce")
+    if pd.isna(parsed):
+        parsed = pd.to_datetime(value, errors="coerce")
+    if pd.isna(parsed):
+        raise ValueError(f"Invalid report period date: {value!r}")
+    return parsed.date()
 
 
 # ---------------------------------------------------------------------------
@@ -226,7 +205,7 @@ def _fetch_yjyg(symbol: str, years: int) -> pd.DataFrame | None:
                 if code_col:
                     df = df[df[code_col].astype(str).str.strip().str.zfill(6) == symbol]
                 if not df.empty:
-                    dfs.append(_normalise_yjyg(df, symbol))
+                    dfs.append(_normalise_yjyg(df, symbol, period_end=date_str))
     return pd.concat(dfs, ignore_index=True) if dfs else None
 
 
@@ -256,26 +235,8 @@ def _fetch_yjkb(symbol: str, years: int) -> pd.DataFrame | None:
                 if code_col:
                     df = df[df[code_col].astype(str).str.strip().str.zfill(6) == symbol]
                 if not df.empty:
-                    dfs.append(_normalise_yjkb(df, symbol))
+                    dfs.append(_normalise_yjkb(df, symbol, period_end=date_str))
     return pd.concat(dfs, ignore_index=True) if dfs else None
-
-
-def _fetch_abstract(symbol: str) -> pd.DataFrame | None:
-    """Fetch 财务摘要 (Sina) — period_end only, announce_date is heuristic."""
-    try:
-        import akshare as ak
-    except ImportError:
-        return None
-
-    df = safe_call(
-        ak.stock_financial_abstract,
-        symbol=symbol,
-        label=f"financial_abstract {symbol}",
-        retries=2,
-    )
-    if df is None or df.empty:
-        return None
-    return _normalise_abstract(df, symbol)
 
 
 # ---------------------------------------------------------------------------
@@ -303,9 +264,9 @@ class FundamentalsCollector:
         """
         Fetch fundamentals for *symbol* and write to Parquet.
 
-        Tries endpoints in order; merges results across sources to maximise
-        announce_date coverage.  Raises ``FundamentalsFetchError`` if ALL
-        endpoints fail — never writes fabricated data.
+        Merges only sources with exact announce_date and report-period
+        semantics.  Raises ``FundamentalsFetchError`` if all exact sources
+        fail — never writes fabricated or estimated data.
 
         Returns the stored DataFrame.
         """
@@ -322,13 +283,6 @@ class FundamentalsCollector:
         if df_kb is not None and not df_kb.empty:
             frames.append(df_kb)
             logger.info("%s: yjkb_em → %d rows", symbol, len(df_kb))
-
-        # --- Priority 3: abstract (heuristic announce_date) ---
-        df_abs = _fetch_abstract(symbol)
-        if df_abs is not None and not df_abs.empty:
-            frames.append(df_abs)
-            logger.info("%s: financial_abstract → %d rows (heuristic announce_date)",
-                        symbol, len(df_abs))
 
         if not frames:
             raise FundamentalsFetchError(

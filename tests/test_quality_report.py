@@ -313,6 +313,31 @@ def test_check_fundamentals_pit_violation():
     print("  [OK] check_fundamentals: ERROR for announce_date < period_end (PIT violation)")
 
 
+def test_check_fundamentals_invalid_dates():
+    """check_fundamentals emits ERROR when PIT dates are empty or unparsable."""
+    from quant_platform.store.quality_report import QualityReport, check_fundamentals
+
+    with tempfile.TemporaryDirectory() as tmp:
+        fund_dir = Path(tmp) / "silver" / "fundamentals"
+        fund_dir.mkdir(parents=True, exist_ok=True)
+        df = pd.DataFrame([{
+            "symbol":        "600519",
+            "announce_date": "2023-10-28",
+            "period_end":    None,
+            "period_type":   "Q3",
+            "source":        "test",
+        }])
+        df.to_parquet(fund_dir / "600519.parquet", index=False)
+
+        report = QualityReport()
+        check_fundamentals(report, Path(tmp), sample_symbols=["600519"])
+        errors = [f for f in report.findings
+                  if f.severity == "ERROR" and "unparsable" in f.message]
+        assert errors, f"Expected invalid date ERROR, findings: {report.findings}"
+        assert report.stats["fundamentals_invalid_date_rows"] == 1
+    print("  [OK] check_fundamentals: ERROR for empty/unparsable PIT dates")
+
+
 def test_check_fundamentals_no_files():
     """check_fundamentals emits INFO (not ERROR) when no files exist."""
     from quant_platform.store.quality_report import QualityReport, check_fundamentals
@@ -411,6 +436,7 @@ if __name__ == "__main__":
         test_check_catalog_failed_symbols,
         test_check_fundamentals_heuristic_warn,
         test_check_fundamentals_pit_violation,
+        test_check_fundamentals_invalid_dates,
         test_check_fundamentals_no_files,
         test_run_quality_report_clean_lake,
         test_run_quality_report_has_errors_flag,

@@ -86,9 +86,8 @@ FEATURE_DOCS: list[ColumnDoc] = [
         ),
         warmup=0,
         notes=(
-            "Rows sourced from stock_financial_abstract use a heuristic "
-            "announce_date (period_end + 45 days) which may introduce up to "
-            "45 days of lookahead bias.  Check fund_* source column."
+            "Fundamental rows are accepted only from sources with exact "
+            "announce_date semantics; estimated disclosure dates are not written."
         ),
     ),
     ColumnDoc(

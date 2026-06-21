@@ -485,7 +485,7 @@ def check_fundamentals(
     store_root: Path,
     sample_symbols: list[str] | None = None,
 ) -> None:
-    """Check PIT fundamentals: coverage, heuristic rows, date ordering."""
+    """Check PIT fundamentals: coverage, exact PIT dates, date ordering."""
     check = "fundamentals"
     fund_d = fundamentals_dir(store_root)
 
@@ -502,6 +502,7 @@ def check_fundamentals(
     symbols = sample_symbols or [p.stem for p in parquet_files[:10]]
     heuristic_count = 0
     pit_violations  = 0
+    invalid_dates   = 0
     total_rows      = 0
 
     for symbol in symbols:
@@ -520,14 +521,16 @@ def check_fundamentals(
         # PIT invariant: announce_date must not precede period_end
         # (a company can't announce before the period closes)
         if "announce_date" in df.columns and "period_end" in df.columns:
-            ad = pd.to_datetime(df["announce_date"]).dt.date
-            pe = pd.to_datetime(df["period_end"]).dt.date
+            ad = pd.to_datetime(df["announce_date"], errors="coerce")
+            pe = pd.to_datetime(df["period_end"], errors="coerce")
             mask_valid = ad.notna() & pe.notna()
+            invalid_dates += int((~mask_valid).sum())
             violations = int((ad[mask_valid] < pe[mask_valid]).sum())
             pit_violations += violations
 
     report.stats["fundamentals_total_rows_sampled"] = total_rows
     report.stats["fundamentals_heuristic_rows"] = heuristic_count
+    report.stats["fundamentals_invalid_date_rows"] = invalid_dates
 
     if heuristic_count > 0:
         report.add("WARN", check,
@@ -536,12 +539,17 @@ def check_fundamentals(
                    "These rows may introduce up to 45 days of lookahead bias. "
                    "Use yjyg_em / yjkb_em endpoints for exact announce_dates.")
 
+    if invalid_dates > 0:
+        report.add("ERROR", check,
+                   f"{invalid_dates} rows have empty or unparsable announce_date/period_end. "
+                   "PIT fundamentals require exact dates; rerun fundamentals collection.")
+
     if pit_violations > 0:
         report.add("ERROR", check,
                    f"{pit_violations} rows have announce_date < period_end — "
                    "impossible: a company cannot announce before the period ends. "
                    "Data is corrupt; check normalisation logic.")
-    elif total_rows > 0:
+    elif invalid_dates == 0 and total_rows > 0:
         report.add("INFO", check,
                    f"PIT invariant (announce_date >= period_end) holds for all "
                    f"{total_rows} sampled rows. ✓")

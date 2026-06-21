@@ -42,14 +42,6 @@ def _raw_yjkb(symbol: str, periods: list[tuple[str, str]]) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def _raw_abstract(symbol: str, periods: list[str]) -> pd.DataFrame:
-    """
-    Synthetic stock_financial_abstract output — has period only, no announce_date.
-    """
-    rows = [{"报告期": p, "营业收入": 1_000_000.0, "净利润": 100_000.0} for p in periods]
-    return pd.DataFrame(rows)
-
-
 # ---------------------------------------------------------------------------
 # Normalisation tests (pure unit tests, no I/O)
 # ---------------------------------------------------------------------------
@@ -90,23 +82,45 @@ def test_normalise_yjkb_infers_period_type():
     print("  [OK] _normalise_yjkb: infers Q1/H1/Q3/annual from period_end month")
 
 
-def test_normalise_abstract_applies_heuristic_announce_date():
-    """
-    _normalise_abstract uses period_end + 45 days for announce_date
-    and marks source as 'financial_abstract_sina_heuristic'.
-    """
-    from quant_platform.ingest.fundamentals_collector import (
-        _normalise_abstract, _ANNOUNCE_HEURISTIC_DAYS,
-    )
+def test_normalise_yjkb_maps_current_akshare_columns():
+    """_normalise_yjkb maps current Eastmoney column names to canonical metrics."""
+    from quant_platform.ingest.fundamentals_collector import _normalise_yjkb
 
-    raw = _raw_abstract("600519", ["2023-09-30"])
-    result = _normalise_abstract(raw, "600519")
+    raw = pd.DataFrame([{
+        "股票代码": "600519",
+        "公告日期": "2024-03-28",
+        "营业收入-营业收入": 2_000_000.0,
+        "净利润-净利润": 200_000.0,
+        "每股收益": 1.8,
+        "净资产收益率": 13.5,
+    }])
+    result = _normalise_yjkb(raw, "600519", period_end="20231231")
 
-    assert "announce_date" in result.columns
-    expected_announce = dt.date(2023, 9, 30) + dt.timedelta(days=_ANNOUNCE_HEURISTIC_DAYS)
-    assert result.iloc[0]["announce_date"] == expected_announce
-    assert "heuristic" in result.iloc[0]["source"]
-    print(f"  [OK] _normalise_abstract: announce_date = period_end + {_ANNOUNCE_HEURISTIC_DAYS}d (heuristic flagged in source)")
+    assert result.iloc[0]["period_end"] == dt.date(2023, 12, 31)
+    assert result.iloc[0]["revenue"] == 2_000_000.0
+    assert result.iloc[0]["net_profit"] == 200_000.0
+    assert result.iloc[0]["roe"] == 13.5
+    print("  [OK] _normalise_yjkb: maps current AKShare columns + explicit period_end")
+
+
+def test_normalise_yjyg_uses_request_period_end():
+    """_normalise_yjyg uses the explicit AKShare request date as period_end."""
+    from quant_platform.ingest.fundamentals_collector import _normalise_yjyg
+
+    raw = pd.DataFrame([{
+        "股票代码": "600519",
+        "公告日期": "2024-01-30",
+        "预测指标": "归属于上市公司股东的净利润",
+        "预测数值": 300_000.0,
+        "业绩变动幅度": 20.0,
+    }])
+    result = _normalise_yjyg(raw, "600519", period_end="20231231")
+
+    assert result.iloc[0]["period_end"] == dt.date(2023, 12, 31)
+    assert result.iloc[0]["period_type"] == "annual"
+    assert result.iloc[0]["forecast_metric"] == "归属于上市公司股东的净利润"
+    assert result.iloc[0]["forecast_value"] == 300_000.0
+    print("  [OK] _normalise_yjyg: uses request period_end + maps forecast fields")
 
 
 # ---------------------------------------------------------------------------
@@ -149,6 +163,24 @@ def test_enforce_fundamentals_rejects_missing_period_end():
     print("  [OK] enforce_fundamentals: missing period_end raises ValueError")
 
 
+def test_enforce_fundamentals_rejects_invalid_dates():
+    """enforce_fundamentals raises ValueError when PIT date values are empty."""
+    from quant_platform.store.schemas import enforce_fundamentals
+
+    df = pd.DataFrame({
+        "symbol":        ["600519"],
+        "announce_date": ["2023-10-28"],
+        "period_end":    [None],
+    })
+    try:
+        enforce_fundamentals(df, "600519")
+        assert False, "Should have raised ValueError"
+    except ValueError as e:
+        assert "invalid PIT dates" in str(e)
+        assert "period_end" in str(e)
+    print("  [OK] enforce_fundamentals: invalid PIT date values raise ValueError")
+
+
 # ---------------------------------------------------------------------------
 # FundamentalsCollector integration tests (monkeypatched)
 # ---------------------------------------------------------------------------
@@ -180,8 +212,6 @@ def test_collect_writes_parquet_with_pit_schema():
                   return_value=None),
             patch("quant_platform.ingest.fundamentals_collector._fetch_yjkb",
                   side_effect=_patch_yjkb_success),
-            patch("quant_platform.ingest.fundamentals_collector._fetch_abstract",
-                  return_value=None),
         ):
             collector = FundamentalsCollector(store_root=tmp, years=1)
             df = collector.collect("600519")
@@ -208,8 +238,6 @@ def test_collect_raises_when_all_endpoints_fail():
             patch("quant_platform.ingest.fundamentals_collector._fetch_yjyg",
                   return_value=None),
             patch("quant_platform.ingest.fundamentals_collector._fetch_yjkb",
-                  return_value=None),
-            patch("quant_platform.ingest.fundamentals_collector._fetch_abstract",
                   return_value=None),
         ):
             collector = FundamentalsCollector(store_root=tmp)
@@ -254,8 +282,6 @@ def test_collect_deduplicates_across_sources():
                   side_effect=fake_yjyg),
             patch("quant_platform.ingest.fundamentals_collector._fetch_yjkb",
                   side_effect=fake_yjkb),
-            patch("quant_platform.ingest.fundamentals_collector._fetch_abstract",
-                  return_value=None),
         ):
             collector = FundamentalsCollector(store_root=tmp, years=1)
             df = collector.collect("600519")
@@ -280,8 +306,6 @@ def test_collect_universe_continues_after_failure():
                   return_value=None),
             patch("quant_platform.ingest.fundamentals_collector._fetch_yjkb",
                   side_effect=fake_yjkb),
-            patch("quant_platform.ingest.fundamentals_collector._fetch_abstract",
-                  return_value=None),
         ):
             collector = FundamentalsCollector(store_root=tmp, years=1)
             results = collector.collect_universe(["600519", "BAD_SYM", "000858"])
@@ -319,8 +343,6 @@ def test_query_fundamentals_as_of_filters_correctly():
                   return_value=None),
             patch("quant_platform.ingest.fundamentals_collector._fetch_yjkb",
                   side_effect=fake_yjkb),
-            patch("quant_platform.ingest.fundamentals_collector._fetch_abstract",
-                  return_value=None),
         ):
             collector = FundamentalsCollector(store_root=tmp, years=1)
             collector.collect("600519")
@@ -357,8 +379,6 @@ def test_get_latest_fundamentals_as_of_returns_most_recent():
                   return_value=None),
             patch("quant_platform.ingest.fundamentals_collector._fetch_yjkb",
                   side_effect=fake_yjkb),
-            patch("quant_platform.ingest.fundamentals_collector._fetch_abstract",
-                  return_value=None),
         ):
             FundamentalsCollector(store_root=tmp, years=1).collect("600519")
 
@@ -390,7 +410,6 @@ def test_integration_live_network_attempt():
         with (
             patch("quant_platform.ingest.fundamentals_collector._fetch_yjyg", return_value=None),
             patch("quant_platform.ingest.fundamentals_collector._fetch_yjkb", return_value=None),
-            patch("quant_platform.ingest.fundamentals_collector._fetch_abstract", return_value=None),
         ):
             collector = FundamentalsCollector(store_root=tmp, years=1)
             try:
@@ -426,9 +445,11 @@ if __name__ == "__main__":
     tests = [
         test_normalise_yjkb_extracts_both_dates,
         test_normalise_yjkb_infers_period_type,
-        test_normalise_abstract_applies_heuristic_announce_date,
+        test_normalise_yjkb_maps_current_akshare_columns,
+        test_normalise_yjyg_uses_request_period_end,
         test_enforce_fundamentals_rejects_missing_announce_date,
         test_enforce_fundamentals_rejects_missing_period_end,
+        test_enforce_fundamentals_rejects_invalid_dates,
         test_collect_writes_parquet_with_pit_schema,
         test_collect_raises_when_all_endpoints_fail,
         test_collect_deduplicates_across_sources,
