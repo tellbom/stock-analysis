@@ -87,7 +87,7 @@ def fit_oof(
     label_col: str,
     n_splits: int = 5,
     horizon: int = 20,
-    embargo: int = 5,
+    embargo: int | None = None,
     lgbm_params: dict | None = None,
     seed: int = 42,
 ) -> OOFResult:
@@ -107,8 +107,11 @@ def fit_oof(
         Number of CV folds.
     horizon : int
         Label horizon in trading rows — used for purging.
-    embargo : int
-        Embargo gap in trading rows.
+    embargo : int | None
+        Embargo gap in trading rows.  Defaults to ``horizon`` (the minimum
+        required to prevent label-window overlap between adjacent folds).
+        Setting embargo < horizon leaves up to (horizon - embargo) days of
+        label overlap across the fold boundary, inflating apparent IC.
     lgbm_params : dict | None
         Override default LightGBM params.
 
@@ -117,6 +120,10 @@ def fit_oof(
     OOFResult
         Contains OOF predictions aligned to the input panel index.
     """
+    # Default embargo = horizon so adjacent fold label windows never overlap
+    if embargo is None:
+        embargo = horizon
+
     np.random.seed(seed)
     panel = panel.copy().reset_index(drop=True)
 

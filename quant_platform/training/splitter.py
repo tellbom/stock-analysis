@@ -40,20 +40,25 @@ class PurgedKFold:
     horizon : int
         Label look-ahead in trading rows (same as the label horizon h).
         Used to determine which training rows to purge.
-    embargo : int
-        Number of rows to exclude after the validation fold (embargo gap).
-        Default 5 (≈1 trading week).
+    embargo : int | None
+        Number of rows to exclude after the purge zone (embargo gap).
+        Defaults to ``horizon`` — the minimum required so that no training
+        sample's label window overlaps the validation fold's label window.
+        Setting embargo < horizon leaves (horizon - embargo) days of label
+        autocorrelation across the boundary, which inflates apparent IC.
+        Pass an explicit integer to override (e.g. embargo=0 to disable).
     """
 
     def __init__(
         self,
         n_splits: int = 5,
         horizon: int = 20,
-        embargo: int = 5,
+        embargo: int | None = None,
     ) -> None:
         self.n_splits  = n_splits
         self.horizon   = horizon
-        self.embargo   = embargo
+        # Default: embargo must be at least horizon to prevent label-window overlap
+        self.embargo   = embargo if embargo is not None else horizon
 
     def split(
         self,

@@ -3,8 +3,8 @@ features.cross_sectional
 ========================
 Cross-sectional feature builder (T1.3).
 
-Computes per-date rankings and z-scores across the universe using DuckDB
-window functions.  Cross-sectional features are computed *within a single date*
+Computes per-date rankings and z-scores across the universe using pandas
+groupby.  Cross-sectional features are computed *within a single date*
 so they carry no look-back leakage across time.
 
 Critical: the universe for each date comes from the point-in-time membership
@@ -15,12 +15,18 @@ applies window functions over it, so the universe is automatically whatever
 symbols are present for each date in that panel.
 
 Output columns (matching CROSS_SECTIONAL_SPECS):
-  cs_rank_close    : rank of close among universe on that date (0–1)
-  cs_rank_volume   : rank of volume
+  cs_rank_volume   : rank of volume among universe on that date (0–1)
   cs_rank_rsi_6    : rank of rsi_6
   cs_rank_roc_10   : rank of roc_10
-  cs_zscore_close  : z-score of close
+  cs_rank_ma_5     : rank of normalised ma_5 ratio (close/MA5-1)
   cs_zscore_volume : z-score of volume
+  cs_zscore_rsi_6  : z-score of rsi_6
+
+NOTE: cs_rank_close and cs_zscore_close are intentionally excluded.
+Raw close price in CNY is not cross-sectionally meaningful — a 500-CNY
+stock always ranks above a 5-CNY stock regardless of signal content.
+Use normalised features (ma_5 ratio, roc_10, rsi_6) for cross-sectional
+ranking instead.
 """
 
 from __future__ import annotations
@@ -41,8 +47,8 @@ def build_cross_sectional_features(panel: pd.DataFrame) -> pd.DataFrame:
     Parameters
     ----------
     panel : pd.DataFrame
-        Must contain columns: symbol, date, close, volume.
-        May also contain rsi_6, roc_10 (added by technical builder).
+        Must contain columns: symbol, date, volume.
+        May also contain rsi_6, roc_10, ma_5 (added by technical builder).
         One row per (symbol, date).
 
     Returns
@@ -54,15 +60,15 @@ def build_cross_sectional_features(panel: pd.DataFrame) -> pd.DataFrame:
     """
     df = panel.copy()
 
-    rank_targets  = [
-        ("cs_rank_close",   "close"),
+    rank_targets = [
         ("cs_rank_volume",  "volume"),
         ("cs_rank_rsi_6",   "rsi_6"),
         ("cs_rank_roc_10",  "roc_10"),
+        ("cs_rank_ma_5",    "ma_5"),    # normalised ratio, safe for cross-section
     ]
     zscore_targets = [
-        ("cs_zscore_close",  "close"),
         ("cs_zscore_volume", "volume"),
+        ("cs_zscore_rsi_6",  "rsi_6"),
     ]
 
     # Per-date rank (0 to 1 percentile rank)

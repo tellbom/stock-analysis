@@ -66,48 +66,61 @@ class FeatureSpec:
 
 # Technical features — all sourced from the existing technical_indicators.py
 # plus pandas_ta_classic additions.  Warmup periods set conservatively.
+#
+# NOTE ON NORMALISATION: features that come out of build_technical_features()
+# are already normalised to dimensionless ratios (see features/technical.py
+# _normalise_price_features).  The transform strings below reflect the *final*
+# normalised form, not the raw indicator value.
 TECHNICAL_SPECS: list[FeatureSpec] = [
-    # Moving averages
-    FeatureSpec("ma_5",   "technical", ("close",), 5,  "MA(5)",   warmup=5),
-    FeatureSpec("ma_10",  "technical", ("close",), 10, "MA(10)",  warmup=10),
-    FeatureSpec("ma_20",  "technical", ("close",), 20, "MA(20)",  warmup=20),
-    FeatureSpec("ma_60",  "technical", ("close",), 60, "MA(60)",  warmup=60),
-    # MACD
-    FeatureSpec("macd_dif",  "technical", ("close",), 26, "EMA(12)-EMA(26)",     warmup=35),
-    FeatureSpec("macd_dea",  "technical", ("close",), 35, "EMA(DIF,9)",          warmup=35),
-    FeatureSpec("macd_hist", "technical", ("close",), 35, "(DIF-DEA)*2",         warmup=35),
-    # KDJ
+    # Moving average distance ratios  (close/MA - 1, dimensionless)
+    FeatureSpec("ma_5",   "technical", ("close",), 5,  "close/MA(5)-1",   warmup=5),
+    FeatureSpec("ma_10",  "technical", ("close",), 10, "close/MA(10)-1",  warmup=10),
+    FeatureSpec("ma_20",  "technical", ("close",), 20, "close/MA(20)-1",  warmup=20),
+    FeatureSpec("ma_60",  "technical", ("close",), 60, "close/MA(60)-1",  warmup=60),
+    # MACD / close  (dimensionless)
+    FeatureSpec("macd_dif",  "technical", ("close",), 26, "(EMA12-EMA26)/close",  warmup=35),
+    FeatureSpec("macd_dea",  "technical", ("close",), 35, "EMA(DIF,9)/close",     warmup=35),
+    FeatureSpec("macd_hist", "technical", ("close",), 35, "(DIF-DEA)*2/close",    warmup=35),
+    # KDJ — already dimensionless (0–100 range)
     FeatureSpec("kdj_k", "technical", ("high","low","close"), 9, "KDJ-K(9)",  warmup=9),
     FeatureSpec("kdj_d", "technical", ("high","low","close"), 9, "KDJ-D(9)",  warmup=9),
     FeatureSpec("kdj_j", "technical", ("high","low","close"), 9, "KDJ-J(9)",  warmup=9),
-    # RSI
+    # RSI — already dimensionless (0–100)
     FeatureSpec("rsi_6",  "technical", ("close",), 6,  "RSI(6)",  warmup=6),
     FeatureSpec("rsi_12", "technical", ("close",), 12, "RSI(12)", warmup=12),
     FeatureSpec("rsi_24", "technical", ("close",), 24, "RSI(24)", warmup=24),
-    # Bollinger Bands
-    FeatureSpec("boll_upper", "technical", ("close",), 20, "BOLL_UPPER(20,2)", warmup=20),
-    FeatureSpec("boll_mid",   "technical", ("close",), 20, "BOLL_MID(20)",     warmup=20),
-    FeatureSpec("boll_lower", "technical", ("close",), 20, "BOLL_LOWER(20,2)", warmup=20),
-    # pandas_ta_classic additions
-    FeatureSpec("atr_14",    "technical", ("high","low","close"), 14, "ATR(14)",    warmup=14),
-    FeatureSpec("adx_14",    "technical", ("high","low","close"), 14, "ADX(14)",    warmup=28),
-    FeatureSpec("obv",       "technical", ("close","volume"),      1, "OBV",        warmup=1),
-    FeatureSpec("cci_14",    "technical", ("high","low","close"), 14, "CCI(14)",    warmup=14),
-    FeatureSpec("roc_10",    "technical", ("close",),             10, "ROC(10)",    warmup=10),
-    FeatureSpec("willr_14",  "technical", ("high","low","close"), 14, "WillR(14)",  warmup=14),
-    FeatureSpec("stoch_k",   "technical", ("high","low","close"), 14, "Stoch-K(14)", warmup=14),
-    FeatureSpec("stoch_d",   "technical", ("high","low","close"), 14, "Stoch-D(14)", warmup=17),
+    # Bollinger: boll_upper → %B=(close-lower)/(upper-lower); boll_mid → close/MA20-1
+    # boll_lower is dropped (redundant after %B)
+    FeatureSpec("boll_upper", "technical", ("close",), 20, "%B=(close-lower)/(upper-lower)", warmup=20),
+    FeatureSpec("boll_mid",   "technical", ("close",), 20, "close/MA(20)-1",                warmup=20),
+    # ATR / close  (dimensionless volatility ratio)
+    FeatureSpec("atr_14",    "technical", ("high","low","close"), 14, "ATR(14)/close",   warmup=14),
+    # ADX — already dimensionless (0–100)
+    FeatureSpec("adx_14",    "technical", ("high","low","close"), 14, "ADX(14)",         warmup=28),
+    # OBV → rolling z-score of OBV.diff()  (rate of change, dimensionless)
+    FeatureSpec("obv",       "technical", ("close","volume"),      20, "zscore(OBV.diff(),20)", warmup=20),
+    # CCI, ROC, WillR, Stoch — already dimensionless
+    FeatureSpec("cci_14",    "technical", ("high","low","close"), 14, "CCI(14)",         warmup=14),
+    FeatureSpec("roc_10",    "technical", ("close",),             10, "ROC(10)",         warmup=10),
+    FeatureSpec("willr_14",  "technical", ("high","low","close"), 14, "WillR(14)",       warmup=14),
+    FeatureSpec("stoch_k",   "technical", ("high","low","close"), 14, "Stoch-K(14)",     warmup=14),
+    FeatureSpec("stoch_d",   "technical", ("high","low","close"), 14, "Stoch-D(14)",     warmup=17),
 ]
 
 # Cross-sectional features — computed across the universe on each date.
 # window=0 signals "no look-back; computed per-date across symbols".
+#
+# NOTE: cs_rank_close and cs_zscore_close are intentionally excluded.
+# Raw close price is not cross-sectionally meaningful (high-price stocks
+# always rank above low-price stocks regardless of signal).  Use the
+# normalised technical features (ma_5, roc_10, etc.) for cross-section instead.
 CROSS_SECTIONAL_SPECS: list[FeatureSpec] = [
-    FeatureSpec("cs_rank_close",     "cross_sectional", ("close",),  0, "rank(close)/N",     warmup=0),
     FeatureSpec("cs_rank_volume",    "cross_sectional", ("volume",), 0, "rank(volume)/N",    warmup=0),
     FeatureSpec("cs_rank_rsi_6",     "cross_sectional", ("rsi_6",),  0, "rank(rsi_6)/N",     warmup=0),
     FeatureSpec("cs_rank_roc_10",    "cross_sectional", ("roc_10",), 0, "rank(roc_10)/N",    warmup=0),
-    FeatureSpec("cs_zscore_close",   "cross_sectional", ("close",),  0, "zscore(close)",     warmup=0),
+    FeatureSpec("cs_rank_ma_5",      "cross_sectional", ("ma_5",),   0, "rank(ma_5_ratio)/N", warmup=0),
     FeatureSpec("cs_zscore_volume",  "cross_sectional", ("volume",), 0, "zscore(volume)",    warmup=0),
+    FeatureSpec("cs_zscore_rsi_6",   "cross_sectional", ("rsi_6",),  0, "zscore(rsi_6)",     warmup=0),
 ]
 
 # Default full spec = technical + cross-sectional

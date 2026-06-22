@@ -8,12 +8,17 @@ metrics module.  The LightGBM baseline must beat ALL of them to claim alpha.
 
 Baselines
 ---------
-  momentum_1d  : yesterday's return  (ret_1d lagged)
-  mean_rev_1d  : negative yesterday's return (mean reversion)
-  cs_momentum  : cross-sectional rank of trailing 20d return
+  momentum_1d  : yesterday's actual 1-day price return (close.pct_change())
+  mean_rev_1d  : negative yesterday's 1-day return (mean reversion)
+  cs_momentum  : cross-sectional rank of trailing 20d cumulative return
   random       : uniform random predictions (permuted by date)
 
 Each baseline is cheap to compute from OHLCV — no model training required.
+
+IMPORTANT: momentum_1d and mean_rev_1d use the actual prior-day price return
+(close.pct_change()), NOT label.shift(1).  Using label.shift(1) for a multi-day
+label (e.g. ret_fwd_20d) creates 19/20-day window overlap with the target and
+produces spuriously high IC (~0.93) that is a mathematical artefact, not alpha.
 
 The comparison table format is designed for MLflow logging and the
 alpha-verdict document.
@@ -31,15 +36,33 @@ logger = get_logger(__name__)
 
 
 def _momentum_predictor(panel: pd.DataFrame, label_col: str) -> pd.Series:
-    """Yesterday's return as a predictor (1d momentum)."""
+    """
+    Yesterday's actual 1-day price return as a momentum predictor.
+
+    Uses close.pct_change() — the true prior-day return — not label.shift(1).
+    Using label.shift(1) for a multi-day label (e.g. ret_fwd_20d) produces
+    window overlap of (horizon-1)/horizon with the target and gives IC ≈ 1,
+    which is a mathematical artefact rather than a tradeable signal.
+
+    Requires a 'close' column in the panel.  Falls back to label.shift(1) with
+    a loud warning if 'close' is absent (so the gauntlet never silently crashes).
+    """
     panel = panel.sort_values(["symbol", "date"]).copy()
-    # Use the 1d raw return shifted by 1 (prev day's return → predict next day)
-    panel["_pred"] = panel.groupby("symbol")[label_col].shift(1)
+    if "close" in panel.columns:
+        # True 1-day momentum: yesterday's close-to-close return
+        panel["_pred"] = panel.groupby("symbol")["close"].pct_change(1).shift(1)
+    else:
+        logger.warning(
+            "momentum_1d baseline: 'close' column not found in panel. "
+            "Falling back to label.shift(1) — this will produce spuriously high IC "
+            "for multi-day labels due to window overlap. Add 'close' to the panel."
+        )
+        panel["_pred"] = panel.groupby("symbol")[label_col].shift(1)
     return panel["_pred"]
 
 
 def _mean_reversion_predictor(panel: pd.DataFrame, label_col: str) -> pd.Series:
-    """Negative yesterday's return (short-term mean reversion)."""
+    """Negative yesterday's 1-day return (short-term mean reversion)."""
     return -_momentum_predictor(panel, label_col)
 
 

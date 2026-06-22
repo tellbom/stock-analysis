@@ -15,6 +15,27 @@ rows carry unstable values (e.g. MA5 on row 1 = that row's close alone).
 ``build_technical_features`` masks these warm-up rows to NaN per the
 ``warmup`` field in each FeatureSpec.
 
+Feature normalisation (cross-sectional comparability)
+------------------------------------------------------
+Several raw indicators carry absolute price units (MA60 in CNY, BOLL in CNY,
+MACD in CNY, ATR in CNY, OBV in share count) that are not comparable across
+stocks in a cross-sectional ranking — a 500-CNY stock's MA60 is always larger
+than a 5-CNY stock's MA60, creating spurious cross-sectional IC.
+
+After warm-up masking this builder normalises every absolute-price feature
+into a dimensionless, cross-sectionally comparable ratio:
+
+  ma_5/10/20/60  → close/MA - 1          (price distance from moving average)
+  boll_upper      → (close-boll_lower)/(boll_upper-boll_lower)  (%B, 0–1)
+  boll_mid        → close/boll_mid - 1   (same as ma_20 ratio)
+  boll_lower      → dropped (redundant after %B)
+  macd_dif/dea/hist → divided by close   (normalise by price level)
+  atr_14          → atr_14 / close       (ATR as fraction of price)
+  obv             → obv.diff() z-scored per symbol  (rate of change, not level)
+
+Oscillators (RSI, KDJ, CCI, ROC, WillR, Stoch, ADX) are already dimensionless
+(percentage or ratio) and require no normalisation.
+
 The output column names match the FeatureSpec.name fields in TECHNICAL_SPECS.
 """
 
@@ -49,12 +70,12 @@ def build_technical_features(
         Must be sorted by date ascending (enforce_ohlcv guarantees this).
     project_root : str | Path | None
         Path containing the original ``technical_indicators.py``.
-        Defaults to the current working directory.
+        Defaults to ``/mnt/project`` (the mounted project directory).
 
     Returns
     -------
     pd.DataFrame
-        Original columns plus feature columns defined in TECHNICAL_SPECS.
+        Original columns plus normalised feature columns defined in TECHNICAL_SPECS.
         Warm-up rows are NaN for each feature.
     """
     df = df.copy().reset_index(drop=True)
@@ -63,7 +84,7 @@ def build_technical_features(
     # --- Core indicators from technical_indicators.py ---
     df = _apply_core_indicators(df, project_root)
 
-    # --- Rename to canonical feature names ---
+    # --- Rename raw indicator columns to canonical names ---
     rename = {
         "MA5": "ma_5", "MA10": "ma_10", "MA20": "ma_20", "MA60": "ma_60",
         "DIF": "macd_dif", "DEA": "macd_dea", "MACD": "macd_hist",
@@ -78,6 +99,9 @@ def build_technical_features(
 
     # --- Apply warm-up masks ---
     df = _mask_warmup(df)
+
+    # --- Normalise absolute-price features for cross-sectional comparability ---
+    df = _normalise_price_features(df)
 
     return df
 
@@ -95,7 +119,7 @@ def _apply_core_indicators(df: pd.DataFrame, project_root) -> pd.DataFrame:
 
 def _ensure_ti_importable(project_root) -> None:
     """Add project_root to sys.path so technical_indicators.py is importable."""
-    root = str(project_root or Path.cwd())
+    root = str(project_root or "/mnt/project")
     if root not in sys.path:
         sys.path.insert(0, root)
 
@@ -160,6 +184,66 @@ def _mask_warmup(df: pd.DataFrame) -> pd.DataFrame:
     for col, warmup in spec_map.items():
         if col in df.columns and warmup > 0:
             df.loc[df.index[:warmup], col] = np.nan
+    return df
+
+
+# ---------------------------------------------------------------------------
+# Price-feature normalisation
+# ---------------------------------------------------------------------------
+
+def _normalise_price_features(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Convert absolute-price indicator columns into dimensionless ratios.
+
+    This makes features cross-sectionally comparable across stocks with
+    very different price levels (e.g. 5-CNY bank stocks vs 1500-CNY Moutai).
+
+    Transformations applied in-place on the same column names so that
+    downstream code (pipeline, registry) does not need to change:
+
+      ma_5/10/20/60  → close/MA - 1          (positive = price above MA)
+      boll_upper     → %B = (close-lower)/(upper-lower)   [0..1, clipped]
+      boll_mid       → close/boll_mid - 1    (same as ma_20 ratio)
+      boll_lower     → dropped (fully captured by %B)
+      macd_dif/dea/hist → value / close      (dimensionless MACD)
+      atr_14         → atr_14 / close        (ATR as pct of price)
+      obv            → per-symbol rolling z-score of obv.diff()
+                        (rate-of-change of cumulative volume, normalised)
+    """
+    cl = df["close"]
+    eps = 1e-9   # avoid division by zero
+
+    # Moving average ratios
+    for col in ("ma_5", "ma_10", "ma_20", "ma_60"):
+        if col in df.columns:
+            df[col] = cl / (df[col] + eps) - 1.0
+
+    # Bollinger %B  (replaces boll_upper; boll_mid becomes MA ratio; boll_lower dropped)
+    if "boll_upper" in df.columns and "boll_lower" in df.columns:
+        band_width = (df["boll_upper"] - df["boll_lower"]).replace(0, np.nan)
+        pct_b = (cl - df["boll_lower"]) / band_width
+        df["boll_upper"] = pct_b.clip(-1.0, 2.0)   # reuse column name → %B
+        df = df.drop(columns=["boll_lower"])         # redundant after %B
+
+    if "boll_mid" in df.columns:
+        df["boll_mid"] = cl / (df["boll_mid"] + eps) - 1.0
+
+    # MACD (all three components) / close
+    for col in ("macd_dif", "macd_dea", "macd_hist"):
+        if col in df.columns:
+            df[col] = df[col] / (cl.abs() + eps)
+
+    # ATR as fraction of close
+    if "atr_14" in df.columns:
+        df["atr_14"] = df["atr_14"] / (cl + eps)
+
+    # OBV: convert level → rate-of-change, then rolling z-score
+    if "obv" in df.columns:
+        obv_diff = df["obv"].diff()
+        roll_mean = obv_diff.rolling(20, min_periods=5).mean()
+        roll_std  = obv_diff.rolling(20, min_periods=5).std(ddof=1).replace(0, np.nan)
+        df["obv"] = (obv_diff - roll_mean) / roll_std
+
     return df
 
 
