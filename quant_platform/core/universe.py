@@ -22,7 +22,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Literal
 
-UniverseKey = Literal["csi300", "csi500", "csi1000", "hs100", "custom", "all_a_share"]
+UniverseKey = Literal["csi300", "csi500", "csi1000", "custom", "all_a_share"]
 
 
 @dataclass(frozen=True)
@@ -78,12 +78,6 @@ UNIVERSE_REGISTRY: dict[str, UniverseConfig] = {
         key="csi1000",
         display_name="CSI 1000 (中证1000)",
         index_code="000852",
-        has_effective_dates=False,
-    ),
-    "hs100": UniverseConfig(
-        key="hs100",
-        display_name="HS100",
-        index_code=None,
         has_effective_dates=False,
     ),
     "all_a_share": UniverseConfig(
