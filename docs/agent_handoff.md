@@ -81,3 +81,26 @@ Date: 2026-06-21
 - Keep `announce_date` as the PIT as-of join key.
 - `yjyg_em` is forecast data, not formal financial statement data.
 - Formal metrics must not be overwritten by forecast-only rows.
+
+## 2026-06-22 Resume Run
+
+- User asked to follow this handoff and continue data collection.
+- `models/data/logs` was missing, so the resume helper scripts were restored:
+  - `models/data/logs/hs100_batch_runner.py`
+  - `models/data/logs/launch_hs100_daemon.py`
+- Background resume was started with:
+  - Command: `python models/data/logs/launch_hs100_daemon.py`
+  - PID file: `models/data/logs/hs100_resume.pid`
+  - Log file: `models/data/logs/hs100_resume.log`
+- Started PID: `17360`
+- Initial resume state from the log:
+  - Universe symbols: 100
+  - OHLCV existing: 100/100
+  - Fundamentals existing: 63/100
+  - Fundamentals missing: 37 symbols
+- First missing symbol being fetched: `000063`.
+- Network status: AKShare/Eastmoney requests are partially working but flaky, with SSL/proxy retries. No fallback values or fabricated `announce_date` are being written.
+- To inspect current progress:
+  - `Get-Content models/data/logs/hs100_resume.log -Tail 120`
+  - `Get-Process -Id (Get-Content models/data/logs/hs100_resume.pid)`
+  - `(Get-ChildItem models/data/silver/fundamentals/*.parquet | Measure-Object).Count`

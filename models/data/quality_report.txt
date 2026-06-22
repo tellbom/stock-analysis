@@ -1,6 +1,6 @@
 ======================================================================
-QUALITY REPORT — 2026-06-21T23:24:23
-store_root   : /Users/fuziqiang/Desktop/stock-analysis/models/data
+QUALITY REPORT — 2026-06-22T20:42:53
+store_root   : E:\stock-analysis\models\data
 universe_key : hs100
 ======================================================================
 
@@ -15,12 +15,13 @@ universe_key : hs100
 [INFO ] ohlcv: No duplicate (symbol, date) pairs. ✓
 [INFO ] ohlcv: No NULL values in OHLCV price/volume columns. ✓
 [INFO ] ohlcv: Price/volume sanity checks passed. ✓
-[INFO ] ohlcv: No calendar gaps in 10 sampled symbols. ✓
+[WARN ] ohlcv: Calendar gaps found in 7/100 sampled symbols (total missing trading days: 69). Symbols: ['600150:14', '600438:10', '601088:10', '603019:10', '688012:9', '688041:10', '688981:6']
 [WARN ] catalog: Catalog Parquet not found — no collection run has completed yet.
-[INFO ] fundamentals: Fundamentals files: 63 symbols
-[ERROR] fundamentals: 1 rows have announce_date < period_end — impossible: a company cannot announce before the period ends. Data is corrupt; check normalisation logic.
+[INFO ] fundamentals: Fundamentals files: 79 symbols
+[INFO ] fundamentals: 10 yjyg_em forecast rows have announce_date < period_end; this is valid forecast timing and still uses exact announce_date for PIT joins.
+[INFO ] fundamentals: PIT invariant (announce_date >= period_end) holds for all non-forecast sampled rows. ✓
 
 ----------------------------------------------------------------------
-Total: 15 findings  |  1 errors  |  2 warnings
-FAIL — fix errors before training
+Total: 16 findings  |  0 errors  |  3 warnings
+PASS
 ======================================================================
