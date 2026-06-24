@@ -272,6 +272,19 @@ def cmd_model(args: argparse.Namespace) -> int:
         label_panel[["symbol", "date", label_col]],
         on=["symbol", "date"], how="inner"
     )
+
+    close_frames = []
+    for sym in symbols:
+        df_close = read_ohlcv(ohlcv_path(store_root, sym))
+        if df_close.empty or "close" not in df_close.columns:
+            continue
+        df_close = df_close[["symbol", "date", "close"]].copy()
+        df_close["date"] = pd.to_datetime(df_close["date"]).dt.date
+        close_frames.append(df_close)
+    if close_frames:
+        close_panel = pd.concat(close_frames, ignore_index=True)
+        panel = panel.merge(close_panel, on=["symbol", "date"], how="left")
+
     panel["date"] = pd.to_datetime(panel["date"])
     panel = panel.sort_values(["date", "symbol"]).reset_index(drop=True)
 

@@ -315,6 +315,9 @@ def test_baseline_gauntlet_produces_table():
     assert expected_rows == set(table.index)
     assert "rank_ic_mean" in table.columns
     assert "icir"         in table.columns
+    assert table.loc["momentum_1d", "n_dates"] > 0
+    assert table.loc["mean_rev_1d", "n_dates"] > 0
+    assert table.loc["cs_momentum", "n_dates"] > 0
     print(f"  [OK] T2.4 baseline gauntlet: {len(table)} rows in comparison table")
 
 
