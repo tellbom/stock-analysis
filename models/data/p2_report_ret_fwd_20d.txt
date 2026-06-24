@@ -1,0 +1,91 @@
+========================================================================
+P2 LIGHTGBM BASELINE  2026-06-24T09:28:28
+========================================================================
+Feature set  : 1474f2c4
+Label        : ret_fwd_20d  |  horizon=20
+Symbols      : 300  |  panel rows=248,457  |  train_val=175,805  |  lockbox=72,652
+Dates        : 2023-01-03 → 2026-06-18
+Features     : 27
+
+OOF Evaluation:
+  ic_mean: 0.614501
+  ic_std: 0.099563
+  rank_ic_mean: 0.639409
+  rank_ic_std: 0.099887
+  icir: 6.4013
+  quantile_spread: 0.194097
+  monotonicity_ok: True
+  precision_at_10: 0.2958
+  precision_at_20: 0.3519
+  ece: 0.018967
+  n_dates: 474
+  n_predictions: 140644
+
+Train/Val Backtest:
+  annualised_return: 2.030156
+  annualised_vol: 0.103041
+  sharpe: 19.7025
+  max_drawdown: 0.0
+  gross_ls_spread: 0.09286
+  net_ls_spread: 0.091972
+  avg_daily_turnover: 0.8875
+  cost_bps: 10.0
+  n_days: 24
+
+Lockbox Evaluation:
+  ic_mean: 0.652137
+  ic_std: 0.090592
+  rank_ic_mean: 0.659408
+  rank_ic_std: 0.093709
+  icir: 7.0368
+  quantile_spread: 0.278231
+  monotonicity_ok: True
+  precision_at_10: 0.3815
+  precision_at_20: 0.4514
+  ece: 0.017116
+  n_dates: 222
+  n_predictions: 66352
+
+Lockbox Backtest:
+  annualised_return: 4.23323
+  annualised_vol: 0.142386
+  sharpe: 29.7306
+  max_drawdown: 0.0
+  gross_ls_spread: 0.141244
+  net_ls_spread: 0.140369
+  avg_daily_turnover: 0.875
+  cost_bps: 10.0
+  n_days: 12
+
+Baselines:
+              rank_ic_mean     icir  quantile_spread  precision_at_10       ece  n_dates  beats_baseline
+predictor                                                                                               
+LightGBM_OOF      0.639409   6.4013         0.194097           0.2958  0.018967      474            True
+momentum_1d       0.933078  25.9947         0.318456           0.7664  0.149650      592           False
+mean_rev_1d      -0.933078 -25.9947        -0.318456           0.0000  0.649613      592            True
+cs_momentum       0.590672   3.7576         0.215366           0.4354  0.031087      584            True
+random            0.005506   0.0956         0.001046           0.0376  0.248536      593            True
+
+Fold Metrics:
+  fold=0 n_train=35121 n_val=35161 ic=0.591915
+  fold=1 n_train=70282 n_val=35161 ic=0.662674
+  fold=2 n_train=105443 n_val=35161 ic=0.477300
+  fold=3 n_train=140604 n_val=35161 ic=0.614389
+
+VERDICT: INCONCLUSIVE  (confidence=MEDIUM)
+Evidence:
+  OOF Rank IC = +0.6394, ICIR = +6.401
+    ✓ ICIR 6.401 > threshold 0.3
+  Beats 3/4 trivial baselines on Rank IC
+  Backtest: Sharpe = +19.70, net L-S spread = +0.0920
+    ✓ Net Sharpe 19.70 > threshold 0.5
+    ✓ Label-shuffle IC ≈ 0 (+0.0435) — not a pipeline artefact
+    ✓ Subperiod stable: first=+0.6299, second=+0.6451
+  LOCKBOX: Rank IC = +0.6594, ICIR = +7.037, Sharpe = +29.73
+    ✓ Lockbox verdict: POSITIVE
+Caveats:
+  Does not beat all baselines: 3/4
+  Lockbox has been used — P2 is sealed. No further tuning is permitted on this data split.
+  A-share market characteristics (circuit breakers, liquidity, T+1 settlement) may affect live performance beyond what this backtest captures.
+
+========================================================================
