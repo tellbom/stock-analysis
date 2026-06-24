@@ -110,6 +110,7 @@ def init_lake(store_root: Path | str) -> None:
         "silver/ohlcv",
         "silver/adj_factor",
         "silver/fundamentals",
+        "silver/index_ohlcv",   # P4A-05: CSI 300 and other index OHLCV
         "universe",
         "calendar",
         "catalog",
@@ -153,3 +154,20 @@ def label_dir(store_root: Path | str, label_name: str) -> Path:
 
 def label_path(store_root: Path | str, label_name: str, symbol: str) -> Path:
     return label_dir(store_root, label_name) / f"{symbol}.parquet"
+
+
+# ---------------------------------------------------------------------------
+# Silver: index OHLCV (P4A-05 — CSI 300 and other market indices)
+# ---------------------------------------------------------------------------
+
+def index_ohlcv_dir(store_root: Path | str) -> Path:
+    return silver_root(store_root) / "index_ohlcv"
+
+
+def index_ohlcv_path(store_root: Path | str, symbol: str) -> Path:
+    """
+    Path to the silver index OHLCV Parquet for one index symbol.
+
+    Example: silver/index_ohlcv/000300.parquet  (CSI 300)
+    """
+    return index_ohlcv_dir(store_root) / f"{symbol}.parquet"

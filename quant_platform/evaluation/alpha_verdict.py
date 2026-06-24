@@ -23,6 +23,7 @@ import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 from quant_platform.evaluation.metrics import EvalReport
@@ -40,39 +41,75 @@ class AlphaVerdict:
 
     ``verdict`` is "GO", "NO_GO", or "INCONCLUSIVE".
     ``lockbox_used`` tracks whether the test set has been spent.
+
+    P4A additions
+    -------------
+    ``walk_forward_used``     : True when a WalkForwardResult is provided.
+    ``wf_agg_rank_ic``        : Aggregate OOS Rank IC from walk-forward.
+    ``wf_agg_icir``           : Aggregate OOS ICIR from walk-forward.
+    ``wf_agg_sharpe``         : Aggregate OOS Sharpe from walk-forward.
+    ``wf_ic_sign_stability``  : Fraction of windows with positive Rank IC.
+    ``wf_total_indep_periods``: Total independent forward periods.
+    ``subperiod_ic_ratio``    : Stability index from RobustnessReport.
+    ``subperiod_interpretation``: Human-readable stability note.
     """
     verdict:         str   = "INCONCLUSIVE"   # "GO" | "NO_GO" | "INCONCLUSIVE"
     confidence:      str   = "LOW"            # "LOW" | "MEDIUM" | "HIGH"
     evidence:        list[str] = field(default_factory=list)
     caveats:         list[str] = field(default_factory=list)
+
+    # Legacy lockbox
     lockbox_used:    bool  = False
     lockbox_rank_ic: float = float("nan")
     lockbox_sharpe:  float = float("nan")
+
+    # P4A: walk-forward evaluation
+    walk_forward_used:       bool  = False
+    wf_agg_rank_ic:          float = float("nan")
+    wf_agg_icir:             float = float("nan")
+    wf_agg_sharpe:           float = float("nan")
+    wf_ic_sign_stability:    float = float("nan")
+    wf_total_indep_periods:  int   = 0
+
+    # P4A: subperiod stability index
+    subperiod_ic_ratio:      float = float("nan")
+    subperiod_interpretation: str  = ""
+
     generated_at:    str   = ""
 
     def to_dict(self) -> dict:
         return {
-            "verdict":         self.verdict,
-            "confidence":      self.confidence,
-            "lockbox_used":    self.lockbox_used,
-            "lockbox_rank_ic": round(self.lockbox_rank_ic, 6),
-            "lockbox_sharpe":  round(self.lockbox_sharpe, 4),
-            "evidence":        self.evidence,
-            "caveats":         self.caveats,
-            "generated_at":    self.generated_at,
+            "verdict":                  self.verdict,
+            "confidence":               self.confidence,
+            "lockbox_used":             self.lockbox_used,
+            "lockbox_rank_ic":          round(self.lockbox_rank_ic, 6),
+            "lockbox_sharpe":           round(self.lockbox_sharpe, 4),
+            "walk_forward_used":        self.walk_forward_used,
+            "wf_agg_rank_ic":           round(self.wf_agg_rank_ic, 6),
+            "wf_agg_icir":              round(self.wf_agg_icir, 4),
+            "wf_agg_sharpe":            round(self.wf_agg_sharpe, 4),
+            "wf_ic_sign_stability":     round(self.wf_ic_sign_stability, 4),
+            "wf_total_indep_periods":   self.wf_total_indep_periods,
+            "subperiod_ic_ratio":       round(self.subperiod_ic_ratio, 4),
+            "subperiod_interpretation": self.subperiod_interpretation,
+            "evidence":                 self.evidence,
+            "caveats":                  self.caveats,
+            "generated_at":             self.generated_at,
         }
 
 
 def render_verdict(
     store_root: Path | str,
-    oof_eval:         EvalReport,
-    baseline_table:   pd.DataFrame,
-    backtest:         BacktestResult,
-    robustness:       RobustnessReport,
-    lockbox_eval:     EvalReport | None = None,
-    lockbox_backtest: BacktestResult | None = None,
-    icir_threshold:   float = 0.3,
-    sharpe_threshold: float = 0.5,
+    oof_eval:           EvalReport,
+    baseline_table:     pd.DataFrame,
+    backtest:           BacktestResult,
+    robustness:         RobustnessReport,
+    lockbox_eval:       EvalReport | None = None,
+    lockbox_backtest:   BacktestResult | None = None,
+    walk_forward_result=None,   # WalkForwardResult | None (optional import)
+    icir_threshold:     float = 0.3,
+    sharpe_threshold:   float = 0.5,
+    wf_icir_threshold:  float = 0.3,
 ) -> AlphaVerdict:
     """
     Synthesise a go/no-go alpha verdict.
@@ -87,7 +124,17 @@ def render_verdict(
     - NO_GO if any critical condition fails.
     - INCONCLUSIVE if data is insufficient to judge.
 
-    When the lockbox is provided, it is the final evidence.
+    P4A additions
+    -------------
+    When ``walk_forward_result`` is provided it becomes the primary OOS
+    evidence, replacing the legacy lockbox.  The walkforward aggregate
+    ICIR must exceed ``wf_icir_threshold`` for a GO verdict.
+
+    When the lockbox is provided (legacy path), it is the final evidence
+    and seals P2.
+
+    P4A-02: the subperiod stability index (``robustness.subperiod_ic_ratio``)
+    is now surfaced in the evidence with a human-readable interpretation.
     """
     verdict = AlphaVerdict(
         generated_at=dt.datetime.now().isoformat(timespec="seconds"),
@@ -149,7 +196,7 @@ def render_verdict(
         ev.append(f"  ✗ Label-shuffle IC = {robustness.shuffle_rank_ic:+.4f} — too large, possible bug")
         fail_count += 1
 
-    # --- 5. Subperiod stability ---
+    # --- 5. Subperiod stability (P4A-02: now includes stability index) ---
     if robustness.subperiod_stable:
         ev.append(
             f"  ✓ Subperiod stable: "
@@ -165,7 +212,64 @@ def render_verdict(
         )
         fail_count += 1
 
-    # --- 6. Lockbox (seals P2) ---
+    # P4A-02: surface subperiod_ic_ratio with interpretation
+    ratio = robustness.subperiod_ic_ratio
+    if not np.isnan(ratio):
+        verdict.subperiod_ic_ratio = ratio
+        interp = _stability_interpretation(ratio, robustness.subperiod_stable)
+        verdict.subperiod_interpretation = interp
+        ev.append(f"  Stability index: {ratio:.3f} — {interp}")
+        if not robustness.subperiod_stable:
+            cav.append(
+                "  Opposite-sign subperiods suggest genuine regime sensitivity. "
+                "Consider whether the lockbox/walk-forward period differs from train/val regime."
+            )
+
+    # --- 6. Walk-forward OOS evaluation (P4A-03 — primary OOS instrument) ---
+    if walk_forward_result is not None:
+        verdict.walk_forward_used       = True
+        verdict.wf_agg_rank_ic          = walk_forward_result.agg_rank_ic_mean
+        verdict.wf_agg_icir             = walk_forward_result.agg_icir
+        verdict.wf_agg_sharpe           = walk_forward_result.agg_sharpe
+        verdict.wf_ic_sign_stability    = walk_forward_result.ic_sign_stability
+        verdict.wf_total_indep_periods  = walk_forward_result.total_independent_periods
+
+        ev.append(
+            f"WALK-FORWARD OOS ({walk_forward_result.n_windows()} windows, "
+            f"{walk_forward_result.total_independent_periods} indep. periods): "
+            f"Rank IC = {walk_forward_result.agg_rank_ic_mean:+.4f}, "
+            f"ICIR = {walk_forward_result.agg_icir:+.4f}, "
+            f"Sharpe = {walk_forward_result.agg_sharpe:+.4f}"
+        )
+        ev.append(
+            f"  IC sign stability = {walk_forward_result.ic_sign_stability:.2f} "
+            f"({walk_forward_result.ic_sign_stability * walk_forward_result.n_windows():.0f}/"
+            f"{walk_forward_result.n_windows()} windows positive)"
+        )
+
+        wf_icir = walk_forward_result.agg_icir
+        if wf_icir > wf_icir_threshold:
+            ev.append(f"  ✓ Walk-forward ICIR {wf_icir:.3f} > threshold {wf_icir_threshold}")
+            pass_count += 1
+        elif wf_icir > 0:
+            cav.append(
+                f"  ⚠ Walk-forward ICIR {wf_icir:.3f} positive but below threshold {wf_icir_threshold}"
+            )
+            fail_count += 1
+        else:
+            ev.append(f"  ✗ Walk-forward ICIR {wf_icir:.3f} ≤ 0 — signal does not generalise OOS")
+            fail_count += 1
+
+        if walk_forward_result.agg_sharpe > 0:
+            ev.append(f"  ✓ Walk-forward Sharpe positive ({walk_forward_result.agg_sharpe:+.3f})")
+            pass_count += 1
+        else:
+            cav.append(
+                f"  ⚠ Walk-forward Sharpe negative ({walk_forward_result.agg_sharpe:+.3f}) — "
+                "check cost assumptions"
+            )
+
+    # --- 7. Lockbox (legacy — seals P2 when used) ---
     if lockbox_eval is not None:
         verdict.lockbox_used    = True
         verdict.lockbox_rank_ic = lockbox_eval.rank_ic_mean
@@ -205,11 +309,16 @@ def render_verdict(
         "A-share market characteristics (circuit breakers, liquidity, T+1 settlement) "
         "may affect live performance beyond what this backtest captures."
     )
-    if not verdict.lockbox_used:
+    if not verdict.lockbox_used and not verdict.walk_forward_used:
         cav.append(
-            "Lockbox has NOT been used. "
-            "This verdict is based on OOF evaluation only. "
-            "Call render_verdict() with lockbox results to seal P2."
+            "Neither lockbox nor walk-forward OOS evaluation has been used. "
+            "This verdict is based on OOF evaluation only — it cannot measure "
+            "whether the signal generalises to genuinely new data."
+        )
+    if not verdict.walk_forward_used and verdict.lockbox_used:
+        cav.append(
+            "Using legacy static lockbox.  Consider switching to walk-forward "
+            "evaluation (WalkForwardEvaluator) for more statistical power."
         )
 
     # Write files
@@ -221,6 +330,17 @@ def render_verdict(
     return verdict
 
 
+def _stability_interpretation(ratio: float, same_sign: bool) -> str:
+    """Human-readable interpretation of subperiod IC ratio."""
+    if not same_sign:
+        return "REGIME-SENSITIVE (opposite signs — genuine decay likely)"
+    if ratio >= 0.7:
+        return "REGIME-STABLE (consistent magnitude)"
+    if ratio >= 0.4:
+        return "MODERATE regime sensitivity (magnitude varies)"
+    return "HIGH regime sensitivity (magnitude differs strongly)"
+
+
 def _write_verdict(verdict: AlphaVerdict, store_root: Path) -> None:
     """Write human-readable text and machine-readable JSON."""
     lines = [
@@ -228,6 +348,7 @@ def _write_verdict(verdict: AlphaVerdict, store_root: Path) -> None:
         f"ALPHA VERDICT — {verdict.generated_at}",
         f"VERDICT: {verdict.verdict}  (confidence: {verdict.confidence})",
         f"Lockbox used: {'YES — P2 sealed' if verdict.lockbox_used else 'NO'}",
+        f"Walk-forward used: {'YES' if verdict.walk_forward_used else 'NO'}",
         "=" * 65,
         "",
         "EVIDENCE:",

@@ -185,7 +185,74 @@ MODEL_REGISTRY: dict[str, type[ModelBase]] = {
     "lgbm":     LGBMModel,
     "xgboost":  XGBModel,
     "catboost": CatModel,
+    "ridge":    "RidgeModel",  # forward reference; resolved below
 }
+
+
+# ---------------------------------------------------------------------------
+# Ridge (P4A-06 — linear diagnostic baseline)
+# ---------------------------------------------------------------------------
+
+class RidgeModel(ModelBase):
+    """
+    Ridge regression baseline (P4A-06).
+
+    Purpose: diagnostic, not performance.
+
+    On Alpha158-style features, linear/ridge models reach ~0.046 Rank IC
+    versus LightGBM's ~0.048 — the signal is largely linear.  If the
+    platform's GBM OOF substantially exceeds RidgeModel OOF (ratio > 1.3),
+    the GBM is likely capturing nonlinear noise rather than signal — a
+    red flag that would partly explain an OOF/lockbox gap.
+
+    The ``alpha`` (L2 regularisation) is intentionally left at a
+    conservative default.  Do NOT tune it against the lockbox.
+
+    Usage
+    -----
+        from quant_platform.training.model_zoo import RidgeModel, fit_zoo_model_oof
+
+        ridge = RidgeModel()
+        oof_preds, metrics = fit_zoo_model_oof(
+            ridge, panel, feature_cols, label_col="ret_fwd_5d",
+            n_splits=5, horizon=5,
+        )
+    """
+
+    model_name = "Ridge"
+
+    _DEFAULTS = {
+        "alpha":     100.0,   # conservative L2; do not tune vs lockbox
+        "fit_intercept": True,
+        "max_iter":  10_000,
+    }
+
+    def __init__(self, **params) -> None:
+        from sklearn.linear_model import Ridge
+        merged = {**self._DEFAULTS, **params}
+        self._params = merged
+        self._pipe = Pipeline([
+            ("imputer", SimpleImputer(strategy="median")),
+            ("scaler",  StandardScaler()),
+            ("model",   Ridge(**merged)),
+        ])
+
+    def fit(self, X, y):
+        self._pipe.fit(X, y)
+        return self
+
+    def predict(self, X) -> np.ndarray:
+        return self._pipe.predict(X)
+
+    def get_params(self) -> dict:
+        return {"model_name": self.model_name, **self._params}
+
+    def get_native_model(self):
+        return self._pipe.named_steps["model"]
+
+
+# Resolve the forward reference in MODEL_REGISTRY
+MODEL_REGISTRY["ridge"] = RidgeModel
 
 
 def get_model(name: str, **params) -> ModelBase:
