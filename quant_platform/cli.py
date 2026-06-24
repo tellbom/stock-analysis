@@ -292,7 +292,9 @@ def cmd_model(args: argparse.Namespace) -> int:
 
     # --- Lockbox split ---
     _step(f"Carving lockbox split ({lockbox_mo} months)")
-    train_val, lockbox = make_lockbox_split(panel, lockbox_months=lockbox_mo)
+    train_val, lockbox = make_lockbox_split(
+        panel, lockbox_months=lockbox_mo, horizon=horizon
+    )
     train_val = train_val.sort_values(["date","symbol"]).reset_index(drop=True)
     lockbox   = lockbox.sort_values(["date","symbol"]).reset_index(drop=True)
     _done(

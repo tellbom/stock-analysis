@@ -145,6 +145,13 @@ def _apply_pta_indicators(df: pd.DataFrame) -> pd.DataFrame:
     n = len(df)
     idx_range = range(n)
 
+    def _align_to_input(obj) -> pd.Series:
+        # pandas_ta may return a shortened Series/DataFrame with the original
+        # row index preserved. Reindex on that original index; resetting it
+        # would move future indicator values onto earlier dates.
+        s = obj if isinstance(obj, pd.Series) else pd.Series(obj)
+        return s.reindex(idx_range)
+
     for col_name, fn_result in [
         ("atr_14",   pta.atr(hi, lo, cl, length=14)),
         ("obv",      pta.obv(cl, vo)),
@@ -153,23 +160,22 @@ def _apply_pta_indicators(df: pd.DataFrame) -> pd.DataFrame:
         ("willr_14", pta.willr(hi, lo, cl, length=14)),
     ]:
         if fn_result is not None:
-            s = fn_result if isinstance(fn_result, pd.Series) else pd.Series(fn_result)
-            df[col_name] = s.reset_index(drop=True).reindex(idx_range).values
+            df[col_name] = _align_to_input(fn_result).values
 
     # ADX returns a DataFrame with DMP, DMN, ADX columns
     adx_df = pta.adx(hi, lo, cl, length=14)
     if adx_df is not None and not adx_df.empty:
         adx_col = [c for c in adx_df.columns if c.upper().startswith("ADX")]
         if adx_col:
-            df["adx_14"] = adx_df[adx_col[0]].reset_index(drop=True).reindex(idx_range).values
+            df["adx_14"] = _align_to_input(adx_df[adx_col[0]]).values
 
     # Stoch returns K and D — may be shorter than df due to warm-up
     stoch_df = pta.stoch(hi, lo, cl)
     if stoch_df is not None and not stoch_df.empty:
         cols = list(stoch_df.columns)
         if len(cols) >= 2:
-            df["stoch_k"] = stoch_df[cols[0]].reset_index(drop=True).reindex(idx_range).values
-            df["stoch_d"] = stoch_df[cols[1]].reset_index(drop=True).reindex(idx_range).values
+            df["stoch_k"] = _align_to_input(stoch_df[cols[0]]).values
+            df["stoch_d"] = _align_to_input(stoch_df[cols[1]]).values
 
     return df
 

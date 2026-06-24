@@ -44,8 +44,8 @@ def _momentum_predictor(panel: pd.DataFrame, label_col: str) -> pd.Series:
     window overlap of (horizon-1)/horizon with the target and gives IC ≈ 1,
     which is a mathematical artefact rather than a tradeable signal.
 
-    Requires a 'close' column in the panel.  Falls back to label.shift(1) with
-    a loud warning if 'close' is absent (so the gauntlet never silently crashes).
+    Requires a 'close' column in the panel.  If 'close' is absent, returns NaN
+    rather than falling back to label.shift(1), which leaks overlapping labels.
     """
     panel = panel.sort_values(["symbol", "date"]).copy()
     if "close" in panel.columns:
@@ -54,10 +54,10 @@ def _momentum_predictor(panel: pd.DataFrame, label_col: str) -> pd.Series:
     else:
         logger.warning(
             "momentum_1d baseline: 'close' column not found in panel. "
-            "Falling back to label.shift(1) — this will produce spuriously high IC "
-            "for multi-day labels due to window overlap. Add 'close' to the panel."
+            "Returning NaN instead of label.shift(1), which leaks overlapping "
+            "multi-day label windows. Add 'close' to the panel for this baseline."
         )
-        panel["_pred"] = panel.groupby("symbol")[label_col].shift(1)
+        panel["_pred"] = np.nan
     return panel["_pred"]
 
 
@@ -72,13 +72,13 @@ def _cross_sectional_momentum_predictor(
 ) -> pd.Series:
     """
     Cross-sectional rank of trailing-window sum of returns.
-    Uses close price if available, otherwise the label column.
+    Uses close price if available; otherwise returns NaN.
     """
     panel = panel.sort_values(["symbol", "date"]).copy()
     if "close" in panel.columns:
         panel["_ret"] = panel.groupby("symbol")["close"].pct_change()
     else:
-        panel["_ret"] = panel.groupby("symbol")[panel.columns[-1]].shift(0)
+        panel["_ret"] = np.nan
 
     panel["_rolling"] = panel.groupby("symbol")["_ret"].transform(
         lambda x: x.rolling(window, min_periods=max(1, window // 2)).sum()

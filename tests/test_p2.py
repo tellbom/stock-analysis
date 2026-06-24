@@ -113,6 +113,32 @@ def test_purged_kfold_no_overlap():
     print("  [OK] T2.1 PurgedKFold: train and val are always disjoint")
 
 
+def test_purged_kfold_purges_by_trading_date():
+    """Purging must be measured in trading dates, not flat panel rows."""
+    from quant_platform.training.splitter import PurgedKFold
+
+    horizon = 5
+    embargo = 2
+    panel = _make_panel(n_symbols=8, n_days=120)
+    panel = panel.sort_values(["date", "symbol"]).reset_index(drop=True)
+    dates = pd.Series(pd.to_datetime(panel["date"]).sort_values().unique())
+    date_pos = {d: i for i, d in enumerate(dates)}
+
+    splitter = PurgedKFold(n_splits=4, horizon=horizon, embargo=embargo)
+    for train_idx, val_idx in splitter.split(panel):
+        train_dates = pd.to_datetime(panel.iloc[train_idx]["date"])
+        val_dates = pd.to_datetime(panel.iloc[val_idx]["date"])
+        val_start_pos = date_pos[val_dates.min()]
+        max_allowed = val_start_pos - horizon - embargo - 2
+
+        assert not (set(train_dates) & set(val_dates)), \
+            "Train/val should not share the same trading date"
+        assert train_dates.map(date_pos).max() <= max_allowed, \
+            "Training label windows or embargo period reach the validation fold"
+
+    print("  [OK] T2.1 PurgedKFold: purge/embargo measured in trading dates")
+
+
 def test_lockbox_split():
     """make_lockbox_split separates the most recent months correctly."""
     from quant_platform.training.splitter import make_lockbox_split
@@ -135,6 +161,26 @@ def test_lockbox_split():
 # ---------------------------------------------------------------------------
 # T2.2 — LightGBM OOF fit
 # ---------------------------------------------------------------------------
+
+def test_lockbox_split_purges_label_window():
+    """Train labels immediately before lockbox must not reach into lockbox."""
+    from quant_platform.training.splitter import make_lockbox_split
+
+    horizon = 5
+    panel = _make_panel(n_symbols=8, n_days=200)
+    panel = panel.sort_values(["date", "symbol"]).reset_index(drop=True)
+    train_val, lockbox = make_lockbox_split(panel, lockbox_months=3, horizon=horizon)
+
+    dates = pd.Series(pd.to_datetime(panel["date"]).sort_values().unique())
+    date_pos = {d: i for i, d in enumerate(dates)}
+    lock_start_pos = date_pos[pd.to_datetime(lockbox["date"]).min()]
+
+    train_date_pos = pd.to_datetime(train_val["date"]).map(date_pos)
+    assert (train_date_pos + 1 + horizon < lock_start_pos).all(), \
+        "A train label window reaches into the lockbox"
+
+    print("  [OK] T2.1 lockbox split: train label windows do not enter lockbox")
+
 
 def test_lgbm_oof_returns_predictions():
     """fit_oof returns OOF predictions aligned to panel index."""
@@ -288,6 +334,20 @@ def test_baseline_gauntlet_random_near_zero():
 # ---------------------------------------------------------------------------
 # T2.5 — Signal backtest
 # ---------------------------------------------------------------------------
+
+def test_baseline_gauntlet_no_label_shift_fallback_without_close():
+    """Missing close must not fall back to label.shift(1)."""
+    from quant_platform.evaluation.baselines import run_baseline_gauntlet
+
+    panel = _make_panel(n_days=300, n_symbols=20).drop(columns=["close"])
+    rng = np.random.default_rng(0)
+    pred = pd.Series(rng.normal(size=len(panel)), index=panel.index)
+
+    table = run_baseline_gauntlet(panel, LABEL_COL, pred)
+    assert pd.isna(table.loc["momentum_1d", "rank_ic_mean"])
+    assert pd.isna(table.loc["cs_momentum", "rank_ic_mean"])
+    print("  [OK] T2.4 baselines: no label-derived fallback when close is absent")
+
 
 def test_backtest_returns_result():
     """run_backtest returns a BacktestResult with required fields."""
@@ -594,7 +654,9 @@ if __name__ == "__main__":
         # T2.1 Splitter
         test_purged_kfold_time_ordering,
         test_purged_kfold_no_overlap,
+        test_purged_kfold_purges_by_trading_date,
         test_lockbox_split,
+        test_lockbox_split_purges_label_window,
         # T2.2 LightGBM
         test_lgbm_oof_returns_predictions,
         test_lgbm_oof_fold_metrics,
@@ -607,6 +669,7 @@ if __name__ == "__main__":
         # T2.4 Baselines
         test_baseline_gauntlet_produces_table,
         test_baseline_gauntlet_random_near_zero,
+        test_baseline_gauntlet_no_label_shift_fallback_without_close,
         # T2.5 Backtest
         test_backtest_returns_result,
         test_backtest_net_lower_than_gross,

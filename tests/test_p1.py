@@ -184,6 +184,26 @@ def test_warmup_rows_are_nan():
     print("  [OK] T1.2 warm-up masking: all warm-up rows are NaN")
 
 
+def test_stoch_features_preserve_pta_index_alignment():
+    """Stoch output from pandas_ta must stay on its original input rows."""
+    import pandas_ta_classic as pta
+    from quant_platform.features.technical import build_technical_features
+
+    df = _make_ohlcv(n=120).reset_index(drop=True)
+    result = build_technical_features(df).reset_index(drop=True)
+    raw = pta.stoch(df["high"], df["low"], df["close"])
+
+    expected_k = raw[raw.columns[0]].reindex(range(len(df))).reset_index(drop=True)
+    expected_d = raw[raw.columns[1]].reindex(range(len(df))).reset_index(drop=True)
+
+    for col, expected in (("stoch_k", expected_k), ("stoch_d", expected_d)):
+        mask = expected.notna() & result[col].notna()
+        assert mask.any(), f"{col}: no comparable non-NaN rows"
+        max_diff = (result.loc[mask, col] - expected.loc[mask]).abs().max()
+        assert max_diff < 1e-10, f"{col}: pandas_ta index alignment shifted by {max_diff}"
+    print("  [OK] T1.2 stoch alignment: pandas_ta original index preserved")
+
+
 def test_technical_features_stable_after_warmup():
     """After warmup rows, feature values are finite (not NaN or inf)."""
     from quant_platform.features.technical import build_technical_features
@@ -695,6 +715,7 @@ if __name__ == "__main__":
         # T1.2 Technical
         test_build_technical_features_output_columns,
         test_warmup_rows_are_nan,
+        test_stoch_features_preserve_pta_index_alignment,
         test_technical_features_stable_after_warmup,
         # T1.3 Cross-sectional
         test_cross_sectional_rank_range,
