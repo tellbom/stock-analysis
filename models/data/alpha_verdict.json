@@ -2,23 +2,23 @@
   "verdict": "INCONCLUSIVE",
   "confidence": "MEDIUM",
   "lockbox_used": true,
-  "lockbox_rank_ic": 0.659408,
-  "lockbox_sharpe": 29.7306,
+  "lockbox_rank_ic": 0.003931,
+  "lockbox_sharpe": -1.8228,
   "evidence": [
-    "OOF Rank IC = +0.6394, ICIR = +6.401",
-    "  \u2713 ICIR 6.401 > threshold 0.3",
-    "Beats 3/4 trivial baselines on Rank IC",
-    "Backtest: Sharpe = +19.70, net L-S spread = +0.0920",
-    "  \u2713 Net Sharpe 19.70 > threshold 0.5",
-    "  \u2713 Label-shuffle IC \u2248 0 (+0.0435) \u2014 not a pipeline artefact",
-    "  \u2713 Subperiod stable: first=+0.6299, second=+0.6451",
-    "LOCKBOX: Rank IC = +0.6594, ICIR = +7.037, Sharpe = +29.73",
-    "  \u2713 Lockbox verdict: POSITIVE"
+    "OOF Rank IC = +0.0908, ICIR = +0.653",
+    "  \u2713 ICIR 0.653 > threshold 0.3",
+    "Beats 1/4 trivial baselines on Rank IC",
+    "Backtest: Sharpe = +0.98, net L-S spread = +0.0064",
+    "  \u2713 Net Sharpe 0.98 > threshold 0.5",
+    "  \u2713 Label-shuffle IC \u2248 0 (+0.0260) \u2014 not a pipeline artefact",
+    "  \u2713 Subperiod stable: first=+0.0885, second=+0.0922",
+    "LOCKBOX: Rank IC = +0.0039, ICIR = +0.022, Sharpe = -1.82",
+    "  \u2717 Lockbox verdict: NEGATIVE \u2014 signal did not generalise"
   ],
   "caveats": [
-    "Does not beat all baselines: 3/4",
+    "Does not beat all baselines: 1/4",
     "Lockbox has been used \u2014 P2 is sealed. No further tuning is permitted on this data split.",
     "A-share market characteristics (circuit breakers, liquidity, T+1 settlement) may affect live performance beyond what this backtest captures."
   ],
-  "generated_at": "2026-06-24T09:28:28"
+  "generated_at": "2026-06-24T10:52:40"
 }
