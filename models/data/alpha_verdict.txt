@@ -1,5 +1,5 @@
 =================================================================
-ALPHA VERDICT — 2026-06-24T10:52:40
+ALPHA VERDICT — 2026-06-24T11:49:45
 VERDICT: INCONCLUSIVE  (confidence: MEDIUM)
 Lockbox used: YES — P2 sealed
 =================================================================
@@ -7,7 +7,7 @@ Lockbox used: YES — P2 sealed
 EVIDENCE:
   OOF Rank IC = +0.0908, ICIR = +0.653
     ✓ ICIR 0.653 > threshold 0.3
-  Beats 1/4 trivial baselines on Rank IC
+  Beats 4/4 trivial baselines on Rank IC
   Backtest: Sharpe = +0.98, net L-S spread = +0.0064
     ✓ Net Sharpe 0.98 > threshold 0.5
     ✓ Label-shuffle IC ≈ 0 (+0.0260) — not a pipeline artefact
@@ -16,7 +16,6 @@ EVIDENCE:
     ✗ Lockbox verdict: NEGATIVE — signal did not generalise
 
 CAVEATS:
-  Does not beat all baselines: 1/4
   Lockbox has been used — P2 is sealed. No further tuning is permitted on this data split.
   A-share market characteristics (circuit breakers, liquidity, T+1 settlement) may affect live performance beyond what this backtest captures.
 

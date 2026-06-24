@@ -139,6 +139,22 @@ def test_purged_kfold_purges_by_trading_date():
     print("  [OK] T2.1 PurgedKFold: purge/embargo measured in trading dates")
 
 
+def test_purged_kfold_returns_requested_validation_folds():
+    """n_splits means the number of validation folds actually produced."""
+    from quant_platform.training.splitter import PurgedKFold
+
+    panel = _make_panel(n_symbols=8, n_days=180)
+    panel = panel.sort_values(["date", "symbol"]).reset_index(drop=True)
+    splitter = PurgedKFold(n_splits=4, horizon=5, embargo=2)
+
+    folds = list(splitter.split(panel))
+
+    assert len(folds) == 4
+    assert all(len(train_idx) > 0 and len(val_idx) > 0 for train_idx, val_idx in folds)
+
+    print("  [OK] T2.1 PurgedKFold: returns requested validation fold count")
+
+
 def test_lockbox_split():
     """make_lockbox_split separates the most recent months correctly."""
     from quant_platform.training.splitter import make_lockbox_split
@@ -658,6 +674,7 @@ if __name__ == "__main__":
         test_purged_kfold_time_ordering,
         test_purged_kfold_no_overlap,
         test_purged_kfold_purges_by_trading_date,
+        test_purged_kfold_returns_requested_validation_folds,
         test_lockbox_split,
         test_lockbox_split_purges_label_window,
         # T2.2 LightGBM

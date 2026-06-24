@@ -91,18 +91,12 @@ class PurgedKFold:
         # panel one trading day contains many symbols; row-based purging would
         # turn a 20-day horizon into only ~20 symbols, leaking label windows.
         unique_dates = np.array(sorted(pd.unique(dates)))
-
-        # Reserve one initial date block for training warm-up, then produce
-        # exactly n_splits validation blocks. Without this, the first fold has
-        # no past-only training history and gets skipped, silently returning
-        # n_splits - 1 folds.
-        n_blocks = self.n_splits + 1
-        fold_size = len(unique_dates) // n_blocks
+        fold_size = len(unique_dates) // self.n_splits
         if fold_size == 0:
             return
         for k in range(self.n_splits):
             # Validation fold: fold k
-            val_start = (k + 1) * fold_size
+            val_start = k * fold_size
             val_end   = val_start + fold_size if k < self.n_splits - 1 else len(unique_dates)
             val_dates = unique_dates[val_start:val_end]
             val_idx   = indices[np.isin(dates, val_dates)]

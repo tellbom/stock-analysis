@@ -31,9 +31,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
-import hashlib
 import json
-import subprocess
 import sys
 from pathlib import Path
 
@@ -275,22 +273,22 @@ def cmd_model(args: argparse.Namespace) -> int:
         on=["symbol", "date"], how="inner"
     )
 
+    # Merge close price so baseline gauntlet (momentum_1d, cs_momentum) can use it
+    from quant_platform.store.lake import ohlcv_path
     close_frames = []
     for sym in symbols:
-        df_close = read_ohlcv(ohlcv_path(store_root, sym))
-        if df_close.empty or "close" not in df_close.columns:
-            continue
-        df_close = df_close[["symbol", "date", "close"]].copy()
-        df_close["date"] = pd.to_datetime(df_close["date"]).dt.date
-        close_frames.append(df_close)
+        odf = read_ohlcv(ohlcv_path(store_root, sym))
+        if not odf.empty:
+            close_frames.append(odf[["symbol", "date", "close"]])
     if close_frames:
-        close_panel = pd.concat(close_frames, ignore_index=True)
-        panel = panel.merge(close_panel, on=["symbol", "date"], how="left")
+        close_df = pd.concat(close_frames, ignore_index=True)
+        close_df["date"] = pd.to_datetime(close_df["date"])
+        panel = panel.merge(close_df, on=["symbol", "date"], how="left")
 
     panel["date"] = pd.to_datetime(panel["date"])
     panel = panel.sort_values(["date", "symbol"]).reset_index(drop=True)
 
-    # Feature columns = all numeric cols except meta + labels
+    # Feature columns = all numeric cols except meta + labels + close
     meta = {"symbol", "date"}
     label_like = {c for c in panel.columns if c.startswith(("ret_fwd_","vol_fwd_","mdd_fwd_"))}
     fund_str    = {"fund_period_end","fund_period_type","fund_announce_date"}
@@ -305,11 +303,9 @@ def cmd_model(args: argparse.Namespace) -> int:
         f"{len(feature_cols)} features, dates {panel['date'].min().date()} → {panel['date'].max().date()}"
     )
 
-    # --- Lockbox split ---
-    _step(f"Carving lockbox split ({lockbox_mo} months)")
-    train_val, lockbox = make_lockbox_split(
-        panel, lockbox_months=lockbox_mo, horizon=horizon
-    )
+    # --- Lockbox split (pass horizon so boundary rows with leaking labels are excluded) ---
+    _step(f"Carving lockbox split ({lockbox_mo} months, horizon={horizon})")
+    train_val, lockbox = make_lockbox_split(panel, lockbox_months=lockbox_mo, horizon=horizon)
     train_val = train_val.sort_values(["date","symbol"]).reset_index(drop=True)
     lockbox   = lockbox.sort_values(["date","symbol"]).reset_index(drop=True)
     _done(
@@ -438,11 +434,10 @@ def cmd_model(args: argparse.Namespace) -> int:
 
     # --- Text report ---
     _step("Writing text report")
-    source_fingerprint = _source_fingerprint(Path.cwd())
     report_lines = _build_text_report(
         feat_set_id, label_col, horizon, len(symbols), panel,
         train_val, lockbox, feature_cols, oof, oof_eval, oof_bt,
-        lb_eval, lb_bt, baseline_table, verdict, source_fingerprint,
+        lb_eval, lb_bt, baseline_table, verdict,
     )
     report_path = store_root / f"p2_report_{label_col}.txt"
     json_path   = store_root / f"p2_report_{label_col}.json"
@@ -471,7 +466,6 @@ def cmd_model(args: argparse.Namespace) -> int:
             "lockbox_backtest": lb_bt.summary_dict(),
             "verdict": verdict.to_dict(),
             "robustness": rob.summary_dict(),
-            "source_fingerprint": source_fingerprint,
         }, indent=2, default=_default),
         encoding="utf-8",
     )
@@ -487,7 +481,7 @@ def cmd_model(args: argparse.Namespace) -> int:
 def _build_text_report(
     feat_set_id, label_col, horizon, n_symbols, panel,
     train_val, lockbox, feature_cols, oof, oof_eval, oof_bt,
-    lb_eval, lb_bt, baseline_table, verdict, source_fingerprint,
+    lb_eval, lb_bt, baseline_table, verdict,
 ) -> list[str]:
     import pandas as pd
     lines = [
@@ -522,13 +516,6 @@ def _build_text_report(
             f"  fold={fm['fold']} n_train={fm['n_train']} "
             f"n_val={fm['n_val']} ic={fm['ic_pearson']:.6f}"
         )
-    lines += ["", "Source Fingerprint:"]
-    lines.append(f"  git_head: {source_fingerprint.get('git_head')}")
-    lines.append(f"  git_dirty: {source_fingerprint.get('git_dirty')}")
-    lines.append(f"  git_diff_sha256: {source_fingerprint.get('git_diff_sha256')}")
-    lines.append("  files:")
-    for rel_path, digest in source_fingerprint.get("files", {}).items():
-        lines.append(f"    {rel_path}: {digest}")
     lines += [
         "",
         f"VERDICT: {verdict.verdict}  (confidence={verdict.confidence})",
@@ -540,59 +527,6 @@ def _build_text_report(
         "=" * 72,
     ]
     return lines
-
-
-def _source_fingerprint(project_root: Path) -> dict:
-    """Return hashes for the source files that define a P2 report."""
-    files = [
-        "quant_platform/cli.py",
-        "quant_platform/training/splitter.py",
-        "quant_platform/training/lgbm_model.py",
-        "quant_platform/evaluation/baselines.py",
-        "quant_platform/evaluation/metrics.py",
-        "quant_platform/evaluation/robustness.py",
-        "quant_platform/evaluation/backtest.py",
-        "quant_platform/evaluation/alpha_verdict.py",
-        "quant_platform/features/technical.py",
-    ]
-
-    file_hashes = {}
-    for rel in files:
-        p = project_root / rel
-        if p.exists():
-            file_hashes[rel] = hashlib.sha256(p.read_bytes()).hexdigest()
-        else:
-            file_hashes[rel] = None
-
-    def _git(args: list[str]) -> str | None:
-        try:
-            proc = subprocess.run(
-                ["git", "-c", f"safe.directory={project_root.as_posix()}", *args],
-                cwd=project_root,
-                check=False,
-                text=True,
-                capture_output=True,
-                timeout=10,
-            )
-        except Exception:
-            return None
-        if proc.returncode != 0:
-            return None
-        return proc.stdout.strip()
-
-    git_head = _git(["rev-parse", "HEAD"])
-    git_status = _git(["status", "--short"])
-    git_diff = _git(["diff", "--", "quant_platform", "tests"])
-    git_diff_sha = hashlib.sha256((git_diff or "").encode("utf-8")).hexdigest()
-
-    return {
-        "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
-        "git_head": git_head,
-        "git_dirty": bool(git_status),
-        "git_status_short": git_status,
-        "git_diff_sha256": git_diff_sha,
-        "files": file_hashes,
-    }
 
 
 # ---------------------------------------------------------------------------

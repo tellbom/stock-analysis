@@ -1,5 +1,5 @@
 ========================================================================
-P2 LIGHTGBM BASELINE  2026-06-24T10:52:40
+P2 LIGHTGBM BASELINE  2026-06-24T11:49:46
 ========================================================================
 Feature set  : 1474f2c4
 Label        : ret_fwd_20d  |  horizon=20
@@ -61,9 +61,9 @@ Baselines:
               rank_ic_mean    icir  quantile_spread  precision_at_10       ece  n_dates  beats_baseline
 predictor                                                                                              
 LightGBM_OOF      0.090783  0.6530         0.019220           0.0483  0.217948      458            True
-momentum_1d            NaN     NaN              NaN              NaN       NaN        0           False
-mean_rev_1d            NaN     NaN              NaN              NaN       NaN        0           False
-cs_momentum            NaN     NaN              NaN              NaN       NaN        0           False
+momentum_1d       0.003607  0.0189         0.000495           0.0753  0.246627      571            True
+mean_rev_1d      -0.003607 -0.0189        -0.000510           0.0608  0.253361      571            True
+cs_momentum      -0.032843 -0.1652        -0.002165           0.0991  0.257819      562            True
 random            0.005334  0.0931         0.000861           0.0372  0.248301      572            True
 
 Fold Metrics:
@@ -72,11 +72,26 @@ Fold Metrics:
   fold=2 n_train=89091 n_val=33800 ic=0.029923
   fold=3 n_train=122902 n_val=34509 ic=0.217971
 
+Source Fingerprint:
+  git_head: e2879b0507e9bc2c8273f84619c1ad9694aeef5c
+  git_dirty: True
+  git_diff_sha256: 5bdeb65bd5f71c82189510de8bcf4f0e6d4962b91ebb4a3e62e2d87d6a39e3a1
+  files:
+    quant_platform/cli.py: 85318ae41b23f40a27a4e5eb991df6d6a03abd170963464c8413bbb896e8169f
+    quant_platform/training/splitter.py: 2bddf2ad7f14ab6efb2f3f484afbd21b32f729b0f1700473e8d2bdd9ce72e238
+    quant_platform/training/lgbm_model.py: 8495308d228f5f67bf6e58bb2e7afc9719019fef46a5774e115881435da4184f
+    quant_platform/evaluation/baselines.py: 37ca64427c838a36bb165f5041a3e6498900d5b40b595f4670de51ccd94a0a20
+    quant_platform/evaluation/metrics.py: 2184f5baa8c50288d13fe468507613ec52fc1d4c6acb52e5040c69514f2f1bef
+    quant_platform/evaluation/robustness.py: 6b4d2026b54b9ddc9a2c4f8fd3c3ff677474c0e66f6f8e80105736eb104bf564
+    quant_platform/evaluation/backtest.py: f9da5f8c781f9b8640004872260ce6028c82e546d52c749659a918b392b4af0a
+    quant_platform/evaluation/alpha_verdict.py: 48ed2e1ffc030685c7cca1fa2fa57b2f7ee56d3e97b6f0c8be5e7d345fb4a29a
+    quant_platform/features/technical.py: ca19261cffac2dea3eae439bf09af11db45c264db92b1a87d108b64c67ff2298
+
 VERDICT: INCONCLUSIVE  (confidence=MEDIUM)
 Evidence:
   OOF Rank IC = +0.0908, ICIR = +0.653
     ✓ ICIR 0.653 > threshold 0.3
-  Beats 1/4 trivial baselines on Rank IC
+  Beats 4/4 trivial baselines on Rank IC
   Backtest: Sharpe = +0.98, net L-S spread = +0.0064
     ✓ Net Sharpe 0.98 > threshold 0.5
     ✓ Label-shuffle IC ≈ 0 (+0.0260) — not a pipeline artefact
@@ -84,7 +99,6 @@ Evidence:
   LOCKBOX: Rank IC = +0.0039, ICIR = +0.022, Sharpe = -1.82
     ✗ Lockbox verdict: NEGATIVE — signal did not generalise
 Caveats:
-  Does not beat all baselines: 1/4
   Lockbox has been used — P2 is sealed. No further tuning is permitted on this data split.
   A-share market characteristics (circuit breakers, liquidity, T+1 settlement) may affect live performance beyond what this backtest captures.
 

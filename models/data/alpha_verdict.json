@@ -7,7 +7,7 @@
   "evidence": [
     "OOF Rank IC = +0.0908, ICIR = +0.653",
     "  \u2713 ICIR 0.653 > threshold 0.3",
-    "Beats 1/4 trivial baselines on Rank IC",
+    "Beats 4/4 trivial baselines on Rank IC",
     "Backtest: Sharpe = +0.98, net L-S spread = +0.0064",
     "  \u2713 Net Sharpe 0.98 > threshold 0.5",
     "  \u2713 Label-shuffle IC \u2248 0 (+0.0260) \u2014 not a pipeline artefact",
@@ -16,9 +16,8 @@
     "  \u2717 Lockbox verdict: NEGATIVE \u2014 signal did not generalise"
   ],
   "caveats": [
-    "Does not beat all baselines: 1/4",
     "Lockbox has been used \u2014 P2 is sealed. No further tuning is permitted on this data split.",
     "A-share market characteristics (circuit breakers, liquidity, T+1 settlement) may affect live performance beyond what this backtest captures."
   ],
-  "generated_at": "2026-06-24T10:52:40"
+  "generated_at": "2026-06-24T11:49:45"
 }
