@@ -279,6 +279,13 @@ def _name_to_code(name: str) -> str:
     return hashlib.md5(name.encode()).hexdigest()[:4].upper()
 
 
+def _date_series(series: pd.Series) -> pd.Series:
+    """Return a Python-date object Series, preserving missing values as None."""
+    return pd.to_datetime(series, errors="coerce").map(
+        lambda x: x.date() if pd.notna(x) else None
+    )
+
+
 # ---------------------------------------------------------------------------
 # PIT query helper
 # ---------------------------------------------------------------------------
@@ -294,13 +301,16 @@ def get_industry_as_of(
     Returns a dict with keys: industry_code, industry_name, concept_tags.
     Returns empty strings if no record is found.
     """
+    effective_date = _date_series(industry_map["effective_date"])
+    out_date = (
+        _date_series(industry_map["out_date"])
+        if "out_date" in industry_map.columns
+        else pd.Series([None] * len(industry_map), index=industry_map.index)
+    )
     rows = industry_map[
         (industry_map["symbol"] == symbol)
-        & (pd.to_datetime(industry_map["effective_date"]).dt.date <= as_of)
-        & (
-            industry_map["out_date"].isna()
-            | (pd.to_datetime(industry_map["out_date"], errors="coerce").dt.date > as_of)
-        )
+        & (effective_date <= as_of)
+        & (out_date.isna() | (out_date > as_of))
     ]
     if rows.empty:
         return {"industry_code": "", "industry_name": "", "concept_tags": ""}

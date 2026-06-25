@@ -15,18 +15,18 @@ applies window functions over it, so the universe is automatically whatever
 symbols are present for each date in that panel.
 
 Output columns (matching CROSS_SECTIONAL_SPECS):
+  cs_rank_close    : rank of close among universe on that date
   cs_rank_volume   : rank of volume among universe on that date (0–1)
   cs_rank_rsi_6    : rank of rsi_6
   cs_rank_roc_10   : rank of roc_10
   cs_rank_ma_5     : rank of normalised ma_5 ratio (close/MA5-1)
+  cs_zscore_close  : z-score of close
   cs_zscore_volume : z-score of volume
   cs_zscore_rsi_6  : z-score of rsi_6
 
-NOTE: cs_rank_close and cs_zscore_close are intentionally excluded.
-Raw close price in CNY is not cross-sectionally meaningful — a 500-CNY
-stock always ranks above a 5-CNY stock regardless of signal content.
-Use normalised features (ma_5 ratio, roc_10, rsi_6) for cross-sectional
-ranking instead.
+NOTE: cs_rank_close and cs_zscore_close are retained for backwards
+compatibility with earlier feature sets. Prefer normalised technical features
+(ma_5 ratio, roc_10, rsi_6) for new modelling work.
 """
 
 from __future__ import annotations
@@ -61,12 +61,14 @@ def build_cross_sectional_features(panel: pd.DataFrame) -> pd.DataFrame:
     df = panel.copy()
 
     rank_targets = [
+        ("cs_rank_close",   "close"),
         ("cs_rank_volume",  "volume"),
         ("cs_rank_rsi_6",   "rsi_6"),
         ("cs_rank_roc_10",  "roc_10"),
         ("cs_rank_ma_5",    "ma_5"),    # normalised ratio, safe for cross-section
     ]
     zscore_targets = [
+        ("cs_zscore_close",  "close"),
         ("cs_zscore_volume", "volume"),
         ("cs_zscore_rsi_6",  "rsi_6"),
     ]

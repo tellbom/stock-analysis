@@ -21,12 +21,17 @@ All tests use synthetic data — no live Eastmoney / Tencent connections.
 from __future__ import annotations
 
 import datetime as dt
+import sys
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import numpy as np
 import pandas as pd
 import pytest
+
+# Add project root so quant_platform is importable when pytest is launched
+# through the repository-local virtualenv.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 
 # ---------------------------------------------------------------------------

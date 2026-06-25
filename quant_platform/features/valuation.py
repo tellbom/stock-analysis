@@ -19,7 +19,7 @@ Join on (symbol, date) directly.
 
 Feature columns produced
 ------------------------
-  cs_log_float_mcap      float in [0,1]  percentile rank of log(float_mcap)
+  cs_log_float_mcap      float in [0,1]  scaled log(float_mcap)
   cs_pe_ttm_rank         float in [0,1]  rank of PE_TTM; negatives → rank 0
   cs_pb_rank             float in [0,1]  rank of PB
   cs_turnover_rank       float in [0,1]  rank of turnover_pct
@@ -49,7 +49,7 @@ logger = get_logger(__name__)
 VALUATION_SPECS: list[FeatureSpec] = [
     FeatureSpec(
         "cs_log_float_mcap", "valuation",
-        ("float_mcap_yi",), 0, "pct_rank(log(float_mcap_yi))", warmup=0,
+        ("float_mcap_yi",), 0, "minmax(log(float_mcap_yi))", warmup=0,
     ),
     FeatureSpec(
         "cs_pe_ttm_rank", "valuation",
@@ -152,6 +152,13 @@ def build_valuation_features(
             continue
         df[out_col] = df.groupby("date")[src_col].transform(_pct_rank)
 
+    log_min = df["_log_float_mcap"].min()
+    log_max = df["_log_float_mcap"].max()
+    if pd.isna(log_min) or pd.isna(log_max) or log_max == log_min:
+        df["cs_log_float_mcap"] = np.nan
+    else:
+        df["cs_log_float_mcap"] = (df["_log_float_mcap"] - log_min) / (log_max - log_min)
+
     # --- PE_TTM momentum (5-day change) — per symbol, cross-sectionally ranked ---
     df = df.sort_values(["symbol", "date"]).reset_index(drop=True)
     if "pe_ttm" in df.columns:
@@ -165,6 +172,7 @@ def build_valuation_features(
     # Drop working columns
     wk = [c for c in df.columns if c.startswith("_")]
     df = df.drop(columns=wk, errors="ignore")
+    df = df.drop(columns=["float_mcap_yi", "total_mcap_yi"], errors="ignore")
 
     logger.info(
         "build_valuation_features: added %d valuation columns to panel (%d rows)",

@@ -111,6 +111,9 @@ def init_lake(store_root: Path | str) -> None:
         "silver/adj_factor",
         "silver/fundamentals",
         "silver/index_ohlcv",   # P4A-05: CSI 300 and other index OHLCV
+        "silver/valuation",     # P4B-01: daily PE/PB/mcap/turnover
+        "silver/fund_flow",     # P4B-06: daily capital flow
+        "silver/margin",        # P4B-08: daily margin trading
         "universe",
         "calendar",
         "catalog",
@@ -171,3 +174,56 @@ def index_ohlcv_path(store_root: Path | str, symbol: str) -> Path:
     Example: silver/index_ohlcv/000300.parquet  (CSI 300)
     """
     return index_ohlcv_dir(store_root) / f"{symbol}.parquet"
+
+
+# ---------------------------------------------------------------------------
+# Silver: valuation (P4B-01 — PE/PB/market cap/turnover from Tencent Finance)
+# ---------------------------------------------------------------------------
+
+def valuation_dir(store_root: Path | str) -> Path:
+    return silver_root(store_root) / "valuation"
+
+
+def valuation_path(store_root: Path | str, symbol: str) -> Path:
+    """silver/valuation/{symbol}.parquet — daily PE_TTM, PB, mcap, turnover."""
+    return valuation_dir(store_root) / f"{symbol}.parquet"
+
+
+# ---------------------------------------------------------------------------
+# Silver: industry classification (P4B-03 — slowly-changing dimension)
+# ---------------------------------------------------------------------------
+
+def industry_map_path(store_root: Path | str) -> Path:
+    """
+    silver/industry_map.parquet — universe-level SCD table.
+
+    Schema: symbol, industry_code, industry_name, concept_tags,
+            effective_date, out_date (None = still current)
+    """
+    return silver_root(store_root) / "industry_map.parquet"
+
+
+# ---------------------------------------------------------------------------
+# Silver: capital flow (P4B-06 — daily 120-day fund flow from Eastmoney)
+# ---------------------------------------------------------------------------
+
+def fund_flow_dir(store_root: Path | str) -> Path:
+    return silver_root(store_root) / "fund_flow"
+
+
+def fund_flow_path(store_root: Path | str, symbol: str) -> Path:
+    """silver/fund_flow/{symbol}.parquet — daily main/small/mid/large/super net inflow (元)."""
+    return fund_flow_dir(store_root) / f"{symbol}.parquet"
+
+
+# ---------------------------------------------------------------------------
+# Silver: margin trading (P4B-08 — daily 融资融券 from Eastmoney datacenter)
+# ---------------------------------------------------------------------------
+
+def margin_dir(store_root: Path | str) -> Path:
+    return silver_root(store_root) / "margin"
+
+
+def margin_path(store_root: Path | str, symbol: str) -> Path:
+    """silver/margin/{symbol}.parquet — daily margin balance, buy, short."""
+    return margin_dir(store_root) / f"{symbol}.parquet"

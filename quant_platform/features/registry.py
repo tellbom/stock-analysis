@@ -115,16 +115,67 @@ TECHNICAL_SPECS: list[FeatureSpec] = [
 # always rank above low-price stocks regardless of signal).  Use the
 # normalised technical features (ma_5, roc_10, etc.) for cross-section instead.
 CROSS_SECTIONAL_SPECS: list[FeatureSpec] = [
+    FeatureSpec("cs_rank_close",     "cross_sectional", ("close",),  0, "rank(close)/N",     warmup=0),
     FeatureSpec("cs_rank_volume",    "cross_sectional", ("volume",), 0, "rank(volume)/N",    warmup=0),
     FeatureSpec("cs_rank_rsi_6",     "cross_sectional", ("rsi_6",),  0, "rank(rsi_6)/N",     warmup=0),
     FeatureSpec("cs_rank_roc_10",    "cross_sectional", ("roc_10",), 0, "rank(roc_10)/N",    warmup=0),
     FeatureSpec("cs_rank_ma_5",      "cross_sectional", ("ma_5",),   0, "rank(ma_5_ratio)/N", warmup=0),
+    FeatureSpec("cs_zscore_close",   "cross_sectional", ("close",),  0, "zscore(close)",     warmup=0),
     FeatureSpec("cs_zscore_volume",  "cross_sectional", ("volume",), 0, "zscore(volume)",    warmup=0),
     FeatureSpec("cs_zscore_rsi_6",   "cross_sectional", ("rsi_6",),  0, "zscore(rsi_6)",     warmup=0),
 ]
 
 # Default full spec = technical + cross-sectional
 DEFAULT_SPECS: list[FeatureSpec] = TECHNICAL_SPECS + CROSS_SECTIONAL_SPECS
+
+# ---------------------------------------------------------------------------
+# P4B extended spec lists (imported lazily to avoid circular deps)
+# ---------------------------------------------------------------------------
+# These are imported at the module level for convenience.  Each builder
+# module (features.valuation, features.industry, features.flow,
+# features.margin) defines its own spec list and registers it independently.
+# The FULL_SPECS convenience constant bundles everything together.
+
+def _valuation_specs_fallback() -> list[FeatureSpec]:
+    return [
+        FeatureSpec("cs_log_float_mcap", "valuation", ("float_mcap_yi",), 0, "minmax(log(float_mcap_yi))", warmup=0),
+        FeatureSpec("cs_pe_ttm_rank", "valuation", ("pe_ttm",), 0, "pct_rank(pe_ttm; neg->0)", warmup=0),
+        FeatureSpec("cs_pb_rank", "valuation", ("pb",), 0, "pct_rank(pb)", warmup=0),
+        FeatureSpec("cs_turnover_rank", "valuation", ("turnover_pct",), 0, "pct_rank(turnover_pct)", warmup=0),
+        FeatureSpec("cs_log_mcap_rank", "valuation", ("total_mcap_yi",), 0, "pct_rank(log(total_mcap_yi))", warmup=0),
+        FeatureSpec("pe_momentum_5d", "valuation", ("pe_ttm",), 5, "pct_rank(PE_TTM.diff(5))", warmup=5),
+    ]
+
+
+def _get_p4b_specs() -> list[FeatureSpec]:
+    """
+    Return the combined P4B spec list: valuation + industry + flow + margin.
+    Imported lazily so the registry module can be loaded even when the
+    P4B feature modules are not yet on the import path.
+    """
+    specs: list[FeatureSpec] = []
+    fallback_by_attr = {"VALUATION_SPECS": _valuation_specs_fallback}
+    for module_name, attr in [
+        ("quant_platform.features.valuation", "VALUATION_SPECS"),
+        ("quant_platform.features.industry",  "INDUSTRY_SPECS"),
+        ("quant_platform.features.flow",      "FLOW_SPECS"),
+        ("quant_platform.features.margin",    "MARGIN_SPECS"),
+    ]:
+        try:
+            import importlib
+            mod = importlib.import_module(module_name)
+            module_specs = getattr(mod, attr, [])
+        except ImportError:
+            module_specs = []
+        if not module_specs and attr in fallback_by_attr:
+            module_specs = fallback_by_attr[attr]()
+        specs.extend(module_specs)
+    return specs
+
+
+# Full spec set including all P4B data blocks.
+# Use this as: registry.register(FULL_SPECS)
+FULL_SPECS: list[FeatureSpec] = DEFAULT_SPECS + _get_p4b_specs()
 
 
 # ---------------------------------------------------------------------------

@@ -141,3 +141,110 @@ def enforce_fundamentals(df: pd.DataFrame, symbol: str) -> pd.DataFrame:
     df["period_end"]    = period_end.dt.date
     df = df.sort_values("announce_date").reset_index(drop=True)
     return df
+
+
+# ---------------------------------------------------------------------------
+# Valuation schema (P4B-01)
+# ---------------------------------------------------------------------------
+# One row per (symbol, date).  Source: Tencent Finance API (qt.gtimg.cn).
+# All fields post-close, same-day — no PIT announcement lag.
+
+VALUATION_REQUIRED: list[str] = ["symbol", "date", "pe_ttm", "pb", "total_mcap_yi", "float_mcap_yi", "turnover_pct"]
+
+VALUATION_DTYPES: dict = {
+    "symbol":         "str",
+    "date":           "object",
+    "pe_ttm":         "float64",   # PE trailing twelve months; negative = loss
+    "pb":             "float64",   # price-to-book
+    "total_mcap_yi":  "float64",   # total market cap in 亿元
+    "float_mcap_yi":  "float64",   # float market cap in 亿元
+    "turnover_pct":   "float64",   # turnover rate %
+}
+
+
+def enforce_valuation(df: pd.DataFrame, symbol: str) -> pd.DataFrame:
+    """Validate and normalise a DataFrame to the valuation silver schema."""
+    df = df.copy()
+    missing = [c for c in VALUATION_REQUIRED if c not in df.columns]
+    if missing:
+        raise ValueError(f"Valuation schema violation for {symbol!r}: missing {missing}")
+    df["symbol"] = symbol
+    df["date"]   = pd.to_datetime(df["date"]).dt.date
+    for col in ("pe_ttm", "pb", "total_mcap_yi", "float_mcap_yi", "turnover_pct"):
+        df[col] = pd.to_numeric(df[col], errors="coerce")
+    df = df.sort_values("date").drop_duplicates(subset=["symbol", "date"], keep="first")
+    return df.reset_index(drop=True)
+
+
+# ---------------------------------------------------------------------------
+# Industry map schema (P4B-03 — slowly-changing dimension)
+# ---------------------------------------------------------------------------
+
+INDUSTRY_MAP_REQUIRED: list[str] = ["symbol", "industry_code", "industry_name", "effective_date"]
+
+def enforce_industry_map(df: pd.DataFrame) -> pd.DataFrame:
+    """Validate and normalise the industry SCD table."""
+    df = df.copy()
+    missing = [c for c in INDUSTRY_MAP_REQUIRED if c not in df.columns]
+    if missing:
+        raise ValueError(f"Industry map schema violation: missing {missing}")
+    df["effective_date"] = pd.to_datetime(df["effective_date"]).dt.date
+    if "out_date" in df.columns:
+        df["out_date"] = pd.to_datetime(df["out_date"], errors="coerce").dt.date
+    else:
+        df["out_date"] = None
+    if "concept_tags" not in df.columns:
+        df["concept_tags"] = ""
+    df = df.drop_duplicates(subset=["symbol", "effective_date"], keep="first")
+    return df.reset_index(drop=True)
+
+
+# ---------------------------------------------------------------------------
+# Capital flow schema (P4B-06)
+# ---------------------------------------------------------------------------
+# One row per (symbol, date).  All flow values in 元 (yuan).
+# Source: Eastmoney push2his API.
+
+FUND_FLOW_REQUIRED: list[str] = ["symbol", "date", "main_net", "small_net"]
+
+def enforce_fund_flow(df: pd.DataFrame, symbol: str) -> pd.DataFrame:
+    """Validate and normalise a DataFrame to the fund flow silver schema."""
+    df = df.copy()
+    missing = [c for c in FUND_FLOW_REQUIRED if c not in df.columns]
+    if missing:
+        raise ValueError(f"Fund flow schema violation for {symbol!r}: missing {missing}")
+    df["symbol"] = symbol
+    df["date"]   = pd.to_datetime(df["date"]).dt.date
+    for col in ("main_net", "small_net", "mid_net", "large_net", "super_net"):
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0)
+        else:
+            df[col] = 0.0
+    df = df.sort_values("date").drop_duplicates(subset=["symbol", "date"], keep="first")
+    return df.reset_index(drop=True)
+
+
+# ---------------------------------------------------------------------------
+# Margin trading schema (P4B-08)
+# ---------------------------------------------------------------------------
+# One row per (symbol, date).  All monetary values in 元.
+# Source: Eastmoney datacenter RPTA_WEB_RZRQ_GGMX.
+# Note: 1-business-day delay — always use with a lag in feature construction.
+
+MARGIN_REQUIRED: list[str] = ["symbol", "date", "rzye", "rzmre"]
+
+def enforce_margin(df: pd.DataFrame, symbol: str) -> pd.DataFrame:
+    """Validate and normalise a DataFrame to the margin silver schema."""
+    df = df.copy()
+    missing = [c for c in MARGIN_REQUIRED if c not in df.columns]
+    if missing:
+        raise ValueError(f"Margin schema violation for {symbol!r}: missing {missing}")
+    df["symbol"] = symbol
+    df["date"]   = pd.to_datetime(df["date"]).dt.date
+    for col in ("rzye", "rzmre", "rzche", "rqye", "rqmcl", "rqchl", "rzrqye"):
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0)
+        else:
+            df[col] = 0.0
+    df = df.sort_values("date").drop_duplicates(subset=["symbol", "date"], keep="first")
+    return df.reset_index(drop=True)

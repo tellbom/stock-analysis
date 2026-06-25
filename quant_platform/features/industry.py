@@ -50,6 +50,13 @@ from quant_platform.core.logging import get_logger
 logger = get_logger(__name__)
 
 
+def _date_series(series: pd.Series) -> pd.Series:
+    """Return a Python-date object Series, preserving missing values as None."""
+    return pd.to_datetime(series, errors="coerce").map(
+        lambda x: x.date() if pd.notna(x) else None
+    )
+
+
 # ---------------------------------------------------------------------------
 # FeatureSpec declarations
 # ---------------------------------------------------------------------------
@@ -98,9 +105,9 @@ def _join_industry(
         return panel
 
     imap = industry_map.copy()
-    imap["effective_date"] = pd.to_datetime(imap["effective_date"]).dt.date
+    imap["effective_date"] = _date_series(imap["effective_date"])
     if "out_date" in imap.columns:
-        imap["out_date"] = pd.to_datetime(imap["out_date"], errors="coerce").dt.date
+        imap["out_date"] = _date_series(imap["out_date"])
 
     df = panel.copy()
     df["date"] = pd.to_datetime(df["date"]).dt.date
@@ -290,11 +297,5 @@ def build_excess_vs_industry_labels(
             "excess_vs_industry_%dd: added for %d rows (%.1f%% coverage)",
             h, n_valid, n_valid / len(df) * 100,
         )
-
-    # Drop the join columns added by _join_industry (industry_code, industry_name)
-    # unless they were already in the original panel
-    for col in ["industry_code", "industry_name"]:
-        if col not in label_panel.columns and col in df.columns:
-            df = df.drop(columns=[col], errors="ignore")
 
     return df.sort_values(["date", "symbol"]).reset_index(drop=True)
