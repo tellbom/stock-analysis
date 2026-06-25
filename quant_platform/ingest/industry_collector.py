@@ -10,13 +10,13 @@ features.
 
 Data sources
 ------------
-1. **Eastmoney push2 ``eastmoney_stock_info``** (primary): returns the
-   ``industry`` field (东财行业名, e.g. "食品饮料") for each stock.
+1. **Eastmoney slist ``eastmoney_concept_blocks``** (primary): returns all
+   board/concept/region tags for a stock (BK codes + names).  The collector
+   filters the mixed list down to a single industry classification.
    Rate-limited with a 1-second minimum interval via ``_em_get()``.
 
-2. **Eastmoney slist ``eastmoney_concept_blocks``** (supplemental):
-   returns all board/concept/region tags for a stock (BK codes + names).
-   Used to populate ``concept_tags``.
+2. **Eastmoney push2 ``eastmoney_stock_info``** (fallback): returns the
+   ``industry`` field (东财行业名, e.g. "食品饮料") for each stock.
 
 SCD design
 ----------
@@ -68,14 +68,32 @@ _em_last_call: list[float] = [0.0]
 _em_session = requests.Session()
 _em_session.headers.update({"User-Agent": _UA})
 
+_REGION_NAMES = (
+    "北京", "上海", "天津", "重庆", "广东", "江苏", "浙江", "山东", "福建",
+    "四川", "贵州", "云南", "海南", "湖北", "湖南", "河南", "河北", "山西",
+    "陕西", "甘肃", "青海", "江西", "安徽", "广西", "新疆", "西藏", "宁夏",
+    "内蒙古", "辽宁", "吉林", "黑龙江",
+)
+_NON_INDUSTRY_KEYWORDS = (
+    "概念", "HS300", "上证", "深成", "中证", "央视", "证金", "融资融券",
+    "沪股通", "深股通", "富时罗素", "MSCI", "标准普尔", "机构重仓",
+    "转债标的", "AH股", "股权激励", "一带一路", "央国企改革", "参股",
+    "中特估", "互联互通", "基金重仓", "创业", "科创", "北交", "QFII",
+    "养老金", "深圳特区", "成渝特区", "西部大开发",
+)
 
-def _em_get(url: str, params: dict | None = None, timeout: int = 15) -> requests.Response:
+def _em_get(
+    url: str,
+    params: dict | None = None,
+    headers: dict | None = None,
+    timeout: int = 15,
+) -> requests.Response:
     """Throttled Eastmoney GET — enforces ≥1s between calls."""
     wait = _EM_MIN_INTERVAL - (time.time() - _em_last_call[0])
     if wait > 0:
         time.sleep(wait + random.uniform(0.1, 0.4))
     try:
-        return _em_session.get(url, params=params, timeout=timeout)
+        return _em_session.get(url, params=params, headers=headers, timeout=timeout)
     finally:
         _em_last_call[0] = time.time()
 
@@ -95,13 +113,25 @@ def _fetch_em_stock_info(code: str) -> dict:
     try:
         r = _em_get(url, params=params)
         d = r.json().get("data") or {}
+        industry_name = str(d.get("f127", "") or "").strip()
         return {
-            "industry_name": str(d.get("f127", "") or ""),
-            "industry_code": str(d.get("f128", "") or ""),
+            "industry_name": industry_name,
+            "industry_code": _name_to_code(industry_name) if industry_name else "",
         }
     except Exception as exc:
         logger.debug("%s: eastmoney_stock_info failed: %s", code, exc)
         return {}
+
+
+def _is_region_board(name: str) -> bool:
+    return "板块" in name and any(region in name for region in _REGION_NAMES)
+
+
+def _is_industry_candidate(name: str) -> bool:
+    name = str(name or "").strip()
+    if not name or _is_region_board(name):
+        return False
+    return not any(keyword in name for keyword in _NON_INDUSTRY_KEYWORDS)
 
 
 def _fetch_em_concept_blocks(code: str) -> list[str]:
@@ -128,6 +158,47 @@ def _fetch_em_concept_blocks(code: str) -> list[str]:
         return []
 
 
+def _fetch_em_slist_industry(code: str) -> dict:
+    """
+    Fetch mixed Eastmoney boards via slist and pick one industry candidate.
+    Returns {industry_name, industry_code, concept_tags} or empty dict.
+    """
+    market = 1 if code.startswith("6") else 0
+    url = "https://push2.eastmoney.com/api/qt/slist/get"
+    params = {
+        "fltt": "2", "invt": "2",
+        "secid": f"{market}.{code}",
+        "spt": "3", "pi": "0", "pz": "200", "po": "1",
+        "fields": "f12,f14,f3,f128",
+    }
+    try:
+        r = _em_get(url, params=params,
+                    headers={"Referer": "https://quote.eastmoney.com/"})
+        diff = (r.json().get("data") or {}).get("diff") or {}
+        items = list(diff.values()) if isinstance(diff, dict) else list(diff or [])
+        boards = []
+        for item in items:
+            name = str(item.get("f14", "") or "").strip()
+            if not name:
+                continue
+            boards.append({
+                "name": name,
+                "code": str(item.get("f12", "") or "").strip(),
+            })
+        candidates = [b for b in boards if _is_industry_candidate(b["name"])]
+        if not candidates:
+            return {}
+        industry = candidates[0]
+        return {
+            "industry_name": industry["name"],
+            "industry_code": industry["code"] or _name_to_code(industry["name"]),
+            "concept_tags": "|".join(b["name"] for b in boards[:30]),
+        }
+    except Exception as exc:
+        logger.debug("%s: eastmoney_slist_industry failed: %s", code, exc)
+        return {}
+
+
 class IndustryCollector:
     """
     Collect and maintain the industry classification SCD table.
@@ -144,9 +215,11 @@ class IndustryCollector:
         self,
         store_root: Path | str,
         fetch_concepts: bool = True,
+        min_coverage: float = 0.90,
     ) -> None:
         self.store_root    = Path(store_root)
         self.fetch_concepts = fetch_concepts
+        self.min_coverage   = min_coverage
         init_lake(self.store_root)
 
     # ------------------------------------------------------------------
@@ -184,21 +257,24 @@ class IndustryCollector:
         existing = self._load()
         new_rows: list[dict] = []
         changes: int = 0
+        fetched: int = 0
 
         for i, symbol in enumerate(symbols):
-            info = _fetch_em_stock_info(symbol)
+            info = _fetch_em_slist_industry(symbol) or _fetch_em_stock_info(symbol)
             if not info.get("industry_name"):
                 logger.debug("%s: no industry returned", symbol)
                 continue
+            fetched += 1
 
             industry_name = info["industry_name"]
             industry_code = info.get("industry_code", "") or _name_to_code(industry_name)
 
             # Fetch concept tags (optional)
-            concept_tags_str = ""
+            concept_tags_str = str(info.get("concept_tags", "") or "")
             if self.fetch_concepts:
-                tags = _fetch_em_concept_blocks(symbol)
-                concept_tags_str = "|".join(tags[:30])   # cap at 30 to limit size
+                if not concept_tags_str:
+                    tags = _fetch_em_concept_blocks(symbol)
+                    concept_tags_str = "|".join(tags[:30])   # cap at 30 to limit size
 
             # Check against last known record
             sym_rows = existing[existing["symbol"] == symbol]
@@ -207,9 +283,11 @@ class IndustryCollector:
             if not current.empty:
                 last_industry = current.iloc[-1]["industry_name"]
                 if last_industry == industry_name:
-                    # No change; optionally refresh concept_tags in place
+                    # No change; refresh tags and repair stale codes in place.
+                    idx = current.index[-1]
+                    if current.iloc[-1].get("industry_code") != industry_code:
+                        existing.at[idx, "industry_code"] = industry_code
                     if self.fetch_concepts and concept_tags_str:
-                        idx = current.index[-1]
                         existing.at[idx, "concept_tags"] = concept_tags_str
                     continue
 
@@ -229,7 +307,10 @@ class IndustryCollector:
             })
 
             if (i + 1) % 50 == 0:
-                logger.info("  ... %d/%d processed (%d changes so far)", i + 1, len(symbols), changes)
+                logger.info(
+                    "  ... %d/%d processed (%d fetched, %d changes so far)",
+                    i + 1, len(symbols), fetched, changes,
+                )
 
         if new_rows:
             new_df = pd.DataFrame(new_rows)
@@ -239,9 +320,18 @@ class IndustryCollector:
 
         combined = enforce_industry_map(combined)
         self._save(combined)
+        coverage = self._coverage(combined, symbols)
+        if coverage < self.min_coverage:
+            msg = (
+                f"Industry coverage too low: {coverage:.1%} "
+                f"({int(coverage * len(symbols))}/{len(symbols)}), "
+                f"threshold={self.min_coverage:.0%}"
+            )
+            logger.warning(msg)
+            raise RuntimeError(msg)
         logger.info(
-            "IndustryCollector done: %d new/changed records, total %d rows",
-            len(new_rows), len(combined),
+            "IndustryCollector done: %d new/changed records, total %d rows, coverage %.1f%%",
+            len(new_rows), len(combined), coverage * 100,
         )
         return combined
 
@@ -267,6 +357,18 @@ class IndustryCollector:
         p.parent.mkdir(parents=True, exist_ok=True)
         df.to_parquet(p, index=False)
         logger.info("Industry map saved → %s (%d rows)", p, len(df))
+
+    @staticmethod
+    def _coverage(df: pd.DataFrame, symbols: list[str]) -> float:
+        if not symbols:
+            return 1.0
+        requested = {str(s).zfill(6) for s in symbols}
+        active = df[
+            df["symbol"].astype(str).str.zfill(6).isin(requested)
+            & df["out_date"].isna()
+            & df["industry_name"].astype(str).str.len().gt(0)
+        ]
+        return active["symbol"].astype(str).str.zfill(6).nunique() / len(requested)
 
 
 def _name_to_code(name: str) -> str:

@@ -347,6 +347,49 @@ class TestValuationFeatures:
 # ---------------------------------------------------------------------------
 
 class TestIndustrySCD:
+    def test_slist_industry_filters_region_and_concepts(self, monkeypatch):
+        from quant_platform.ingest import industry_collector as ic
+
+        class FakeResponse:
+            def json(self):
+                return {
+                    "data": {
+                        "diff": [
+                            {"f12": "BK0475", "f14": "食品饮料"},
+                            {"f12": "BK0477", "f14": "白酒Ⅱ"},
+                            {"f12": "BK9999", "f14": "贵州板块"},
+                            {"f12": "BK0001", "f14": "酿酒概念"},
+                            {"f12": "BK0002", "f14": "HS300_"},
+                        ]
+                    }
+                }
+
+        monkeypatch.setattr(ic, "_em_get", lambda *args, **kwargs: FakeResponse())
+
+        info = ic._fetch_em_slist_industry("600519")
+        assert info["industry_name"] == "食品饮料"
+        assert info["industry_code"] == "BK0475"
+        assert "贵州板块" in info["concept_tags"]
+
+    def test_run_fails_when_industry_coverage_is_too_low(self, tmp_path, monkeypatch):
+        from quant_platform.ingest import industry_collector as ic
+
+        def fake_slist(symbol):
+            if symbol == "000001":
+                return {
+                    "industry_name": "银行Ⅱ",
+                    "industry_code": "BK0470",
+                    "concept_tags": "银行Ⅱ|广东板块",
+                }
+            return {}
+
+        monkeypatch.setattr(ic, "_fetch_em_slist_industry", fake_slist)
+        monkeypatch.setattr(ic, "_fetch_em_stock_info", lambda symbol: {})
+
+        collector = ic.IndustryCollector(tmp_path, fetch_concepts=False)
+        with pytest.raises(RuntimeError, match="Industry coverage too low"):
+            collector.run(["000001", "000002", "000063"], as_of=dt.date(2026, 6, 25))
+
     def test_get_industry_as_of_current(self):
         from quant_platform.ingest.industry_collector import get_industry_as_of
         imap = _make_industry_map(n_symbols=5, n_industries=2)
