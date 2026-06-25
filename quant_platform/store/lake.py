@@ -114,9 +114,11 @@ def init_lake(store_root: Path | str) -> None:
         "silver/valuation",     # P4B-01: daily PE/PB/mcap/turnover
         "silver/fund_flow",     # P4B-06: daily capital flow
         "silver/margin",        # P4B-08: daily margin trading
+        "silver/lockup",        # P4C-03: lockup expiry calendar
         "universe",
         "calendar",
         "catalog",
+        "evaluation",           # P4C-01: feature IC reports and pruning logs
     ):
         (root / sub).mkdir(parents=True, exist_ok=True)
 
@@ -227,3 +229,21 @@ def margin_dir(store_root: Path | str) -> Path:
 def margin_path(store_root: Path | str, symbol: str) -> Path:
     """silver/margin/{symbol}.parquet — daily margin balance, buy, short."""
     return margin_dir(store_root) / f"{symbol}.parquet"
+
+
+# ---------------------------------------------------------------------------
+# Silver: lockup expiry calendar (P4C-03 — 限售解禁)
+# ---------------------------------------------------------------------------
+
+def lockup_dir(store_root: Path | str) -> Path:
+    return silver_root(store_root) / "lockup"
+
+
+def lockup_path(store_root: Path | str, symbol: str) -> Path:
+    """
+    silver/lockup/{symbol}.parquet — lockup expiry events.
+
+    Schema: symbol, unlock_date, lock_type, shares_million, ratio_pct
+    PIT safe: all dates are public knowledge at the time of announcement.
+    """
+    return lockup_dir(store_root) / f"{symbol}.parquet"
