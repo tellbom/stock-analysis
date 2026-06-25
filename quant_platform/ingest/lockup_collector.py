@@ -16,8 +16,8 @@ symbol, unlock_date, lock_type, shares_million, ratio_pct
 
   symbol         : 6-digit A-share code
   unlock_date    : date the lock-up expires (future or past)
-  lock_type      : e.g. "首发原股东限售股份", "定向增发"
-  shares_million : number of shares unlocking (百万股)
+    lock_type      : e.g. "首发机构配售股份", "定向增发"
+    shares_million : number of shares unlocking (百万股)
   ratio_pct      : shares unlocking / float shares (%)
 
 Collection strategy
@@ -116,11 +116,21 @@ def _fetch_lockup_events(
         if not unlock_date_raw or unlock_date_raw == "None":
             continue
         try:
+            shares = row.get("CURRENT_FREE_SHARES")
+            if shares is None:
+                shares = row.get("FREE_SHARES_NUM")
+            if shares is None:
+                shares = row.get("FREE_SHARES")
+            lock_type = (
+                row.get("FREE_SHARES_TYPE")
+                or row.get("LIMITED_STOCK_TYPE")
+                or ""
+            )
             records.append({
                 "symbol":          code,
                 "unlock_date":     unlock_date_raw,
-                "lock_type":       str(row.get("LIMITED_STOCK_TYPE", "") or ""),
-                "shares_million":  float(row.get("FREE_SHARES_NUM", 0) or 0) / 1e6,
+                "lock_type":       str(lock_type),
+                "shares_million":  float(shares or 0) / 1e6,
                 "ratio_pct":       float(row.get("FREE_RATIO", 0) or 0),
             })
         except (TypeError, ValueError):

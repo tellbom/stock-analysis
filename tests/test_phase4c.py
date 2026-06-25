@@ -312,6 +312,33 @@ class TestLockupFeatures:
             },
         ])
 
+    def test_lockup_fetch_parses_current_eastmoney_fields(self, monkeypatch):
+        """RPT_LIFT_STAGE uses FREE_SHARES_TYPE/CURRENT_FREE_SHARES today."""
+        from quant_platform.ingest import lockup_collector as lc
+
+        class FakeResponse:
+            def json(self):
+                return {
+                    "result": {
+                        "data": [{
+                            "SECURITY_CODE": "603296",
+                            "FREE_DATE": "2026-08-20 00:00:00",
+                            "FREE_SHARES_TYPE": "首发机构配售股份",
+                            "CURRENT_FREE_SHARES": 194.9371,
+                            "FREE_SHARES": 6147.6276,
+                            "FREE_RATIO": 0.031709321495,
+                        }]
+                    }
+                }
+
+        monkeypatch.setattr(lc, "_em_get", lambda *args, **kwargs: FakeResponse())
+
+        df = lc._fetch_lockup_events("603296", "2026-01-01", "2026-12-31")
+        assert len(df) == 1
+        assert df.iloc[0]["lock_type"] == "首发机构配售股份"
+        assert df.iloc[0]["shares_million"] == pytest.approx(194.9371 / 1e6)
+        assert df.iloc[0]["ratio_pct"] == pytest.approx(0.031709321495)
+
     def test_days_to_next_unlock_strictly_positive(self):
         """days_to_next_unlock must be > 0 for all dates T < unlock date."""
         from quant_platform.features.event import build_lockup_features

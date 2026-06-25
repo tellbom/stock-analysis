@@ -1,0 +1,537 @@
+[
+  {
+    "symbol": "002475",
+    "mode": "history_no_date",
+    "status": 200,
+    "text_head": "{\"version\":\"4710f86b41c7e5fe29e9008e0302d626\",\"result\":{\"pages\":1,\"data\":[{\"SECUCODE\":\"002475.SZ\",\"SECURITY_CODE\":\"00247",
+    "rows": 5,
+    "head": [
+      {
+        "SECURITY_CODE": "002475",
+        "SECURITY_NAME_ABBR": "立讯精密",
+        "FREE_DATE": "2017-10-24 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.111054473706
+      },
+      {
+        "SECURITY_CODE": "002475",
+        "SECURITY_NAME_ABBR": "立讯精密",
+        "FREE_DATE": "2016-12-20 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.00219677366
+      },
+      {
+        "SECURITY_CODE": "002475",
+        "SECURITY_NAME_ABBR": "立讯精密",
+        "FREE_DATE": "2015-10-16 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.078790048847
+      }
+    ],
+    "success": true,
+    "code": 0,
+    "message": "ok"
+  },
+  {
+    "symbol": "002475",
+    "mode": "upcoming_90d",
+    "status": 200,
+    "text_head": "{\"version\":null,\"result\":null,\"success\":false,\"message\":\"返回数据为空\",\"code\":9201}",
+    "rows": 0,
+    "head": [],
+    "success": false,
+    "code": 9201,
+    "message": "返回数据为空"
+  },
+  {
+    "symbol": "301509",
+    "mode": "history_no_date",
+    "status": 200,
+    "text_head": "{\"version\":\"c36341825c42761b9e8d8746ac8e85f5\",\"result\":{\"pages\":1,\"data\":[{\"SECUCODE\":\"301509.SZ\",\"SECURITY_CODE\":\"30150",
+    "rows": 3,
+    "head": [
+      {
+        "SECURITY_CODE": "301509",
+        "SECURITY_NAME_ABBR": "金凯生科",
+        "FREE_DATE": "2027-02-03 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 1.122747604692
+      },
+      {
+        "SECURITY_CODE": "301509",
+        "SECURITY_NAME_ABBR": "金凯生科",
+        "FREE_DATE": "2024-08-07 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.469313067985
+      },
+      {
+        "SECURITY_CODE": "301509",
+        "SECURITY_NAME_ABBR": "金凯生科",
+        "FREE_DATE": "2024-02-05 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.051593021961
+      }
+    ],
+    "success": true,
+    "code": 0,
+    "message": "ok"
+  },
+  {
+    "symbol": "301509",
+    "mode": "upcoming_90d",
+    "status": 200,
+    "text_head": "{\"version\":null,\"result\":null,\"success\":false,\"message\":\"返回数据为空\",\"code\":9201}",
+    "rows": 0,
+    "head": [],
+    "success": false,
+    "code": 9201,
+    "message": "返回数据为空"
+  },
+  {
+    "symbol": "301589",
+    "mode": "history_no_date",
+    "status": 200,
+    "text_head": "{\"version\":\"f46535b48250aed08fcdafa10ee0775b\",\"result\":{\"pages\":1,\"data\":[{\"SECUCODE\":\"301589.SZ\",\"SECURITY_CODE\":\"30158",
+    "rows": 3,
+    "head": [
+      {
+        "SECURITY_CODE": "301589",
+        "SECURITY_NAME_ABBR": "诺瓦星云",
+        "FREE_DATE": "2027-02-12 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 1.682376535473
+      },
+      {
+        "SECURITY_CODE": "301589",
+        "SECURITY_NAME_ABBR": "诺瓦星云",
+        "FREE_DATE": "2025-02-10 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.463524692905
+      },
+      {
+        "SECURITY_CODE": "301589",
+        "SECURITY_NAME_ABBR": "诺瓦星云",
+        "FREE_DATE": "2024-08-08 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.250185942368
+      }
+    ],
+    "success": true,
+    "code": 0,
+    "message": "ok"
+  },
+  {
+    "symbol": "301589",
+    "mode": "upcoming_90d",
+    "status": 200,
+    "text_head": "{\"version\":null,\"result\":null,\"success\":false,\"message\":\"返回数据为空\",\"code\":9201}",
+    "rows": 0,
+    "head": [],
+    "success": false,
+    "code": 9201,
+    "message": "返回数据为空"
+  },
+  {
+    "symbol": "301607",
+    "mode": "history_no_date",
+    "status": 200,
+    "text_head": "{\"version\":\"3e62b84cdf8e8f843929823e892791e8\",\"result\":{\"pages\":1,\"data\":[{\"SECUCODE\":\"301607.SZ\",\"SECURITY_CODE\":\"30160",
+    "rows": 4,
+    "head": [
+      {
+        "SECURITY_CODE": "301607",
+        "SECURITY_NAME_ABBR": "富特科技",
+        "FREE_DATE": "2027-09-06 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.401900202737
+      },
+      {
+        "SECURITY_CODE": "301607",
+        "SECURITY_NAME_ABBR": "富特科技",
+        "FREE_DATE": "2026-11-11 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.108966544896
+      },
+      {
+        "SECURITY_CODE": "301607",
+        "SECURITY_NAME_ABBR": "富特科技",
+        "FREE_DATE": "2025-09-04 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.69505785652
+      }
+    ],
+    "success": true,
+    "code": 0,
+    "message": "ok"
+  },
+  {
+    "symbol": "301607",
+    "mode": "upcoming_90d",
+    "status": 200,
+    "text_head": "{\"version\":null,\"result\":null,\"success\":false,\"message\":\"返回数据为空\",\"code\":9201}",
+    "rows": 0,
+    "head": [],
+    "success": false,
+    "code": 9201,
+    "message": "返回数据为空"
+  },
+  {
+    "symbol": "688691",
+    "mode": "history_no_date",
+    "status": 200,
+    "text_head": "{\"version\":\"e004ec04c5221a652cb1deac347d984a\",\"result\":{\"pages\":1,\"data\":[{\"SECUCODE\":\"688691.SH\",\"SECURITY_CODE\":\"68869",
+    "rows": 4,
+    "head": [
+      {
+        "SECURITY_CODE": "688691",
+        "SECURITY_NAME_ABBR": "灿芯股份",
+        "FREE_DATE": "2027-04-12 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.64462390946
+      },
+      {
+        "SECURITY_CODE": "688691",
+        "SECURITY_NAME_ABBR": "灿芯股份",
+        "FREE_DATE": "2026-04-13 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.020557798868
+      },
+      {
+        "SECURITY_CODE": "688691",
+        "SECURITY_NAME_ABBR": "灿芯股份",
+        "FREE_DATE": "2025-04-11 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.643182027121
+      }
+    ],
+    "success": true,
+    "code": 0,
+    "message": "ok"
+  },
+  {
+    "symbol": "688691",
+    "mode": "upcoming_90d",
+    "status": 200,
+    "text_head": "{\"version\":null,\"result\":null,\"success\":false,\"message\":\"返回数据为空\",\"code\":9201}",
+    "rows": 0,
+    "head": [],
+    "success": false,
+    "code": 9201,
+    "message": "返回数据为空"
+  },
+  {
+    "symbol": "688702",
+    "mode": "history_no_date",
+    "status": 200,
+    "text_head": "{\"version\":\"2561b76fb838cb6252dd504fd7091672\",\"result\":{\"pages\":1,\"data\":[{\"SECUCODE\":\"688702.SH\",\"SECURITY_CODE\":\"68870",
+    "rows": 5,
+    "head": [
+      {
+        "SECURITY_CODE": "688702",
+        "SECURITY_NAME_ABBR": "盛科通信",
+        "FREE_DATE": "2027-03-15 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.989997383293
+      },
+      {
+        "SECURITY_CODE": "688702",
+        "SECURITY_NAME_ABBR": "盛科通信",
+        "FREE_DATE": "2026-09-14 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.029788806772
+      },
+      {
+        "SECURITY_CODE": "688702",
+        "SECURITY_NAME_ABBR": "盛科通信",
+        "FREE_DATE": "2025-09-15 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.007389461671
+      }
+    ],
+    "success": true,
+    "code": 0,
+    "message": "ok"
+  },
+  {
+    "symbol": "688702",
+    "mode": "upcoming_90d",
+    "status": 200,
+    "text_head": "{\"version\":\"6ce16d325bc2cc897f0ccc8aea0ac3bf\",\"result\":{\"pages\":1,\"data\":[{\"SECUCODE\":\"688702.SH\",\"SECURITY_CODE\":\"68870",
+    "rows": 1,
+    "head": [
+      {
+        "SECURITY_CODE": "688702",
+        "SECURITY_NAME_ABBR": "盛科通信",
+        "FREE_DATE": "2026-09-14 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.029788806772
+      }
+    ],
+    "success": true,
+    "code": 0,
+    "message": "ok"
+  },
+  {
+    "symbol": "688472",
+    "mode": "history_no_date",
+    "status": 200,
+    "text_head": "{\"version\":\"883e5e46c3fbf6cfd31b7c248295a468\",\"result\":{\"pages\":1,\"data\":[{\"SECUCODE\":\"688472.SH\",\"SECURITY_CODE\":\"68847",
+    "rows": 4,
+    "head": [
+      {
+        "SECURITY_CODE": "688472",
+        "SECURITY_NAME_ABBR": "阿特斯",
+        "FREE_DATE": "2026-06-09 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.630084391605
+      },
+      {
+        "SECURITY_CODE": "688472",
+        "SECURITY_NAME_ABBR": "阿特斯",
+        "FREE_DATE": "2025-06-09 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.007769749733
+      },
+      {
+        "SECURITY_CODE": "688472",
+        "SECURITY_NAME_ABBR": "阿特斯",
+        "FREE_DATE": "2024-06-11 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.675488366512
+      }
+    ],
+    "success": true,
+    "code": 0,
+    "message": "ok"
+  },
+  {
+    "symbol": "688472",
+    "mode": "upcoming_90d",
+    "status": 200,
+    "text_head": "{\"version\":null,\"result\":null,\"success\":false,\"message\":\"返回数据为空\",\"code\":9201}",
+    "rows": 0,
+    "head": [],
+    "success": false,
+    "code": 9201,
+    "message": "返回数据为空"
+  },
+  {
+    "symbol": "603296",
+    "mode": "history_no_date",
+    "status": 200,
+    "text_head": "{\"version\":\"fa5d95a56228515ccf1cf4c621671356\",\"result\":{\"pages\":2,\"data\":[{\"SECUCODE\":\"603296.SH\",\"SECURITY_CODE\":\"60329",
+    "rows": 10,
+    "head": [
+      {
+        "SECURITY_CODE": "603296",
+        "SECURITY_NAME_ABBR": "华勤技术",
+        "FREE_DATE": "2029-03-30 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.001620950916
+      },
+      {
+        "SECURITY_CODE": "603296",
+        "SECURITY_NAME_ABBR": "华勤技术",
+        "FREE_DATE": "2028-09-25 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.000308786901
+      },
+      {
+        "SECURITY_CODE": "603296",
+        "SECURITY_NAME_ABBR": "华勤技术",
+        "FREE_DATE": "2028-03-30 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.0012157135
+      }
+    ],
+    "success": true,
+    "code": 0,
+    "message": "ok"
+  },
+  {
+    "symbol": "603296",
+    "mode": "upcoming_90d",
+    "status": 200,
+    "text_head": "{\"version\":\"01881ff8e0a451b01256ccf3b9272ba8\",\"result\":{\"pages\":1,\"data\":[{\"SECUCODE\":\"603296.SH\",\"SECURITY_CODE\":\"60329",
+    "rows": 1,
+    "head": [
+      {
+        "SECURITY_CODE": "603296",
+        "SECURITY_NAME_ABBR": "华勤技术",
+        "FREE_DATE": "2026-08-20 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.000353007005
+      }
+    ],
+    "success": true,
+    "code": 0,
+    "message": "ok"
+  },
+  {
+    "symbol": "001391",
+    "mode": "history_no_date",
+    "status": 200,
+    "text_head": "{\"version\":\"8c99dd2abbbaddb191094899461b4833\",\"result\":{\"pages\":1,\"data\":[{\"SECUCODE\":\"001391.SZ\",\"SECURITY_CODE\":\"00139",
+    "rows": 3,
+    "head": [
+      {
+        "SECURITY_CODE": "001391",
+        "SECURITY_NAME_ABBR": "国货航",
+        "FREE_DATE": "2027-12-30 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 3.236490548793
+      },
+      {
+        "SECURITY_CODE": "001391",
+        "SECURITY_NAME_ABBR": "国货航",
+        "FREE_DATE": "2025-12-30 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.434782645324
+      },
+      {
+        "SECURITY_CODE": "001391",
+        "SECURITY_NAME_ABBR": "国货航",
+        "FREE_DATE": "2025-06-30 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.02308118286
+      }
+    ],
+    "success": true,
+    "code": 0,
+    "message": "ok"
+  },
+  {
+    "symbol": "001391",
+    "mode": "upcoming_90d",
+    "status": 200,
+    "text_head": "{\"version\":null,\"result\":null,\"success\":false,\"message\":\"返回数据为空\",\"code\":9201}",
+    "rows": 0,
+    "head": [],
+    "success": false,
+    "code": 9201,
+    "message": "返回数据为空"
+  },
+  {
+    "symbol": "001280",
+    "mode": "history_no_date",
+    "status": 200,
+    "text_head": "{\"version\":\"e2ce62616d7731e8a16ed56f1b86c632\",\"result\":{\"pages\":1,\"data\":[{\"SECUCODE\":\"001280.SZ\",\"SECURITY_CODE\":\"00128",
+    "rows": 3,
+    "head": [
+      {
+        "SECURITY_CODE": "001280",
+        "SECURITY_NAME_ABBR": "中国铀业",
+        "FREE_DATE": "2028-12-04 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 8.396123819891
+      },
+      {
+        "SECURITY_CODE": "001280",
+        "SECURITY_NAME_ABBR": "中国铀业",
+        "FREE_DATE": "2026-12-03 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 2.508638065136
+      },
+      {
+        "SECURITY_CODE": "001280",
+        "SECURITY_NAME_ABBR": "中国铀业",
+        "FREE_DATE": "2026-06-03 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.090026244757
+      }
+    ],
+    "success": true,
+    "code": 0,
+    "message": "ok"
+  },
+  {
+    "symbol": "001280",
+    "mode": "upcoming_90d",
+    "status": 200,
+    "text_head": "{\"version\":null,\"result\":null,\"success\":false,\"message\":\"返回数据为空\",\"code\":9201}",
+    "rows": 0,
+    "head": [],
+    "success": false,
+    "code": 9201,
+    "message": "返回数据为空"
+  },
+  {
+    "symbol": "000001",
+    "mode": "history_no_date",
+    "status": 200,
+    "text_head": "{\"version\":\"f166be80597f6e912b5c25acafce60ed\",\"result\":{\"pages\":1,\"data\":[{\"SECUCODE\":\"000001.SZ\",\"SECURITY_CODE\":\"00000",
+    "rows": 6,
+    "head": [
+      {
+        "SECURITY_CODE": "000001",
+        "SECURITY_NAME_ABBR": "平安银行",
+        "FREE_DATE": "2018-05-21 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.014690993457
+      },
+      {
+        "SECURITY_CODE": "000001",
+        "SECURITY_NAME_ABBR": "平安银行",
+        "FREE_DATE": "2017-01-09 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.13517027207
+      },
+      {
+        "SECURITY_CODE": "000001",
+        "SECURITY_NAME_ABBR": "平安银行",
+        "FREE_DATE": "2016-05-23 00:00:00",
+        "LIMITED_STOCK_TYPE": null,
+        "FREE_SHARES_NUM": null,
+        "FREE_RATIO": 0.031871310396
+      }
+    ],
+    "success": true,
+    "code": 0,
+    "message": "ok"
+  },
+  {
+    "symbol": "000001",
+    "mode": "upcoming_90d",
+    "status": 200,
+    "text_head": "{\"version\":null,\"result\":null,\"success\":false,\"message\":\"返回数据为空\",\"code\":9201}",
+    "rows": 0,
+    "head": [],
+    "success": false,
+    "code": 9201,
+    "message": "返回数据为空"
+  }
+]
