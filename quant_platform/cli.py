@@ -141,6 +141,18 @@ def cmd_collect(args: argparse.Namespace) -> int:
 
     init_lake(store_root)
 
+    if getattr(args, "index_only", False):
+        _step("Fetching CSI 300 index OHLCV only (P4A-05)")
+        try:
+            from quant_platform.ingest.index_collector import IndexCollector
+            ic = IndexCollector(store_root)
+            result = ic.run(start_date=args.start_date or "2015-01-01")
+            _done(f"Index OHLCV: 000300 rows_new={result.get('000300', 0)}")
+            return 0
+        except Exception as exc:
+            _warn(f"Index OHLCV collection failed: {exc}")
+            return 1
+
     # --- Universe ---
     _step("Building universe membership table")
     svc = UniverseService(args.universe, store_root)
@@ -192,7 +204,7 @@ def cmd_collect(args: argparse.Namespace) -> int:
         try:
             from quant_platform.ingest.index_collector import IndexCollector
             ic = IndexCollector(store_root)
-            ic.run(symbols=["000300"], start_date=args.start_date or "2015-01-01")
+            ic.run(start_date=args.start_date or "2015-01-01")
             _done("Index OHLCV: 000300 up to date")
         except Exception as exc:
             _warn(f"Index OHLCV collection failed (non-fatal): {exc}")
@@ -1273,6 +1285,8 @@ def _add_collect_args(p: argparse.ArgumentParser) -> None:
                    help="Thread workers for OHLCV collection (default: 1)")
     p.add_argument("--no-index",     action="store_true",
                    help="Skip CSI 300 index OHLCV collection")
+    p.add_argument("--index-only",   action="store_true",
+                   help="Only collect CSI 300 index OHLCV; skip universe, calendar, and stock OHLCV")
 
 
 def _add_enrich_args(p: argparse.ArgumentParser) -> None:

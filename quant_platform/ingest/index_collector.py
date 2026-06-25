@@ -143,6 +143,8 @@ class IndexCollector:
 
         # Fetch from AKShare (historical bulk)
         new_rows = self._fetch_akshare(symbol, fetch_start, today)
+        if new_rows.empty:
+            new_rows = self._fetch_eastmoney(symbol, fetch_start, today)
 
         if new_rows.empty:
             logger.warning("Index %s: no new data from %s to %s", symbol, fetch_start, today)
@@ -191,7 +193,7 @@ class IndexCollector:
             )
             return df
 
-        df = safe_call(_call, retries=3, backoff=2.0)
+        df = safe_call(_call, retries=3, label=f"index_zh_a_hist {symbol}")
         if df is None or df.empty:
             logger.warning(
                 "AKShare index_zh_a_hist returned empty for %s (%s to %s)",
@@ -229,3 +231,59 @@ class IndexCollector:
 
         out = out[out["close"].notna()].reset_index(drop=True)
         return out
+
+    def _fetch_eastmoney(
+        self,
+        symbol: str,
+        start_date: str,
+        end_date: str,
+    ) -> pd.DataFrame:
+        """Fetch index daily OHLCV directly from Eastmoney kline API."""
+        import requests
+        import urllib3
+
+        market = _TENCENT_INDEX_PREFIX.get(symbol, "sh")
+        market_id = "1" if market == "sh" else "0"
+        url = "https://push2his.eastmoney.com/api/qt/stock/kline/get"
+        params = {
+            "secid": f"{market_id}.{symbol}",
+            "fields1": "f1,f2,f3,f4,f5,f6",
+            "fields2": "f51,f52,f53,f54,f55,f56,f57",
+            "klt": "101",
+            "fqt": "1",
+            "beg": start_date.replace("-", ""),
+            "end": end_date.replace("-", ""),
+        }
+
+        try:
+            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+            resp = requests.get(url, params=params, timeout=30, verify=False)
+            resp.raise_for_status()
+            payload = resp.json()
+        except Exception as exc:
+            logger.warning("Eastmoney index kline failed for %s: %s", symbol, exc)
+            return pd.DataFrame()
+
+        klines = ((payload or {}).get("data") or {}).get("klines") or []
+        rows: list[dict] = []
+        for line in klines:
+            parts = str(line).split(",")
+            if len(parts) < 7:
+                continue
+            rows.append({
+                "date": parts[0],
+                "open": parts[1],
+                "close": parts[2],
+                "high": parts[3],
+                "low": parts[4],
+                "volume": parts[5],
+                "amount": parts[6],
+            })
+        if not rows:
+            return pd.DataFrame()
+
+        df = pd.DataFrame(rows)
+        df["date"] = pd.to_datetime(df["date"]).dt.date
+        for col in ("open", "high", "low", "close", "volume", "amount"):
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+        return df[df["close"].notna()].reset_index(drop=True)
