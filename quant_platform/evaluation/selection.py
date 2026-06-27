@@ -21,8 +21,8 @@ merely different.
 
 Default promotion thresholds
 -----------------------------
-  icir_delta_min  : challenger ICIR must exceed champion by ≥ 0.1
-  p_value_max     : Wilcoxon p-value ≤ 0.05
+  icir_delta_min  : challenger ICIR must exceed champion by >= 0.1
+  p_value_max     : Wilcoxon p-value <= 0.05
   sharpe_positive : challenger backtest Sharpe > 0
 """
 
@@ -104,10 +104,10 @@ class PromotionDecision:
     criteria_used:      dict  = field(default_factory=dict)
 
     def __str__(self) -> str:
-        status = "PROMOTED ✓" if self.promoted else "REJECTED ✗"
+        status = "PROMOTED" if self.promoted else "REJECTED"
         return (
             f"[{status}] {self.reason} | "
-            f"ΔICIR={self.icir_delta:+.4f}  p={self.wilcoxon_pvalue:.4f}  "
+            f"delta_ICIR={self.icir_delta:+.4f}  p={self.wilcoxon_pvalue:.4f}  "
             f"challenger_sharpe={self.challenger_sharpe:+.2f}"
         )
 
@@ -163,11 +163,11 @@ def evaluate_promotion(
     # Apply all criteria
     fails = []
     if icir_delta < icir_delta_min:
-        fails.append(f"ΔICIR={icir_delta:+.4f} < {icir_delta_min}")
+        fails.append(f"delta_ICIR={icir_delta:+.4f} < {icir_delta_min}")
     if pvalue > p_value_max:
         fails.append(f"p={pvalue:.4f} > {p_value_max}")
     if sharpe_positive and challenger_sharpe <= 0:
-        fails.append(f"challenger_sharpe={challenger_sharpe:.2f} ≤ 0")
+        fails.append(f"challenger_sharpe={challenger_sharpe:.2f} <= 0")
 
     promoted = len(fails) == 0
     reason   = "All criteria met" if promoted else "; ".join(fails)

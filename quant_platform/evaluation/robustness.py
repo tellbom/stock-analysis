@@ -79,20 +79,20 @@ class RobustnessReport:
         print("=" * 60)
         print(f"  Baseline Rank IC:     {self.baseline_rank_ic:+.4f}")
         print(f"  Label-shuffle IC:     {self.shuffle_rank_ic:+.4f}  "
-              f"({'PASS ✓' if self.shuffle_passed else 'FAIL ✗'})")
+              f"({'PASS' if self.shuffle_passed else 'FAIL'})")
         print(f"  Canary IC:            {self.canary_rank_ic:+.4f}  "
-              f"({'PASS ✓' if self.canary_passed else 'FAIL ✗'})")
+              f"({'PASS' if self.canary_passed else 'FAIL'})")
         print(f"  First-half Rank IC:   {self.first_half_ric:+.4f}")
         print(f"  Second-half Rank IC:  {self.second_half_ric:+.4f}  "
-              f"({'stable ✓' if self.subperiod_stable else 'unstable ✗'})")
+              f"({'stable' if self.subperiod_stable else 'unstable'})")
         if not np.isnan(self.subperiod_ic_ratio):
             interp = _interpret_stability(self.subperiod_ic_ratio, self.subperiod_stable)
-            print(f"  Stability ratio:      {self.subperiod_ic_ratio:.3f}  — {interp}")
+            print(f"  Stability ratio:      {self.subperiod_ic_ratio:.3f}  - {interp}")
         if self.ablation_results:
             print("  Feature ablation (IC with group removed):")
             for grp, ic in sorted(self.ablation_results.items()):
                 delta = ic - self.baseline_rank_ic
-                print(f"    remove {grp:20s}: IC={ic:+.4f}  Δ={delta:+.4f}")
+                print(f"    remove {grp:20s}: IC={ic:+.4f}  delta={delta:+.4f}")
         print("=" * 60 + "\n")
 
     def summary_dict(self) -> dict:
@@ -112,7 +112,7 @@ class RobustnessReport:
 def _interpret_stability(ratio: float, same_sign: bool) -> str:
     """Human-readable interpretation of the subperiod stability index."""
     if not same_sign:
-        return "signal is REGIME-SENSITIVE (opposite signs — genuine decay likely)"
+        return "signal is REGIME-SENSITIVE (opposite signs - genuine decay likely)"
     if ratio >= 0.7:
         return "signal is REGIME-STABLE (consistent magnitude across halves)"
     if ratio >= 0.4:
@@ -263,7 +263,7 @@ def run_robustness_tests(
         )
         interp = _interpret_stability(report.subperiod_ic_ratio, report.subperiod_stable)
         logger.info(
-            "Subperiod stability: first=%.4f  second=%.4f  ratio=%.3f  → %s",
+            "Subperiod stability: first=%.4f  second=%.4f  ratio=%.3f  -> %s",
             report.first_half_ric, report.second_half_ric,
             report.subperiod_ic_ratio, interp,
         )

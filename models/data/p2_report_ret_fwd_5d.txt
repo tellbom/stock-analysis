@@ -1,0 +1,81 @@
+========================================================================
+P2+P4A MODEL REPORT  2026-06-27T11:21:27
+========================================================================
+Feature set  : d02a4ebf
+Label        : ret_fwd_5d  |  horizon=5d
+Symbols      : 300  |  panel rows=248,457
+Dates        : 2023-01-03 -> 2026-06-18
+Features     : 34
+
+OOF Evaluation:
+  ic_mean: 0.026595
+  ic_std: 0.144142
+  rank_ic_mean: 0.033533
+  rank_ic_std: 0.146168
+  icir: 0.2294
+  quantile_spread: 0.003382
+  monotonicity_ok: False
+  precision_at_10: 0.0636
+  precision_at_20: 0.1035
+  ece: 0.237327
+  n_dates: 692
+  n_predictions: 205956
+
+OOF Backtest:
+  annualised_return: 0.068203
+  annualised_vol: 0.104567
+  sharpe: 0.6522
+  max_drawdown: -0.1135
+  gross_ls_spread: 0.001965
+  net_ls_spread: 0.00131
+  avg_daily_turnover: 0.6553
+  cost_bps: 10.0
+  n_days: 139
+
+Walk-Forward OOS Evaluation:
+ window_id train_start  train_end test_start   test_end  n_train  n_test  rank_ic_mean   icir  sharpe  n_independent_periods
+         0  2023-01-03 2024-06-07 2024-06-19 2025-06-18   102149   71874      0.048416 0.2975  0.6116                     48
+         1  2023-01-03 2025-06-10 2025-06-19 2026-06-18   174017   70852      0.003511 0.0208 -0.5657                     47
+  Agg Rank IC : +0.0262
+  Agg ICIR    : +0.1569
+  Agg Sharpe  : -0.2419
+  IC stability: 1.00
+
+Baselines:
+              rank_ic_mean    icir  quantile_spread  precision_at_10       ece  n_dates  beats_baseline
+predictor                                                                                              
+LightGBM_OOF      0.033533  0.2294         0.003382           0.0636  0.237327      692            True
+momentum_1d            NaN     NaN              NaN              NaN       NaN        0           False
+mean_rev_1d            NaN     NaN              NaN              NaN       NaN        0           False
+cs_momentum            NaN     NaN              NaN              NaN       NaN        0           False
+random            0.000674  0.0120        -0.000233           0.0336  0.249701      830            True
+
+Robustness:
+  Subperiod IC first=+0.0408  second=+0.0287  ratio=0.703
+
+Fold Metrics:
+  fold=0 n_train=37445 n_val=40970 ic=0.047395
+  fold=1 n_train=78404 n_val=40936 ic=0.033638
+  fold=2 n_train=119359 n_val=41000 ic=-0.008204
+  fold=3 n_train=160329 n_val=41152 ic=0.030191
+  fold=4 n_train=201470 n_val=41898 ic=0.034446
+
+VERDICT: NO_GO  (confidence=HIGH)
+Evidence:
+  OOF Rank IC = +0.0335, ICIR = +0.229
+  Beats 1/4 trivial baselines on Rank IC
+  Backtest: Sharpe = +0.65, net L-S spread = +0.0013
+    PASS Net Sharpe 0.65 > threshold 0.5
+    PASS Label-shuffle IC ~= 0 (+0.0032) - not a pipeline artefact
+    PASS Subperiod stable: first=+0.0408, second=+0.0287
+    Stability index: 0.703 - REGIME-STABLE (consistent magnitude)
+  WALK-FORWARD OOS (2 windows, 95 indep. periods): Rank IC = +0.0262, ICIR = +0.1569, Sharpe = -0.2419
+    IC sign stability = 1.00 (2/2 windows positive)
+Caveats:
+    WARN ICIR 0.229 is positive but below threshold 0.3
+  Does not beat all baselines: 1/4
+    WARN Walk-forward ICIR 0.157 positive but below threshold 0.3
+    WARN Walk-forward Sharpe negative (-0.242) - check cost assumptions
+  A-share market characteristics (circuit breakers, liquidity, T+1 settlement) may affect live performance beyond what this backtest captures.
+
+========================================================================

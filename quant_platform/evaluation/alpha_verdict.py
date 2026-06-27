@@ -119,7 +119,7 @@ def render_verdict(
         - OOF Rank ICIR > ``icir_threshold`` (default 0.3)
         - Backtest net Sharpe > ``sharpe_threshold`` (default 0.5)
         - Beats all trivial baselines on Rank IC
-        - Label-shuffle null test passes (shuffle IC ≈ 0)
+        - Label-shuffle null test passes (shuffle IC ~= 0)
         - Subperiod stable (both halves positive)
     - NO_GO if any critical condition fails.
     - INCONCLUSIVE if data is insufficient to judge.
@@ -151,13 +151,13 @@ def render_verdict(
     icir = oof_eval.icir
     ev.append(f"OOF Rank IC = {ric:+.4f}, ICIR = {icir:+.3f}")
     if icir > icir_threshold:
-        ev.append(f"  ✓ ICIR {icir:.3f} > threshold {icir_threshold}")
+        ev.append(f"  PASS ICIR {icir:.3f} > threshold {icir_threshold}")
         pass_count += 1
     elif icir > 0:
-        cav.append(f"  ⚠ ICIR {icir:.3f} is positive but below threshold {icir_threshold}")
+        cav.append(f"  WARN ICIR {icir:.3f} is positive but below threshold {icir_threshold}")
         fail_count += 1
     else:
-        ev.append(f"  ✗ ICIR {icir:.3f} ≤ 0 — no signal")
+        ev.append(f"  FAIL ICIR {icir:.3f} <= 0 - no signal")
         fail_count += 1
 
     # --- 2. Beats baselines ---
@@ -179,34 +179,34 @@ def render_verdict(
     net_spread = backtest.net_long_minus_short
     ev.append(f"Backtest: Sharpe = {sharpe:+.2f}, net L-S spread = {net_spread:+.4f}")
     if sharpe > sharpe_threshold:
-        ev.append(f"  ✓ Net Sharpe {sharpe:.2f} > threshold {sharpe_threshold}")
+        ev.append(f"  PASS Net Sharpe {sharpe:.2f} > threshold {sharpe_threshold}")
         pass_count += 1
     elif sharpe > 0:
-        cav.append(f"  ⚠ Sharpe {sharpe:.2f} positive but below threshold {sharpe_threshold}")
+        cav.append(f"  WARN Sharpe {sharpe:.2f} positive but below threshold {sharpe_threshold}")
         fail_count += 1
     else:
-        ev.append(f"  ✗ Sharpe {sharpe:.2f} ≤ 0 — costs destroy the signal")
+        ev.append(f"  FAIL Sharpe {sharpe:.2f} <= 0 - costs destroy the signal")
         fail_count += 1
 
     # --- 4. Null tests ---
     if robustness.shuffle_passed:
-        ev.append(f"  ✓ Label-shuffle IC ≈ 0 ({robustness.shuffle_rank_ic:+.4f}) — not a pipeline artefact")
+        ev.append(f"  PASS Label-shuffle IC ~= 0 ({robustness.shuffle_rank_ic:+.4f}) - not a pipeline artefact")
         pass_count += 1
     else:
-        ev.append(f"  ✗ Label-shuffle IC = {robustness.shuffle_rank_ic:+.4f} — too large, possible bug")
+        ev.append(f"  FAIL Label-shuffle IC = {robustness.shuffle_rank_ic:+.4f} - too large, possible bug")
         fail_count += 1
 
     # --- 5. Subperiod stability (P4A-02: now includes stability index) ---
     if robustness.subperiod_stable:
         ev.append(
-            f"  ✓ Subperiod stable: "
+            f"  PASS Subperiod stable: "
             f"first={robustness.first_half_ric:+.4f}, "
             f"second={robustness.second_half_ric:+.4f}"
         )
         pass_count += 1
     else:
         cav.append(
-            f"  ⚠ Subperiod instability: "
+            f"  WARN Subperiod instability: "
             f"first={robustness.first_half_ric:+.4f}, "
             f"second={robustness.second_half_ric:+.4f}"
         )
@@ -218,14 +218,14 @@ def render_verdict(
         verdict.subperiod_ic_ratio = ratio
         interp = _stability_interpretation(ratio, robustness.subperiod_stable)
         verdict.subperiod_interpretation = interp
-        ev.append(f"  Stability index: {ratio:.3f} — {interp}")
+        ev.append(f"  Stability index: {ratio:.3f} - {interp}")
         if not robustness.subperiod_stable:
             cav.append(
                 "  Opposite-sign subperiods suggest genuine regime sensitivity. "
                 "Consider whether the lockbox/walk-forward period differs from train/val regime."
             )
 
-    # --- 6. Walk-forward OOS evaluation (P4A-03 — primary OOS instrument) ---
+    # --- 6. Walk-forward OOS evaluation (P4A-03 - primary OOS instrument) ---
     if walk_forward_result is not None:
         verdict.walk_forward_used       = True
         verdict.wf_agg_rank_ic          = walk_forward_result.agg_rank_ic_mean
@@ -249,27 +249,27 @@ def render_verdict(
 
         wf_icir = walk_forward_result.agg_icir
         if wf_icir > wf_icir_threshold:
-            ev.append(f"  ✓ Walk-forward ICIR {wf_icir:.3f} > threshold {wf_icir_threshold}")
+            ev.append(f"  PASS Walk-forward ICIR {wf_icir:.3f} > threshold {wf_icir_threshold}")
             pass_count += 1
         elif wf_icir > 0:
             cav.append(
-                f"  ⚠ Walk-forward ICIR {wf_icir:.3f} positive but below threshold {wf_icir_threshold}"
+                f"  WARN Walk-forward ICIR {wf_icir:.3f} positive but below threshold {wf_icir_threshold}"
             )
             fail_count += 1
         else:
-            ev.append(f"  ✗ Walk-forward ICIR {wf_icir:.3f} ≤ 0 — signal does not generalise OOS")
+            ev.append(f"  FAIL Walk-forward ICIR {wf_icir:.3f} <= 0 - signal does not generalise OOS")
             fail_count += 1
 
         if walk_forward_result.agg_sharpe > 0:
-            ev.append(f"  ✓ Walk-forward Sharpe positive ({walk_forward_result.agg_sharpe:+.3f})")
+            ev.append(f"  PASS Walk-forward Sharpe positive ({walk_forward_result.agg_sharpe:+.3f})")
             pass_count += 1
         else:
             cav.append(
-                f"  ⚠ Walk-forward Sharpe negative ({walk_forward_result.agg_sharpe:+.3f}) — "
+                f"  WARN Walk-forward Sharpe negative ({walk_forward_result.agg_sharpe:+.3f}) - "
                 "check cost assumptions"
             )
 
-    # --- 7. Lockbox (legacy — seals P2 when used) ---
+    # --- 7. Lockbox (legacy - seals P2 when used) ---
     if lockbox_eval is not None:
         verdict.lockbox_used    = True
         verdict.lockbox_rank_ic = lockbox_eval.rank_ic_mean
@@ -280,14 +280,14 @@ def render_verdict(
             f"Sharpe = {verdict.lockbox_sharpe:+.2f}"
         )
         cav.append(
-            "Lockbox has been used — P2 is sealed. "
+            "Lockbox has been used - P2 is sealed. "
             "No further tuning is permitted on this data split."
         )
         if lockbox_eval.rank_ic_mean > 0 and (lockbox_backtest is None or lockbox_backtest.sharpe > 0):
-            ev.append("  ✓ Lockbox verdict: POSITIVE")
+            ev.append("  PASS Lockbox verdict: POSITIVE")
             pass_count += 1
         else:
-            ev.append("  ✗ Lockbox verdict: NEGATIVE — signal did not generalise")
+            ev.append("  FAIL Lockbox verdict: NEGATIVE - signal did not generalise")
             fail_count += 1
 
     # --- Determine verdict ---
@@ -312,7 +312,7 @@ def render_verdict(
     if not verdict.lockbox_used and not verdict.walk_forward_used:
         cav.append(
             "Neither lockbox nor walk-forward OOS evaluation has been used. "
-            "This verdict is based on OOF evaluation only — it cannot measure "
+            "This verdict is based on OOF evaluation only - it cannot measure "
             "whether the signal generalises to genuinely new data."
         )
     if not verdict.walk_forward_used and verdict.lockbox_used:
@@ -333,7 +333,7 @@ def render_verdict(
 def _stability_interpretation(ratio: float, same_sign: bool) -> str:
     """Human-readable interpretation of subperiod IC ratio."""
     if not same_sign:
-        return "REGIME-SENSITIVE (opposite signs — genuine decay likely)"
+        return "REGIME-SENSITIVE (opposite signs - genuine decay likely)"
     if ratio >= 0.7:
         return "REGIME-STABLE (consistent magnitude)"
     if ratio >= 0.4:
@@ -345,9 +345,9 @@ def _write_verdict(verdict: AlphaVerdict, store_root: Path) -> None:
     """Write human-readable text and machine-readable JSON."""
     lines = [
         "=" * 65,
-        f"ALPHA VERDICT — {verdict.generated_at}",
+        f"ALPHA VERDICT - {verdict.generated_at}",
         f"VERDICT: {verdict.verdict}  (confidence: {verdict.confidence})",
-        f"Lockbox used: {'YES — P2 sealed' if verdict.lockbox_used else 'NO'}",
+        f"Lockbox used: {'YES - P2 sealed' if verdict.lockbox_used else 'NO'}",
         f"Walk-forward used: {'YES' if verdict.walk_forward_used else 'NO'}",
         "=" * 65,
         "",
@@ -364,4 +364,4 @@ def _write_verdict(verdict: AlphaVerdict, store_root: Path) -> None:
     json_path = store_root / "alpha_verdict.json"
     txt_path.write_text("\n".join(lines), encoding="utf-8")
     json_path.write_text(json.dumps(verdict.to_dict(), indent=2), encoding="utf-8")
-    logger.info("Verdict written → %s, %s", txt_path, json_path)
+    logger.info("Verdict written -> %s, %s", txt_path, json_path)

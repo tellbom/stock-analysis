@@ -1,22 +1,26 @@
 =================================================================
-ALPHA VERDICT — 2026-06-24T11:49:45
-VERDICT: INCONCLUSIVE  (confidence: MEDIUM)
-Lockbox used: YES — P2 sealed
+ALPHA VERDICT - 2026-06-27T11:21:27
+VERDICT: NO_GO  (confidence: HIGH)
+Lockbox used: NO
+Walk-forward used: YES
 =================================================================
 
 EVIDENCE:
-  OOF Rank IC = +0.0908, ICIR = +0.653
-    ✓ ICIR 0.653 > threshold 0.3
-  Beats 4/4 trivial baselines on Rank IC
-  Backtest: Sharpe = +0.98, net L-S spread = +0.0064
-    ✓ Net Sharpe 0.98 > threshold 0.5
-    ✓ Label-shuffle IC ≈ 0 (+0.0260) — not a pipeline artefact
-    ✓ Subperiod stable: first=+0.0885, second=+0.0922
-  LOCKBOX: Rank IC = +0.0039, ICIR = +0.022, Sharpe = -1.82
-    ✗ Lockbox verdict: NEGATIVE — signal did not generalise
+  OOF Rank IC = +0.0335, ICIR = +0.229
+  Beats 1/4 trivial baselines on Rank IC
+  Backtest: Sharpe = +0.65, net L-S spread = +0.0013
+    PASS Net Sharpe 0.65 > threshold 0.5
+    PASS Label-shuffle IC ~= 0 (+0.0032) - not a pipeline artefact
+    PASS Subperiod stable: first=+0.0408, second=+0.0287
+    Stability index: 0.703 - REGIME-STABLE (consistent magnitude)
+  WALK-FORWARD OOS (2 windows, 95 indep. periods): Rank IC = +0.0262, ICIR = +0.1569, Sharpe = -0.2419
+    IC sign stability = 1.00 (2/2 windows positive)
 
 CAVEATS:
-  Lockbox has been used — P2 is sealed. No further tuning is permitted on this data split.
+    WARN ICIR 0.229 is positive but below threshold 0.3
+  Does not beat all baselines: 1/4
+    WARN Walk-forward ICIR 0.157 positive but below threshold 0.3
+    WARN Walk-forward Sharpe negative (-0.242) - check cost assumptions
   A-share market characteristics (circuit breakers, liquidity, T+1 settlement) may affect live performance beyond what this backtest captures.
 
 =================================================================

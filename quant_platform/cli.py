@@ -538,7 +538,7 @@ def cmd_model(args: argparse.Namespace) -> int:
         active_cols = pruner.get_active_feature_cols(feature_cols)
         if len(active_cols) < len(feature_cols):
             _info(
-                f"Pruning applied: {len(feature_cols)} → {len(active_cols)} features"
+                f"Pruning applied: {len(feature_cols)} -> {len(active_cols)} features"
             )
             feature_cols = active_cols
     except ImportError:
@@ -547,7 +547,7 @@ def cmd_model(args: argparse.Namespace) -> int:
     _done(
         f"Panel: {len(panel):,} rows  {panel['symbol'].nunique()} symbols  "
         f"{len(feature_cols)} features  "
-        f"{panel['date'].min().date()} → {panel['date'].max().date()}"
+        f"{panel['date'].min().date()} -> {panel['date'].max().date()}"
     )
 
     lgbm_params = {
@@ -569,7 +569,7 @@ def cmd_model(args: argparse.Namespace) -> int:
         })
 
         # ----------------------------------------------------------------
-        # Walk-forward OOS evaluation (P4A-03) — primary path
+        # Walk-forward OOS evaluation (P4A-03) - primary path
         # ----------------------------------------------------------------
         wf_result = None
         if use_wf:
@@ -642,7 +642,7 @@ def cmd_model(args: argparse.Namespace) -> int:
             )
             if not np.isnan(ratio) and ratio > 1.3:
                 _warn(
-                    f"GBM/Ridge ratio {ratio:.2f} > 1.3 — GBM may be fitting "
+                    f"GBM/Ridge ratio {ratio:.2f} > 1.3 - GBM may be fitting "
                     "nonlinear noise.  Consider reducing num_leaves."
                 )
             run_log.log_metrics({
@@ -650,7 +650,7 @@ def cmd_model(args: argparse.Namespace) -> int:
                 "lgbm_ridge_ratio": ratio,
             })
         except ImportError:
-            _warn("RidgeModel not available — skipping baseline (merge model_zoo.py)")
+            _warn("RidgeModel not available - skipping baseline (merge model_zoo.py)")
 
         # ----------------------------------------------------------------
         # Baseline gauntlet
@@ -663,7 +663,7 @@ def cmd_model(args: argparse.Namespace) -> int:
         print("\n" + baseline_table.to_string())
 
         # ----------------------------------------------------------------
-        # OOF backtest (on full panel — for sanity check)
+        # OOF backtest (on full panel - for sanity check)
         # ----------------------------------------------------------------
         _step("Running OOF cost-aware backtest")
         bt_panel = panel.copy()
@@ -692,7 +692,7 @@ def cmd_model(args: argparse.Namespace) -> int:
         if not np.isnan(rob.subperiod_ic_ratio):
             _info(
                 f"Subperiod IC ratio = {rob.subperiod_ic_ratio:.3f}  "
-                f"— {rob.subperiod_interpretation if hasattr(rob, 'subperiod_interpretation') else ''}"
+                f"- {rob.subperiod_interpretation if hasattr(rob, 'subperiod_interpretation') else ''}"
             )
 
         # ----------------------------------------------------------------
@@ -886,7 +886,7 @@ def cmd_diagnose(args: argparse.Namespace) -> int:
                 feature_cols, pruning_result=prune_result
             )
             _done(
-                f"Pruning: {len(feature_cols)} → {len(active_cols)} active features  "
+                f"Pruning: {len(feature_cols)} -> {len(active_cols)} active features  "
                 f"({prune_result.n_pruned} pruned)"
             )
 
@@ -1093,22 +1093,22 @@ def cmd_status(args: argparse.Namespace) -> int:
 # ---------------------------------------------------------------------------
 
 def cmd_run(args: argparse.Namespace) -> int:
-    """Full pipeline: collect → enrich → features → model."""
-    _banner("FULL PIPELINE  P0 → P4B → P1+P4 → P2+P4A")
+    """Full pipeline: collect -> enrich -> features -> model."""
+    _banner("FULL PIPELINE  P0 -> P4B -> P1+P4 -> P2+P4A")
 
     rc = cmd_collect(args)
     if rc != 0:
-        print("\n[ABORT] collect stage failed — stopping.")
+        print("\n[ABORT] collect stage failed - stopping.")
         return rc
 
     if not getattr(args, "skip_enrich", False):
         rc = cmd_enrich(args)
         if rc != 0:
-            _warn("Enrich stage had failures — continuing (P4B data will be partial)")
+            _warn("Enrich stage had failures - continuing (P4B data will be partial)")
 
     rc = cmd_features(args)
     if rc != 0:
-        print("\n[ABORT] features stage failed — stopping.")
+        print("\n[ABORT] features stage failed - stopping.")
         return rc
 
     return cmd_model(args)
@@ -1134,7 +1134,7 @@ def _write_model_report(
         f"Feature set  : {feat_set_id}",
         f"Label        : {label_col}  |  horizon={horizon}d",
         f"Symbols      : {n_symbols}  |  panel rows={len(panel):,}",
-        f"Dates        : {pd.to_datetime(panel['date']).min().date()} → "
+        f"Dates        : {pd.to_datetime(panel['date']).min().date()} -> "
         f"{pd.to_datetime(panel['date']).max().date()}",
         f"Features     : {len(feature_cols)}",
         "",
@@ -1186,7 +1186,7 @@ def _write_model_report(
 
     report_path = store_root / f"p2_report_{label_col}.txt"
     report_path.write_text("\n".join(lines), encoding="utf-8")
-    _done(f"Report → {report_path}")
+    _done(f"Report -> {report_path}")
 
     def _default(v):
         if isinstance(v, (np.bool_,)):   return bool(v)
@@ -1218,7 +1218,7 @@ def _write_model_report(
 
     json_path = store_root / f"p2_report_{label_col}.json"
     json_path.write_text(json.dumps(json_doc, indent=2, default=_default), encoding="utf-8")
-    _done(f"JSON  → {json_path}")
+    _done(f"JSON  -> {json_path}")
 
 
 def _source_fingerprint(project_root: Path) -> dict:
@@ -1242,7 +1242,8 @@ def _source_fingerprint(project_root: Path) -> dict:
         try:
             proc = subprocess.run(
                 ["git", "-c", f"safe.directory={project_root.as_posix()}", *git_args],
-                cwd=project_root, check=False, text=True, capture_output=True, timeout=10,
+                cwd=project_root, check=False, text=True, capture_output=True,
+                encoding="utf-8", errors="replace", timeout=10,
             )
             return proc.stdout.strip() if proc.returncode == 0 else None
         except Exception:

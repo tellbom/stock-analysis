@@ -6,26 +6,26 @@ Walk-forward / rolling out-of-sample evaluator (P4A-03).
 Motivation
 ----------
 A single 12-month static lockbox at a 20-day horizon yields only ~12
-independent forward periods.  With daily Rank IC std ≈ 0.14 the standard
-error of the mean is ≈ 0.039, so a lockbox Rank IC of 0.004 has a 95%
-confidence interval of [−0.07, +0.08] — statistically indistinguishable
+independent forward periods.  With daily Rank IC std ~= 0.14 the standard
+error of the mean is ~= 0.039, so a lockbox Rank IC of 0.004 has a 95%
+confidence interval of [-0.07, +0.08] - statistically indistinguishable
 from zero *and* from a healthy 0.05 signal.
 
 ``WalkForwardEvaluator`` fixes this by walking a test window sequentially
 through the available history.  With n_windows=5 and window_months=12
 at a 5-day horizon the evaluator accumulates ~250 independent forward
-periods — enough to detect a 0.04 forward Rank IC with reasonable power.
+periods - enough to detect a 0.04 forward Rank IC with reasonable power.
 
 Design
 ------
 - Each window trains on all data strictly before it (minus a purge gap),
   predicts on the window, and yields a ``WalkForwardWindow`` result.
-- No data after the test window is used in training — no future leakage.
+- No data after the test window is used in training - no future leakage.
 - The purge gap equals ``horizon + embargo_extra`` trading days before the
   window start, matching the logic in ``PurgedKFold``.
 - Windows are non-overlapping (step_months == window_months by default).
 - The aggregate IC is computed over the concatenated OOS predictions from
-  all windows — this is the primary evaluation metric.
+  all windows - this is the primary evaluation metric.
 
 Relationship to lockbox
 -----------------------
@@ -120,7 +120,7 @@ def _ic_at_lag(
     ``lag``-day forward return from close prices, for each lag.
 
     Uses close prices from the panel to compute forward returns on the
-    fly — so it only requires a 'close' column, not pre-built label cols.
+    fly - so it only requires a 'close' column, not pre-built label cols.
     Rows with missing close or predictions are skipped.
     """
     result: dict[int, float] = {}
@@ -197,7 +197,7 @@ class WalkForwardResult:
         print(f"  Windows evaluated:          {self.n_windows()}")
         print(f"  Total independent periods:  {self.total_independent_periods}")
         print(f"  Agg Rank IC (OOS):          {self.agg_rank_ic_mean:+.4f}  "
-              f"±{self.agg_rank_ic_std:.4f}")
+              f"+/-{self.agg_rank_ic_std:.4f}")
         print(f"  Agg ICIR (OOS):             {self.agg_icir:+.4f}")
         print(f"  Agg Sharpe (OOS):           {self.agg_sharpe:+.4f}")
         print(f"  Agg Max Drawdown:           {self.agg_max_drawdown:+.4f}")
@@ -209,7 +209,7 @@ class WalkForwardResult:
               f"{'ICIR':>7}  {'Sharpe':>7}  {'IndepPd':>8}")
         for w in self.windows:
             print(f"  {w.window_id:>3}  "
-                  f"{w.test_start} – {w.test_end}  "
+                  f"{w.test_start} - {w.test_end}  "
                   f"{w.rank_ic_mean:>+8.4f}  "
                   f"{w.icir:>+7.3f}  "
                   f"{w.sharpe:>+7.3f}  "
@@ -229,10 +229,10 @@ def _interpret_sign_stability(ratio: float) -> str:
     if np.isnan(ratio):
         return "unknown"
     if ratio >= 0.8:
-        return "strong — signal is regime-stable"
+        return "strong - signal is regime-stable"
     if ratio >= 0.6:
-        return "moderate — some regime sensitivity"
-    return "weak — signal is regime-sensitive, further investigation required"
+        return "moderate - some regime sensitivity"
+    return "weak - signal is regime-sensitive, further investigation required"
 
 
 # ---------------------------------------------------------------------------
@@ -479,7 +479,7 @@ class WalkForwardEvaluator:
         test  = panel[test_mask].copy()
 
         if len(train) == 0 or len(test) == 0:
-            logger.warning("Window %d: empty train or test — skipping", win_id)
+            logger.warning("Window %d: empty train or test - skipping", win_id)
             return None
 
         train_valid = train[train[label_col].notna()]
@@ -487,7 +487,7 @@ class WalkForwardEvaluator:
 
         if len(train_valid) < 50 or len(test_valid) < 10:
             logger.warning(
-                "Window %d: insufficient data (train=%d, test=%d) — skipping",
+                "Window %d: insufficient data (train=%d, test=%d) - skipping",
                 win_id, len(train_valid), len(test_valid),
             )
             return None
