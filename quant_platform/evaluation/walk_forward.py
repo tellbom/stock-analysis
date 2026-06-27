@@ -173,7 +173,12 @@ class WalkForwardResult:
     total_independent_periods: int = 0
 
     # IC sign stability: fraction of windows with positive Rank IC
+    # A tiny positive IC still counts as positive here, so the summary also
+    # flags near-zero positive windows when stability is 1.0.
     ic_sign_stability: float = float("nan")   # [0, 1]; 1.0 = all windows positive
+
+    # Simple average of per-window Sharpe, shown next to pooled-PnL Sharpe.
+    per_window_sharpe_mean: float = float("nan")
 
     # IC decay curve: {lag_days: mean Rank IC across windows}
     ic_decay: dict[int, float] = field(default_factory=dict)
@@ -199,10 +204,16 @@ class WalkForwardResult:
         print(f"  Agg Rank IC (OOS):          {self.agg_rank_ic_mean:+.4f}  "
               f"+/-{self.agg_rank_ic_std:.4f}")
         print(f"  Agg ICIR (OOS):             {self.agg_icir:+.4f}")
-        print(f"  Agg Sharpe (OOS):           {self.agg_sharpe:+.4f}")
+        print(f"  Agg Sharpe (pooled PnL):    {self.agg_sharpe:+.4f}  "
+              f"[per-window mean: {self.per_window_sharpe_mean:+.4f}]")
         print(f"  Agg Max Drawdown:           {self.agg_max_drawdown:+.4f}")
+        stability_note = _interpret_sign_stability(self.ic_sign_stability)
+        if self.ic_sign_stability == 1.0 and self.n_windows() >= 2:
+            near_zero = [w for w in self.windows if 0 < w.rank_ic_mean < 0.01]
+            if near_zero:
+                stability_note += "; latest/near-zero positive window present"
         print(f"  IC sign stability:          {self.ic_sign_stability:.2f}  "
-              f"({_interpret_sign_stability(self.ic_sign_stability)})")
+              f"({stability_note})")
         print()
         print("  Per-window breakdown:")
         print(f"  {'Win':>3}  {'Test period':>25}  {'RankIC':>8}  "
@@ -409,14 +420,18 @@ class WalkForwardEvaluator:
             result.ic_sign_stability = float(
                 sum(1 for r in valid_rics if r > 0) / len(valid_rics)
             )
+        window_sharpes = [w.sharpe for w in result.windows if not np.isnan(w.sharpe)]
+        if window_sharpes:
+            result.per_window_sharpe_mean = float(np.mean(window_sharpes))
 
         logger.info(
             "Walk-forward complete: %d windows, agg Rank IC=%.4f, ICIR=%.4f, "
-            "Sharpe=%.4f, total_indep_periods=%d",
+            "Sharpe=%.4f, per_window_sharpe_mean=%.4f, total_indep_periods=%d",
             len(result.windows),
             result.agg_rank_ic_mean,
             result.agg_icir,
             result.agg_sharpe,
+            result.per_window_sharpe_mean,
             result.total_independent_periods,
         )
         return result

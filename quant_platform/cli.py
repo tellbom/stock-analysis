@@ -198,16 +198,35 @@ def cmd_collect(args: argparse.Namespace) -> int:
     if summary.failed_symbols:
         _warn(f"Failed symbols: {summary.failed_symbols[:10]}")
 
-    # --- P4A-05: CSI 300 index OHLCV ---
+    # --- P4A-05 + F4: CSI 300 index OHLCV, with offline proxy fallback ---
     if getattr(args, "with_index", True):
         _step("Fetching CSI 300 index OHLCV (P4A-05)")
+        from quant_platform.store.lake import index_ohlcv_path
+        index_path = index_ohlcv_path(store_root, "000300")
         try:
             from quant_platform.ingest.index_collector import IndexCollector
             ic = IndexCollector(store_root)
             ic.run(start_date=args.start_date or "2015-01-01")
-            _done("Index OHLCV: 000300 up to date")
+            if index_path.exists():
+                _done("Index OHLCV: 000300 up to date")
+            else:
+                raise RuntimeError("index collector returned without writing 000300")
         except Exception as exc:
-            _warn(f"Index OHLCV collection failed (non-fatal): {exc}")
+            _warn(f"Index OHLCV collection failed: {exc}")
+            if not index_path.exists():
+                _step("Building offline CSI 300 proxy from constituent OHLCV (F4)")
+                try:
+                    from quant_platform.ingest.index_proxy import build_index_proxy
+                    build_index_proxy(store_root, symbols=symbols)
+                    _warn(
+                        "Using equal-weighted constituent proxy for CSI 300; "
+                        "collect the real 000300 index when network is available."
+                    )
+                except Exception as proxy_exc:
+                    _warn(
+                        "Proxy build also failed; excess_vs_csi300 labels will be skipped: "
+                        f"{proxy_exc}"
+                    )
 
     # --- Quality report ---
     _step("Running data quality report")
@@ -513,7 +532,9 @@ def cmd_model(args: argparse.Namespace) -> int:
         _warn(f"Label '{label_col}' not found. Run 'features' with matching horizon.")
         return 1
 
-    # Attach close prices
+    # F1: attach canonical 'close' for baselines without producing close_x/close_y.
+    # This column is excluded from feature_cols by _build_feature_cols(), so it
+    # does not enter the model feature matrix.
     close_frames = []
     for sym in symbols:
         df_c = read_ohlcv(ohlcv_path(store_root, sym))
@@ -521,10 +542,15 @@ def cmd_model(args: argparse.Namespace) -> int:
             df_c["date"] = pd.to_datetime(df_c["date"]).dt.date
             close_frames.append(df_c[["symbol", "date", "close"]])
     if close_frames:
+        drop_close = [c for c in panel.columns if c in ("close", "close_x", "close_y")]
+        if drop_close:
+            panel = panel.drop(columns=drop_close)
         panel = panel.merge(
             pd.concat(close_frames, ignore_index=True),
             on=["symbol", "date"], how="left",
         )
+    if "close" not in panel.columns:
+        _warn("Could not attach 'close'; momentum/mean-rev baselines will return NaN")
 
     panel["date"] = pd.to_datetime(panel["date"])
     panel = panel.sort_values(["date", "symbol"]).reset_index(drop=True)
@@ -1153,6 +1179,7 @@ def _write_model_report(
             f"  Agg Rank IC : {wf_result.agg_rank_ic_mean:+.4f}",
             f"  Agg ICIR    : {wf_result.agg_icir:+.4f}",
             f"  Agg Sharpe  : {wf_result.agg_sharpe:+.4f}",
+            f"  Per-window Sharpe mean: {getattr(wf_result, 'per_window_sharpe_mean', float('nan')):+.4f}",
             f"  IC stability: {wf_result.ic_sign_stability:.2f}",
         ]
 
@@ -1209,6 +1236,7 @@ def _write_model_report(
             "agg_rank_ic":       wf_result.agg_rank_ic_mean,
             "agg_icir":          wf_result.agg_icir,
             "agg_sharpe":        wf_result.agg_sharpe,
+            "per_window_sharpe_mean": getattr(wf_result, "per_window_sharpe_mean", float("nan")),
             "ic_sign_stability": wf_result.ic_sign_stability,
             "total_indep_periods": wf_result.total_independent_periods,
         }

@@ -175,18 +175,26 @@ def render_verdict(
             fail_count += 1
 
     # --- 3. Cost-aware backtest ---
-    sharpe  = backtest.sharpe
+    # When walk-forward OOS is available, the OOF/in-period backtest is
+    # descriptive only.  The forward walk-forward Sharpe is the honest gate.
+    sharpe = backtest.sharpe
     net_spread = backtest.net_long_minus_short
-    ev.append(f"Backtest: Sharpe = {sharpe:+.2f}, net L-S spread = {net_spread:+.4f}")
-    if sharpe > sharpe_threshold:
-        ev.append(f"  PASS Net Sharpe {sharpe:.2f} > threshold {sharpe_threshold}")
-        pass_count += 1
-    elif sharpe > 0:
-        cav.append(f"  WARN Sharpe {sharpe:.2f} positive but below threshold {sharpe_threshold}")
-        fail_count += 1
+    ev.append(
+        f"OOF backtest (in-period, descriptive): "
+        f"Sharpe = {sharpe:+.2f}, net L-S spread = {net_spread:+.4f}"
+    )
+    if walk_forward_result is None:
+        if sharpe > sharpe_threshold:
+            ev.append(f"  PASS Net Sharpe {sharpe:.2f} > threshold {sharpe_threshold} (OOF - no WF available)")
+            pass_count += 1
+        elif sharpe > 0:
+            cav.append(f"  WARN Sharpe {sharpe:.2f} positive but below threshold {sharpe_threshold} (OOF - no WF available)")
+            fail_count += 1
+        else:
+            ev.append(f"  FAIL Sharpe {sharpe:.2f} <= 0 (OOF - no WF available)")
+            fail_count += 1
     else:
-        ev.append(f"  FAIL Sharpe {sharpe:.2f} <= 0 - costs destroy the signal")
-        fail_count += 1
+        ev.append("  (OOF Sharpe is in-period only; forward gate is the walk-forward Sharpe below)")
 
     # --- 4. Null tests ---
     if robustness.shuffle_passed:
@@ -260,13 +268,18 @@ def render_verdict(
             ev.append(f"  FAIL Walk-forward ICIR {wf_icir:.3f} <= 0 - signal does not generalise OOS")
             fail_count += 1
 
-        if walk_forward_result.agg_sharpe > 0:
-            ev.append(f"  PASS Walk-forward Sharpe positive ({walk_forward_result.agg_sharpe:+.3f})")
+        wf_sharpe_pooled = walk_forward_result.agg_sharpe
+        wf_sharpe_per_win = getattr(walk_forward_result, "per_window_sharpe_mean", float("nan"))
+        sharpe_str = f"pooled={wf_sharpe_pooled:+.3f}"
+        if not np.isnan(wf_sharpe_per_win):
+            sharpe_str += f", per-window-avg={wf_sharpe_per_win:+.3f}"
+        if wf_sharpe_pooled > 0:
+            ev.append(f"  PASS Walk-forward Sharpe positive ({sharpe_str})")
             pass_count += 1
         else:
             cav.append(
-                f"  WARN Walk-forward Sharpe negative ({walk_forward_result.agg_sharpe:+.3f}) - "
-                "check cost assumptions"
+                f"  WARN Walk-forward Sharpe negative ({sharpe_str}) - "
+                "check cost assumptions and whether recent-window decay dominates PnL"
             )
 
     # --- 7. Lockbox (legacy - seals P2 when used) ---
@@ -291,18 +304,30 @@ def render_verdict(
             fail_count += 1
 
     # --- Determine verdict ---
+    gauntlet_broken = False
+    if not baseline_table.empty and "rank_ic_mean" in baseline_table.columns:
+        non_model_rows = baseline_table.drop(baseline_table.index[0], errors="ignore")
+        n_baselines_total = len(non_model_rows)
+        n_nan_baselines = non_model_rows["rank_ic_mean"].isna().sum()
+        if n_baselines_total and n_nan_baselines > n_baselines_total / 2:
+            gauntlet_broken = True
+            cav.append(
+                f"Baseline gauntlet is incomplete: {n_nan_baselines}/{n_baselines_total} "
+                "baselines returned NaN. Confidence is capped at MEDIUM until resolved."
+            )
+
     if pass_count == 0 and fail_count == 0:
         verdict.verdict    = "INCONCLUSIVE"
         verdict.confidence = "LOW"
     elif fail_count == 0:
         verdict.verdict    = "GO"
-        verdict.confidence = "HIGH" if pass_count >= 5 else "MEDIUM"
+        verdict.confidence = "HIGH" if pass_count >= 5 and not gauntlet_broken else "MEDIUM"
     elif pass_count > fail_count:
         verdict.verdict    = "INCONCLUSIVE"
         verdict.confidence = "MEDIUM"
     else:
         verdict.verdict    = "NO_GO"
-        verdict.confidence = "HIGH" if fail_count >= 3 else "MEDIUM"
+        verdict.confidence = "HIGH" if fail_count >= 3 and not gauntlet_broken else "MEDIUM"
 
     # Standard caveat
     cav.append(

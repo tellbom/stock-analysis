@@ -148,6 +148,18 @@ class IndexCollector:
 
         if new_rows.empty:
             logger.warning("Index %s: no new data from %s to %s", symbol, fetch_start, today)
+            if symbol == "000300" and not out_path.exists():
+                logger.info(
+                    "Index %s: first collection attempt failed; falling back to "
+                    "offline equal-weighted constituent proxy.",
+                    symbol,
+                )
+                try:
+                    from quant_platform.ingest.index_proxy import build_index_proxy
+                    build_index_proxy(self.store_root)
+                    return 1
+                except Exception as proxy_exc:
+                    logger.warning("Index proxy fallback also failed: %s", proxy_exc)
             return 0
 
         # Merge with existing and deduplicate
@@ -165,7 +177,7 @@ class IndexCollector:
 
         combined.to_parquet(out_path, index=False)
         logger.info(
-            "Index %s: wrote %d total rows → %s",
+            "Index %s: wrote %d total rows -> %s",
             symbol, len(combined), out_path,
         )
         return len(new_rows)
