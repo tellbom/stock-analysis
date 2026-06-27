@@ -195,7 +195,12 @@ def enforce_industry_map(df: pd.DataFrame) -> pd.DataFrame:
         df["out_date"] = None
     if "concept_tags" not in df.columns:
         df["concept_tags"] = ""
-    df = df.drop_duplicates(subset=["symbol", "effective_date"], keep="first")
+    df["_active_first"] = df["out_date"].notna()
+    df = (
+        df.sort_values(["symbol", "effective_date", "_active_first"])
+          .drop_duplicates(subset=["symbol", "effective_date"], keep="first")
+          .drop(columns=["_active_first"])
+    )
     return df.reset_index(drop=True)
 
 

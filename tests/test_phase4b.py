@@ -390,6 +390,68 @@ class TestIndustrySCD:
         with pytest.raises(RuntimeError, match="Industry coverage too low"):
             collector.run(["000001", "000002", "000063"], as_of=dt.date(2026, 6, 25))
 
+    def test_enforce_industry_map_keeps_active_same_day_correction(self):
+        from quant_platform.store.schemas import enforce_industry_map
+
+        imap = pd.DataFrame([
+            {
+                "symbol": "000858",
+                "industry_code": "四川板块",
+                "industry_name": "白酒Ⅱ",
+                "concept_tags": "",
+                "effective_date": dt.date(2026, 6, 25),
+                "out_date": dt.date(2026, 6, 25),
+            },
+            {
+                "symbol": "000858",
+                "industry_code": "BK0438",
+                "industry_name": "食品饮料",
+                "concept_tags": "食品饮料|白酒Ⅱ|四川板块",
+                "effective_date": dt.date(2026, 6, 25),
+                "out_date": None,
+            },
+        ])
+
+        fixed = enforce_industry_map(imap)
+        assert len(fixed) == 1
+        assert fixed.iloc[0]["industry_code"] == "BK0438"
+        assert pd.isna(fixed.iloc[0]["out_date"])
+
+    def test_run_repairs_same_day_active_bad_industry(self, tmp_path, monkeypatch):
+        from quant_platform.ingest import industry_collector as ic
+        from quant_platform.store.lake import industry_map_path
+
+        existing = pd.DataFrame([{
+            "symbol": "000858",
+            "industry_code": "四川板块",
+            "industry_name": "白酒Ⅱ",
+            "concept_tags": "",
+            "effective_date": dt.date(2026, 6, 25),
+            "out_date": None,
+        }])
+        p = industry_map_path(tmp_path)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        existing.to_parquet(p, index=False)
+
+        monkeypatch.setattr(
+            ic,
+            "_fetch_em_slist_industry",
+            lambda symbol: {
+                "industry_name": "食品饮料",
+                "industry_code": "BK0438",
+                "concept_tags": "食品饮料|白酒Ⅱ|四川板块",
+            },
+        )
+        monkeypatch.setattr(ic, "_fetch_em_stock_info", lambda symbol: {})
+
+        collector = ic.IndustryCollector(tmp_path, fetch_concepts=False)
+        fixed = collector.run(["000858"], as_of=dt.date(2026, 6, 25))
+
+        assert len(fixed) == 1
+        assert fixed.iloc[0]["industry_code"] == "BK0438"
+        assert fixed.iloc[0]["industry_name"] == "食品饮料"
+        assert pd.isna(fixed.iloc[0]["out_date"])
+
     def test_get_industry_as_of_current(self):
         from quant_platform.ingest.industry_collector import get_industry_as_of
         imap = _make_industry_map(n_symbols=5, n_industries=2)

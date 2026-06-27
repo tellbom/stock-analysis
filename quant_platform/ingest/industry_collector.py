@@ -281,19 +281,29 @@ class IndustryCollector:
             current = sym_rows[sym_rows["out_date"].isna()]
 
             if not current.empty:
+                idx = current.index[-1]
                 last_industry = current.iloc[-1]["industry_name"]
+                current_effective = current.iloc[-1].get("effective_date")
                 if last_industry == industry_name:
                     # No change; refresh tags and repair stale codes in place.
-                    idx = current.index[-1]
                     if current.iloc[-1].get("industry_code") != industry_code:
                         existing.at[idx, "industry_code"] = industry_code
                     if self.fetch_concepts and concept_tags_str:
                         existing.at[idx, "concept_tags"] = concept_tags_str
                     continue
 
+                if current_effective == as_of:
+                    # Same-day correction: replace the bad current row instead of
+                    # closing it and inserting a duplicate effective_date row.
+                    existing.at[idx, "industry_code"] = industry_code
+                    existing.at[idx, "industry_name"] = industry_name
+                    existing.at[idx, "concept_tags"] = concept_tags_str
+                    existing.at[idx, "out_date"] = None
+                    changes += 1
+                    continue
+
                 # Industry changed: close the old record
-                idx_to_close = current.index[-1]
-                existing.at[idx_to_close, "out_date"] = as_of
+                existing.at[idx, "out_date"] = as_of
                 changes += 1
 
             # Insert new row
