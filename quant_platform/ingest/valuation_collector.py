@@ -37,6 +37,7 @@ import time
 import urllib.request
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 from quant_platform.core.logging import get_logger
@@ -51,6 +52,9 @@ _UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
 
 # Maximum symbols per request (Tencent can handle 300+ in one call)
 _BATCH_SIZE = 300
+_VALUATION_COLUMNS = [
+    "symbol", "date", "pe_ttm", "pb", "total_mcap_yi", "float_mcap_yi", "turnover_pct",
+]
 
 
 def _market_prefix(code: str) -> str:
@@ -112,6 +116,71 @@ def _fetch_tencent_batch(codes: list[str]) -> dict[str, dict]:
             continue
 
     return result
+
+
+def _find_column(df: pd.DataFrame, candidates: list[str]) -> str:
+    """Find a source column by exact or substring match; raises if missing."""
+    columns = [str(c).strip() for c in df.columns]
+    lowered = {c.lower(): c for c in columns}
+    for name in candidates:
+        key = name.lower()
+        if key in lowered:
+            return lowered[key]
+    for name in candidates:
+        key = name.lower()
+        for col in columns:
+            if key in col.lower():
+                return col
+    raise ValueError(f"AKShare stock_value_em schema missing one of {candidates}; columns={columns}")
+
+
+def normalise_stock_value_em(
+    raw: pd.DataFrame,
+    symbol: str,
+    start_date: dt.date | str,
+    end_date: dt.date | str,
+    turnover: pd.DataFrame | None = None,
+) -> pd.DataFrame:
+    """
+    Convert AKShare ``stock_value_em`` history to the valuation silver schema.
+
+    AKShare market-cap fields are yuan; silver stores ``*_mcap_yi`` in
+    hundred-million yuan.  ``turnover_pct`` is not present in stock_value_em
+    and must be joined from OHLCV when doing historical backfill.
+    """
+    if raw is None or raw.empty:
+        raise ValueError(f"{symbol}: empty AKShare stock_value_em response")
+
+    date_col = _find_column(raw, ["date", "数据日期", "日期"])
+    pe_col = _find_column(raw, ["pe_ttm", "PE_TTM", "PE(TTM)", "市盈率(TTM)", "滚动市盈率"])
+    pb_col = _find_column(raw, ["pb", "PB", "市净率"])
+    total_col = _find_column(raw, ["total_mcap", "总市值"])
+    float_col = _find_column(raw, ["float_mcap", "流通市值"])
+
+    df = pd.DataFrame({
+        "symbol": symbol,
+        "date": pd.to_datetime(raw[date_col], errors="coerce"),
+        "pe_ttm": pd.to_numeric(raw[pe_col], errors="coerce"),
+        "pb": pd.to_numeric(raw[pb_col], errors="coerce"),
+        "total_mcap_yi": pd.to_numeric(raw[total_col], errors="coerce") / 1e8,
+        "float_mcap_yi": pd.to_numeric(raw[float_col], errors="coerce") / 1e8,
+    })
+
+    start = pd.to_datetime(start_date)
+    end = pd.to_datetime(end_date)
+    df = df[(df["date"] >= start) & (df["date"] <= end)].copy()
+    if df.empty:
+        raise ValueError(f"{symbol}: no valuation rows in {start.date()} -> {end.date()}")
+
+    df["date"] = df["date"].dt.date
+    if turnover is not None and not turnover.empty:
+        t = turnover.copy()
+        t["date"] = pd.to_datetime(t["date"]).dt.date
+        df = df.merge(t[["date", "turnover_pct"]], on="date", how="left")
+    else:
+        df["turnover_pct"] = np.nan
+
+    return enforce_valuation(df[_VALUATION_COLUMNS], symbol)
 
 
 class ValuationCollector:
@@ -190,6 +259,64 @@ class ValuationCollector:
         logger.info("ValuationCollector done: %d/%d written", n_ok, len(symbols))
         return results
 
+    def backfill_history(
+        self,
+        symbols: list[str],
+        start_date: dt.date | str,
+        end_date: dt.date | str,
+        dry_run: bool = True,
+        min_success_rate: float = 0.95,
+    ) -> dict:
+        """
+        Backfill historical valuation from AKShare ``stock_value_em``.
+
+        The method validates schema, units, per-symbol row counts, and core
+        field non-null rates before writing.  In ``dry_run`` mode it performs
+        all fetch/validation work without touching silver files.
+        """
+        try:
+            import akshare as ak
+        except ImportError as exc:
+            raise RuntimeError("akshare is required for historical valuation backfill") from exc
+
+        results: dict[str, dict] = {}
+        frames: dict[str, pd.DataFrame] = {}
+        for symbol in symbols:
+            try:
+                raw = ak.stock_value_em(symbol=symbol)
+                turnover = self._load_ohlcv_turnover(symbol)
+                df = normalise_stock_value_em(raw, symbol, start_date, end_date, turnover)
+                stats = self._validate_history(symbol, df)
+                results[symbol] = {"status": "ok", **stats}
+                frames[symbol] = df
+            except Exception as exc:
+                logger.error("%s: valuation history validation failed: %s", symbol, exc)
+                results[symbol] = {"status": "failed", "error": str(exc)}
+
+        ok_symbols = [s for s, r in results.items() if r["status"] == "ok"]
+        success_rate = len(ok_symbols) / len(symbols) if symbols else 1.0
+        report = {
+            "source": "akshare.stock_value_em",
+            "dry_run": dry_run,
+            "date_range": f"{start_date} -> {end_date}",
+            "total_symbols": len(symbols),
+            "succeeded": len(ok_symbols),
+            "failed": len(symbols) - len(ok_symbols),
+            "success_rate": success_rate,
+            "results": results,
+        }
+        if success_rate < min_success_rate:
+            raise RuntimeError(
+                f"Valuation backfill success rate {success_rate:.1%} below "
+                f"threshold {min_success_rate:.1%}"
+            )
+        if not dry_run:
+            for symbol, df in frames.items():
+                out_path = valuation_path(self.store_root, symbol)
+                out_path.parent.mkdir(parents=True, exist_ok=True)
+                df.to_parquet(out_path, index=False)
+        return report
+
     def _write_one(
         self,
         symbol: str,
@@ -228,6 +355,42 @@ class ValuationCollector:
         )
         combined.to_parquet(out_path, index=False)
         return True
+
+    def _load_ohlcv_turnover(self, symbol: str) -> pd.DataFrame:
+        from quant_platform.store.lake import ohlcv_path
+
+        p = ohlcv_path(self.store_root, symbol)
+        if not p.exists():
+            return pd.DataFrame(columns=["date", "turnover_pct"])
+        df = pd.read_parquet(p)
+        if "turnover" not in df.columns:
+            return pd.DataFrame(columns=["date", "turnover_pct"])
+        df["date"] = pd.to_datetime(df["date"]).dt.date
+        return df[["date", "turnover"]].rename(columns={"turnover": "turnover_pct"})
+
+    @staticmethod
+    def _validate_history(symbol: str, df: pd.DataFrame) -> dict:
+        core = ["pe_ttm", "pb", "total_mcap_yi", "float_mcap_yi", "turnover_pct"]
+        if df.empty:
+            raise ValueError("empty normalised valuation frame")
+        non_null = df[core].notna().mean().to_dict()
+        bad = {k: v for k, v in non_null.items() if v < 0.95}
+        if bad:
+            raise ValueError(f"core field coverage below 95%: {bad}")
+        if (df[["total_mcap_yi", "float_mcap_yi"]] <= 0).any().any():
+            raise ValueError("market cap fields must be positive yi-yuan values")
+        if df["date"].duplicated().any():
+            raise ValueError("duplicate valuation dates")
+        return {
+            "rows": int(len(df)),
+            "date_min": str(df["date"].min()),
+            "date_max": str(df["date"].max()),
+            "non_null": {k: round(float(v), 4) for k, v in non_null.items()},
+            "units": {
+                "total_mcap_yi": "100 million CNY",
+                "float_mcap_yi": "100 million CNY",
+            },
+        }
 
 
 def load_valuation(

@@ -195,6 +195,8 @@ def enforce_industry_map(df: pd.DataFrame) -> pd.DataFrame:
         df["out_date"] = None
     if "concept_tags" not in df.columns:
         df["concept_tags"] = ""
+    if "source" not in df.columns:
+        df["source"] = "unknown"
     df["_active_first"] = df["out_date"].notna()
     df = (
         df.sort_values(["symbol", "effective_date", "_active_first"])

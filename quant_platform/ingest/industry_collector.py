@@ -15,7 +15,10 @@ Data sources
    filters the mixed list down to a single industry classification.
    Rate-limited with a 1-second minimum interval via ``_em_get()``.
 
-2. **Eastmoney push2 ``eastmoney_stock_info``** (fallback): returns the
+2. **CNINFO ``stock_industry_change_cninfo``** (historical primary for backfill):
+   returns industry change events that can be converted to PIT-safe SCD rows.
+
+3. **Eastmoney push2 ``eastmoney_stock_info``** (fallback): returns the
    ``industry`` field (东财行业名, e.g. "食品饮料") for each stock.
 
 SCD design
@@ -27,7 +30,7 @@ means the record is still current.
 
 Silver table: ``silver/industry_map.parquet``
 Schema:  symbol, industry_code, industry_name, concept_tags,
-         effective_date, out_date
+         effective_date, out_date, source
 
 PIT query
 ---------
@@ -117,6 +120,7 @@ def _fetch_em_stock_info(code: str) -> dict:
         return {
             "industry_name": industry_name,
             "industry_code": _name_to_code(industry_name) if industry_name else "",
+            "source": "eastmoney_stock_info",
         }
     except Exception as exc:
         logger.debug("%s: eastmoney_stock_info failed: %s", code, exc)
@@ -193,10 +197,103 @@ def _fetch_em_slist_industry(code: str) -> dict:
             "industry_name": industry["name"],
             "industry_code": industry["code"] or _name_to_code(industry["name"]),
             "concept_tags": "|".join(b["name"] for b in boards[:30]),
+            "source": "eastmoney_slist",
         }
     except Exception as exc:
         logger.debug("%s: eastmoney_slist_industry failed: %s", code, exc)
         return {}
+
+
+def _find_column(df: pd.DataFrame, candidates: list[str]) -> str:
+    columns = [str(c).strip() for c in df.columns]
+    lowered = {c.lower(): c for c in columns}
+    for name in candidates:
+        key = name.lower()
+        if key in lowered:
+            return lowered[key]
+    for name in candidates:
+        key = name.lower()
+        for col in columns:
+            if key in col.lower():
+                return col
+    raise ValueError(f"CNINFO schema missing one of {candidates}; columns={columns}")
+
+
+def normalise_cninfo_industry_events(raw: pd.DataFrame, symbol: str) -> pd.DataFrame:
+    """Normalise AKShare CNINFO industry change events without positional mapping."""
+    if raw is None or raw.empty:
+        return pd.DataFrame(columns=[
+            "industry_code", "industry_name", "classification_standard",
+            "industry_level", "effective_date",
+        ])
+
+    code_col = _find_column(raw, ["industry_code", "行业编码", "行业代码"])
+    name_col = _find_column(raw, ["industry_name", "行业名称"])
+    eff_col = _find_column(raw, ["effective_date", "变更日期", "生效日期", "日期"])
+    try:
+        std_col = _find_column(raw, ["classification_standard", "行业分类标准", "分类标准"])
+    except ValueError:
+        std_col = None
+    try:
+        level_col = _find_column(raw, ["industry_level", "行业级别", "行业层级"])
+    except ValueError:
+        level_col = None
+
+    df = pd.DataFrame({
+        "industry_code": raw[code_col].astype(str).str.strip(),
+        "industry_name": raw[name_col].astype(str).str.strip(),
+        "classification_standard": raw[std_col].astype(str).str.strip() if std_col else "",
+        "industry_level": raw[level_col].astype(str).str.strip() if level_col else "",
+        "effective_date": pd.to_datetime(raw[eff_col], errors="coerce"),
+    })
+    if level_col:
+        primary = df[df["industry_level"].str.contains("主要", na=False)].copy()
+        if not primary.empty:
+            df = primary
+    df = df[df["industry_name"].str.len() > 0]
+    df = df[df["effective_date"].notna()].copy()
+    df.loc[df["industry_code"].isin(["", "nan", "None"]), "industry_code"] = ""
+    df["industry_code"] = df.apply(
+        lambda r: r["industry_code"] or _name_to_code(r["industry_name"]),
+        axis=1,
+    )
+    df["effective_date"] = df["effective_date"].dt.date
+    return df.sort_values("effective_date").drop_duplicates(
+        subset=["industry_code", "industry_name", "effective_date"], keep="last"
+    ).reset_index(drop=True)
+
+
+def fetch_cninfo_industry_events(symbol: str) -> pd.DataFrame:
+    """Fetch and normalise historical industry change events from CNINFO."""
+    try:
+        import akshare as ak
+    except ImportError as exc:
+        raise RuntimeError("akshare is required for CNINFO industry history") from exc
+    raw = ak.stock_industry_change_cninfo(symbol=symbol)
+    return normalise_cninfo_industry_events(raw, symbol)
+
+
+def industry_events_to_scd(events: pd.DataFrame, symbol: str) -> pd.DataFrame:
+    """Convert sorted CNINFO change events into SCD rows with out_date."""
+    if events.empty:
+        return pd.DataFrame(columns=[
+            "symbol", "industry_code", "industry_name", "concept_tags",
+            "effective_date", "out_date", "source",
+        ])
+    rows = []
+    ordered = events.sort_values("effective_date").reset_index(drop=True)
+    for i, row in ordered.iterrows():
+        out_date = ordered.iloc[i + 1]["effective_date"] if i + 1 < len(ordered) else None
+        rows.append({
+            "symbol": symbol,
+            "industry_code": row["industry_code"],
+            "industry_name": row["industry_name"],
+            "concept_tags": "",
+            "effective_date": row["effective_date"],
+            "out_date": out_date,
+            "source": "cninfo_stock_industry_change",
+        })
+    return enforce_industry_map(pd.DataFrame(rows))
 
 
 class IndustryCollector:
@@ -314,6 +411,7 @@ class IndustryCollector:
                 "concept_tags":   concept_tags_str,
                 "effective_date": as_of,
                 "out_date":       None,
+                "source":         info.get("source", "eastmoney_current"),
             })
 
             if (i + 1) % 50 == 0:
@@ -345,6 +443,98 @@ class IndustryCollector:
         )
         return combined
 
+    def backfill_history(
+        self,
+        symbols: list[str],
+        start_date: dt.date | str | None = None,
+        end_date: dt.date | str | None = None,
+        dry_run: bool = True,
+        min_success_rate: float = 0.90,
+        allow_static_fallback: bool = False,
+    ) -> dict:
+        """
+        Build historical SCD industry_map rows from CNINFO change events.
+
+        Static Eastmoney fallback rows are optional and are marked as
+        ``eastmoney_static_fallback`` with an effective date at ``end_date``;
+        they are not presented as complete historical SCD.
+        """
+        all_scd: list[pd.DataFrame] = []
+        results: dict[str, dict] = {}
+        fallback_rows = 0
+        end = pd.to_datetime(end_date).date() if end_date else dt.date.today()
+
+        for symbol in symbols:
+            try:
+                events = fetch_cninfo_industry_events(symbol)
+                if events.empty:
+                    if allow_static_fallback:
+                        info = _fetch_em_slist_industry(symbol) or _fetch_em_stock_info(symbol)
+                        if info.get("industry_name"):
+                            row = pd.DataFrame([{
+                                "symbol": symbol,
+                                "industry_code": info.get("industry_code") or _name_to_code(info["industry_name"]),
+                                "industry_name": info["industry_name"],
+                                "concept_tags": info.get("concept_tags", ""),
+                                "effective_date": end,
+                                "out_date": None,
+                                "source": "eastmoney_static_fallback",
+                            }])
+                            all_scd.append(row)
+                            fallback_rows += 1
+                            results[symbol] = {
+                                "status": "fallback_static",
+                                "rows": 1,
+                                "warning": "current classification only; not historical SCD",
+                            }
+                            continue
+                    raise ValueError("CNINFO returned no usable industry events")
+                scd = industry_events_to_scd(events, symbol)
+                if start_date is not None:
+                    start = pd.to_datetime(start_date).date()
+                    if not (scd["effective_date"] <= start).any():
+                        raise ValueError(f"SCD does not cover requested start_date {start}")
+                all_scd.append(scd)
+                results[symbol] = {
+                    "status": "ok",
+                    "rows": int(len(scd)),
+                    "effective_min": str(scd["effective_date"].min()),
+                    "effective_max": str(scd["effective_date"].max()),
+                    "source": "cninfo_stock_industry_change",
+                }
+            except Exception as exc:
+                logger.error("%s: industry history validation failed: %s", symbol, exc)
+                results[symbol] = {"status": "failed", "error": str(exc)}
+
+        ok = [s for s, r in results.items() if r["status"] in ("ok", "fallback_static")]
+        success_rate = len(ok) / len(symbols) if symbols else 1.0
+        if success_rate < min_success_rate:
+            raise RuntimeError(
+                f"Industry backfill success rate {success_rate:.1%} below "
+                f"threshold {min_success_rate:.1%}"
+            )
+
+        scd_df = enforce_industry_map(pd.concat(all_scd, ignore_index=True)) if all_scd else pd.DataFrame()
+        report = {
+            "source": "akshare.stock_industry_change_cninfo",
+            "dry_run": dry_run,
+            "total_symbols": len(symbols),
+            "succeeded": len(ok),
+            "failed": len(symbols) - len(ok),
+            "success_rate": success_rate,
+            "scd_rows": int(len(scd_df)),
+            "symbols_covered": int(scd_df["symbol"].nunique()) if not scd_df.empty else 0,
+            "fallback_static_rows": fallback_rows,
+            "fallback_warning": (
+                "fallback rows are current snapshots only, not historical SCD"
+                if fallback_rows else ""
+            ),
+            "results": results,
+        }
+        if not dry_run and not scd_df.empty:
+            self._save(scd_df)
+        return report
+
     # ------------------------------------------------------------------
     # Helpers
     # ------------------------------------------------------------------
@@ -354,12 +544,14 @@ class IndustryCollector:
         if not p.exists():
             return pd.DataFrame(columns=[
                 "symbol", "industry_code", "industry_name",
-                "concept_tags", "effective_date", "out_date",
+                "concept_tags", "effective_date", "out_date", "source",
             ])
         df = pd.read_parquet(p)
         df["effective_date"] = pd.to_datetime(df["effective_date"]).dt.date
         if "out_date" in df.columns:
             df["out_date"] = pd.to_datetime(df["out_date"], errors="coerce").dt.date
+        if "source" not in df.columns:
+            df["source"] = "unknown"
         return df
 
     def _save(self, df: pd.DataFrame) -> None:
@@ -431,6 +623,7 @@ def get_industry_as_of(
         "industry_code": str(last.get("industry_code", "")),
         "industry_name": str(last.get("industry_name", "")),
         "concept_tags":  str(last.get("concept_tags", "")),
+        "source":        str(last.get("source", "")),
     }
 
 
@@ -440,10 +633,12 @@ def load_industry_map(store_root: Path | str) -> pd.DataFrame:
     if not p.exists():
         return pd.DataFrame(columns=[
             "symbol", "industry_code", "industry_name",
-            "concept_tags", "effective_date", "out_date",
+            "concept_tags", "effective_date", "out_date", "source",
         ])
     df = pd.read_parquet(p)
     df["effective_date"] = pd.to_datetime(df["effective_date"]).dt.date
     if "out_date" in df.columns:
         df["out_date"] = pd.to_datetime(df["out_date"], errors="coerce").dt.date
+    if "source" not in df.columns:
+        df["source"] = "unknown"
     return df

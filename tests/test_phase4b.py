@@ -287,6 +287,33 @@ class TestTencentParsing:
         df = load_valuation(tmp_path, "000858")
         assert len(df) == 1, f"Expected 1 row, got {len(df)}"
 
+    def test_stock_value_em_mapping_uses_column_names(self):
+        from quant_platform.ingest.valuation_collector import normalise_stock_value_em
+
+        raw = pd.DataFrame({
+            "PB": [1.2, 1.3],
+            "总市值": [100_000_000_000.0, 101_000_000_000.0],
+            "数据日期": ["2023-01-03", "2023-01-04"],
+            "流通市值": [80_000_000_000.0, 81_000_000_000.0],
+            "PE(TTM)": [10.0, 10.5],
+        })
+        turnover = pd.DataFrame({
+            "date": [dt.date(2023, 1, 3), dt.date(2023, 1, 4)],
+            "turnover_pct": [0.5, 0.6],
+        })
+
+        df = normalise_stock_value_em(
+            raw, "600519", "2023-01-03", "2023-01-04", turnover
+        )
+
+        assert list(df.columns) == [
+            "symbol", "date", "pe_ttm", "pb",
+            "total_mcap_yi", "float_mcap_yi", "turnover_pct",
+        ]
+        assert df["total_mcap_yi"].iloc[0] == pytest.approx(1000.0)
+        assert df["float_mcap_yi"].iloc[0] == pytest.approx(800.0)
+        assert df["turnover_pct"].notna().all()
+
 
 # ---------------------------------------------------------------------------
 # P4B-02: build_valuation_features
@@ -491,6 +518,29 @@ class TestIndustrySCD:
         after_change  = get_industry_as_of(imap, "SYM000", dt.date(2023, 1, 1))
         assert before_change["industry_code"] == "IND_OLD"
         assert after_change["industry_code"]  == "IND_NEW"
+
+    def test_cninfo_events_to_scd_generates_out_dates_and_source(self):
+        from quant_platform.ingest.industry_collector import (
+            industry_events_to_scd,
+            get_industry_as_of,
+            normalise_cninfo_industry_events,
+        )
+
+        raw = pd.DataFrame({
+            "行业名称": ["Old", "New"],
+            "行业编码": ["IND_OLD", "IND_NEW"],
+            "行业级别": ["主要行业", "主要行业"],
+            "行业分类标准": ["申万", "申万"],
+            "变更日期": ["2020-01-01", "2022-01-01"],
+        })
+        events = normalise_cninfo_industry_events(raw, "600519")
+        scd = industry_events_to_scd(events, "600519")
+
+        assert scd.iloc[0]["out_date"] == dt.date(2022, 1, 1)
+        assert pd.isna(scd.iloc[1]["out_date"])
+        assert set(scd["source"]) == {"cninfo_stock_industry_change"}
+        assert get_industry_as_of(scd, "600519", dt.date(2021, 6, 1))["industry_code"] == "IND_OLD"
+        assert get_industry_as_of(scd, "600519", dt.date(2023, 6, 1))["industry_code"] == "IND_NEW"
 
     def test_load_save_roundtrip(self, tmp_path):
         from quant_platform.store.lake import init_lake, industry_map_path

@@ -109,6 +109,12 @@ def _auto_detect_feature_set(store_root: Path) -> str | None:
 
 def _build_feature_cols(panel) -> list[str]:
     """Standard feature column filter: numeric, non-meta, non-label."""
+    candidates, _ = _feature_candidates(panel)
+    return [c for c in candidates if panel[c].notna().any()]
+
+
+def _feature_candidates(panel) -> tuple[list[str], dict[str, str]]:
+    """Return numeric feature candidates and excluded all-NaN reasons."""
     import pandas as pd
     meta      = {"symbol", "date", "close"}
     lbl_like  = {c for c in panel.columns if c.startswith(
@@ -117,12 +123,81 @@ def _build_feature_cols(panel) -> list[str]:
     str_cols  = {"fund_period_end", "fund_period_type", "fund_announce_date",
                  "industry_code", "industry_name", "concept_tags", "lock_type"}
     exclude = meta | lbl_like | str_cols
-    return [
+    candidates = [
         c for c in panel.columns
         if c not in exclude
         and pd.api.types.is_numeric_dtype(panel[c])
-        and panel[c].notna().any()
     ]
+    excluded = {c: "all-NaN" for c in candidates if not panel[c].notna().any()}
+    return candidates, excluded
+
+
+def _feature_family_lookup() -> dict[str, str]:
+    """Map feature names to audit families used before training."""
+    from quant_platform.features.registry import TECHNICAL_SPECS, CROSS_SECTIONAL_SPECS
+    from quant_platform.features.valuation import VALUATION_SPECS
+    from quant_platform.features.industry import INDUSTRY_SPECS
+
+    family_by_col = {"volume": "raw_aux", "pe_ttm": "raw_aux", "pb": "raw_aux",
+                     "turnover_pct": "raw_aux"}
+    for spec in TECHNICAL_SPECS:
+        family_by_col[spec.name] = "technical"
+    for spec in CROSS_SECTIONAL_SPECS:
+        family_by_col[spec.name] = "cross_sectional"
+    for spec in VALUATION_SPECS:
+        family_by_col[spec.name] = "valuation"
+    for spec in INDUSTRY_SPECS:
+        family_by_col[spec.name] = "industry"
+    return family_by_col
+
+
+def _audit_training_features(
+    panel,
+    feature_cols: list[str],
+    include_valuation: bool = False,
+    include_industry: bool = False,
+) -> dict:
+    """Print and validate the exact feature list that will enter training."""
+    from quant_platform.features.valuation import VALUATION_SPECS
+    from quant_platform.features.industry import INDUSTRY_SPECS
+
+    _, excluded = _feature_candidates(panel)
+    family_by_col = _feature_family_lookup()
+    feature_families = {c: family_by_col.get(c, "raw_aux") for c in feature_cols}
+
+    print("\nFeature audit:")
+    print(f"  final feature_count = {len(feature_cols)}")
+    counts: dict[str, int] = {}
+    for fam in feature_families.values():
+        counts[fam] = counts.get(fam, 0) + 1
+    for fam in ("technical", "cross_sectional", "raw_aux", "valuation", "industry"):
+        print(f"  {fam:16s}: {counts.get(fam, 0)}")
+    print("  final LightGBM feature columns:")
+    for col in feature_cols:
+        print(f"    - {col} [{feature_families[col]}]")
+    if excluded:
+        print("  excluded feature candidates:")
+        for col, reason in sorted(excluded.items()):
+            print(f"    - {col}: {reason}")
+
+    valuation_cols = {s.name for s in VALUATION_SPECS}
+    industry_cols = {s.name for s in INDUSTRY_SPECS}
+    if include_valuation and not (valuation_cols & set(feature_cols)):
+        raise RuntimeError(
+            "--include-valuation was set, but no valuation features entered the training list"
+        )
+    if include_industry and not (industry_cols & set(feature_cols)):
+        raise RuntimeError(
+            "--include-industry was set, but no industry features entered the training list"
+        )
+
+    return {
+        "feature_count": len(feature_cols),
+        "features": feature_cols,
+        "families": feature_families,
+        "family_counts": counts,
+        "excluded": excluded,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -396,6 +471,17 @@ def cmd_features(args: argparse.Namespace) -> int:
     # --- Assemble panel (triggers P4B panel-level builders) ---
     _step("Assembling panel with P4B feature builders")
     panel = pipe.build_panel(symbols, fset_id, add_cross_sectional=True)
+    feature_cols = _build_feature_cols(panel)
+    try:
+        _audit_training_features(
+            panel,
+            feature_cols,
+            include_valuation=include_val,
+            include_industry=include_ind,
+        )
+    except RuntimeError as exc:
+        _warn(str(exc))
+        return 1
     _done(f"Panel: {len(panel):,} rows × {panel.shape[1]} columns")
 
     # --- Lockup features (separate panel builder since it needs lockup data) ---
@@ -507,9 +593,17 @@ def cmd_model(args: argparse.Namespace) -> int:
     if not args.feature_set_id:
         _warn(f"No --feature-set-id given, using latest: {feat_set_id}")
 
+    include_val = getattr(args, "include_valuation", False)
+    include_ind = getattr(args, "include_industry", False)
+    _info(f"feature flags: valuation={include_val}  industry={include_ind}")
+
     _step("Assembling feature + label panel")
-    pipe  = FeaturePipeline(store_root=store_root,
-                            project_root=getattr(args, "project_root", None))
+    pipe  = FeaturePipeline(
+        store_root=store_root,
+        project_root=getattr(args, "project_root", None),
+        include_valuation=include_val,
+        include_industry=include_ind,
+    )
     panel = pipe.build_panel(symbols, feat_set_id, add_cross_sectional=True)
     if panel.empty:
         _warn("Panel is empty — no feature files found.")
@@ -569,6 +663,17 @@ def cmd_model(args: argparse.Namespace) -> int:
             feature_cols = active_cols
     except ImportError:
         pass
+
+    try:
+        feature_audit = _audit_training_features(
+            panel,
+            feature_cols,
+            include_valuation=include_val,
+            include_industry=include_ind,
+        )
+    except RuntimeError as exc:
+        _warn(str(exc))
+        return 1
 
     _done(
         f"Panel: {len(panel):,} rows  {panel['symbol'].nunique()} symbols  "
@@ -1364,6 +1469,12 @@ def _add_model_args(
     p.add_argument("--n-estimators",   type=int, default=200)
     p.add_argument("--learning-rate",  type=float, default=0.05)
     p.add_argument("--num-leaves",     type=int, default=31)
+    if "--include-valuation" not in p._option_string_actions:
+        p.add_argument("--include-valuation", action="store_true",
+                       help="Add P4B valuation/size features during model panel assembly")
+    if "--include-industry" not in p._option_string_actions:
+        p.add_argument("--include-industry",  action="store_true",
+                       help="Add P4B industry-relative features during model panel assembly")
     # Walk-forward (P4A-03) — on by default; --use-lockbox for legacy path
     p.add_argument("--walk-forward",   action="store_true", default=True,
                    help="Use walk-forward OOS evaluation (default: True)")
