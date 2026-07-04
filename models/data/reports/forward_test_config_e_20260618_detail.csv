@@ -1,0 +1,301 @@
+rank,symbol,stock_name,industry_name,model_score,score_percentile,latest_close,recent_5d_return,recent_20d_return,pe_ttm,pb,total_mcap_yi,turnover_pct,cs_margin_balance_change_5d,cs_rzrq_ratio_rank,main_positive_factors,main_risk_factors
+1,600183,生益科技,电子元件,0.0609,1.0000,183.87,0.2280,0.8831,113.69,24.91,N/A,0.03,0.80,0.21,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum|Margin expansion (bullish),High PE (expensive)|Overbought (RSI>70)|PE expanding rapidly
+2,600118,中国卫星,航空航天,0.0202,0.9967,76.52,-0.0194,-0.1026,5330.13,14.31,N/A,0.04,0.65,0.72,Sector-relative strength,High PE (expensive)|Negative momentum (10d)|High leverage ratio
+3,688223,晶科能源,发电设备,0.0182,0.9933,5.09,0.0000,-0.1933,-7.64,2.10,N/A,0.01,0.56,0.68,N/A,Small cap (liquidity)|Negative momentum (10d)
+4,300408,三环集团,电子元件,0.0164,0.9900,157.89,0.1995,0.6034,105.19,13.51,N/A,0.04,0.66,0.21,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|PE expanding rapidly
+5,600426,600426,化学原料,0.0149,0.9867,25.51,-0.0446,-0.1868,14.49,1.58,N/A,0.02,0.83,0.19,Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)
+6,600160,巨化股份,化学制品,0.0148,0.9833,44.12,0.0761,0.3672,28.69,5.51,N/A,0.06,0.80,0.75,Positive momentum (10d)|Sector-relative strength|Strong sector momentum|Margin expansion (bullish),High leverage ratio|PE expanding rapidly
+7,600482,600482,交通运输设备,0.0142,0.9800,33.11,0.0555,-0.0586,50.29,1.84,N/A,0.03,0.29,0.23,N/A,High PE (expensive)|Small cap (liquidity)|Negative momentum (10d)|Margin contraction (bearish)|PE expanding rapidly
+8,002532,天山铝业,工业金属,0.0141,0.9767,12.05,-0.1014,-0.2175,9.33,1.78,N/A,0.03,0.92,0.29,Low PE (value)|Oversold (RSI<30)|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)
+9,688303,大全能源,发电设备,0.0140,0.9733,19.20,-0.1237,-0.0565,-30.02,1.08,N/A,0.01,0.49,0.33,Low PB,Small cap (liquidity)|Negative momentum (10d)|PE expanding rapidly
+10,688183,生益电子,电子元件,0.0137,0.9700,138.50,0.1923,0.4020,67.54,18.92,N/A,0.04,0.42,0.51,Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|PE expanding rapidly
+11,000807,云铝股份,工业金属,0.0134,0.9667,24.17,-0.1124,-0.1823,9.66,2.35,N/A,0.03,0.99,0.61,Low PE (value)|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+12,601898,中煤能源,煤炭,0.0127,0.9633,13.50,-0.1723,-0.1708,10.08,1.09,N/A,0.01,0.76,0.06,Low PE (value)|Low PB|Large cap (quality)|Oversold (RSI<30)|Sector-relative strength,Negative momentum (10d)
+13,000975,山金国际,贵金属,0.0125,0.9600,21.07,0.0268,-0.0984,15.91,3.60,N/A,0.02,0.46,0.42,N/A,Small cap (liquidity)|Negative momentum (10d)
+14,300476,胜宏科技,电子元件,0.0122,0.9567,369.00,0.1337,0.1135,77.49,20.84,N/A,0.05,0.02,0.99,Large cap (quality)|Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+15,600066,宇通客车,交通运输设备,0.0119,0.9533,26.04,-0.1173,-0.1788,10.56,3.55,N/A,0.01,0.86,0.08,Low PE (value)|Oversold (RSI<30)|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)
+16,688521,芯原股份,集成电路,0.0117,0.9500,274.00,0.1925,0.0017,-222.27,45.79,N/A,0.05,0.20,0.65,Positive momentum (10d)|Strong sector momentum,Overbought (RSI>70)|Margin contraction (bearish)
+17,600875,600875,发电设备,0.0116,0.9467,32.56,0.1041,-0.0986,26.41,2.40,N/A,0.04,0.08,0.62,Sector-relative strength,Negative momentum (10d)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+18,002916,深南电路,电子元件,0.0111,0.9433,453.80,0.2064,0.3276,85.05,17.09,N/A,0.03,0.16,0.13,Large cap (quality)|Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+19,600188,兖矿能源,煤炭,0.0110,0.9400,19.38,-0.1610,-0.0463,20.36,2.54,N/A,0.01,0.84,0.10,Large cap (quality)|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+20,600845,600845,软件开发,0.0108,0.9367,17.90,-0.0006,-0.2062,41.39,4.50,N/A,0.01,0.56,0.39,Oversold (RSI<30),High PE (expensive)|Small cap (liquidity)|Negative momentum (10d)
+21,600893,600893,航空航天,0.0104,0.9333,39.02,0.0217,-0.1441,165.26,2.59,N/A,0.01,0.30,0.57,N/A,High PE (expensive)|Negative momentum (10d)|Margin contraction (bearish)|PE expanding rapidly
+22,600026,中远海能,运输业,0.0103,0.9300,19.30,0.1592,-0.1468,19.19,2.19,N/A,0.03,0.63,0.49,Positive momentum (10d)|Strong sector momentum,Overbought (RSI>70)|PE expanding rapidly
+23,688472,阿特斯,光伏设备,0.0100,0.9267,11.20,0.0009,-0.2034,27.42,1.73,N/A,0.01,0.71,0.55,Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)
+24,603799,华友钴业,工业金属,0.0093,0.9233,52.10,0.0961,-0.0772,13.43,1.96,N/A,0.04,0.23,0.90,Low PE (value)|Positive momentum (10d)|Sector-relative strength,Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+25,001979,招商蛇口,商业地产开发和管理,0.0091,0.9200,7.25,-0.1233,-0.1520,105.86,0.67,N/A,0.01,0.93,0.24,Low PB|Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),High PE (expensive)|Small cap (liquidity)|Negative momentum (10d)
+26,600346,600346,化学原料,0.0088,0.9167,17.10,0.0497,-0.0826,13.47,1.70,N/A,0.00,0.32,0.32,Positive momentum (10d)|Sector-relative strength,N/A
+27,603392,万泰生物,医疗器械,0.0083,0.9133,28.54,-0.0135,-0.2476,-92.89,3.05,N/A,0.00,0.54,0.39,Oversold (RSI<30),Small cap (liquidity)|Negative momentum (10d)|PE expanding rapidly
+28,300418,昆仑万维,数字媒体,0.0080,0.9100,43.00,0.1640,-0.0723,-32.30,4.51,N/A,0.11,0.01,0.97,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,Small cap (liquidity)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio
+29,300033,同花顺,计算机软件,0.0079,0.9067,214.69,0.1122,-0.0911,48.37,23.12,N/A,0.03,0.01,0.87,Strong sector momentum,High PE (expensive)|Negative momentum (10d)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio
+30,300502,新易盛,通信设备,0.0078,0.9033,581.48,0.1055,0.4402,75.49,39.78,N/A,0.03,0.25,0.69,Large cap (quality)|Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Margin contraction (bearish)|PE expanding rapidly
+31,688506,百利天恒,生物制品,0.0077,0.9000,229.43,0.0506,-0.0826,-73.05,16.78,N/A,0.01,0.40,0.07,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,N/A
+32,002558,巨人网络,文化娱乐,0.0073,0.8967,23.90,0.0106,-0.1220,18.26,2.78,N/A,0.02,0.58,0.50,Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)
+33,603260,合盛硅业,化学制品,0.0068,0.8933,48.40,0.1691,0.2158,-18.03,1.94,N/A,0.03,0.54,0.47,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,Small cap (liquidity)|Overbought (RSI>70)
+34,002920,德赛西威,汽车零部件与轮胎,0.0066,0.8900,87.75,0.0266,-0.1731,22.45,3.45,N/A,0.01,0.18,0.66,Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)|Margin contraction (bearish)
+35,688111,金山办公,软件开发,0.0066,0.8867,217.36,0.0372,-0.1088,27.79,6.67,N/A,0.02,0.13,0.85,Sector-relative strength,Negative momentum (10d)|Margin contraction (bearish)|High leverage ratio
+36,601600,601600,工业金属,0.0059,0.8833,9.38,-0.0920,-0.1347,10.97,2.00,N/A,0.03,0.94,0.74,Low PE (value)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)|High leverage ratio
+37,600415,600415,商业服务与用品,0.0059,0.8800,10.54,0.0009,-0.1855,13.16,2.42,N/A,0.01,0.81,0.67,Low PE (value)|Sector-relative strength|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)
+38,688256,寒武纪,集成电路,0.0057,0.8767,1507.46,0.2361,0.1678,348.60,73.58,N/A,0.04,0.07,0.57,Large cap (quality)|Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+39,603986,兆易创新,集成电路,0.0057,0.8733,629.00,0.3009,0.4585,153.41,17.45,N/A,0.09,0.02,0.86,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+40,002602,世纪华通,文化娱乐,0.0056,0.8700,12.94,-0.1245,-0.0976,15.18,2.95,N/A,0.02,0.94,0.72,Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)|High leverage ratio
+41,605499,东鹏饮料,软饮料,0.0055,0.8667,120.60,-0.0941,-0.1809,18.87,4.33,N/A,0.01,0.84,0.18,Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)
+42,600438,600438,农牧渔产品,0.0054,0.8633,12.85,-0.0951,-0.1758,-6.15,1.65,N/A,0.01,0.97,0.78,Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)|High leverage ratio
+43,688041,海光信息,数字芯片设计,0.0053,0.8600,328.00,0.1317,0.0684,279.66,32.45,N/A,0.02,0.20,0.34,Large cap (quality)|Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+44,600570,600570,软件开发,0.0051,0.8567,22.25,0.0585,-0.1423,31.48,4.22,N/A,0.01,0.05,0.97,Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+45,300394,天孚通信,通信设备,0.0051,0.8533,336.60,0.1449,0.3998,169.06,61.40,N/A,0.05,0.41,0.63,Large cap (quality)|Strong sector momentum,High PE (expensive)|Negative momentum (10d)|Overbought (RSI>70)|PE expanding rapidly
+46,601127,601127,乘用车,0.0051,0.8500,64.81,-0.0428,-0.2151,18.93,2.73,N/A,0.02,0.26,0.87,Oversold (RSI<30),Negative momentum (10d)|Margin contraction (bearish)|High leverage ratio
+47,002202,金风科技,发电设备,0.0050,0.8467,22.49,0.0644,-0.0906,30.51,2.39,N/A,0.04,0.15,0.81,Sector-relative strength,Negative momentum (10d)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+48,002074,国轩高科,储能设备,0.0050,0.8433,29.71,0.0480,-0.1477,23.40,1.86,N/A,0.02,0.20,0.88,Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+49,002600,领益智造,电子终端及组件,0.0050,0.8400,16.82,0.2340,0.0838,58.14,5.04,N/A,0.05,0.08,0.43,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+50,600547,600547,贵金属,0.0047,0.8367,26.91,-0.0015,-0.0909,24.05,3.88,N/A,0.02,0.88,0.56,Margin expansion (bullish),Negative momentum (10d)
+51,600803,600803,燃气,0.0046,0.8333,16.28,-0.1070,-0.1945,11.56,2.08,N/A,0.00,0.46,0.05,Low PE (value)|Oversold (RSI<30)|Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)
+52,601238,601238,乘用车,0.0041,0.8300,5.53,-0.0383,-0.1278,-6.48,0.54,N/A,0.01,0.90,0.92,Low PB|Oversold (RSI<30)|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)|High leverage ratio
+53,600233,圆通速递,运输业,0.0040,0.8267,15.80,-0.0678,-0.1446,11.17,1.49,N/A,0.01,0.59,0.07,Low PE (value)|Oversold (RSI<30)|Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)
+54,300122,智飞生物,生物药品,0.0036,0.8233,12.21,-0.0121,-0.1573,-1.98,1.89,N/A,0.02,0.79,0.95,Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)|High leverage ratio
+55,600588,600588,信息技术服务,0.0035,0.8200,9.79,-0.0111,-0.0977,-24.31,4.85,N/A,0.02,0.34,0.80,Oversold (RSI<30)|Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)|High leverage ratio
+56,600219,南山铝业,工业金属,0.0035,0.8167,4.53,-0.0109,-0.1030,12.59,1.02,N/A,0.02,0.31,0.66,Low PE (value)|Low PB|Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)
+57,002241,歌尔股份,电子终端及组件,0.0035,0.8133,23.92,0.0528,-0.0343,21.37,2.27,N/A,0.03,0.04,0.94,Strong sector momentum,Negative momentum (10d)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+58,601360,601360,软件开发,0.0033,0.8100,9.37,0.0411,-0.1068,101.61,2.25,N/A,0.01,0.17,0.63,N/A,High PE (expensive)|Small cap (liquidity)|Negative momentum (10d)|Margin contraction (bearish)|PE expanding rapidly
+59,000596,古井贡酒,酒,0.0030,0.8067,81.71,-0.0626,-0.1398,15.28,1.65,N/A,0.01,0.60,0.16,Oversold (RSI<30),Small cap (liquidity)|Negative momentum (10d)
+60,002625,光启技术,国防装备,0.0030,0.8033,34.15,-0.0631,-0.1032,103.26,7.53,N/A,0.04,1.00,1.00,Sector-relative strength|Margin expansion (bullish),High PE (expensive)|Small cap (liquidity)|Negative momentum (10d)|High leverage ratio
+61,601136,601136,证券Ⅲ,0.0029,0.8000,13.98,0.0302,-0.0992,34.68,2.70,N/A,0.00,0.34,0.41,Sector-relative strength,Small cap (liquidity)
+62,600989,600989,化学原料,0.0028,0.7967,21.51,-0.0632,-0.1898,12.54,3.03,N/A,0.01,0.87,0.54,Low PE (value)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)
+63,002648,卫星化学,化学原料,0.0028,0.7933,21.65,-0.0611,-0.1098,12.45,2.06,N/A,0.02,0.91,0.45,Low PE (value)|Oversold (RSI<30)|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)
+64,002422,科伦药业,化学药,0.0027,0.7900,35.92,-0.0567,0.1090,36.36,2.32,N/A,0.02,0.65,0.25,Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Small cap (liquidity)
+65,601012,601012,发电设备,0.0025,0.7867,12.84,-0.0587,-0.1318,-14.08,1.93,N/A,0.02,0.95,0.86,Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)|High leverage ratio
+66,600104,上汽集团,乘用车,0.0023,0.7833,10.46,-0.0377,-0.1565,11.89,0.40,N/A,0.01,0.73,0.59,Low PE (value)|Low PB|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+67,000858,五 粮 液,酒,0.0023,0.7800,75.85,-0.0494,-0.1113,23.37,2.30,N/A,0.01,0.77,0.43,Large cap (quality)|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+68,600741,600741,汽车零部件与轮胎,0.0023,0.7767,16.27,-0.0228,-0.0446,7.15,0.75,N/A,0.01,0.64,0.29,Low PE (value)|Low PB|Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)
+69,600085,同仁堂,中药,0.0022,0.7733,23.50,-0.0329,-0.0795,29.89,2.29,N/A,0.01,0.74,0.70,Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)|High leverage ratio
+70,300498,温氏股份,养殖,0.0021,0.7700,12.36,-0.0389,-0.1345,37.67,2.08,N/A,0.01,0.81,0.24,Oversold (RSI<30)|Margin expansion (bullish),High PE (expensive)|Negative momentum (10d)
+71,300896,爱美客,医疗器械,0.0020,0.7667,91.36,-0.0128,-0.1177,24.13,3.51,N/A,0.02,0.39,0.91,Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)|High leverage ratio
+72,002230,科大讯飞,软件开发,0.0019,0.7633,42.61,0.0446,-0.0972,118.61,5.43,N/A,0.03,0.13,0.95,N/A,High PE (expensive)|Negative momentum (10d)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+73,601877,正泰电器,电网设备,0.0019,0.7600,27.04,0.0127,-0.1040,12.62,1.28,N/A,0.01,0.38,0.47,Low PE (value)|Low PB,Small cap (liquidity)|Negative momentum (10d)
+74,000963,华东医药,化学药,0.0017,0.7567,28.34,-0.0271,-0.0234,14.19,1.93,N/A,0.01,0.47,0.44,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,Small cap (liquidity)
+75,002028,思源电气,电网设备,0.0017,0.7533,190.20,0.1058,-0.0434,45.74,9.23,N/A,0.02,0.24,0.18,Sector-relative strength,High PE (expensive)|Negative momentum (10d)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+76,300251,光线传媒,文化娱乐,0.0014,0.7500,11.32,0.0300,-0.1232,-103.66,3.31,N/A,0.01,0.14,0.79,Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)|Margin contraction (bearish)|High leverage ratio
+77,688036,传音控股,电子终端及组件,0.0014,0.7467,53.51,0.0064,-0.1375,22.07,2.90,N/A,0.01,0.33,0.45,Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)
+78,002460,赣锋锂业,稀有金属,0.0014,0.7433,69.36,-0.0083,-0.0793,38.21,3.13,N/A,0.05,0.98,0.96,Positive momentum (10d)|Strong sector momentum|Margin expansion (bullish),High PE (expensive)|High leverage ratio
+79,600089,特变电工,电网设备,0.0013,0.7400,23.32,0.0251,-0.1000,19.10,1.64,N/A,0.02,0.22,0.86,Sector-relative strength,Negative momentum (10d)|Margin contraction (bearish)|High leverage ratio
+80,603369,今世缘,酒,0.0013,0.7367,24.24,-0.0053,-0.1039,12.89,1.68,N/A,0.01,0.58,0.24,Low PE (value)|Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)
+81,600372,600372,航空航天,0.0013,0.7333,10.98,0.0233,-0.0655,46.34,1.40,N/A,0.01,0.39,0.65,Sector-relative strength,High PE (expensive)|Small cap (liquidity)|Negative momentum (10d)|PE expanding rapidly
+82,601059,601059,证券,0.0013,0.7300,15.38,0.0413,-0.1053,23.29,2.25,N/A,0.00,0.42,0.27,Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)
+83,600436,600436,中药,0.0013,0.7267,112.89,-0.0461,-0.1048,35.80,4.48,N/A,0.01,0.71,0.54,Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)
+84,002466,天齐锂业,稀有金属,0.0012,0.7233,62.18,0.0193,-0.0547,47.68,2.30,N/A,0.05,0.99,0.83,Positive momentum (10d)|Sector-relative strength|Strong sector momentum|Margin expansion (bullish),High PE (expensive)|Overbought (RSI>70)|High leverage ratio
+85,000999,华润三九,中药,0.0011,0.7200,23.48,-0.0494,-0.0237,12.11,1.68,N/A,0.00,0.89,0.56,Low PE (value)|Oversold (RSI<30)|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)
+86,300413,芒果超媒,数字媒体,0.0011,0.7167,15.54,-0.0089,-0.1564,27.75,1.23,N/A,0.01,0.37,0.89,Low PB|Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)|High leverage ratio
+87,002371,北方华创,半导体材料与设备,0.0010,0.7133,721.04,0.1310,0.0876,93.73,13.30,N/A,0.01,0.38,0.09,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|PE expanding rapidly
+88,601872,招商轮船,运输业,0.0010,0.7100,17.14,0.1886,-0.0371,17.50,3.07,N/A,0.02,0.57,0.38,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,Overbought (RSI>70)|PE expanding rapidly
+89,000625,长安汽车,乘用车,0.0009,0.7067,7.45,0.0013,-0.1204,24.03,0.96,N/A,0.01,0.28,0.71,Low PB|Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)|Margin contraction (bearish)|High leverage ratio
+90,002714,牧原股份,养殖,0.0008,0.7033,33.63,-0.0155,-0.1390,19.85,2.25,N/A,0.02,0.72,0.78,Large cap (quality)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)|High leverage ratio
+91,300274,阳光电源,发电设备,0.0008,0.7000,146.98,0.0016,-0.1113,25.55,6.26,N/A,0.04,0.75,0.80,Large cap (quality)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)|High leverage ratio
+92,002709,天赐材料,电气部件与设备,0.0008,0.6967,51.61,0.0650,-0.1057,36.70,5.51,N/A,0.07,0.68,0.90,Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|High leverage ratio|PE expanding rapidly
+93,300832,新产业,医疗器械,0.0008,0.6933,42.00,-0.0400,-0.1304,20.31,3.48,N/A,0.01,0.67,0.70,Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)
+94,603893,瑞芯微,集成电路,0.0007,0.6900,180.66,0.1286,-0.0344,65.59,16.11,N/A,0.03,0.11,0.57,Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+95,000938,紫光股份,信息技术服务,0.0007,0.6867,27.45,0.0854,-0.0593,36.95,5.06,N/A,0.04,0.05,0.91,Sector-relative strength,High PE (expensive)|Negative momentum (10d)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio
+96,000768,中航西飞,航空航天,0.0006,0.6833,20.59,-0.0091,-0.0775,51.64,2.54,N/A,0.01,0.81,0.79,Margin expansion (bullish),High PE (expensive)|Small cap (liquidity)|Negative momentum (10d)|High leverage ratio
+97,601021,601021,运输业,0.0006,0.6800,45.76,0.0400,-0.0431,17.07,2.40,N/A,0.01,0.47,0.21,Positive momentum (10d),Small cap (liquidity)
+98,300450,先导智能,专用机械,0.0006,0.6767,46.73,0.1187,-0.0673,48.78,4.38,N/A,0.06,0.32,0.84,Sector-relative strength,High PE (expensive)|Negative momentum (10d)|High leverage ratio|PE expanding rapidly
+99,002049,紫光国微,集成电路,0.0005,0.6733,80.39,0.1256,0.0321,41.34,4.91,N/A,0.05,0.03,0.96,Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Small cap (liquidity)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio
+100,301236,软通动力,信息技术服务,0.0005,0.6700,38.56,-0.0613,0.0129,740.42,2.99,N/A,0.04,0.43,0.98,Oversold (RSI<30)|Sector-relative strength,High PE (expensive)|Small cap (liquidity)|Negative momentum (10d)|High leverage ratio
+101,002493,荣盛石化,化学原料,0.0004,0.6667,11.21,0.0428,-0.0184,36.41,2.41,N/A,0.01,0.36,0.15,Positive momentum (10d)|Sector-relative strength,High PE (expensive)|PE expanding rapidly
+102,601689,601689,汽车零部件与轮胎,0.0004,0.6633,62.30,0.0150,-0.1362,39.15,4.40,N/A,0.03,nan,nan,Sector-relative strength,High PE (expensive)|Negative momentum (10d)
+103,601456,601456,证券公司,0.0003,0.6600,9.17,-0.0140,-0.0086,24.46,0.97,N/A,0.01,0.35,0.53,Low PB|Positive momentum (10d)|Strong sector momentum,Small cap (liquidity)
+104,000617,中油资本,其他金融服务,0.0003,0.6567,7.17,0.0070,-0.1309,19.74,0.85,N/A,0.01,0.51,0.46,Low PB|Sector-relative strength,Negative momentum (10d)
+105,000568,泸州老窖,酒,0.0002,0.6533,80.93,-0.0532,-0.1147,11.98,2.31,N/A,0.01,0.78,0.49,Low PE (value)|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+106,600519,600519,酒,0.0002,0.6500,1215.00,-0.0500,-0.0732,18.36,5.61,N/A,0.00,0.75,0.26,Large cap (quality)|Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)
+107,600061,国投资本,证券公司,0.0002,0.6467,6.36,0.0275,-0.0140,12.08,0.74,N/A,0.01,0.30,0.76,Low PE (value)|Low PB|Positive momentum (10d)|Strong sector momentum,Small cap (liquidity)|High leverage ratio
+108,000002,万  科Ａ,房地产开发与园区,0.0002,0.6433,3.06,-0.0192,-0.1182,-0.41,0.33,N/A,0.02,0.68,0.99,Low PB|Oversold (RSI<30)|Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)|High leverage ratio
+109,601211,601211,证券公司,0.0001,0.6400,17.28,0.0035,0.1346,13.87,0.93,N/A,0.01,0.17,0.72,Low PB|Large cap (quality)|Positive momentum (10d)|Strong sector momentum,Margin contraction (bearish)|High leverage ratio
+110,600196,复星医药,化学药,-0.0000,0.6367,21.79,0.0005,-0.0810,16.74,1.18,N/A,0.01,0.41,0.83,Low PB|Strong sector momentum,Small cap (liquidity)|Negative momentum (10d)|High leverage ratio
+111,601607,601607,食品与主要用品零售,-0.0001,0.6333,15.91,-0.0203,-0.0358,10.16,0.76,N/A,0.00,0.62,0.41,Low PE (value)|Low PB|Oversold (RSI<30)|Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)
+112,000977,浪潮信息,电子终端及组件,-0.0001,0.6300,65.66,0.1352,-0.0098,37.74,4.32,N/A,0.05,0.03,0.77,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+113,600809,600809,酒,-0.0001,0.6267,113.28,-0.0528,-0.1377,12.58,3.07,N/A,0.01,0.61,0.20,Low PE (value)|Oversold (RSI<30)|Sector-relative strength,Negative momentum (10d)
+114,600918,600918,证券公司,-0.0001,0.6233,5.13,-0.0116,-0.1031,26.48,0.91,N/A,0.01,0.29,0.94,Low PB|Strong sector momentum,Small cap (liquidity)|Negative momentum (10d)|Margin contraction (bearish)|High leverage ratio
+115,600009,上海机场,交通基本设施,-0.0002,0.6200,23.16,-0.0128,-0.0953,26.49,1.34,N/A,0.00,0.57,0.71,Low PB|Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)|High leverage ratio
+116,601727,601727,发电设备,-0.0003,0.6167,7.31,0.0310,-0.1578,87.76,2.07,N/A,0.01,0.27,0.54,N/A,High PE (expensive)|Negative momentum (10d)|Margin contraction (bearish)|PE expanding rapidly
+117,300628,亿联网络,通信设备,-0.0003,0.6133,33.20,-0.0377,-0.0803,15.61,4.21,N/A,0.01,0.66,0.31,Oversold (RSI<30)|Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)
+118,601857,601857,石油与天然气,-0.0003,0.6100,9.58,-0.0762,-0.1515,11.08,1.08,N/A,0.00,0.53,0.02,Low PE (value)|Low PB|Large cap (quality)|Oversold (RSI<30),Negative momentum (10d)
+119,600938,600938,石油与天然气,-0.0004,0.6067,30.70,-0.0923,-0.1524,11.70,1.74,N/A,0.02,0.97,0.64,Low PE (value)|Large cap (quality)|Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)
+120,300015,爱尔眼科,医疗商业与服务,-0.0004,0.6033,8.27,-0.0166,-0.1165,22.88,3.35,N/A,0.01,0.59,0.66,Sector-relative strength,Negative momentum (10d)
+121,600036,招商银行,商业银行,-0.0005,0.6000,37.26,-0.0380,0.0030,6.23,0.83,N/A,0.00,0.74,0.34,Low PE (value)|Low PB|Large cap (quality)|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+122,600999,600999,证券公司,-0.0005,0.5967,18.58,0.0777,0.0660,12.14,1.30,N/A,0.01,0.15,0.42,Low PE (value)|Low PB|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,Overbought (RSI>70)|Margin contraction (bearish)
+123,601058,601058,汽车零部件与轮胎,-0.0006,0.5933,11.50,-0.0558,-0.0726,10.68,1.69,N/A,0.02,0.98,0.58,Low PE (value)|Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)
+124,002353,杰瑞股份,油气开采与油田服务,-0.0006,0.5900,164.22,0.1325,0.2406,59.98,7.16,N/A,0.03,0.09,0.14,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+125,601878,浙商证券,证券公司,-0.0006,0.5867,9.11,0.0077,-0.0461,15.98,1.11,N/A,0.01,0.28,0.92,Low PB|Strong sector momentum,Small cap (liquidity)|Margin contraction (bearish)|High leverage ratio
+126,002179,中航光电,航空航天,-0.0007,0.5833,40.78,0.1173,0.0132,44.97,3.50,N/A,0.04,0.24,0.51,Positive momentum (10d)|Sector-relative strength,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+127,601377,601377,证券公司,-0.0008,0.5800,5.82,-0.0034,0.0000,16.01,0.89,N/A,0.02,0.62,0.80,Low PB|Strong sector momentum,Small cap (liquidity)|Negative momentum (10d)|High leverage ratio
+128,002236,大华股份,电子终端及组件,-0.0008,0.5767,16.27,0.0271,-0.0546,13.63,1.38,N/A,0.01,0.23,0.85,N/A,Small cap (liquidity)|Negative momentum (10d)|Margin contraction (bearish)|High leverage ratio
+129,600027,华电国际,电力及电网,-0.0009,0.5733,4.77,-0.0592,-0.0702,9.43,1.11,N/A,0.01,0.83,0.36,Low PE (value)|Low PB|Oversold (RSI<30)|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)
+130,001391,国货航,跨境物流,-0.0009,0.5700,4.39,-0.0539,-0.1654,21.63,1.96,N/A,0.02,0.95,0.78,Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)|High leverage ratio
+131,600515,600515,房地产开发与园区,-0.0009,0.5667,2.85,-0.0240,-0.1176,141.19,1.34,N/A,0.01,0.76,0.60,Low PB|Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),High PE (expensive)|Small cap (liquidity)|Negative momentum (10d)
+132,600585,600585,建筑材料,-0.0010,0.5633,17.76,-0.0436,-0.0989,12.11,0.49,N/A,0.01,0.91,0.53,Low PE (value)|Low PB|Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)
+133,601901,方正证券,证券公司,-0.0010,0.5600,6.66,0.0262,-0.0499,12.87,1.05,N/A,0.01,0.21,0.93,Low PE (value)|Low PB|Positive momentum (10d)|Strong sector momentum,Small cap (liquidity)|Margin contraction (bearish)|High leverage ratio
+134,600926,600926,商业银行,-0.0010,0.5567,15.64,-0.0423,-0.0139,5.77,0.81,N/A,0.01,0.86,0.46,Low PE (value)|Low PB|Positive momentum (10d)|Oversold (RSI<30)|Margin expansion (bullish),N/A
+135,601225,601225,煤炭,-0.0011,0.5533,22.97,-0.1470,-0.0192,13.77,2.18,N/A,0.00,0.77,0.05,Large cap (quality)|Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)
+136,000776,广发证券,证券公司,-0.0011,0.5500,20.64,0.0778,0.0683,10.32,1.17,N/A,0.02,0.09,0.64,Low PE (value)|Low PB|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,Overbought (RSI>70)|Margin contraction (bearish)
+137,000792,盐湖股份,农用化工,-0.0012,0.5467,29.75,-0.0217,-0.0784,15.26,3.52,N/A,0.02,0.94,0.76,Positive momentum (10d)|Sector-relative strength|Margin expansion (bullish),High leverage ratio
+138,300059,东方财富,证券公司,-0.0012,0.5433,18.60,0.0714,-0.0691,22.45,3.08,N/A,0.02,0.02,1.00,Large cap (quality)|Sector-relative strength|Strong sector momentum,Negative momentum (10d)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+139,300014,亿纬锂能,电气部件与设备,-0.0014,0.5400,66.66,0.2098,0.0424,32.34,3.32,N/A,0.05,0.03,0.81,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+140,600011,华能国际,电力及电网,-0.0014,0.5367,7.64,-0.0649,0.0437,8.62,1.71,N/A,0.02,0.88,0.33,Low PE (value)|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+141,605117,德业股份,家用电器,-0.0014,0.5333,103.20,0.0198,-0.1341,35.96,11.36,N/A,0.01,0.70,0.10,Margin expansion (bullish),Negative momentum (10d)
+142,601117,601117,建筑与工程,-0.0014,0.5300,8.08,0.1008,0.0267,7.52,0.72,N/A,0.05,0.09,0.83,Low PE (value)|Low PB|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,Small cap (liquidity)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio
+143,002001,新 和 成,化学药,-0.0015,0.5267,28.00,-0.0479,-0.0617,12.82,2.45,N/A,0.01,0.86,0.23,Low PE (value)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)
+144,000708,中信特钢,钢铁,-0.0015,0.5233,13.53,-0.0217,-0.0370,11.28,1.53,N/A,0.00,0.45,0.04,Low PE (value)|Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)
+145,688271,联影医疗,医疗设备,-0.0015,0.5200,103.48,-0.0779,-0.1607,44.93,3.88,N/A,0.02,0.84,0.37,Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),High PE (expensive)|Negative momentum (10d)
+146,601688,601688,证券公司,-0.0016,0.5167,19.55,0.0135,0.0477,10.06,0.99,N/A,0.02,0.25,0.84,Low PE (value)|Low PB|Positive momentum (10d)|Strong sector momentum,Margin contraction (bearish)|High leverage ratio
+147,000063,中兴通讯,通信设备,-0.0016,0.5133,37.89,0.0021,0.0879,40.50,2.36,N/A,0.05,0.42,0.97,Large cap (quality)|Positive momentum (10d)|Strong sector momentum,High PE (expensive)|High leverage ratio
+148,600309,万华化学,化学制品,-0.0016,0.5100,69.05,0.0283,-0.0943,16.42,1.94,N/A,0.01,0.40,0.30,Large cap (quality)|Sector-relative strength,Negative momentum (10d)
+149,688072,拓荆科技,半导体材料与设备,-0.0016,0.5067,734.00,0.1201,0.2115,126.19,28.63,N/A,0.03,0.33,0.25,Large cap (quality)|Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|PE expanding rapidly
+150,601788,601788,证券公司,-0.0017,0.5033,14.19,0.0179,-0.0360,16.07,1.05,N/A,0.01,0.26,0.93,Low PB|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,Small cap (liquidity)|Margin contraction (bearish)|High leverage ratio
+151,002594,比亚迪,乘用车,-0.0017,0.5000,88.13,-0.0186,-0.0575,29.17,3.46,N/A,0.01,0.72,0.81,Large cap (quality)|Margin expansion (bullish),Negative momentum (10d)|High leverage ratio
+152,601336,601336,保险,-0.0017,0.4967,57.55,-0.0282,-0.0277,4.86,1.45,N/A,0.02,0.71,0.77,Low PE (value)|Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High leverage ratio
+153,002050,三花智控,家用电器,-0.0017,0.4933,45.74,0.0011,-0.1342,47.09,5.90,N/A,0.03,0.24,0.76,Large cap (quality)|Sector-relative strength,High PE (expensive)|Negative momentum (10d)|Margin contraction (bearish)|High leverage ratio
+154,601288,601288,商业银行,-0.0017,0.4900,6.37,-0.0464,-0.0215,7.58,0.79,N/A,0.00,0.50,0.00,Low PE (value)|Low PB|Large cap (quality)|Positive momentum (10d)|Oversold (RSI<30),N/A
+155,601628,601628,保险,-0.0018,0.4867,33.70,-0.0184,-0.0103,6.58,1.59,N/A,0.00,0.52,0.03,Low PE (value)|Large cap (quality)|Positive momentum (10d)|Strong sector momentum,N/A
+156,601066,601066,证券公司,-0.0019,0.4833,24.90,0.0126,0.0984,17.15,2.24,N/A,0.01,0.38,0.30,Large cap (quality)|Strong sector momentum,Negative momentum (10d)
+157,000630,铜陵有色,工业金属,-0.0019,0.4800,7.65,0.1860,0.3328,39.01,2.74,N/A,0.08,0.16,0.65,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+158,002304,洋河股份,酒,-0.0019,0.4767,41.03,-0.0537,-0.0800,60.87,1.26,N/A,0.00,0.85,0.50,Low PB|Oversold (RSI<30)|Margin expansion (bullish),High PE (expensive)|Small cap (liquidity)|Negative momentum (10d)
+159,002837,英维克,专用机械,-0.0019,0.4733,74.37,0.1077,-0.0365,196.40,27.38,N/A,0.05,0.05,0.85,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+160,302132,中航成飞,航空航天,-0.0020,0.4700,59.33,0.0365,-0.0814,45.71,7.40,N/A,0.01,0.22,0.73,Positive momentum (10d),High PE (expensive)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+161,600030,中信证券,证券公司,-0.0021,0.4667,26.56,0.0412,0.0295,11.69,1.35,N/A,0.02,0.13,0.94,Low PE (value)|Low PB|Large cap (quality)|Positive momentum (10d)|Sector-relative strength,Margin contraction (bearish)|High leverage ratio
+162,600489,600489,贵金属,-0.0021,0.4633,21.92,0.0620,-0.0378,16.93,3.24,N/A,0.02,0.12,0.61,Sector-relative strength,Negative momentum (10d)|Overbought (RSI>70)|Margin contraction (bearish)
+163,000651,格力电器,家用电器,-0.0021,0.4600,36.72,-0.0462,-0.0551,7.05,1.35,N/A,0.01,0.93,0.60,Low PE (value)|Low PB|Large cap (quality)|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+164,002736,国信证券,证券公司,-0.0021,0.4567,9.85,0.0165,-0.0020,9.63,1.04,N/A,0.00,0.49,0.40,Low PE (value)|Low PB|Positive momentum (10d)|Strong sector momentum,N/A
+165,601800,601800,建筑与工程,-0.0021,0.4533,6.11,-0.0271,-0.0453,7.43,0.34,N/A,0.01,0.77,0.41,Low PE (value)|Low PB|Margin expansion (bullish),Negative momentum (10d)
+166,601166,601166,商业银行,-0.0021,0.4500,17.32,-0.0530,0.0242,4.73,0.44,N/A,0.01,0.92,0.58,Low PE (value)|Low PB|Large cap (quality)|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+167,601899,紫金矿业,贵金属,-0.0021,0.4467,29.69,0.0864,-0.0100,12.80,4.00,N/A,0.02,0.17,0.43,Low PE (value)|Large cap (quality)|Sector-relative strength,Negative momentum (10d)|Margin contraction (bearish)
+168,002938,鹏鼎控股,电子元件,-0.0022,0.4433,119.91,0.1366,0.2812,74.86,8.02,N/A,0.03,0.28,0.16,Large cap (quality)|Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Margin contraction (bearish)|PE expanding rapidly
+169,603259,药明康德,制药与生物科技服务,-0.0022,0.4400,102.72,0.0582,0.0012,15.23,3.64,N/A,0.02,0.25,0.47,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,Overbought (RSI>70)|Margin contraction (bearish)
+170,601881,中国银河,证券公司,-0.0022,0.4367,12.09,0.0109,-0.0258,10.31,1.09,N/A,0.01,0.35,0.74,Low PE (value)|Low PB|Positive momentum (10d)|Strong sector momentum,High leverage ratio
+171,601398,601398,商业银行,-0.0022,0.4333,7.16,-0.0653,0.0014,6.87,0.65,N/A,0.00,0.55,0.02,Low PE (value)|Low PB|Large cap (quality)|Oversold (RSI<30),Negative momentum (10d)
+172,600221,海航控股,运输业,-0.0022,0.4300,1.45,-0.0203,-0.0203,18.26,9.01,N/A,0.01,0.69,0.35,N/A,Small cap (liquidity)|Negative momentum (10d)
+173,601995,中金公司,证券公司,-0.0023,0.4267,33.40,0.0526,-0.0217,14.24,1.57,N/A,0.01,0.23,0.59,Positive momentum (10d)|Strong sector momentum,Margin contraction (bearish)
+174,688126,沪硅产业,半导体材料与设备,-0.0023,0.4233,32.20,-0.0092,0.1633,-59.72,6.32,N/A,0.07,1.00,0.73,Positive momentum (10d)|Sector-relative strength|Strong sector momentum|Margin expansion (bullish),High leverage ratio
+175,601328,601328,商业银行,-0.0023,0.4200,6.68,-0.0416,0.0060,6.12,0.51,N/A,0.01,0.56,0.14,Low PE (value)|Low PB|Large cap (quality)|Sector-relative strength,Negative momentum (10d)
+176,600941,600941,电信运营服务,-0.0023,0.4167,91.65,-0.0450,-0.0314,14.63,1.40,N/A,0.01,0.85,0.52,Large cap (quality)|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+177,600919,600919,商业银行,-0.0023,0.4133,11.22,-0.0475,-0.0062,5.83,0.78,N/A,0.01,0.80,0.52,Low PE (value)|Low PB|Large cap (quality)|Oversold (RSI<30)|Sector-relative strength,Negative momentum (10d)
+178,000538,云南白药,中药,-0.0024,0.4100,48.43,-0.0419,-0.0339,16.44,2.05,N/A,0.00,0.66,0.27,Oversold (RSI<30),Negative momentum (10d)
+179,000001,平安银行,商业银行,-0.0024,0.4067,10.52,-0.0384,0.0154,4.74,0.44,N/A,0.01,0.88,0.55,Low PE (value)|Low PB|Large cap (quality)|Positive momentum (10d)|Oversold (RSI<30),N/A
+180,000157,中联重科,专用机械,-0.0024,0.4033,7.58,0.0398,0.0426,15.13,1.12,N/A,0.01,0.68,0.68,Low PB|Positive momentum (10d)|Sector-relative strength,Small cap (liquidity)
+181,000408,藏格矿业,农用化工,-0.0024,0.4000,76.42,0.0054,-0.0226,25.63,6.80,N/A,0.01,0.82,0.34,Margin expansion (bullish),Negative momentum (10d)
+182,600015,华夏银行,商业银行,-0.0024,0.3967,6.63,-0.0405,-0.0104,3.89,0.33,N/A,0.00,0.89,0.44,Low PE (value)|Low PB|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+183,688009,中国通号,专用设备,-0.0024,0.3933,4.93,0.0123,0.0144,14.32,1.09,N/A,0.00,0.36,0.22,Low PB|Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)
+184,601888,中国中免,旅游零售,-0.0024,0.3900,55.33,-0.0295,-0.0310,28.77,1.98,N/A,0.02,0.69,0.75,Sector-relative strength,Negative momentum (10d)|High leverage ratio
+185,601601,601601,保险,-0.0024,0.3867,29.98,-0.0649,-0.0915,5.35,0.90,N/A,0.02,0.89,0.32,Low PE (value)|Low PB|Large cap (quality)|Oversold (RSI<30)|Sector-relative strength,Negative momentum (10d)
+186,002311,海大集团,养殖,-0.0024,0.3833,41.20,-0.0581,-0.0628,17.45,2.67,N/A,0.01,0.67,0.07,Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)
+187,601229,601229,商业银行,-0.0025,0.3800,8.84,-0.0328,-0.0045,5.18,0.50,N/A,0.00,0.65,0.11,Low PE (value)|Low PB|Oversold (RSI<30)|Sector-relative strength,Negative momentum (10d)
+188,600958,600958,证券公司,-0.0025,0.3767,9.21,0.0442,-0.0456,13.53,0.96,N/A,0.01,0.16,0.77,Low PB|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,Margin contraction (bearish)|High leverage ratio
+189,600900,600900,电力及电网,-0.0025,0.3733,26.66,-0.0441,0.0000,18.08,2.86,N/A,0.01,0.85,0.40,Large cap (quality)|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+190,300433,蓝思科技,电子终端及组件,-0.0025,0.3700,55.77,0.3067,0.5275,85.60,5.39,N/A,0.04,0.04,0.67,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+191,000338,潍柴动力,交通运输设备,-0.0025,0.3667,30.09,0.0914,-0.0678,23.05,2.73,N/A,0.03,0.21,0.26,Large cap (quality)|Sector-relative strength,Negative momentum (10d)|Margin contraction (bearish)|PE expanding rapidly
+192,600660,600660,汽车零部件与轮胎,-0.0025,0.3633,49.95,-0.0469,-0.0808,14.49,3.33,N/A,0.00,0.79,0.48,Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+193,600031,三一重工,专用机械,-0.0026,0.3600,18.37,0.0082,-0.0311,20.06,1.86,N/A,0.01,0.51,0.20,Positive momentum (10d),N/A
+194,600029,南方航空,运输业,-0.0027,0.3567,5.29,0.0538,-0.0149,31.07,2.59,N/A,0.01,0.39,0.17,Positive momentum (10d)|Sector-relative strength,PE expanding rapidly
+195,300750,宁德时代,储能设备,-0.0027,0.3533,391.55,0.0245,-0.0488,22.94,5.07,N/A,0.01,0.47,0.31,Large cap (quality),Negative momentum (10d)
+196,600674,600674,电力及电网,-0.0027,0.3500,14.31,-0.0774,-0.0331,14.75,1.50,N/A,0.01,0.87,0.28,Oversold (RSI<30)|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)
+197,601318,601318,保险,-0.0027,0.3467,49.38,-0.0619,-0.0507,6.73,0.88,N/A,0.02,0.98,0.98,Low PE (value)|Low PB|Large cap (quality)|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)|High leverage ratio
+198,000333,美的集团,家用电器,-0.0027,0.3433,78.00,-0.0861,-0.0429,13.44,2.56,N/A,0.01,0.79,0.15,Large cap (quality)|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+199,601186,601186,建筑与工程,-0.0028,0.3400,6.30,-0.0016,-0.0187,4.86,0.31,N/A,0.00,0.70,0.75,Low PE (value)|Low PB,Negative momentum (10d)|High leverage ratio
+200,301308,江波龙,数字芯片设计,-0.0029,0.3367,577.79,0.1224,0.0741,44.96,20.06,N/A,0.08,0.40,0.82,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|High leverage ratio|PE expanding rapidly
+201,600930,600930,公用事业,-0.0029,0.3333,5.28,-0.0721,-0.1258,34.40,1.99,N/A,0.04,0.97,0.88,Large cap (quality)|Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)|High leverage ratio
+202,300760,迈瑞医疗,医疗器械,-0.0029,0.3300,140.01,-0.0468,-0.1063,21.66,4.23,N/A,0.01,0.96,0.67,Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)
+203,002352,顺丰控股,运输业,-0.0029,0.3267,31.55,-0.0810,-0.1108,14.56,1.66,N/A,0.01,0.99,0.69,Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+204,600760,600760,航空航天,-0.0029,0.3233,41.27,-0.0084,-0.0965,35.98,4.92,N/A,0.01,0.45,0.36,Positive momentum (10d),N/A
+205,601088,601088,煤炭,-0.0029,0.3200,41.26,-0.1275,-0.0884,17.35,1.86,N/A,0.00,0.61,0.01,Large cap (quality)|Oversold (RSI<30),Negative momentum (10d)
+206,300866,安克创新,电子终端及组件,-0.0030,0.3167,117.11,0.0457,-0.0853,24.91,5.62,N/A,0.02,0.19,0.19,Positive momentum (10d)|Strong sector momentum,Small cap (liquidity)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+207,603501,豪威集团,集成电路,-0.0030,0.3133,89.97,0.0564,-0.1228,30.82,3.45,N/A,0.02,0.21,0.87,Strong sector momentum,Negative momentum (10d)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+208,601766,601766,交通运输设备,-0.0030,0.3100,5.60,-0.0193,-0.0227,11.90,0.91,N/A,0.01,0.60,0.59,Low PE (value)|Low PB|Sector-relative strength,Negative momentum (10d)
+209,600886,600886,电力及电网,-0.0030,0.3067,13.07,-0.0508,-0.0158,14.07,1.52,N/A,0.01,0.74,0.15,Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)
+210,601985,中国核电,电力及电网,-0.0030,0.3033,9.12,0.0000,0.0435,22.79,1.56,N/A,0.01,0.44,0.18,Large cap (quality)|Sector-relative strength,Negative momentum (10d)
+211,600023,浙能电力,电力及电网,-0.0031,0.3000,5.76,-0.0857,0.0088,10.44,1.00,N/A,0.01,0.72,0.12,Low PE (value)|Low PB|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)
+212,601633,601633,乘用车,-0.0031,0.2967,17.65,0.0074,-0.0101,16.66,1.71,N/A,0.01,0.48,0.09,Positive momentum (10d)|Sector-relative strength,N/A
+213,600039,四川路桥,建筑与工程,-0.0031,0.2933,8.27,-0.0084,0.0235,10.25,1.36,N/A,0.00,0.55,0.02,Low PE (value),Small cap (liquidity)|Negative momentum (10d)
+214,601698,601698,电信运营服务,-0.0031,0.2900,30.89,-0.0332,-0.0670,328.17,8.17,N/A,0.01,0.50,0.27,Positive momentum (10d)|Sector-relative strength,High PE (expensive)
+215,000425,徐工机械,专用机械,-0.0032,0.2867,8.99,0.0158,-0.0606,15.98,1.68,N/A,0.01,0.45,0.26,N/A,Negative momentum (10d)
+216,601669,601669,建筑与工程,-0.0032,0.2833,4.94,0.0400,-0.0985,9.11,0.58,N/A,0.02,0.19,0.91,Low PE (value)|Low PB|Sector-relative strength,Negative momentum (10d)|Margin contraction (bearish)|High leverage ratio
+217,300999,金龙鱼,食品,-0.0032,0.2800,24.38,-0.0197,-0.0641,36.18,1.35,N/A,0.01,0.83,0.99,Low PB|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)|High leverage ratio
+218,600000,浦发银行,商业银行,-0.0033,0.2767,9.09,-0.0482,0.0260,6.02,0.40,N/A,0.00,0.69,0.23,Low PE (value)|Low PB|Large cap (quality)|Oversold (RSI<30),Negative momentum (10d)
+219,600406,600406,电网设备,-0.0033,0.2733,23.06,0.0092,-0.1013,22.26,3.46,N/A,0.01,0.44,0.35,Large cap (quality)|Sector-relative strength,Negative momentum (10d)
+220,600690,600690,家用电器,-0.0033,0.2700,19.45,-0.0786,-0.0484,9.74,1.46,N/A,0.01,0.78,0.28,Low PE (value)|Large cap (quality)|Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)
+221,002463,沪电股份,电子元器件,-0.0034,0.2667,147.90,0.1654,0.4262,66.16,16.95,N/A,0.04,0.08,0.51,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+222,603288,海天味业,食品,-0.0034,0.2633,32.44,-0.0564,-0.0608,26.08,4.52,N/A,0.00,0.64,0.12,Large cap (quality)|Oversold (RSI<30),Negative momentum (10d)
+223,601939,建设银行,商业银行,-0.0034,0.2600,9.92,-0.0642,-0.0129,7.59,0.73,N/A,0.01,0.93,0.22,Low PE (value)|Low PB|Large cap (quality)|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+224,301165,锐捷网络,软件开发,-0.0034,0.2567,67.80,0.1958,0.0304,106.05,14.71,N/A,0.01,0.22,0.11,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+225,600887,600887,食品,-0.0035,0.2533,24.26,-0.0527,-0.0615,12.70,2.58,N/A,0.01,0.91,0.39,Low PE (value)|Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)
+226,000166,申万宏源,证券公司,-0.0035,0.2500,4.41,-0.0023,-0.0134,11.17,0.96,N/A,0.00,0.54,0.69,Low PE (value)|Low PB|Positive momentum (10d)|Strong sector momentum,N/A
+227,601658,601658,商业银行,-0.0036,0.2467,4.86,-0.0471,-0.0122,6.64,0.57,N/A,0.00,0.48,0.04,Low PE (value)|Low PB|Large cap (quality)|Oversold (RSI<30)|Sector-relative strength,Negative momentum (10d)
+228,300124,汇川技术,通用机械,-0.0036,0.2433,71.18,0.0285,-0.0787,40.65,5.30,N/A,0.02,0.27,0.31,Large cap (quality)|Sector-relative strength,High PE (expensive)|Negative momentum (10d)|Margin contraction (bearish)|PE expanding rapidly
+229,601100,601100,通用机械,-0.0036,0.2400,117.90,-0.0376,0.0338,57.10,8.84,N/A,0.01,0.63,0.06,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)
+230,601668,601668,建筑与工程,-0.0036,0.2367,4.61,-0.0274,-0.0396,5.02,0.38,N/A,0.01,nan,nan,Low PE (value)|Low PB|Large cap (quality)|Oversold (RSI<30),Negative momentum (10d)
+231,000895,双汇发展,食品,-0.0036,0.2333,22.79,-0.0571,-0.1194,15.01,3.48,N/A,0.00,0.64,0.06,Oversold (RSI<30)|Sector-relative strength,Negative momentum (10d)
+232,600019,宝钢股份,钢铁,-0.0037,0.2300,5.68,-0.0291,-0.0438,12.21,0.59,N/A,0.00,0.67,0.33,Low PE (value)|Low PB,Negative momentum (10d)
+233,601006,601006,运输业,-0.0037,0.2267,4.94,-0.0179,-0.0869,17.17,0.59,N/A,0.00,0.78,0.48,Low PB|Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)
+234,600276,恒瑞医药,化学药,-0.0038,0.2233,48.42,0.0307,-0.0550,39.58,5.05,N/A,0.02,0.33,0.38,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|PE expanding rapidly
+235,603296,华勤技术,计算机设备,-0.0038,0.2200,80.40,0.0865,0.0839,28.53,4.55,N/A,0.03,0.10,0.48,Sector-relative strength,Negative momentum (10d)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+236,601618,601618,建筑与工程,-0.0038,0.2167,2.67,0.0230,-0.0498,41.01,0.54,N/A,0.01,0.35,0.60,Low PB|Sector-relative strength,High PE (expensive)|Small cap (liquidity)|Negative momentum (10d)
+237,601169,601169,商业银行,-0.0038,0.2133,5.01,-0.0347,-0.0215,5.16,0.37,N/A,0.01,0.82,0.58,Low PE (value)|Low PB|Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)
+238,000301,东方盛虹,化学原料,-0.0039,0.2100,11.59,-0.0017,-0.0743,62.55,2.21,N/A,0.00,0.62,0.42,N/A,High PE (expensive)|Negative momentum (10d)
+239,601390,601390,建筑与工程,-0.0039,0.2067,4.51,0.0112,-0.0525,5.25,0.35,N/A,0.01,0.46,0.71,Low PE (value)|Low PB,Negative momentum (10d)|High leverage ratio
+240,002027,分众传媒,传媒,-0.0040,0.2033,5.02,-0.0599,-0.1004,20.13,4.69,N/A,0.02,0.96,0.63,Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)
+241,600025,XD华能水,电力及电网,-0.0040,0.2000,9.30,-0.0412,-0.0032,20.29,2.44,N/A,0.00,0.73,0.22,Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)
+242,002415,海康威视,电子终端及组件,-0.0041,0.1967,32.30,0.0774,0.0212,19.82,3.44,N/A,0.01,0.32,0.36,Large cap (quality)|Positive momentum (10d)|Sector-relative strength,Overbought (RSI>70)|PE expanding rapidly
+243,001965,招商公路,交通基本设施,-0.0041,0.1933,9.82,0.0061,-0.0296,14.41,0.95,N/A,0.00,0.52,0.03,Low PB|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,Small cap (liquidity)
+244,600050,中国联通,电信运营服务,-0.0041,0.1900,4.28,-0.0183,-0.0593,15.46,0.78,N/A,0.01,0.43,0.53,Low PB|Oversold (RSI<30)|Sector-relative strength,Negative momentum (10d)
+245,601825,601825,商业银行,-0.0041,0.1867,8.20,-0.0682,-0.0498,6.41,0.60,N/A,0.00,0.58,0.03,Low PE (value)|Low PB|Oversold (RSI<30),Negative momentum (10d)
+246,600018,上港集团,交通基本设施,-0.0041,0.1833,4.89,-0.0161,-0.0393,8.33,0.78,N/A,0.00,0.61,0.14,Low PE (value)|Low PB,Negative momentum (10d)
+247,002142,宁波银行,商业银行,-0.0042,0.1800,30.78,-0.0630,-0.0238,6.75,0.87,N/A,0.01,0.76,0.19,Low PE (value)|Low PB|Large cap (quality)|Positive momentum (10d)|Oversold (RSI<30),N/A
+248,601838,601838,商业银行,-0.0042,0.1767,18.66,-0.0557,-0.0048,5.89,0.86,N/A,0.00,nan,nan,Low PE (value)|Low PB|Oversold (RSI<30),Negative momentum (10d)
+249,600111,北方稀土,稀有金属,-0.0042,0.1733,51.40,0.0816,0.0162,67.86,7.26,N/A,0.05,0.41,0.79,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|High leverage ratio|PE expanding rapidly
+250,001280,中国铀业,其他小金属,-0.0042,0.1700,73.65,0.0517,-0.0307,88.59,8.95,N/A,0.06,0.90,0.93,Positive momentum (10d)|Sector-relative strength|Strong sector momentum|Margin expansion (bullish),High PE (expensive)|Overbought (RSI>70)|High leverage ratio|PE expanding rapidly
+251,601077,601077,商业银行,-0.0042,0.1667,6.26,-0.0848,-0.0657,5.77,0.52,N/A,0.01,0.75,0.09,Low PE (value)|Low PB|Oversold (RSI<30)|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)
+252,600115,中国东航,运输业,-0.0042,0.1633,3.92,0.0595,-0.0689,87.02,6.14,N/A,0.01,0.43,0.17,Sector-relative strength,High PE (expensive)|Negative momentum (10d)|PE expanding rapidly
+253,601319,601319,保险,-0.0043,0.1600,6.65,-0.0119,-0.0500,6.90,0.92,N/A,0.00,0.51,0.12,Low PE (value)|Low PB|Large cap (quality)|Positive momentum (10d)|Sector-relative strength,N/A
+254,600600,600600,酒,-0.0043,0.1567,53.90,-0.1119,-0.1194,15.72,2.27,N/A,0.02,0.96,0.37,Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)
+255,688012,中微公司,半导体材料与设备,-0.0043,0.1533,360.00,0.1876,0.1282,124.99,14.03,N/A,0.03,0.11,0.32,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+256,601111,601111,运输业,-0.0044,0.1500,6.24,0.0470,-0.0783,64.33,2.91,N/A,0.01,0.37,0.29,N/A,High PE (expensive)|Negative momentum (10d)|PE expanding rapidly
+257,600460,600460,分立器件,-0.0044,0.1467,41.83,0.2607,0.3520,151.71,5.71,N/A,0.09,0.14,0.62,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Small cap (liquidity)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+258,601998,中信银行,商业银行,-0.0045,0.1433,7.27,-0.0484,-0.0534,5.68,0.54,N/A,0.00,0.53,0.01,Low PE (value)|Low PB|Large cap (quality)|Positive momentum (10d)|Oversold (RSI<30),N/A
+259,600150,中国船舶,交通运输设备,-0.0045,0.1400,36.14,0.0491,-0.0589,24.05,1.82,N/A,0.02,0.63,0.55,Large cap (quality)|Sector-relative strength,Negative momentum (10d)|PE expanding rapidly
+260,601919,中远海控,运输业,-0.0045,0.1367,13.80,-0.0302,-0.0593,8.44,0.90,N/A,0.01,0.92,0.62,Low PE (value)|Low PB|Large cap (quality)|Oversold (RSI<30)|Strong sector momentum,Negative momentum (10d)
+261,002475,立讯精密,电子终端及组件,-0.0046,0.1333,69.93,0.0828,0.0304,29.60,5.77,N/A,0.03,0.31,0.25,Large cap (quality)|Strong sector momentum,Negative momentum (10d)|Overbought (RSI>70)|PE expanding rapidly
+262,600795,600795,电力及电网,-0.0046,0.1300,4.74,-0.0501,-0.0327,12.53,1.38,N/A,0.02,0.48,0.20,Low PE (value)|Oversold (RSI<30)|Sector-relative strength,Negative momentum (10d)
+263,601728,601728,电信运营服务,-0.0047,0.1267,5.68,-0.0897,-0.0927,16.41,1.11,N/A,0.00,0.60,0.05,Low PB|Large cap (quality)|Oversold (RSI<30),Negative momentum (10d)
+264,601018,601018,交通基本设施,-0.0047,0.1233,3.26,-0.0181,-0.0765,12.28,0.77,N/A,0.00,0.59,0.08,Low PE (value)|Low PB|Sector-relative strength,Small cap (liquidity)|Negative momentum (10d)
+265,600028,中国石化,石油与天然气,-0.0047,0.1200,4.71,0.0064,-0.0427,16.02,0.68,N/A,0.00,0.49,0.08,Low PB|Large cap (quality)|Sector-relative strength,N/A
+266,601916,浙商银行,商业银行,-0.0049,0.1167,2.99,-0.0292,0.0034,6.33,0.45,N/A,0.01,0.73,0.40,Low PE (value)|Low PB|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+267,601009,601009,商业银行,-0.0049,0.1133,10.85,-0.0532,0.0102,6.02,0.71,N/A,0.00,nan,nan,Low PE (value)|Low PB|Positive momentum (10d)|Oversold (RSI<30),N/A
+268,000100,TCL科技,光学光电子,-0.0050,0.1100,5.00,0.1086,0.1655,20.55,1.66,N/A,0.09,0.26,0.82,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+269,600905,600905,电力及电网,-0.0051,0.1067,4.07,-0.0216,-0.0049,50.42,1.30,N/A,0.01,0.57,0.17,Low PB|Sector-relative strength,High PE (expensive)|Negative momentum (10d)
+270,300316,晶盛机电,发电设备,-0.0051,0.1033,53.89,0.1174,0.0282,170.30,4.10,N/A,0.04,0.31,0.45,Positive momentum (10d)|Sector-relative strength,High PE (expensive)|Small cap (liquidity)|Overbought (RSI>70)|PE expanding rapidly
+271,300803,指南针,计算机软件,-0.0052,0.1000,95.76,0.2219,-0.0587,291.29,20.38,N/A,0.04,0.00,0.92,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Small cap (liquidity)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio
+272,601868,中国能建,建筑与工程,-0.0054,0.0967,2.76,0.0494,-0.0738,21.49,1.02,N/A,0.02,0.37,0.38,Low PB|Sector-relative strength,Negative momentum (10d)
+273,600016,民生银行,商业银行,-0.0057,0.0933,3.48,-0.0252,-0.0142,5.19,0.26,N/A,0.01,0.87,0.96,Low PE (value)|Low PB|Oversold (RSI<30)|Sector-relative strength|Margin expansion (bullish),Negative momentum (10d)|High leverage ratio
+274,688396,华润微,集成电路,-0.0063,0.0900,73.59,0.1675,0.2306,107.73,4.22,N/A,0.03,0.19,0.37,Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+275,003816,中国广核,电力及电网,-0.0064,0.0867,4.08,-0.0377,-0.0727,21.73,1.64,N/A,0.00,0.53,0.04,Large cap (quality),Negative momentum (10d)
+276,600048,保利发展,房地产开发与园区,-0.0064,0.0833,4.92,-0.0447,-0.1618,-323.12,0.30,N/A,0.01,0.95,0.88,Low PB|Oversold (RSI<30)|Margin expansion (bullish),Small cap (liquidity)|Negative momentum (10d)|High leverage ratio|PE expanding rapidly
+277,601138,601138,电子终端及组件,-0.0064,0.0800,78.08,0.1231,0.1921,38.12,8.79,N/A,0.02,0.34,0.13,Large cap (quality)|Strong sector momentum,High PE (expensive)|Negative momentum (10d)|Overbought (RSI>70)|PE expanding rapidly
+278,601988,中国银行,商业银行,-0.0067,0.0767,5.78,-0.0677,-0.0034,7.59,0.68,N/A,0.00,0.55,0.01,Low PE (value)|Low PB|Large cap (quality)|Oversold (RSI<30),Negative momentum (10d)
+279,601816,601816,运输业,-0.0068,0.0733,4.59,-0.0802,-0.0536,16.82,1.07,N/A,0.01,0.82,0.11,Low PB|Large cap (quality)|Oversold (RSI<30)|Margin expansion (bullish),Negative momentum (10d)
+280,601818,601818,商业银行,-0.0069,0.0700,3.08,-0.0284,-0.0096,4.81,0.36,N/A,0.00,nan,nan,Low PE (value)|Low PB|Large cap (quality)|Oversold (RSI<30)|Sector-relative strength,Negative momentum (10d)
+281,600010,包钢股份,钢铁,-0.0074,0.0667,2.43,0.0519,-0.0433,-819.90,2.13,N/A,0.02,0.52,0.73,Positive momentum (10d)|Sector-relative strength,Overbought (RSI>70)|High leverage ratio
+282,603993,洛阳钼业,稀有金属,-0.0076,0.0633,20.04,0.1537,0.1524,17.75,4.82,N/A,0.03,0.29,0.28,Large cap (quality)|Positive momentum (10d)|Strong sector momentum,Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+283,000988,华工科技,其他电子,-0.0077,0.0600,177.55,0.1817,0.1551,105.06,15.28,N/A,0.08,0.01,0.95,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+284,600584,600584,集成电路,-0.0086,0.0567,83.03,0.1540,0.2422,89.93,5.16,N/A,0.13,0.12,0.84,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+285,600522,600522,通信设备,-0.0097,0.0533,56.55,0.1478,0.3496,60.43,5.08,N/A,0.08,0.14,0.68,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+286,688981,中芯国际,集成电路,-0.0105,0.0500,140.70,0.1044,0.1060,223.46,7.53,N/A,0.06,0.12,0.82,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+287,300442,润泽科技,专用机械,-0.0114,0.0467,85.18,0.1508,-0.0699,26.87,9.79,N/A,0.03,0.06,0.64,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+288,300308,中际旭创,通信设备,-0.0121,0.0433,1367.88,0.2170,0.3771,102.05,42.87,N/A,0.03,0.11,0.61,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+289,002384,东山精密,电子元件,-0.0127,0.0400,273.00,0.2939,0.3190,245.10,22.09,N/A,0.06,0.18,0.74,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+290,688082,盛美上海,半导体材料与设备,-0.0132,0.0367,378.75,0.3336,0.7805,145.77,13.40,N/A,0.02,0.44,0.13,Large cap (quality)|Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|PE expanding rapidly
+291,301269,华大九天,软件和信息技术服务业,-0.0150,0.0333,104.00,0.0783,0.0712,-2609.95,10.90,N/A,0.02,0.36,0.44,Positive momentum (10d)|Sector-relative strength,Small cap (liquidity)
+292,603019,中科曙光,电子终端及组件,-0.0151,0.0300,88.68,0.0898,-0.0449,58.51,5.75,N/A,0.04,0.10,0.98,Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+293,000725,京东方Ａ,光学光电子,-0.0153,0.0267,6.55,0.1332,0.4086,40.78,1.78,N/A,0.11,0.04,0.89,Large cap (quality)|Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+294,688047,龙芯中科,集成电路,-0.0155,0.0233,146.49,0.0796,-0.0688,-140.59,24.49,N/A,0.03,0.18,0.56,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,Small cap (liquidity)|Overbought (RSI>70)|Margin contraction (bearish)
+295,688008,澜起科技,集成电路,-0.0172,0.0200,269.90,0.1801,0.0295,128.98,15.82,N/A,0.07,0.06,0.89,Large cap (quality)|Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|High leverage ratio|PE expanding rapidly
+296,600362,600362,工业金属,-0.0175,0.0167,53.31,0.3281,0.2261,23.09,2.19,N/A,0.06,0.07,0.49,Large cap (quality)|Positive momentum (10d)|Strong sector momentum,Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+297,000657,中钨高新,稀有金属,-0.0209,0.0133,98.48,0.2634,0.7366,115.13,21.00,N/A,0.06,0.27,0.46,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+298,300661,圣邦股份,集成电路,-0.0256,0.0100,132.77,0.2618,0.2112,134.95,15.08,N/A,0.02,0.15,0.16,Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+299,600549,600549,稀有金属,-0.0335,0.0067,85.91,0.2739,0.7234,44.96,7.45,N/A,0.10,0.06,0.52,Positive momentum (10d)|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
+300,600176,中国巨石,其他非金属材料,-0.0409,0.0033,53.50,0.3027,0.5130,56.03,6.63,N/A,0.07,0.07,0.35,Large cap (quality)|Positive momentum (10d)|Sector-relative strength|Strong sector momentum,High PE (expensive)|Overbought (RSI>70)|Margin contraction (bearish)|PE expanding rapidly
