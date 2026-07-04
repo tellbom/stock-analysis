@@ -130,6 +130,147 @@ def build_labels(
     return results
 
 
+def append_horizon_labels(
+    store_root: Path | str,
+    symbols: list[str],
+    horizons: list[int],
+) -> dict[str, int]:
+    """
+    T2.2: add one or more NEW horizons to the EXISTING per-symbol label
+    Parquet, without touching any horizon already present in that file.
+
+    Why this exists instead of ``build_labels(horizons=[3])``
+    -----------------------------------------------------------
+    ``build_labels`` / ``_build_symbol_labels`` write ONE Parquet per
+    symbol containing ONLY the columns for the ``horizons`` passed to
+    that call. Calling ``build_labels(store_root, symbols, horizons=[3])``
+    with the default ``overwrite=True`` would silently REPLACE the
+    existing file — deleting the ``ret_fwd_1d/5d/10d/20d`` columns that
+    are already there. This function instead reads the existing file (if
+    any), computes only the requested new horizon(s) via the same
+    ``_compute_horizon_columns`` helper ``_build_symbol_labels`` uses (one
+    T+1 formula, one place), and merges on (symbol, date) — every column
+    that was already in the file is preserved untouched.
+
+    Does NOT modify ``DEFAULT_HORIZONS`` and does not require the caller
+    to re-list the horizons that already exist.
+
+    Parameters
+    ----------
+    horizons : list[int]
+        New horizon(s) to add, e.g. [3] for ret_fwd_3d. Horizons already
+        present as columns in the existing file are recomputed and
+        overwritten IN PLACE for just those columns (idempotent re-run),
+        everything else is left alone.
+
+    Returns
+    -------
+    dict[str, int]
+        Mapping symbol → number of rows in the resulting file (0 if the
+        symbol had no OHLCV).
+    """
+    store_root = Path(store_root)
+    results: dict[str, int] = {}
+
+    for symbol in symbols:
+        try:
+            results[symbol] = _append_symbol_horizon_labels(symbol, store_root, horizons)
+        except Exception as exc:
+            logger.error("append_horizon_labels failed for %s: %s", symbol, exc)
+            results[symbol] = 0
+
+    succeeded = sum(1 for v in results.values() if v > 0)
+    logger.info(
+        "append_horizon_labels done: %d/%d symbols, new horizons=%s",
+        succeeded, len(symbols), horizons,
+    )
+    return results
+
+
+def _append_symbol_horizon_labels(
+    symbol: str,
+    store_root: Path,
+    horizons: list[int],
+) -> int:
+    """Merge new horizon columns into one symbol's existing label file."""
+    df = read_ohlcv(ohlcv_path(store_root, symbol))
+    if df.empty:
+        logger.warning("%s: no OHLCV — skipping label append", symbol)
+        return 0
+
+    df["date"] = pd.to_datetime(df["date"]).dt.date
+    df = df.sort_values("date").reset_index(drop=True)
+    close = df["close"].values
+    n = len(df)
+
+    new_cols = pd.DataFrame({"symbol": symbol, "date": df["date"]})
+    for h in horizons:
+        cols = _compute_horizon_columns(close, n, h)
+        new_cols[f"ret_fwd_{h}d"] = cols["ret"]
+        new_cols[f"vol_fwd_{h}d"] = cols["vol"]
+        new_cols[f"mdd_fwd_{h}d"] = cols["mdd"]
+        new_cols[f"ret_fwd_{h}d_cs"]  = np.nan   # filled by build_label_panel()
+        new_cols[f"ret_fwd_{h}d_bin"] = np.nan
+
+    out_path = label_path(store_root, "forward_returns", symbol)
+    if out_path.exists():
+        existing = pd.read_parquet(out_path)
+        existing["date"] = pd.to_datetime(existing["date"]).dt.date
+        # Drop any stale columns for the horizons we're recomputing, so the
+        # merge doesn't produce _x/_y collisions on a re-run.
+        overlap = [c for c in new_cols.columns
+                   if c in existing.columns and c not in ("symbol", "date")]
+        existing = existing.drop(columns=overlap)
+        merged = existing.merge(new_cols, on=["symbol", "date"], how="outer")
+    else:
+        merged = new_cols
+
+    merged = merged.sort_values("date").reset_index(drop=True)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    merged.to_parquet(out_path, index=False)
+    logger.debug("%s: appended horizons %s → %s (%d rows)", symbol, horizons, out_path, len(merged))
+    return len(merged)
+
+
+def _compute_horizon_columns(close: np.ndarray, n: int, h: int) -> dict[str, np.ndarray]:
+    """
+    Compute ret_fwd_{h}d, vol_fwd_{h}d, mdd_fwd_{h}d arrays for one horizon.
+
+    Identical T+1 -> T+1+h convention used everywhere in this module.
+    Extracted so a single horizon can be added to an EXISTING label file
+    (T2.2 / append_horizon_labels) without recomputing or overwriting the
+    other horizons already in that file.
+    """
+    ret_vals = np.full(n, np.nan)
+    vol_vals = np.full(n, np.nan)
+    mdd_vals = np.full(n, np.nan)
+
+    for i in range(n):
+        # T+1 index and T+1+h index
+        t1   = i + 1
+        t1ph = i + 1 + h
+        if t1 >= n or t1ph >= n:
+            continue  # not enough future data → NaN
+        # Forward return: close(T+1+h) / close(T+1) - 1
+        c_t1   = close[t1]
+        c_t1ph = close[t1ph]
+        if c_t1 <= 0:
+            continue
+        ret_vals[i] = c_t1ph / c_t1 - 1.0
+
+        # Forward realised volatility: std of daily returns T+1 … T+1+h
+        if t1ph > t1:
+            window = close[t1 : t1ph + 1]
+            daily_rets = np.diff(window) / window[:-1]
+            vol_vals[i] = float(np.std(daily_rets, ddof=1)) if len(daily_rets) > 1 else np.nan
+
+        # Forward max drawdown T+1 … T+1+h
+        window_mdd = close[t1 : t1ph + 1]
+        mdd_vals[i] = _max_drawdown(window_mdd)
+
+    return {"ret": ret_vals, "vol": vol_vals, "mdd": mdd_vals}
+
+
 def _build_symbol_labels(
     symbol: str,
     store_root: Path,
@@ -157,36 +298,10 @@ def _build_symbol_labels(
         vol_col  = f"vol_fwd_{h}d"
         mdd_col  = f"mdd_fwd_{h}d"
 
-        ret_vals = np.full(n, np.nan)
-        vol_vals = np.full(n, np.nan)
-        mdd_vals = np.full(n, np.nan)
-
-        for i in range(n):
-            # T+1 index and T+1+h index
-            t1   = i + 1
-            t1ph = i + 1 + h
-            if t1 >= n or t1ph >= n:
-                continue  # not enough future data → NaN
-            # Forward return: close(T+1+h) / close(T+1) - 1
-            c_t1   = close[t1]
-            c_t1ph = close[t1ph]
-            if c_t1 <= 0:
-                continue
-            ret_vals[i] = c_t1ph / c_t1 - 1.0
-
-            # Forward realised volatility: std of daily returns T+1 … T+1+h
-            if t1ph > t1:
-                window = close[t1 : t1ph + 1]
-                daily_rets = np.diff(window) / window[:-1]
-                vol_vals[i] = float(np.std(daily_rets, ddof=1)) if len(daily_rets) > 1 else np.nan
-
-            # Forward max drawdown T+1 … T+1+h
-            window_mdd = close[t1 : t1ph + 1]
-            mdd_vals[i] = _max_drawdown(window_mdd)
-
-        out[ret_col] = ret_vals
-        out[vol_col] = vol_vals
-        out[mdd_col] = mdd_vals
+        cols = _compute_horizon_columns(close, n, h)
+        out[ret_col] = cols["ret"]
+        out[vol_col] = cols["vol"]
+        out[mdd_col] = cols["mdd"]
 
         # Cross-sectional decile and binary — computed below after all symbols
         # For per-symbol label file, store raw return; CS decile added in panel

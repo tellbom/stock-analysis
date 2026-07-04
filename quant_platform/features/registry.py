@@ -105,6 +105,11 @@ TECHNICAL_SPECS: list[FeatureSpec] = [
     FeatureSpec("willr_14",  "technical", ("high","low","close"), 14, "WillR(14)",       warmup=14),
     FeatureSpec("stoch_k",   "technical", ("high","low","close"), 14, "Stoch-K(14)",     warmup=14),
     FeatureSpec("stoch_d",   "technical", ("high","low","close"), 14, "Stoch-D(14)",     warmup=17),
+    # T3.1 (P?-reversal): short-term reversal counter-signal to momentum.
+    # Negative of the trailing 3-day return — already dimensionless (a
+    # return ratio), needs no further normalisation. High past 1-3d return
+    # -> low (negative) reversal_3d value, i.e. "expect mean reversion".
+    FeatureSpec("reversal_3d", "technical", ("close",), 3, "-(close/close.shift(3)-1)", warmup=3),
 ]
 
 # Cross-sectional features — computed across the universe on each date.

@@ -595,15 +595,21 @@ def cmd_model(args: argparse.Namespace) -> int:
 
     include_val = getattr(args, "include_valuation", False)
     include_ind = getattr(args, "include_industry", False)
-    _info(f"feature flags: valuation={include_val}  industry={include_ind}")
+    include_marg = getattr(args, "include_margin", False)
+    _info(f"feature flags: valuation={include_val}  industry={include_ind}  margin={include_marg}")
 
     _step("Assembling feature + label panel")
-    pipe  = FeaturePipeline(
-        store_root=store_root,
-        project_root=getattr(args, "project_root", None),
-        include_valuation=include_val,
-        include_industry=include_ind,
-    )
+    import inspect
+
+    pipeline_kwargs = {
+        "store_root": store_root,
+        "project_root": getattr(args, "project_root", None),
+        "include_valuation": include_val,
+        "include_industry": include_ind,
+    }
+    if "include_margin" in inspect.signature(FeaturePipeline).parameters:
+        pipeline_kwargs["include_margin"] = include_marg
+    pipe = FeaturePipeline(**pipeline_kwargs)
     panel = pipe.build_panel(symbols, feat_set_id, add_cross_sectional=True)
     if panel.empty:
         _warn("Panel is empty — no feature files found.")
@@ -1475,6 +1481,9 @@ def _add_model_args(
     if "--include-industry" not in p._option_string_actions:
         p.add_argument("--include-industry",  action="store_true",
                        help="Add P4B industry-relative features during model panel assembly")
+    if "--include-margin" not in p._option_string_actions:
+        p.add_argument("--include-margin",    action="store_true",
+                       help="Add P4B margin trading features during model panel assembly")
     # Walk-forward (P4A-03) — on by default; --use-lockbox for legacy path
     p.add_argument("--walk-forward",   action="store_true", default=True,
                    help="Use walk-forward OOS evaluation (default: True)")

@@ -97,6 +97,10 @@ def build_technical_features(
     # --- Additional breadth indicators from pandas_ta_classic ---
     df = _apply_pta_indicators(df)
 
+    # --- T3.1: short-term reversal counter-signal (additive, does not
+    # touch any existing momentum feature) ---
+    df = _apply_reversal_factor(df)
+
     # --- Apply warm-up masks ---
     df = _mask_warmup(df)
 
@@ -177,6 +181,27 @@ def _apply_pta_indicators(df: pd.DataFrame) -> pd.DataFrame:
             df["stoch_k"] = _align_to_input(stoch_df[cols[0]]).values
             df["stoch_d"] = _align_to_input(stoch_df[cols[1]]).values
 
+    return df
+
+
+# ---------------------------------------------------------------------------
+# T3.1: Short-term reversal factor (additive counter-signal to momentum)
+# ---------------------------------------------------------------------------
+
+def _apply_reversal_factor(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Add ``reversal_3d`` = -(close(T) / close(T-3) - 1).
+
+    This is the negative of the trailing 3-day return: a stock that just
+    ran up hard gets a low (negative) reversal_3d value; a stock that just
+    dropped gets a high (positive) value. Already dimensionless (a return
+    ratio) so no further cross-sectional normalisation is needed, unlike
+    the absolute-price features handled in _normalise_price_features.
+
+    Additive only — does not modify or remove any existing momentum
+    feature (ma_*, macd_*, roc_10, etc.).
+    """
+    df["reversal_3d"] = -(df["close"].pct_change(3))
     return df
 
 
