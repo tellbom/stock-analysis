@@ -1,0 +1,348 @@
+{
+  "电子元件": {
+    "industry_code": "印制电路板",
+    "industry_name": "电子元件",
+    "count": 3,
+    "fraction": 0.06,
+    "symbols": [
+      "002384",
+      "002938",
+      "600183"
+    ]
+  },
+  "电子终端及组件": {
+    "industry_code": "消费电子组件及零部件",
+    "industry_name": "电子终端及组件",
+    "count": 3,
+    "fraction": 0.06,
+    "symbols": [
+      "002241",
+      "002475",
+      "300433"
+    ]
+  },
+  "通信设备": {
+    "industry_code": "通信系统设备及组件",
+    "industry_name": "通信设备",
+    "count": 3,
+    "fraction": 0.06,
+    "symbols": [
+      "300308",
+      "300394",
+      "300502"
+    ]
+  },
+  "乘用车": {
+    "industry_code": "乘用车",
+    "industry_name": "乘用车",
+    "count": 2,
+    "fraction": 0.04,
+    "symbols": [
+      "000625",
+      "600104"
+    ]
+  },
+  "化学原料": {
+    "industry_code": "其他化学原料",
+    "industry_name": "化学原料",
+    "count": 2,
+    "fraction": 0.04,
+    "symbols": [
+      "002648",
+      "600346"
+    ]
+  },
+  "计算机软件": {
+    "industry_code": "应用软件",
+    "industry_name": "计算机软件",
+    "count": 2,
+    "fraction": 0.04,
+    "symbols": [
+      "300033",
+      "300803"
+    ]
+  },
+  "文化娱乐 (游戏)": {
+    "industry_code": "游戏",
+    "industry_name": "文化娱乐",
+    "count": 2,
+    "fraction": 0.04,
+    "symbols": [
+      "002558",
+      "002602"
+    ]
+  },
+  "工业金属 (铝)": {
+    "industry_code": "铝",
+    "industry_name": "工业金属",
+    "count": 2,
+    "fraction": 0.04,
+    "symbols": [
+      "002532",
+      "600219"
+    ]
+  },
+  "稀有金属 (锂)": {
+    "industry_code": "锂",
+    "industry_name": "稀有金属",
+    "count": 2,
+    "fraction": 0.04,
+    "symbols": [
+      "002460",
+      "002466"
+    ]
+  },
+  "集成电路": {
+    "industry_code": "集成电路设计",
+    "industry_name": "集成电路",
+    "count": 2,
+    "fraction": 0.04,
+    "symbols": [
+      "002049",
+      "300661"
+    ]
+  },
+  "软件和信息技术服务业": {
+    "industry_code": "nan",
+    "industry_name": "软件和信息技术服务业",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "301269"
+    ]
+  },
+  "数字媒体": {
+    "industry_code": "互动媒体",
+    "industry_name": "数字媒体",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "300418"
+    ]
+  },
+  "发电设备": {
+    "industry_code": "光伏设备",
+    "industry_name": "发电设备",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "300274"
+    ]
+  },
+  "专用机械": {
+    "industry_code": "其他专用机械",
+    "industry_name": "专用机械",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "300450"
+    ]
+  },
+  "其他电子": {
+    "industry_code": "其他电子",
+    "industry_name": "其他电子",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "000988"
+    ]
+  },
+  "医疗器械": {
+    "industry_code": "医疗耗材",
+    "industry_name": "医疗器械",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "300896"
+    ]
+  },
+  "半导体材料与设备": {
+    "industry_code": "半导体设备",
+    "industry_name": "半导体材料与设备",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "002371"
+    ]
+  },
+  "文化娱乐": {
+    "industry_code": "影视动漫",
+    "industry_name": "文化娱乐",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "300251"
+    ]
+  },
+  "交通基本设施": {
+    "industry_code": "机场",
+    "industry_name": "交通基本设施",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "600009"
+    ]
+  },
+  "专用机械 (楼宇设备)": {
+    "industry_code": "楼宇设备",
+    "industry_name": "专用机械",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "002837"
+    ]
+  },
+  "化学制品": {
+    "industry_code": "氟化工",
+    "industry_name": "化学制品",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "600160"
+    ]
+  },
+  "油气开采与油田服务": {
+    "industry_code": "油气开采",
+    "industry_name": "油气开采与油田服务",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "002353"
+    ]
+  },
+  "其他非金属材料": {
+    "industry_code": "玻璃纤维",
+    "industry_name": "其他非金属材料",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "600176"
+    ]
+  },
+  "电子元器件": {
+    "industry_code": "电子元器件",
+    "industry_name": "电子元器件",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "002463"
+    ]
+  },
+  "储能设备": {
+    "industry_code": "电池",
+    "industry_name": "储能设备",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "002074"
+    ]
+  },
+  "电子终端及组件 (电脑与外围设备)": {
+    "industry_code": "电脑与外围设备",
+    "industry_name": "电子终端及组件",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "000977"
+    ]
+  },
+  "酒": {
+    "industry_code": "白酒",
+    "industry_name": "酒",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "000858"
+    ]
+  },
+  "化学制品 (聚氨酯)": {
+    "industry_code": "聚氨酯",
+    "industry_name": "化学制品",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "600309"
+    ]
+  },
+  "航空航天": {
+    "industry_code": "航空",
+    "industry_name": "航空航天",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "002179"
+    ]
+  },
+  "运输业": {
+    "industry_code": "航空运输",
+    "industry_name": "运输业",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "600115"
+    ]
+  },
+  "电子元件 (被动元件)": {
+    "industry_code": "被动元件",
+    "industry_name": "电子元件",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "300408"
+    ]
+  },
+  "数字媒体 (视频媒体)": {
+    "industry_code": "视频媒体",
+    "industry_name": "数字媒体",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "300413"
+    ]
+  },
+  "证券公司": {
+    "industry_code": "证券公司",
+    "industry_name": "证券公司",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "000776"
+    ]
+  },
+  "稀有金属": {
+    "industry_code": "钨钼",
+    "industry_name": "稀有金属",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "000657"
+    ]
+  },
+  "工业金属": {
+    "industry_code": "铜",
+    "industry_name": "工业金属",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "600362"
+    ]
+  },
+  "光学光电子": {
+    "industry_code": "面板",
+    "industry_name": "光学光电子",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "000100"
+    ]
+  },
+  "贵金属": {
+    "industry_code": "黄金",
+    "industry_name": "贵金属",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "000975"
+    ]
+  }
+}

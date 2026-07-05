@@ -99,7 +99,8 @@ class ExposureMonitor:
         Returns
         -------
         dict
-            {industry_name: {"count": N, "fraction": f, "symbols": [...]}, ...}
+            {industry_key: {"industry_code": code, "industry_name": name,
+                            "count": N, "fraction": f, "symbols": [...]}, ...}
             Sorted by count descending.
         """
         sel = panel[panel[selected_col] == True]
@@ -111,7 +112,12 @@ class ExposureMonitor:
 
         for ind_code, grp in sel.groupby(industry_col):
             ind_name = str(grp[name_col].iloc[0]) if name_col in grp.columns else str(ind_code)
-            report[ind_name] = {
+            key = str(ind_name)
+            if key in report:
+                key = f"{ind_name} ({ind_code})"
+            report[key] = {
+                "industry_code": str(ind_code),
+                "industry_name": ind_name,
                 "count": len(grp),
                 "fraction": len(grp) / total,
                 "symbols": grp[symbol_col].tolist()[:top_n_symbols],

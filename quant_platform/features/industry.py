@@ -115,7 +115,7 @@ def _join_industry(
     # Build a flat (symbol, date) → industry lookup for the dates in the panel
     # Strategy: for each unique (symbol, date) pair, find the active SCD row.
     # This is O(panel_dates × scd_rows_per_symbol) — acceptable for CSI 300.
-    unique_sd = df[["symbol", "date"]].drop_duplicates()
+    unique_sd = df[["symbol", "date"]].drop_duplicates().reset_index(drop=True)
 
     def _lookup_industry(row):
         sym, dt_ = row["symbol"], row["date"]
@@ -133,7 +133,7 @@ def _join_industry(
         })
 
     lookup = unique_sd.apply(_lookup_industry, axis=1)
-    unique_sd = pd.concat([unique_sd.reset_index(drop=True), lookup], axis=1)
+    unique_sd = pd.concat([unique_sd, lookup], axis=1)
 
     df = df.merge(unique_sd, on=["symbol", "date"], how="left")
     df["industry_code"] = df["industry_code"].fillna("_UNKNOWN")
