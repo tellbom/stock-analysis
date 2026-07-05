@@ -1,0 +1,332 @@
+{
+  "发电设备": {
+    "industry_code": "光伏设备",
+    "industry_name": "发电设备",
+    "count": 3,
+    "fraction": 0.06,
+    "symbols": [
+      "300274",
+      "300316",
+      "688223"
+    ]
+  },
+  "工业金属 (铝)": {
+    "industry_code": "铝",
+    "industry_name": "工业金属",
+    "count": 3,
+    "fraction": 0.06,
+    "symbols": [
+      "000807",
+      "002532",
+      "601600"
+    ]
+  },
+  "集成电路 (集成电路设计)": {
+    "industry_code": "集成电路设计",
+    "industry_name": "集成电路",
+    "count": 3,
+    "fraction": 0.06,
+    "symbols": [
+      "603986",
+      "688256",
+      "688521"
+    ]
+  },
+  "贵金属": {
+    "industry_code": "黄金",
+    "industry_name": "贵金属",
+    "count": 3,
+    "fraction": 0.06,
+    "symbols": [
+      "000975",
+      "600489",
+      "600547"
+    ]
+  },
+  "数字芯片设计": {
+    "industry_code": "BK1331",
+    "industry_name": "数字芯片设计",
+    "count": 2,
+    "fraction": 0.04,
+    "symbols": [
+      "301308",
+      "688041"
+    ]
+  },
+  "乘用车": {
+    "industry_code": "乘用车",
+    "industry_name": "乘用车",
+    "count": 2,
+    "fraction": 0.04,
+    "symbols": [
+      "600104",
+      "601127"
+    ]
+  },
+  "电子元件": {
+    "industry_code": "印制电路板",
+    "industry_name": "电子元件",
+    "count": 2,
+    "fraction": 0.04,
+    "symbols": [
+      "002384",
+      "002938"
+    ]
+  },
+  "电子终端及组件": {
+    "industry_code": "消费电子组件及零部件",
+    "industry_name": "电子终端及组件",
+    "count": 2,
+    "fraction": 0.04,
+    "symbols": [
+      "300433",
+      "601138"
+    ]
+  },
+  "煤炭": {
+    "industry_code": "煤炭",
+    "industry_name": "煤炭",
+    "count": 2,
+    "fraction": 0.04,
+    "symbols": [
+      "600188",
+      "601898"
+    ]
+  },
+  "运输业": {
+    "industry_code": "航运",
+    "industry_name": "运输业",
+    "count": 2,
+    "fraction": 0.04,
+    "symbols": [
+      "600026",
+      "601872"
+    ]
+  },
+  "通信设备": {
+    "industry_code": "通信系统设备及组件",
+    "industry_name": "通信设备",
+    "count": 2,
+    "fraction": 0.04,
+    "symbols": [
+      "300394",
+      "600522"
+    ]
+  },
+  "数字媒体": {
+    "industry_code": "互动媒体",
+    "industry_name": "数字媒体",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "300418"
+    ]
+  },
+  "医疗器械": {
+    "industry_code": "体外诊断",
+    "industry_name": "医疗器械",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "603392"
+    ]
+  },
+  "专用机械": {
+    "industry_code": "其他专用机械",
+    "industry_name": "专用机械",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "300450"
+    ]
+  },
+  "化学原料": {
+    "industry_code": "其他化学原料",
+    "industry_name": "化学原料",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "600426"
+    ]
+  },
+  "发电设备 (其他发电设备)": {
+    "industry_code": "其他发电设备",
+    "industry_name": "发电设备",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "600875"
+    ]
+  },
+  "半导体材料与设备": {
+    "industry_code": "半导体设备",
+    "industry_name": "半导体材料与设备",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "688082"
+    ]
+  },
+  "化学药": {
+    "industry_code": "原料药",
+    "industry_name": "化学药",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "002001"
+    ]
+  },
+  "商业地产开发和管理": {
+    "industry_code": "商业地产开发和管理",
+    "industry_name": "商业地产开发和管理",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "001979"
+    ]
+  },
+  "交通运输设备": {
+    "industry_code": "商用车",
+    "industry_name": "交通运输设备",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "000338"
+    ]
+  },
+  "专用机械 (工程机械)": {
+    "industry_code": "工程机械",
+    "industry_name": "专用机械",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "000425"
+    ]
+  },
+  "计算机软件": {
+    "industry_code": "应用软件",
+    "industry_name": "计算机软件",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "300803"
+    ]
+  },
+  "文化娱乐": {
+    "industry_code": "影视动漫",
+    "industry_name": "文化娱乐",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "300251"
+    ]
+  },
+  "专用机械 (楼宇设备)": {
+    "industry_code": "楼宇设备",
+    "industry_name": "专用机械",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "002837"
+    ]
+  },
+  "汽车零部件与轮胎": {
+    "industry_code": "汽车电子",
+    "industry_name": "汽车零部件与轮胎",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "002920"
+    ]
+  },
+  "储能设备": {
+    "industry_code": "电池",
+    "industry_name": "储能设备",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "002074"
+    ]
+  },
+  "交通运输设备 (船舶及其他航运设备)": {
+    "industry_code": "船舶及其他航运设备",
+    "industry_name": "交通运输设备",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "600482"
+    ]
+  },
+  "软件开发": {
+    "industry_code": "行业应用软件",
+    "industry_name": "软件开发",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "600845"
+    ]
+  },
+  "电子元件 (被动元件)": {
+    "industry_code": "被动元件",
+    "industry_name": "电子元件",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "300408"
+    ]
+  },
+  "数字媒体 (视频媒体)": {
+    "industry_code": "视频媒体",
+    "industry_name": "数字媒体",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "300413"
+    ]
+  },
+  "电网设备": {
+    "industry_code": "配电设备",
+    "industry_name": "电网设备",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "002028"
+    ]
+  },
+  "稀有金属": {
+    "industry_code": "钨钼",
+    "industry_name": "稀有金属",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "000657"
+    ]
+  },
+  "工业金属": {
+    "industry_code": "钴镍",
+    "industry_name": "工业金属",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "603799"
+    ]
+  },
+  "稀有金属 (锂)": {
+    "industry_code": "锂",
+    "industry_name": "稀有金属",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "002460"
+    ]
+  },
+  "集成电路": {
+    "industry_code": "集成电路封测",
+    "industry_name": "集成电路",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "600584"
+    ]
+  }
+}

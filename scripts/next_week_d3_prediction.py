@@ -6,7 +6,7 @@ Next-week D+3 stock recommendation pipeline.
 Uses the PRODUCTION model (trained once before prediction date, persisted to disk).
 No retraining. No synthetic data. Real market inference only.
 
-Prediction: 2026-07-03 (Friday) -> D+3 = 2026-07-08 (Wednesday next week)
+Prediction: 2026-07-03 (Friday) -> D+3 = 2026-07-08 (Wednesday next week)  [PIT: data <= T, labels observable at T close]
 
 Output:
   A. Top 50 industry-neutral stock picks
@@ -38,7 +38,7 @@ PREDICTION_DATE = dt.date(2026, 7, 3)   # T (Friday)
 D1_DATE = dt.date(2026, 7, 6)            # T+1 (Monday)
 D3_DATE = dt.date(2026, 7, 8)            # T+1+3 (Wednesday)
 D5_DATE = dt.date(2026, 7, 10)           # T+1+5 (Friday)
-TRAIN_END = dt.date(2026, 7, 3)          # Train on data BEFORE this date
+TRAIN_END = dt.date(2026, 6, 30)         # PIT: T<=6/29 labels observable at 7/3 close
 EXISTING_FEATURE_SET_ID = "d02a4ebf"
 # FIXED (merge review): model persistence now goes through the existing
 # MLflow Model Registry (quant_platform.training.registry) instead of a
