@@ -95,6 +95,9 @@ class FeaturePipeline:
     include_margin : bool
         Whether to join margin trading features (P4B-08).
         Requires MarginCollector to have run.  Default False.
+    include_sector_flow : bool
+        Whether to join sector/industry fund-flow proxy features.
+        Default False.
     """
 
     def __init__(
@@ -106,6 +109,7 @@ class FeaturePipeline:
         include_industry: bool = False,
         include_flow: bool = False,
         include_margin: bool = False,
+        include_sector_flow: bool = False,
     ) -> None:
         self.store_root          = Path(store_root)
         self.project_root        = Path(project_root or Path.cwd())
@@ -114,6 +118,7 @@ class FeaturePipeline:
         self.include_industry    = include_industry
         self.include_flow        = include_flow
         self.include_margin      = include_margin
+        self.include_sector_flow = include_sector_flow
         self.registry            = FeatureRegistry(store_root)
         init_lake(self.store_root)
 
@@ -312,5 +317,17 @@ class FeaturePipeline:
                 logger.info("Margin features added to panel")
             except ImportError:
                 logger.warning("features.margin not available — skipping")
+
+        if self.include_sector_flow:
+            try:
+                from quant_platform.features.sector_flow import (
+                    build_sector_flow_features,
+                    load_sector_fund_flow_panel,
+                )
+                sector_flow_panel = load_sector_fund_flow_panel(self.store_root)
+                panel = build_sector_flow_features(panel, sector_flow_panel)
+                logger.info("Sector fund-flow proxy features added to panel")
+            except ImportError:
+                logger.warning("features.sector_flow not available — skipping")
 
         return panel

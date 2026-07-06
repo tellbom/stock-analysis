@@ -52,10 +52,16 @@ from quant_platform.features.cross_sectional import build_cross_sectional_featur
 from quant_platform.features.industry import build_industry_features
 from quant_platform.features.pipeline import FeaturePipeline
 from quant_platform.features.registry import DEFAULT_SPECS, compute_feature_set_id
+from quant_platform.evaluation.coverage_gate import (
+    compute_feature_coverage_report,
+    select_features_by_gate,
+    write_coverage_gate_report,
+)
 from quant_platform.selection.config import SelectionConfig, StrategyType
 from quant_platform.selection.ranker import IndustryNeutralRanker
 from quant_platform.selection.exposure import ExposureMonitor
 from quant_platform.store.lake import ohlcv_path, label_path, feature_path
+from quant_platform.cli import _coverage_gate_config_for_universe, _feature_family_lookup
 
 logger = get_logger(__name__)
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -229,15 +235,24 @@ def main():
             continue
         feature_cols.append(c)
 
-    # Drop features that are >90% NaN
-    valid_cols = []
-    for c in feature_cols:
-        if panel[c].isna().mean() < 0.90:
-            valid_cols.append(c)
-    feature_cols = valid_cols
+    # Gate-first feature eligibility: production D3 script is the long-history
+    # base path, so short-history flow/event columns are reported but not
+    # silently admitted into the base model.
+    coverage_report = compute_feature_coverage_report(
+        panel,
+        feature_cols,
+        family_by_col=_feature_family_lookup(),
+        config=_coverage_gate_config_for_universe(panel["symbol"].nunique()),
+    )
+    write_coverage_gate_report(
+        coverage_report,
+        OUTPUT_DIR,
+        prefix=f"{PREDICTION_LABEL}_coverage_gate_base",
+    )
+    feature_cols = select_features_by_gate(coverage_report, model_path="base")
 
     print(f"  Panel: {len(panel)} rows, {panel['date'].min()} -> {panel['date'].max()}")
-    print(f"  Features: {len(feature_cols)} active")
+    print(f"  Features: {len(feature_cols)} active after coverage gate")
     print(f"  reversal_3d present: {'reversal_3d' in feature_cols}")
     print(f"  industry_code present: {'industry_code' in panel.columns}")
     print()

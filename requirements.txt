@@ -20,3 +20,5 @@ dvc>=3.0.0
 # 可选依赖（用于高级功能）
 # matplotlib>=3.7.0  # 如需本地生成图表
 # openpyxl>=3.1.0    # 如需读取Excel文件
+# adata>=2.8.0        # 可选：FundFlowProvider 第一优先级
+# qstock>=1.3.7       # 可选：FundFlowProvider 第二优先级

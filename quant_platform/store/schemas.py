@@ -212,21 +212,34 @@ def enforce_industry_map(df: pd.DataFrame) -> pd.DataFrame:
 # One row per (symbol, date).  All flow values in 元 (yuan).
 # Source: Eastmoney push2his API.
 
-FUND_FLOW_REQUIRED: list[str] = ["symbol", "date", "main_net", "small_net"]
+FUND_FLOW_REQUIRED: list[str] = ["symbol", "main_net", "small_net"]
 
 def enforce_fund_flow(df: pd.DataFrame, symbol: str) -> pd.DataFrame:
     """Validate and normalise a DataFrame to the fund flow silver schema."""
     df = df.copy()
+    if "date" not in df.columns and "trade_date" in df.columns:
+        df["date"] = df["trade_date"]
+    if "trade_date" not in df.columns and "date" in df.columns:
+        df["trade_date"] = df["date"]
     missing = [c for c in FUND_FLOW_REQUIRED if c not in df.columns]
+    if "date" not in df.columns:
+        missing.append("date|trade_date")
     if missing:
         raise ValueError(f"Fund flow schema violation for {symbol!r}: missing {missing}")
     df["symbol"] = symbol
     df["date"]   = pd.to_datetime(df["date"]).dt.date
+    df["trade_date"] = pd.to_datetime(df["trade_date"]).dt.date
     for col in ("main_net", "small_net", "mid_net", "large_net", "super_net"):
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0)
         else:
             df[col] = 0.0
+    for col in ("main_net_rate", "small_net_rate", "medium_net_rate", "large_net_rate", "super_net_rate"):
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+    for col in ("source", "raw_update_time", "fetched_at"):
+        if col not in df.columns:
+            df[col] = None
     df = df.sort_values("date").drop_duplicates(subset=["symbol", "date"], keep="first")
     return df.reset_index(drop=True)
 

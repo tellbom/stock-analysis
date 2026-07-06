@@ -1,0 +1,11 @@
+symbol,rows,min,max,cols
+002236,120,2026-01-05,2026-07-06,date|main_net|small_net|mid_net|large_net|super_net|symbol|source|raw_update_time|fetched_at
+002241,120,2026-01-05,2026-07-06,date|main_net|small_net|mid_net|large_net|super_net|symbol|source|raw_update_time|fetched_at
+002304,120,2026-01-05,2026-07-06,date|main_net|small_net|mid_net|large_net|super_net|symbol|source|raw_update_time|fetched_at
+688041,120,2026-01-05,2026-07-06,date|main_net|small_net|mid_net|large_net|super_net|symbol|source|raw_update_time|fetched_at
+000001,120,2025-12-23,2026-06-25,date|main_net|small_net|mid_net|large_net|super_net|symbol
+000002,120,2025-12-23,2026-06-25,date|main_net|small_net|mid_net|large_net|super_net|symbol
+000063,120,2025-12-23,2026-06-25,date|main_net|small_net|mid_net|large_net|super_net|symbol
+000100,120,2025-12-23,2026-06-25,date|main_net|small_net|mid_net|large_net|super_net|symbol
+300498,120,2025-12-23,2026-06-25,date|main_net|small_net|mid_net|large_net|super_net|symbol
+300502,120,2025-12-23,2026-06-25,date|main_net|small_net|mid_net|large_net|super_net|symbol

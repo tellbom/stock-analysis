@@ -113,6 +113,8 @@ def init_lake(store_root: Path | str) -> None:
         "silver/index_ohlcv",   # P4A-05: CSI 300 and other index OHLCV
         "silver/valuation",     # P4B-01: daily PE/PB/mcap/turnover
         "silver/fund_flow",     # P4B-06: daily capital flow
+        "silver/sector_fund_flow",  # P0 gate: sector/industry fund-flow proxy
+        "silver/concept_fund_flow", # P0 gate: concept fund-flow proxy
         "silver/margin",        # P4B-08: daily margin trading
         "silver/lockup",        # P4C-03: lockup expiry calendar
         "universe",
@@ -216,6 +218,24 @@ def fund_flow_dir(store_root: Path | str) -> Path:
 def fund_flow_path(store_root: Path | str, symbol: str) -> Path:
     """silver/fund_flow/{symbol}.parquet — daily main/small/mid/large/super net inflow (元)."""
     return fund_flow_dir(store_root) / f"{symbol}.parquet"
+
+
+def sector_fund_flow_dir(store_root: Path | str) -> Path:
+    return silver_root(store_root) / "sector_fund_flow"
+
+
+def sector_fund_flow_path(store_root: Path | str, sector_name: str) -> Path:
+    safe = str(sector_name).replace("/", "_").replace("\\", "_")
+    return sector_fund_flow_dir(store_root) / f"{safe}.parquet"
+
+
+def concept_fund_flow_dir(store_root: Path | str) -> Path:
+    return silver_root(store_root) / "concept_fund_flow"
+
+
+def concept_fund_flow_path(store_root: Path | str, concept_name: str) -> Path:
+    safe = str(concept_name).replace("/", "_").replace("\\", "_")
+    return concept_fund_flow_dir(store_root) / f"{safe}.parquet"
 
 
 # ---------------------------------------------------------------------------

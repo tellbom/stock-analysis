@@ -1,0 +1,53 @@
+feature_name,feature_family,source,latest_available_date,overall_missing_rate,recent_symbol_coverage,recent_20d_avg_symbol_coverage,available_trading_days,date_coverage_rate,is_allowed_for_base_model,is_allowed_for_recent_model,is_allowed_for_prediction_only,rejection_reason
+volume,raw_aux,feature_panel,2026-07-03,0.0,298,295.75,846,1.0,True,True,False,allowed
+ma_5,technical,feature_panel,2026-07-03,0.005967251722546664,298,295.75,841,0.9940898345153665,True,True,False,allowed
+ma_10,technical,feature_panel,2026-07-03,0.011934503445093328,298,295.75,836,0.9881796690307328,True,True,False,allowed
+ma_20,technical,feature_panel,2026-07-03,0.023869006890186655,298,295.75,826,0.9763593380614657,True,True,False,allowed
+ma_60,technical,feature_panel,2026-07-03,0.07160702067055996,298,295.75,786,0.9290780141843972,True,True,False,allowed
+macd_dif,technical,feature_panel,2026-07-03,0.04177076205782665,298,295.75,811,0.958628841607565,True,True,False,allowed
+macd_dea,technical,feature_panel,2026-07-03,0.04177076205782665,298,295.75,811,0.958628841607565,True,True,False,allowed
+macd_hist,technical,feature_panel,2026-07-03,0.04177076205782665,298,295.75,811,0.958628841607565,True,True,False,allowed
+kdj_k,technical,feature_panel,2026-07-03,0.010741053100583995,298,295.75,837,0.9893617021276596,True,True,False,allowed
+kdj_d,technical,feature_panel,2026-07-03,0.010741053100583995,298,295.75,837,0.9893617021276596,True,True,False,allowed
+kdj_j,technical,feature_panel,2026-07-03,0.010741053100583995,298,295.75,837,0.9893617021276596,True,True,False,allowed
+rsi_6,technical,feature_panel,2026-07-03,0.007160702067055997,298,295.75,840,0.9929078014184397,True,True,False,allowed
+rsi_12,technical,feature_panel,2026-07-03,0.014321404134111993,298,295.75,834,0.9858156028368794,True,True,False,allowed
+rsi_24,technical,feature_panel,2026-07-03,0.028642808268223987,298,295.75,822,0.9716312056737588,True,True,False,allowed
+boll_upper,technical,feature_panel,2026-07-03,0.023869006890186655,298,295.75,826,0.9763593380614657,True,True,False,allowed
+boll_mid,technical,feature_panel,2026-07-03,0.023869006890186655,298,295.75,826,0.9763593380614657,True,True,False,allowed
+atr_14,technical,feature_panel,2026-07-03,0.016708304823130658,298,295.75,832,0.983451536643026,True,True,False,allowed
+adx_14,technical,feature_panel,2026-07-03,0.033416609646261315,298,295.75,818,0.966903073286052,True,True,False,allowed
+obv,technical,feature_panel,2026-07-03,0.02983625861273332,298,295.75,821,0.9704491725768322,True,True,False,allowed
+cci_14,technical,feature_panel,2026-07-03,0.016708304823130658,298,295.75,832,0.983451536643026,True,True,False,allowed
+roc_10,technical,feature_panel,2026-07-03,0.011934503445093328,298,295.75,836,0.9881796690307328,True,True,False,allowed
+willr_14,technical,feature_panel,2026-07-03,0.016708304823130658,298,295.75,832,0.983451536643026,True,True,False,allowed
+stoch_k,technical,feature_panel,2026-07-03,0.01790175516763999,298,295.75,831,0.9822695035460993,True,True,False,allowed
+stoch_d,technical,feature_panel,2026-07-03,0.020288655856658656,298,295.75,829,0.9799054373522459,True,True,False,allowed
+reversal_3d,technical,feature_panel,2026-07-03,0.0035803510335279984,298,295.75,843,0.9964539007092199,True,True,False,allowed
+fund_revenue,fundamental,silver/fundamentals,2026-07-03,0.9802205496236653,27,26.5,583,0.6891252955082743,False,False,True,base-missing>30%; base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low
+fund_net_profit,fundamental,silver/fundamentals,2026-07-03,0.9802205496236653,27,26.5,583,0.6891252955082743,False,False,True,base-missing>30%; base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low
+fund_eps,fundamental,silver/fundamentals,2026-07-03,0.9805865410626482,26,25.5,583,0.6891252955082743,False,False,True,base-missing>30%; base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low
+fund_roe,fundamental,silver/fundamentals,2026-07-03,0.9805865410626482,26,25.5,583,0.6891252955082743,False,False,True,base-missing>30%; base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low
+fund_lag_days,fundamental,silver/fundamentals,2026-07-03,0.9802205496236653,27,26.5,583,0.6891252955082743,False,False,True,base-missing>30%; base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low
+cs_rank_close,cross_sectional,feature_panel,2026-07-03,0.0,298,295.75,846,1.0,True,True,False,allowed
+cs_rank_volume,cross_sectional,feature_panel,2026-07-03,0.0,298,295.75,846,1.0,True,True,False,allowed
+cs_rank_rsi_6,cross_sectional,feature_panel,2026-07-03,0.007160702067055997,298,295.75,840,0.9929078014184397,True,True,False,allowed
+cs_rank_roc_10,cross_sectional,feature_panel,2026-07-03,0.011934503445093328,298,295.75,836,0.9881796690307328,True,True,False,allowed
+cs_rank_ma_5,cross_sectional,feature_panel,2026-07-03,0.005967251722546664,298,295.75,841,0.9940898345153665,True,True,False,allowed
+cs_zscore_close,cross_sectional,feature_panel,2026-07-03,0.0,298,295.75,846,1.0,True,True,False,allowed
+cs_zscore_volume,cross_sectional,feature_panel,2026-07-03,0.0,298,295.75,846,1.0,True,True,False,allowed
+cs_zscore_rsi_6,cross_sectional,feature_panel,2026-07-03,0.007160702067055997,298,295.75,840,0.9929078014184397,True,True,False,allowed
+pe_ttm,raw_aux,feature_panel,2026-06-29,0.010410865171936413,0,164.9,837,0.9893617021276596,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
+pb,raw_aux,feature_panel,2026-06-29,0.010410865171936413,0,164.9,837,0.9893617021276596,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
+turnover_pct,raw_aux,feature_panel,2026-06-29,0.010410865171936413,0,164.9,837,0.9893617021276596,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
+cs_log_float_mcap,valuation,silver/valuation,2026-06-29,0.010410865171936413,0,164.9,837,0.9893617021276596,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
+cs_pe_ttm_rank,valuation,silver/valuation,2026-06-29,0.07705313240933756,0,154.45,837,0.9893617021276596,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
+cs_pb_rank,valuation,silver/valuation,2026-06-29,0.010410865171936413,0,164.9,837,0.9893617021276596,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
+cs_turnover_rank,valuation,silver/valuation,2026-06-29,0.010410865171936413,0,164.9,837,0.9893617021276596,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
+cs_log_mcap_rank,valuation,silver/valuation,2026-06-29,0.010410865171936413,0,164.9,837,0.9893617021276596,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
+pe_momentum_5d,valuation,silver/valuation,2026-06-29,0.01750791655395191,0,150.7,832,0.983451536643026,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
+ind_rank_rsi_6,industry,silver/industry_map,2026-07-03,0.007160702067055997,298,295.75,840,0.9929078014184397,True,True,False,allowed
+ind_rank_turnover,industry,silver/industry_map,2026-06-29,0.010410865171936413,0,164.9,837,0.9893617021276596,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
+sector_momentum_10d,industry,silver/industry_map,2026-07-03,0.011882787263497924,298,295.75,836,0.9881796690307328,True,True,False,allowed
+cs_margin_balance_change_5d,margin,silver/margin,2026-06-24,0.08666438585045272,0,149.0,833,0.9846335697399528,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
+cs_rzrq_ratio_rank,margin,silver/margin,2026-06-24,0.08079658832328183,0,149.0,838,0.9905437352245863,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale

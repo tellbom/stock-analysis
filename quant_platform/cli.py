@@ -148,7 +148,71 @@ def _feature_family_lookup() -> dict[str, str]:
         family_by_col[spec.name] = "valuation"
     for spec in INDUSTRY_SPECS:
         family_by_col[spec.name] = "industry"
+    for mod_name, attr, family in [
+        ("quant_platform.features.flow", "FLOW_SPECS", "flow"),
+        ("quant_platform.features.sector_flow", "SECTOR_FLOW_SPECS", "sector_flow"),
+        ("quant_platform.features.margin", "MARGIN_SPECS", "margin"),
+        ("quant_platform.features.event", "LOCKUP_SPECS", "event"),
+    ]:
+        try:
+            import importlib
+            mod = importlib.import_module(mod_name)
+            for spec in getattr(mod, attr, []):
+                family_by_col[spec.name] = family
+        except ImportError:
+            pass
+    for col in (
+        "fund_revenue", "fund_net_profit", "fund_eps", "fund_roe",
+        "fund_lag_days",
+    ):
+        family_by_col[col] = "fundamental"
     return family_by_col
+
+
+def _coverage_gate_config_for_universe(n_symbols: int):
+    """Scale the 250/300 coverage rule for small tests or custom universes."""
+    import math
+    from quant_platform.evaluation.coverage_gate import CoverageGateConfig
+
+    threshold = min(250, max(1, math.ceil(n_symbols * 0.80)))
+    return CoverageGateConfig(
+        recent_symbol_threshold=threshold,
+        recent_20d_symbol_threshold=threshold,
+    )
+
+
+def _apply_coverage_gate(
+    panel,
+    feature_cols: list[str],
+    *,
+    store_root: Path,
+    model_path: str,
+    prefix: str,
+) -> tuple[list[str], object]:
+    """Run coverage gate, persist report, and return allowed features."""
+    from quant_platform.evaluation.coverage_gate import (
+        compute_feature_coverage_report,
+        select_features_by_gate,
+        write_coverage_gate_report,
+    )
+
+    family_by_col = _feature_family_lookup()
+    cfg = _coverage_gate_config_for_universe(panel["symbol"].nunique())
+    report = compute_feature_coverage_report(
+        panel,
+        feature_cols,
+        family_by_col=family_by_col,
+        config=cfg,
+    )
+    out_dir = store_root / "reports"
+    csv_path, md_path = write_coverage_gate_report(report, out_dir, prefix=prefix)
+    allowed = select_features_by_gate(report, model_path=model_path)
+    _info(
+        f"Coverage gate ({model_path}): {len(feature_cols)} -> {len(allowed)} "
+        f"features  report={csv_path.name}"
+    )
+    _info(f"Coverage gate markdown: {md_path}")
+    return allowed, report
 
 
 def _audit_training_features(
@@ -170,7 +234,10 @@ def _audit_training_features(
     counts: dict[str, int] = {}
     for fam in feature_families.values():
         counts[fam] = counts.get(fam, 0) + 1
-    for fam in ("technical", "cross_sectional", "raw_aux", "valuation", "industry"):
+    for fam in (
+        "technical", "cross_sectional", "raw_aux", "valuation", "industry",
+        "flow", "sector_flow", "margin", "event", "fundamental",
+    ):
         print(f"  {fam:16s}: {counts.get(fam, 0)}")
     print("  final LightGBM feature columns:")
     for col in feature_cols:
@@ -395,6 +462,29 @@ def cmd_enrich(args: argparse.Namespace) -> int:
             _warn(f"Lockup collection failed: {exc}")
             errors.append("lockup")
 
+    if getattr(args, "with_sector_flow", False):
+        _step("Collecting sector fund-flow proxy data (行业资金流; explicit opt-in)")
+        try:
+            import pandas as pd
+            from quant_platform.ingest.sector_fund_flow_collector import SectorFundFlowCollector
+            from quant_platform.store.lake import industry_map_path
+
+            imap_path = industry_map_path(store_root)
+            if not imap_path.exists():
+                raise RuntimeError("industry_map.parquet missing; run industry collector first")
+            imap = pd.read_parquet(imap_path)
+            sector_names = sorted(
+                str(x) for x in imap.get("industry_name", pd.Series(dtype=str)).dropna().unique()
+                if str(x).strip()
+            )
+            sfc = SectorFundFlowCollector(store_root)
+            res = sfc.run_sectors(sector_names)
+            n_ok = sum(1 for v in res.values() if v > 0)
+            _done(f"Sector fund-flow proxy: {n_ok}/{len(sector_names)} sectors written")
+        except Exception as exc:
+            _warn(f"Sector fund-flow proxy collection failed: {exc}")
+            errors.append("sector_flow")
+
     if errors:
         _warn(f"Enrich completed with failures: {errors}")
         _warn("Failed sources will be silently omitted from feature building.")
@@ -440,6 +530,7 @@ def cmd_features(args: argparse.Namespace) -> int:
     include_val  = getattr(args, "include_valuation", False)
     include_ind  = getattr(args, "include_industry", False)
     include_flow = getattr(args, "include_flow", False)
+    include_sector_flow = getattr(args, "include_sector_flow", False)
     include_marg = getattr(args, "include_margin", False)
     include_lock = getattr(args, "include_lockup", False)
     include_fund = getattr(args, "include_fundamentals", False)
@@ -447,7 +538,8 @@ def cmd_features(args: argparse.Namespace) -> int:
     _info(
         f"valuation={include_val}  industry={include_ind}  "
         f"flow={include_flow}  margin={include_marg}  "
-        f"lockup={include_lock}  fundamentals={include_fund}"
+        f"lockup={include_lock}  fundamentals={include_fund}  "
+        f"sector_flow={include_sector_flow}"
     )
 
     pipe = FeaturePipeline(
@@ -458,6 +550,7 @@ def cmd_features(args: argparse.Namespace) -> int:
         include_industry=include_ind,
         include_flow=include_flow,
         include_margin=include_marg,
+        include_sector_flow=include_sector_flow,
     )
     fset_id = pipe.run(symbols, specs=DEFAULT_SPECS)
     _done(f"Technical features written  feature_set_id={fset_id}")
@@ -595,8 +688,15 @@ def cmd_model(args: argparse.Namespace) -> int:
 
     include_val = getattr(args, "include_valuation", False)
     include_ind = getattr(args, "include_industry", False)
+    include_flow = getattr(args, "include_flow", False)
+    include_sector_flow = getattr(args, "include_sector_flow", False)
     include_marg = getattr(args, "include_margin", False)
-    _info(f"feature flags: valuation={include_val}  industry={include_ind}  margin={include_marg}")
+    gate_model_path = getattr(args, "gate_model_path", "base")
+    _info(
+        f"feature flags: valuation={include_val}  industry={include_ind}  "
+        f"flow={include_flow}  sector_flow={include_sector_flow}  "
+        f"margin={include_marg}  gate={gate_model_path}"
+    )
 
     _step("Assembling feature + label panel")
     import inspect
@@ -607,6 +707,10 @@ def cmd_model(args: argparse.Namespace) -> int:
         "include_valuation": include_val,
         "include_industry": include_ind,
     }
+    if "include_flow" in inspect.signature(FeaturePipeline).parameters:
+        pipeline_kwargs["include_flow"] = include_flow
+    if "include_sector_flow" in inspect.signature(FeaturePipeline).parameters:
+        pipeline_kwargs["include_sector_flow"] = include_sector_flow
     if "include_margin" in inspect.signature(FeaturePipeline).parameters:
         pipeline_kwargs["include_margin"] = include_marg
     pipe = FeaturePipeline(**pipeline_kwargs)
@@ -669,6 +773,20 @@ def cmd_model(args: argparse.Namespace) -> int:
             feature_cols = active_cols
     except ImportError:
         pass
+
+    if not getattr(args, "skip_coverage_gate", False):
+        feature_cols, coverage_report = _apply_coverage_gate(
+            panel,
+            feature_cols,
+            store_root=store_root,
+            model_path=gate_model_path,
+            prefix=f"coverage_gate_{label_col}_{gate_model_path}",
+        )
+        if not feature_cols:
+            _warn("Coverage gate rejected all features; inspect the coverage report.")
+            return 1
+    else:
+        coverage_report = None
 
     try:
         feature_audit = _audit_training_features(
@@ -1226,6 +1344,97 @@ def cmd_status(args: argparse.Namespace) -> int:
 
 
 # ---------------------------------------------------------------------------
+# Subcommand: fuse  (Gate-first base/recent fusion)
+# ---------------------------------------------------------------------------
+
+def _normalise_ranked_input(df, prefix: str):
+    """Normalize score/rank/pct columns for gate fusion."""
+    import pandas as pd
+
+    out = df.copy()
+    out["symbol"] = out["symbol"].astype(str).str.zfill(6)
+    if "trade_date" not in out.columns and "date" in out.columns:
+        out["trade_date"] = out["date"]
+    if f"{prefix}_score" not in out.columns:
+        for candidate in ("model_score", "score", "pred", "prediction"):
+            if candidate in out.columns:
+                out[f"{prefix}_score"] = out[candidate]
+                break
+    if f"{prefix}_score" not in out.columns:
+        raise ValueError(f"{prefix} input needs {prefix}_score or model_score")
+    out[f"{prefix}_score"] = pd.to_numeric(out[f"{prefix}_score"], errors="coerce")
+    if f"{prefix}_rank" not in out.columns:
+        out[f"{prefix}_rank"] = out[f"{prefix}_score"].rank(
+            ascending=False, method="first"
+        ).astype(int)
+    if f"{prefix}_pct" not in out.columns:
+        out[f"{prefix}_pct"] = out[f"{prefix}_score"].rank(
+            ascending=True, pct=True, method="average"
+        )
+    keep = ["symbol", "trade_date", f"{prefix}_score", f"{prefix}_rank", f"{prefix}_pct"]
+    for extra in ("risk_flags", "event_flags"):
+        if extra in out.columns:
+            keep.append(extra)
+    return out[keep]
+
+
+def cmd_fuse(args: argparse.Namespace) -> int:
+    """Gate-first fusion of base and recent ranked outputs."""
+    import pandas as pd
+    from quant_platform.selection.gate_fusion import (
+        gate_first_fusion,
+        write_gate_fusion_outputs,
+    )
+
+    _banner("D3 GATE-FIRST FUSION")
+    base = _normalise_ranked_input(pd.read_csv(args.base_ranked, dtype={"symbol": str}), "base")
+    recent = _normalise_ranked_input(pd.read_csv(args.recent_ranked, dtype={"symbol": str}), "recent")
+
+    merged = base.merge(
+        recent,
+        on=["symbol", "trade_date"],
+        how="inner",
+        suffixes=("_base", "_recent"),
+    )
+    if merged.empty:
+        _warn("No overlapping (symbol, trade_date) rows between base and recent ranked files.")
+        return 1
+
+    for col in ("risk_flags", "event_flags"):
+        left = f"{col}_base"
+        right = f"{col}_recent"
+        if left in merged.columns or right in merged.columns:
+            left_values = (
+                merged[left].fillna("").astype(str)
+                if left in merged.columns else ""
+            )
+            right_values = (
+                merged[right].fillna("").astype(str)
+                if right in merged.columns else ""
+            )
+            merged[col] = (
+                left_values
+                + ";"
+                + right_values
+            ).str.strip(";")
+        elif col not in merged.columns:
+            merged[col] = ""
+
+    fused = gate_first_fusion(merged)
+    out_dir = Path(args.output_dir)
+    csv_path, md_path = write_gate_fusion_outputs(
+        fused,
+        out_dir,
+        prefix=args.prefix,
+        top_n=args.top_n,
+    )
+    _done(f"Fused ranked -> {csv_path}")
+    _done(f"Fusion report -> {md_path}")
+    print(f"  rows={len(fused)}  top_tier={fused['gate_tier'].iloc[0]}")
+    return 0
+
+
+# ---------------------------------------------------------------------------
 # Subcommand: run  (full pipeline)
 # ---------------------------------------------------------------------------
 
@@ -1435,6 +1644,8 @@ def _add_enrich_args(p: argparse.ArgumentParser) -> None:
     p.add_argument("--skip-flow",      action="store_true", help="Skip capital flow collector")
     p.add_argument("--skip-margin",    action="store_true", help="Skip margin trading collector")
     p.add_argument("--skip-lockup",    action="store_true", help="Skip lockup expiry collector")
+    p.add_argument("--with-sector-flow", action="store_true",
+                   help="Collect sector/industry fund-flow proxy data (explicit opt-in)")
 
 
 def _add_features_args(p: argparse.ArgumentParser) -> None:
@@ -1449,6 +1660,8 @@ def _add_features_args(p: argparse.ArgumentParser) -> None:
                    help="Add P4B industry-relative features (requires enrich)")
     p.add_argument("--include-flow",         action="store_true",
                    help="Add P4B capital flow features (requires enrich)")
+    p.add_argument("--include-sector-flow",  action="store_true",
+                   help="Add sector fund-flow proxy features (not stock-level fund_flow)")
     p.add_argument("--include-margin",       action="store_true",
                    help="Add P4B margin trading features (requires enrich)")
     p.add_argument("--include-lockup",       action="store_true",
@@ -1481,9 +1694,19 @@ def _add_model_args(
     if "--include-industry" not in p._option_string_actions:
         p.add_argument("--include-industry",  action="store_true",
                        help="Add P4B industry-relative features during model panel assembly")
+    if "--include-flow" not in p._option_string_actions:
+        p.add_argument("--include-flow",      action="store_true",
+                       help="Add short-history capital flow features during model panel assembly")
+    if "--include-sector-flow" not in p._option_string_actions:
+        p.add_argument("--include-sector-flow", action="store_true",
+                       help="Add sector fund-flow proxy features during model panel assembly")
     if "--include-margin" not in p._option_string_actions:
         p.add_argument("--include-margin",    action="store_true",
                        help="Add P4B margin trading features during model panel assembly")
+    p.add_argument("--gate-model-path", choices=["base", "recent"], default="base",
+                   help="Coverage gate path: base long-history or recent enhanced (default: base)")
+    p.add_argument("--skip-coverage-gate", action="store_true",
+                   help="Skip feature coverage gate and use the legacy feature filter")
     # Walk-forward (P4A-03) — on by default; --use-lockbox for legacy path
     p.add_argument("--walk-forward",   action="store_true", default=True,
                    help="Use walk-forward OOS evaluation (default: True)")
@@ -1509,6 +1732,19 @@ def _add_diagnose_args(p: argparse.ArgumentParser) -> None:
                    help="Also run walk-forward regime analysis (P4C-05; slow)")
     p.add_argument("--n-windows",      type=int, default=5)
     p.add_argument("--window-months",  type=int, default=12)
+
+
+def _add_fuse_args(p: argparse.ArgumentParser) -> None:
+    p.add_argument("--base-ranked", required=True,
+                   help="CSV with base_score/base_pct or model_score columns")
+    p.add_argument("--recent-ranked", required=True,
+                   help="CSV with recent_score/recent_pct or model_score columns")
+    p.add_argument("--output-dir", required=True,
+                   help="Directory for D3_fused_ranked.csv and fusion report")
+    p.add_argument("--prefix", default="D3_fused",
+                   help="Output prefix (default: D3_fused)")
+    p.add_argument("--top-n", type=int, default=50,
+                   help="Rows to show in markdown report (default: 50)")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -1559,6 +1795,10 @@ def build_parser() -> argparse.ArgumentParser:
     p_status = sub.add_parser("status", help="Show lake contents and reports")
     _add_common_args(p_status)
 
+    # --- fuse ---
+    p_fuse = sub.add_parser("fuse", help="Gate-first fusion for base/recent ranked CSVs")
+    _add_fuse_args(p_fuse)
+
     return parser
 
 
@@ -1582,6 +1822,7 @@ def main(argv: list[str] | None = None) -> int:
         "model":    cmd_model,
         "diagnose": cmd_diagnose,
         "status":   cmd_status,
+        "fuse":     cmd_fuse,
     }
     return dispatch[args.command](args)
 

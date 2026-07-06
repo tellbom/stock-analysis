@@ -164,6 +164,7 @@ def _get_p4b_specs() -> list[FeatureSpec]:
         ("quant_platform.features.valuation", "VALUATION_SPECS"),
         ("quant_platform.features.industry",  "INDUSTRY_SPECS"),
         ("quant_platform.features.flow",      "FLOW_SPECS"),
+        ("quant_platform.features.sector_flow", "SECTOR_FLOW_SPECS"),
         ("quant_platform.features.margin",    "MARGIN_SPECS"),
     ]:
         try:

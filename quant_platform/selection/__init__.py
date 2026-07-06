@@ -29,6 +29,11 @@ Quick start
 from quant_platform.selection.config import SelectionConfig, StrategyType
 from quant_platform.selection.exposure import ExposureMonitor
 from quant_platform.selection.ranker import IndustryNeutralRanker
+from quant_platform.selection.gate_fusion import (
+    GateFusionConfig,
+    gate_first_fusion,
+    write_gate_fusion_outputs,
+)
 from quant_platform.selection.strategies import (
     EqualTopKStrategy,
     HybridStrategy,
@@ -43,4 +48,7 @@ __all__ = [
     "ProportionalTopKStrategy",
     "HybridStrategy",
     "ExposureMonitor",
+    "GateFusionConfig",
+    "gate_first_fusion",
+    "write_gate_fusion_outputs",
 ]
