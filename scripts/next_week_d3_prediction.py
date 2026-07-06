@@ -39,7 +39,6 @@ D1_DATE = dt.date(2026, 7, 6)            # T+1 (Monday)
 D3_DATE = dt.date(2026, 7, 8)            # T+1+3 (Wednesday)
 D5_DATE = dt.date(2026, 7, 10)           # T+1+5 (Friday)
 TRAIN_END = dt.date(2026, 6, 30)         # PIT: T<=6/29 labels observable at 7/3 close
-EXISTING_FEATURE_SET_ID = "d02a4ebf"
 # FIXED (merge review): model persistence now goes through the existing
 # MLflow Model Registry (quant_platform.training.registry) instead of a
 # bespoke pickle file under models/production/ -- see step 3 in main().
@@ -49,17 +48,19 @@ PREDICTION_LABEL = f"D3_Prediction_{PREDICTION_DATE.isoformat()}"
 sys.path.insert(0, str(ROOT))
 
 from quant_platform.core.logging import get_logger
+from quant_platform.features.cross_sectional import build_cross_sectional_features
 from quant_platform.features.industry import build_industry_features
-from quant_platform.features.registry import compute_feature_set_id, TECHNICAL_SPECS
-from quant_platform.features.technical import build_technical_features
+from quant_platform.features.pipeline import FeaturePipeline
+from quant_platform.features.registry import DEFAULT_SPECS, compute_feature_set_id
 from quant_platform.selection.config import SelectionConfig, StrategyType
 from quant_platform.selection.ranker import IndustryNeutralRanker
 from quant_platform.selection.exposure import ExposureMonitor
-from quant_platform.store.lake import ohlcv_path, label_path
-from quant_platform.store.parquet_store import read_ohlcv
+from quant_platform.store.lake import ohlcv_path, label_path, feature_path
 
 logger = get_logger(__name__)
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+REQUIRED_FEATURE_COLUMNS = ("reversal_3d",)
 
 
 # ===================================================================
@@ -75,49 +76,86 @@ def load_symbols() -> list[str]:
     return valid
 
 
-def build_panel(symbols: list[str], max_date: dt.date | None = None) -> pd.DataFrame:
+def ensure_registered_feature_set(
+    symbols: list[str],
+    *,
+    max_date: dt.date,
+) -> str:
     """
-    Build feature+label panel from the existing feature set, extended with
-    freshly-computed technical features for any date beyond that feature
-    set's coverage -- including the live prediction day.
+    Ensure the production D+3 feature set is formally written to the lake.
 
-    FIXED (merge review): previously "extra" dates (including the live
-    prediction day) were extended with only close/volume plus a
-    hand-duplicated reversal_3d formula, MA ratios, and roc_10 computed
-    directly in main() -- a much narrower feature set than the one the
-    model trains on, and a second, independent implementation of formulas
-    that already live in features.technical. Extra dates are now built via
-    the SAME build_technical_features() call used to build historical
-    feature sets, so training rows and the live prediction row go through
-    identical feature computation. This does mean recomputing technical
-    indicators over each symbol's full OHLCV history when there are extra
-    dates to fill -- an acceptable cost for a once-a-week batch job.
+    The old D3 script read a stale pre-reversal feature set and patched missing/new dates on the
+    fly. That meant ``reversal_3d`` could appear in prediction-day output
+    while being absent from the historical training rows. We now use the
+    normal FeaturePipeline/FeatureRegistry path so ``reversal_3d`` is present
+    in the stored feature parquet before model training starts.
     """
-    feat_dir = STORE_ROOT / "features" / EXISTING_FEATURE_SET_ID
+    feature_set_id = compute_feature_set_id(DEFAULT_SPECS)
+
+    def _needs_rebuild(symbol: str) -> bool:
+        path = feature_path(STORE_ROOT, feature_set_id, symbol)
+        if not path.exists():
+            return True
+        try:
+            df = pd.read_parquet(path)
+        except Exception:
+            return True
+        if any(c not in df.columns for c in REQUIRED_FEATURE_COLUMNS):
+            return True
+        if df.empty or "date" not in df.columns:
+            return True
+        max_written = pd.to_datetime(df["date"]).dt.date.max()
+        return max_written < max_date
+
+    needs_rebuild = any(_needs_rebuild(sym) for sym in symbols)
+    if needs_rebuild:
+        print(f"  Building registered feature set {feature_set_id} "
+              f"(includes {', '.join(REQUIRED_FEATURE_COLUMNS)})...")
+        pipe = FeaturePipeline(store_root=STORE_ROOT, project_root=ROOT)
+        built_id = pipe.run(symbols, specs=DEFAULT_SPECS, end_date=max_date)
+        if built_id != feature_set_id:
+            raise RuntimeError(
+                f"Unexpected feature_set_id {built_id}; expected {feature_set_id}"
+            )
+    else:
+        print(f"  Registered feature set {feature_set_id} already covers {max_date}")
+
+    return feature_set_id
+
+
+def build_panel(
+    symbols: list[str],
+    feature_set_id: str,
+    max_date: dt.date | None = None,
+) -> pd.DataFrame:
+    """
+    Build feature+label panel from the registered production feature set.
+
+    ``ensure_registered_feature_set()`` guarantees that this set has already
+    been rebuilt through FeaturePipeline and contains ``reversal_3d`` in the
+    stored per-symbol parquet files. Keep this loader intentionally boring:
+    no ad hoc technical-feature patching here, so training and prediction use
+    one persisted feature source of truth.
+    """
     frames = []
 
     for sym in symbols:
-        fp = feat_dir / f"{sym}.parquet"
+        fp = feature_path(STORE_ROOT, feature_set_id, sym)
         if not fp.exists():
             continue
         df = pd.read_parquet(fp)
         df["date"] = pd.to_datetime(df["date"]).dt.date
-
-        ohlcv_df = read_ohlcv(ohlcv_path(STORE_ROOT, sym))
-        ohlcv_df["date"] = pd.to_datetime(ohlcv_df["date"]).dt.date
-
-        extra_dates = set(ohlcv_df["date"]) - set(df["date"])
         if max_date:
-            extra_dates = {d for d in extra_dates if d <= max_date}
+            df = df[df["date"] <= max_date].copy()
 
-        if extra_dates:
-            full_tech = build_technical_features(
-                ohlcv_df.sort_values("date").reset_index(drop=True),
-                project_root=str(ROOT),
+        missing_required = [
+            c for c in REQUIRED_FEATURE_COLUMNS if c not in df.columns
+        ]
+        if missing_required:
+            raise RuntimeError(
+                f"Feature set {feature_set_id} is missing {missing_required}; "
+                "rebuild features through FeaturePipeline before training."
             )
-            full_tech["symbol"] = sym
-            ext = full_tech[full_tech["date"].isin(extra_dates)].copy()
-            df = pd.concat([df, ext], ignore_index=True)
 
         # Merge labels
         lp = label_path(STORE_ROOT, "forward_returns", sym)
@@ -135,6 +173,7 @@ def build_panel(symbols: list[str], max_date: dt.date | None = None) -> pd.DataF
     panel = pd.concat(frames, ignore_index=True)
     panel["date"] = pd.to_datetime(panel["date"]).dt.date
     panel = panel.sort_values(["date", "symbol"]).reset_index(drop=True)
+    panel = build_cross_sectional_features(panel)
 
     # Industry features -- computed for the WHOLE panel (historical rows
     # AND the live prediction day alike) via the public
@@ -174,7 +213,8 @@ def main():
     print("[1/6] Loading data and building panel...")
     symbols = load_symbols()
     print(f"  {len(symbols)} symbols with OHLCV data")
-    panel = build_panel(symbols, max_date=PREDICTION_DATE)
+    feature_set_id = ensure_registered_feature_set(symbols, max_date=PREDICTION_DATE)
+    panel = build_panel(symbols, feature_set_id, max_date=PREDICTION_DATE)
 
     # Feature columns
     meta_cols = {"symbol", "date", "close", "volume", "open", "high", "low",
@@ -207,9 +247,9 @@ def main():
     # FIXED (merge review): this pipeline is branded "D+3" (filenames,
     # report text says "Horizon | 3 trading days") but previously trained
     # on ret_fwd_5d -- a real label/target mismatch between what the code
-    # did and what the pipeline claims to predict. ret_fwd_3d exists in the
-    # label panel (built via labels.builder.append_horizon_labels), so this
-    # now trains on the label that matches the stated horizon. This has NOT
+    # did and what the pipeline claims to predict. ret_fwd_3d is now part of
+    # the default label horizon set, so this trains on the label that
+    # matches the stated horizon. This has NOT
     # been re-validated against T2.3's (compare_label_horizons) measured
     # 3d-vs-5d comparison with real accumulated data -- if that comparison
     # is later run and favors 5d, this should be revisited deliberately,
@@ -303,7 +343,6 @@ def main():
         mlflow.sklearn.log_model(pipeline, "model", serialization_format="pickle")
         run_id = run.info.run_id
 
-    feature_set_id = compute_feature_set_id(TECHNICAL_SPECS)
     model_version = register_model(
         STORE_ROOT,
         model_name=f"ridge_d3_{PREDICTION_DATE.isoformat()}",
@@ -315,7 +354,7 @@ def main():
             "prediction_date": str(PREDICTION_DATE),
             "train_end": str(TRAIN_END),
             "feature_cols": feature_cols,
-            "existing_feature_set_id": EXISTING_FEATURE_SET_ID,
+            "feature_set_id": feature_set_id,
         },
         registered_name=REGISTERED_MODEL_NAME,
     )
@@ -410,7 +449,7 @@ def main():
     lines.append(f"| D+5 comparison date | {D5_DATE} (Friday) |")
     lines.append(f"| Horizon | 3 trading days |")
     lines.append(f"| Model | Ridge Regression (registered: `{REGISTERED_MODEL_NAME}` v{model_version}, run {run_id[:8]}) |")
-    lines.append(f"| Feature set | `{EXISTING_FEATURE_SET_ID}` + reversal_3d + industry |")
+    lines.append(f"| Feature set | `{feature_set_id}` (registered DEFAULT_SPECS, includes reversal_3d) + industry |")
     lines.append(f"| Feature count | {len(feature_cols)} |")
     lines.append(f"| Selection strategy | IndustryNeutralRanker (EqualTopK=3, max_total=50) |")
     lines.append(f"| Universe | CSI 300 ({len(symbols)} symbols) |")

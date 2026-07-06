@@ -42,7 +42,7 @@ NaN policy
 
 P4A-04 change
 -------------
-DEFAULT_HORIZONS updated from [1, 5, 20] to [1, 5, 10, 20].
+DEFAULT_HORIZONS updated from [1, 5, 20] to [1, 3, 5, 10, 20].
 The 5-day horizon is now the **primary evaluation horizon** for the
 platform.  At 5d a 12-month walk-forward window yields ~50 independent
 forward periods vs. ~12 at 20d — a 4× improvement in statistical power.
@@ -75,8 +75,8 @@ from quant_platform.store.parquet_store import read_ohlcv
 logger = get_logger(__name__)
 
 # Default holding horizons (in trading days).
-# P4A-04: 10d added; 5d is the primary evaluation horizon.
-DEFAULT_HORIZONS: list[int] = [1, 5, 10, 20]
+# P4A-04: 3d/10d added; 5d is the primary evaluation horizon.
+DEFAULT_HORIZONS: list[int] = [1, 3, 5, 10, 20]
 
 # Primary label used throughout the platform (shortest horizon with reasonable
 # signal decay and high independent-period count per year).
@@ -101,7 +101,7 @@ def build_labels(
     store_root : Path | str
     symbols : list[str]
     horizons : list[int] | None
-        Holding periods in trading days.  Default [1, 5, 10, 20].
+        Holding periods in trading days.  Default [1, 3, 5, 10, 20].
     overwrite : bool
         If True, overwrite existing label files.  Default True.
 
@@ -152,8 +152,8 @@ def append_horizon_labels(
     T+1 formula, one place), and merges on (symbol, date) — every column
     that was already in the file is preserved untouched.
 
-    Does NOT modify ``DEFAULT_HORIZONS`` and does not require the caller
-    to re-list the horizons that already exist.
+    Kept for idempotent backfills and older label files; ``ret_fwd_3d`` is
+    now part of ``DEFAULT_HORIZONS`` for full label rebuilds.
 
     Parameters
     ----------

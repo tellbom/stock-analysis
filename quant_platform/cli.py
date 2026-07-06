@@ -35,7 +35,7 @@ Phase 4 changes (relative to original P0–P3 CLI)
   collect   - added --with-index flag to fetch CSI 300 index OHLCV (P4A-05)
   enrich    - NEW: runs all P4B data source collectors serially
   features  - primary label defaults to ret_fwd_5d (was ret_fwd_20d)
-            - horizons default to [1, 5, 10, 20] (added 10d, P4A-04)
+            - horizons default to [1, 3, 5, 10, 20] (added 3d/10d, P4A-04)
             - flags: --include-valuation / --include-industry /
                      --include-flow / --include-margin / --include-lockup
             - builds excess_vs_csi300 labels when index OHLCV available
@@ -1440,8 +1440,8 @@ def _add_enrich_args(p: argparse.ArgumentParser) -> None:
 def _add_features_args(p: argparse.ArgumentParser) -> None:
     p.add_argument("--label",     default="ret_fwd_5d",       # P4A-04: default changed to 5d
                    help="Primary label column (default: ret_fwd_5d)")
-    p.add_argument("--horizons",  type=int, nargs="+", default=[1, 5, 10, 20],  # P4A-04
-                   help="Label horizons in trading days (default: 1 5 10 20)")
+    p.add_argument("--horizons",  type=int, nargs="+", default=[1, 3, 5, 10, 20],  # P4A-04
+                   help="Label horizons in trading days (default: 1 3 5 10 20)")
     p.add_argument("--include-fundamentals", action="store_true")
     p.add_argument("--include-valuation",    action="store_true",
                    help="Add P4B valuation/size features (requires enrich)")
@@ -1466,7 +1466,7 @@ def _add_model_args(
     p.add_argument("--horizon",        type=int, default=5,    # P4A-04: 5d default
                    help="Label horizon matching --label (default: 5)")
     if include_horizons:
-        p.add_argument("--horizons",   type=int, nargs="+", default=[1, 5, 10, 20])
+        p.add_argument("--horizons",   type=int, nargs="+", default=[1, 3, 5, 10, 20])
     p.add_argument("--feature-set-id", default=None,
                    help="8-char feature set ID (auto-detected if omitted)")
     p.add_argument("--n-splits",       type=int, default=5)

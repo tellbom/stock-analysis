@@ -30,7 +30,7 @@ Usage
     run_diagnostic(
         panel,
         feature_cols=[...],          # e.g. TECHNICAL feature names
-        label_cols=["ret_fwd_1d", "ret_fwd_5d", "ret_fwd_20d"],  # T2.1 note:
+        label_cols=["ret_fwd_1d", "ret_fwd_3d", "ret_fwd_5d"],  # T2.1 note:
             # pass only labels confirmed present in the panel; do not assume
             # ret_fwd_10d exists without checking panel.columns first.
         store_root=store_root,
@@ -40,8 +40,9 @@ NOTE ON DEFAULT_LABEL_COLS drift
 ---------------------------------
 task.md/plan.md were written against a snapshot where
 labels.builder.DEFAULT_HORIZONS == [1, 5, 20]. The current codebase's
-DEFAULT_HORIZONS is [1, 5, 10, 20] (P4A-04) -- ret_fwd_10d IS a supported
-horizon now, but whether it has actually been *generated* for a given
+DEFAULT_HORIZONS is [1, 3, 5, 10, 20] (P4A-04) -- ret_fwd_3d and
+ret_fwd_10d are supported horizons now, but whether they have actually been
+*generated* for a given
 store_root/symbol set is a data-pipeline execution question, not a code
 question. This script never assumes either way: it intersects the
 caller-requested label_cols with panel.columns and logs what it found.

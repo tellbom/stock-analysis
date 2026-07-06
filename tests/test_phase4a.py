@@ -7,7 +7,7 @@ Covers:
   P4A-01  Robustness embargo fix
   P4A-02  Subperiod stability index (subperiod_ic_ratio)
   P4A-03  WalkForwardEvaluator
-  P4A-04  DEFAULT_HORIZONS includes 10d; PRIMARY_LABEL_HORIZON = 5
+  P4A-04  DEFAULT_HORIZONS includes 3d/10d; PRIMARY_LABEL_HORIZON = 5
   P4A-05  excess_vs_csi300 label construction
   P4A-06  RidgeModel in model zoo
 
@@ -65,7 +65,7 @@ def _make_panel(
     # Build ret_fwd_{h}d as the label (simple forward return from close)
     df["date"] = pd.to_datetime(df["date"])
     df = df.sort_values(["symbol", "date"]).reset_index(drop=True)
-    for h in [1, 5, 10, 20]:
+    for h in [1, 3, 5, 10, 20]:
         df[f"ret_fwd_{h}d"] = (
             df.groupby("symbol")["close"]
               .transform(lambda x: x.shift(-h) / x.shift(-1) - 1)
@@ -259,15 +259,19 @@ class TestWalkForwardEvaluator:
 # ---------------------------------------------------------------------------
 
 class TestMultiHorizonLabels:
-    """P4A-04: DEFAULT_HORIZONS includes 10d; PRIMARY_LABEL_HORIZON is 5."""
+    """P4A-04: DEFAULT_HORIZONS includes 3d/10d; PRIMARY_LABEL_HORIZON is 5."""
 
     def test_default_horizons_includes_10d(self):
         from quant_platform.labels.builder import DEFAULT_HORIZONS
         assert 10 in DEFAULT_HORIZONS, f"10d not in DEFAULT_HORIZONS={DEFAULT_HORIZONS}"
 
+    def test_default_horizons_includes_3d(self):
+        from quant_platform.labels.builder import DEFAULT_HORIZONS
+        assert 3 in DEFAULT_HORIZONS, f"3d not in DEFAULT_HORIZONS={DEFAULT_HORIZONS}"
+
     def test_default_horizons_includes_all_expected(self):
         from quant_platform.labels.builder import DEFAULT_HORIZONS
-        for h in [1, 5, 10, 20]:
+        for h in [1, 3, 5, 10, 20]:
             assert h in DEFAULT_HORIZONS, f"{h}d missing from DEFAULT_HORIZONS"
 
     def test_primary_label_horizon(self):

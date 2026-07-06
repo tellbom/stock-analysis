@@ -39,10 +39,11 @@ Usage
 
     label_panel = residualise_returns(
         panel=label_panel_with_industry_and_size,
-        horizons=[1, 5, 10, 20],
+        horizons=[1, 3, 5, 10, 20],
         market_ret_cols={"5": "index_ret_5d", ...},   # optional
     )
-    # Adds: residual_ret_1d, residual_ret_5d, residual_ret_10d, residual_ret_20d
+    # Adds: residual_ret_1d, residual_ret_3d, residual_ret_5d,
+    #       residual_ret_10d, residual_ret_20d
 """
 
 from __future__ import annotations
@@ -88,7 +89,7 @@ def residualise_returns(
           - industry_code (from P4B features or label join)
           - float_mcap_yi OR cs_log_float_mcap (for size control)
     horizons : list[int] | None
-        Label horizons.  Defaults to [1, 5, 10, 20].
+        Label horizons.  Defaults to [1, 3, 5, 10, 20].
     industry_col : str
         Column containing the industry code.  Stocks with _UNKNOWN industry
         are included but their dummies contribute to the intercept.

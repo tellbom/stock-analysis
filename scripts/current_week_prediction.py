@@ -41,9 +41,7 @@ OUTPUT_DIR = STORE_ROOT / "reports"
 PREDICTION_DATE = dt.date(2026, 6, 26)  # Latest date with full feature data
 PREDICTION_LABEL = f"Prediction_{PREDICTION_DATE.isoformat()}"
 
-# Feature set: use existing d02a4ebf (latest to 2026-06-26)
-# New features (reversal_3d) will be added on-the-fly
-EXISTING_FEATURE_SET_ID = "d02a4ebf"
+REQUIRED_FEATURE_COLUMNS = ("reversal_3d",)
 
 # Verification schedule
 D1_DATE = dt.date(2026, 6, 29)   # T+1 (Monday after prediction Friday)
@@ -58,16 +56,15 @@ sys.path.insert(0, str(ROOT))
 from quant_platform.core.logging import get_logger
 from quant_platform.evaluation.metrics import evaluate
 from quant_platform.evaluation.backtest import run_backtest
-from quant_platform.features.technical import build_technical_features
+from quant_platform.features.cross_sectional import build_cross_sectional_features
+from quant_platform.features.pipeline import FeaturePipeline
 from quant_platform.features.industry import build_industry_features
-from quant_platform.features.registry import (
-    TECHNICAL_SPECS, FeatureSpec, FeatureRegistry, compute_feature_set_id,
-)
+from quant_platform.features.registry import DEFAULT_SPECS, compute_feature_set_id
 from quant_platform.labels.builder import build_label_panel, PRIMARY_LABEL_COL, PRIMARY_LABEL_HORIZON
 from quant_platform.selection.config import SelectionConfig, StrategyType
 from quant_platform.selection.ranker import IndustryNeutralRanker
 from quant_platform.selection.exposure import ExposureMonitor
-from quant_platform.store.lake import ohlcv_path, label_path
+from quant_platform.store.lake import ohlcv_path, label_path, feature_path
 from quant_platform.store.parquet_store import read_ohlcv
 
 logger = get_logger(__name__)
@@ -97,42 +94,70 @@ def load_universe_symbols() -> list[str]:
 # ===================================================================
 # Helper: build panel for a set of dates
 # ===================================================================
+def ensure_registered_feature_set(symbols: list[str], max_date: dt.date) -> str:
+    """Build/register the default feature set so reversal_3d is persisted."""
+    feature_set_id = compute_feature_set_id(DEFAULT_SPECS)
+
+    def _needs_rebuild(symbol: str) -> bool:
+        path = feature_path(STORE_ROOT, feature_set_id, symbol)
+        if not path.exists():
+            return True
+        try:
+            df = pd.read_parquet(path)
+        except Exception:
+            return True
+        if any(c not in df.columns for c in REQUIRED_FEATURE_COLUMNS):
+            return True
+        if df.empty or "date" not in df.columns:
+            return True
+        max_written = pd.to_datetime(df["date"]).dt.date.max()
+        return max_written < max_date
+
+    if any(_needs_rebuild(sym) for sym in symbols):
+        print(f"  Building registered feature set {feature_set_id} "
+              f"(includes {', '.join(REQUIRED_FEATURE_COLUMNS)})...")
+        pipe = FeaturePipeline(store_root=STORE_ROOT, project_root=ROOT)
+        built_id = pipe.run(symbols, specs=DEFAULT_SPECS, end_date=max_date)
+        if built_id != feature_set_id:
+            raise RuntimeError(
+                f"Unexpected feature_set_id {built_id}; expected {feature_set_id}"
+            )
+    else:
+        print(f"  Registered feature set {feature_set_id} already covers {max_date}")
+
+    return feature_set_id
+
+
 def build_prediction_panel(
     symbols: list[str],
     feature_set_id: str,
-    add_reversal_3d: bool = True,
     add_industry: bool = True,
 ) -> pd.DataFrame:
     """
-    Build a feature + label panel by loading existing feature parquets,
-    optionally appending reversal_3d and industry features.
+    Build a feature + label panel from registered feature parquets.
+
+    reversal_3d must already be present in the feature set; do not compute it
+    ad hoc here, or training and prediction will drift from the persisted
+    feature source of truth.
     """
     frames = []
-    feature_dir = STORE_ROOT / "features" / feature_set_id
 
     # Build per-symbol technical features first
     for sym in symbols:
-        feat_path = feature_dir / f"{sym}.parquet"
+        feat_path = feature_path(STORE_ROOT, feature_set_id, sym)
         if not feat_path.exists():
             continue
         df = pd.read_parquet(feat_path)
         df["date"] = pd.to_datetime(df["date"]).dt.date
 
-        # Add reversal_3d on-the-fly if needed
-        # Formula: -(close/close.shift(3) - 1), matching TECHNICAL_SPECS
-        if add_reversal_3d and "reversal_3d" not in df.columns:
-            try:
-                ohlcv_df = read_ohlcv(ohlcv_path(STORE_ROOT, sym))
-                ohlcv_df["date"] = pd.to_datetime(ohlcv_df["date"]).dt.date
-                ohlcv_df = ohlcv_df.sort_values("date")
-                ohlcv_df["reversal_3d"] = -(ohlcv_df["close"] / ohlcv_df["close"].shift(3) - 1.0)
-                # Mask warm-up rows (first 3 rows)
-                ohlcv_df.loc[:ohlcv_df.index[2], "reversal_3d"] = np.nan
-                rev = ohlcv_df[["date", "reversal_3d"]].copy()
-                rev["date"] = pd.to_datetime(rev["date"]).dt.date
-                df = df.merge(rev, on="date", how="left")
-            except Exception:
-                pass
+        missing_required = [
+            c for c in REQUIRED_FEATURE_COLUMNS if c not in df.columns
+        ]
+        if missing_required:
+            raise RuntimeError(
+                f"Feature set {feature_set_id} is missing {missing_required}; "
+                "rebuild features through FeaturePipeline before training."
+            )
 
         # Merge labels
         label_file = label_path(STORE_ROOT, "forward_returns", sym)
@@ -150,6 +175,7 @@ def build_prediction_panel(
     panel = pd.concat(frames, ignore_index=True)
     panel["date"] = pd.to_datetime(panel["date"]).dt.date
     panel = panel.sort_values(["date", "symbol"]).reset_index(drop=True)
+    panel = build_cross_sectional_features(panel)
 
     # --- Add industry features at panel level ---
     if add_industry and "industry_code" not in panel.columns:
@@ -202,7 +228,8 @@ def main():
 
     # ---- 2. Build panel ----
     print("[2/8] Building feature+label panel...")
-    panel = build_prediction_panel(symbols, EXISTING_FEATURE_SET_ID)
+    feature_set_id = ensure_registered_feature_set(symbols, PREDICTION_DATE)
+    panel = build_prediction_panel(symbols, feature_set_id)
 
     # Determine feature columns (exclude meta/label columns)
     meta_cols = {"symbol", "date", "close", "volume", "open", "high", "low",
@@ -517,11 +544,11 @@ def main():
     report_lines.append(f"| D+5 target date | {D5_DATE} |")
     report_lines.append(f"| Primary label column | `{label_col}` |")
     report_lines.append(f"| Primary horizon | {PRIMARY_LABEL_HORIZON} trading days |")
-    report_lines.append(f"| Feature set ID | `{EXISTING_FEATURE_SET_ID}` |")
+    report_lines.append(f"| Feature set ID | `{feature_set_id}` (registered DEFAULT_SPECS, includes reversal_3d) |")
     report_lines.append(f"| Feature count | {len(feature_cols)} |")
     report_lines.append(f"| reversal_3d in features | {reversal_present} |")
     report_lines.append(f"| industry_code in panel | {industry_present} |")
-    report_lines.append(f"| ret_fwd_3d labels | Appended via `append_horizon_labels` |")
+    report_lines.append(f"| ret_fwd_3d labels | Built via default label horizons |")
     report_lines.append(f"| Model | Ridge Regression (sklearn) |")
     report_lines.append(f"| Universe | CSI 300 ({len(symbols)} symbols) |")
     report_lines.append("")
@@ -717,13 +744,11 @@ def main():
         report_lines.append("  - `reversal_3d` = -(close / close.shift(3) - 1), dimensionless")
         report_lines.append("  - Short-term reversal counter-signal to momentum")
     else:
-        report_lines.append("  - ⚠️ `reversal_3d` NOT in current feature set. TECHNICAL_SPECS includes it")
-        report_lines.append("  - but the existing feature build (`d02a4ebf`) predates it.")
-        report_lines.append("  - A new feature set build with `compute_feature_set_id(TECHNICAL_SPECS + CROSS_SECTIONAL_SPECS)`")
-        report_lines.append("  - would produce a different `feature_set_id` and include `reversal_3d`.")
-    report_lines.append(f"- **Technical spec ID (with reversal_3d):** {compute_feature_set_id(TECHNICAL_SPECS)}")
-    report_lines.append(f"- **Note:** prediction uses existing feature set `{EXISTING_FEATURE_SET_ID}` plus on-the-fly `reversal_3d`; no new feature parquet set was written.")
-    report_lines.append(f"- **3-day labels:** ret_fwd_3d, vol_fwd_3d, mdd_fwd_3d appended to all 300 symbols")
+        report_lines.append("  - WARNING: `reversal_3d` did not enter the final feature list after filtering.")
+        report_lines.append("  - Check feature parquet coverage and missing-rate filters before trusting this run.")
+    report_lines.append(f"- **Registered feature set ID:** {feature_set_id}")
+    report_lines.append("- **Note:** prediction uses the registered feature parquet set; no ad hoc reversal_3d patching is performed.")
+    report_lines.append("- **3-day labels:** ret_fwd_3d, vol_fwd_3d, mdd_fwd_3d are built by the default label horizon set")
     report_lines.append("")
 
     # Disclaimer
