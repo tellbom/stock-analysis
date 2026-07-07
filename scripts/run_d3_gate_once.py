@@ -35,7 +35,7 @@ from quant_platform.evaluation.coverage_gate import (  # noqa: E402
 )
 from quant_platform.features.event import build_lockup_features, load_lockup_panel  # noqa: E402
 from quant_platform.features.pipeline import FeaturePipeline  # noqa: E402
-from quant_platform.features.registry import DEFAULT_SPECS  # noqa: E402
+from quant_platform.features.registry import DEFAULT_SPECS, feature_metadata_lookup  # noqa: E402
 from quant_platform.labels.builder import build_label_panel  # noqa: E402
 from quant_platform.selection.gate_fusion import gate_first_fusion, write_gate_fusion_outputs  # noqa: E402
 from quant_platform.store.lake import ohlcv_path  # noqa: E402
@@ -249,11 +249,13 @@ def _risk_flags(panel: pd.DataFrame, actual_as_of: dt.date) -> pd.DataFrame:
         if "days_to_next_unlock" in row.index and pd.notna(row["days_to_next_unlock"]):
             days = float(row["days_to_next_unlock"])
             ratio = float(row.get("unlock_size_ratio", 0) or 0)
+            # structured flags carry an explicit @known_at (the as-of date) so
+            # the gate admits them to the risk channel (GF-04b req #3).
+            asof = actual_as_of.isoformat()
             if days <= 5 and ratio >= 0.05:
-                risk.append("high_unlock")
-                event.append(f"unlock_{int(days)}d_ratio_{ratio:.2%}")
+                risk.append(f"high_unlock:{int(days)}d_ratio_{ratio:.2%}@{asof}")
             elif days <= 10:
-                event.append(f"unlock_{int(days)}d")
+                event.append(f"unlock:{int(days)}d@{asof}")
         flags.append({
             "symbol": row["symbol"],
             "trade_date": row["date"],
@@ -346,11 +348,13 @@ def main() -> int:
     )
 
     family_by_col = _feature_family_lookup()
+    feature_metadata = feature_metadata_lookup()
     cfg = _coverage_gate_config_for_universe(len(symbols))
 
     base_candidates = _build_feature_cols(base_panel)
     base_gate = compute_feature_coverage_report(
-        base_panel, base_candidates, family_by_col=family_by_col, as_of_date=actual_as_of, config=cfg
+        base_panel, base_candidates, family_by_col=family_by_col,
+        feature_metadata=feature_metadata, as_of_date=actual_as_of, config=cfg
     )
     base_gate_csv, base_gate_md = write_coverage_gate_report(
         base_gate, REPORT_DIR, prefix=f"D3_base_coverage_gate_{date_tag}"
@@ -360,7 +364,8 @@ def main() -> int:
 
     recent_candidates = _build_feature_cols(recent_panel)
     recent_gate = compute_feature_coverage_report(
-        recent_panel, recent_candidates, family_by_col=family_by_col, as_of_date=actual_as_of, config=cfg
+        recent_panel, recent_candidates, family_by_col=family_by_col,
+        feature_metadata=feature_metadata, as_of_date=actual_as_of, config=cfg
     )
     recent_gate_csv, recent_gate_md = write_coverage_gate_report(
         recent_gate, REPORT_DIR, prefix=f"D3_recent_coverage_gate_{date_tag}"

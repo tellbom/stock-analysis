@@ -25,6 +25,7 @@ import hashlib
 import json
 from dataclasses import dataclass, asdict
 from pathlib import Path
+from typing import Iterable
 
 import pandas as pd
 
@@ -182,6 +183,144 @@ def _get_p4b_specs() -> list[FeatureSpec]:
 # Full spec set including all P4B data blocks.
 # Use this as: registry.register(FULL_SPECS)
 FULL_SPECS: list[FeatureSpec] = DEFAULT_SPECS + _get_p4b_specs()
+
+
+# ---------------------------------------------------------------------------
+# Typed feature metadata (GF-04)
+# ---------------------------------------------------------------------------
+# Provenance/PIT metadata per feature column.  The coverage gate reads this to
+# decide base-model eligibility: a column that is unregistered, not pit_safe,
+# or has no known_at rule is fail-closed (locked out of the base model).  Name
+# tokens (features/coverage_gate) remain a *secondary* transitional guard, not
+# the sole PIT judgement.
+
+@dataclass(frozen=True)
+class FeatureMetadata:
+    """Typed provenance / point-in-time metadata for one feature column.
+
+    Attributes
+    ----------
+    name          : canonical column name
+    family        : feature family (technical, flow, event, ...)
+    source        : upstream data source (silver table / provider)
+    pit_safe      : True if the value at date T uses only data known by close(T)
+    known_at      : rule describing *when* the value becomes known
+                    (e.g. "post_close_T", "announce_date").  Empty string means
+                    the rule is undeclared -> treated as PIT-unverified.
+    history_start : first date the feature is available (informational; may be
+                    None when unknown).
+    """
+    name:          str
+    family:        str
+    source:        str
+    pit_safe:      bool
+    known_at:      str
+    history_start: str | None = None
+
+
+# family -> (source, known_at rule, pit_safe default)
+_FAMILY_PROVENANCE: dict[str, tuple[str, str, bool]] = {
+    "technical":           ("feature_panel", "post_close_T", True),
+    "cross_sectional":     ("feature_panel", "post_close_T", True),
+    "raw_aux":             ("feature_panel", "post_close_T", True),
+    "valuation":           ("silver/valuation", "post_close_T", True),
+    "industry":            ("silver/industry_map", "scd_pit_join", True),
+    "margin":              ("silver/margin", "post_close_T_lag1", True),
+    "fundamental":         ("silver/fundamentals", "announce_date", True),
+    "flow":                ("silver/fund_flow", "post_close_T", True),
+    "sector_flow":         ("silver/sector_fund_flow", "post_close_T", True),
+    "concept_flow":        ("silver/concept_fund_flow", "post_close_T", True),
+    "proxy_flow":          ("silver/sector_fund_flow", "post_close_T", True),
+    "event":               ("silver/lockup", "announce_date", True),
+    "announcement":        ("silver/announcement_events", "announce_date", True),
+    "announcement_events": ("cninfo", "announce_date", True),
+    "dragon_tiger":        ("datacenter-web", "announce_date", True),
+    "block_trade":         ("datacenter-web", "announce_date", True),
+}
+
+# Raw auxiliary / fundamental columns that are not FeatureSpec-defined but are
+# explicitly trusted (mirrors cli._feature_family_lookup).
+_RAW_AUX_COLUMNS = ("volume", "pe_ttm", "pb", "turnover_pct")
+_FUNDAMENTAL_COLUMNS = ("fund_revenue", "fund_net_profit", "fund_eps", "fund_roe", "fund_lag_days")
+
+
+def _event_family_specs() -> list[tuple[str, str]]:
+    """(name, family) pairs for event families not bundled into FULL_SPECS."""
+    pairs: list[tuple[str, str]] = []
+    for module_name, attr, family in [
+        ("quant_platform.features.event", "LOCKUP_SPECS", "event"),
+        ("quant_platform.features.event", "ANNOUNCEMENT_EVENT_SPECS", "announcement_events"),
+        ("quant_platform.features.event", "DRAGON_TIGER_SPECS", "dragon_tiger"),
+        ("quant_platform.features.event", "BLOCK_TRADE_SPECS", "block_trade"),
+    ]:
+        try:
+            import importlib
+            mod = importlib.import_module(module_name)
+            for spec in getattr(mod, attr, []):
+                pairs.append((spec.name, family))
+        except ImportError:
+            pass
+    return pairs
+
+
+def _metadata_for_family(name: str, family: str) -> FeatureMetadata:
+    # Unknown family -> undeclared provenance -> pit_safe False, known_at "" so
+    # the gate fails it closed.  This is the last-resort safety net;
+    # build_feature_metadata() raises before reaching it for spec families (see
+    # _families_without_provenance) so the fail-close is never silent.
+    source, known_at, pit_safe = _FAMILY_PROVENANCE.get(family, ("feature_panel", "", False))
+    return FeatureMetadata(
+        name=name, family=family, source=source,
+        pit_safe=pit_safe, known_at=known_at, history_start=None,
+    )
+
+
+def _families_without_provenance(families: Iterable[str]) -> list[str]:
+    """Families that have no entry in ``_FAMILY_PROVENANCE`` (would fail-close)."""
+    return sorted({f for f in families if f not in _FAMILY_PROVENANCE})
+
+
+def build_feature_metadata() -> dict[str, FeatureMetadata]:
+    """Typed PIT/provenance metadata for every known feature column (GF-04).
+
+    Columns absent from the result are, by construction, *unregistered*:
+    callers (the coverage gate) treat them as fail-closed and lock them out of
+    the base model.
+
+    Raises
+    ------
+    ValueError
+        If any feature family reachable from the spec registry has no entry in
+        ``_FAMILY_PROVENANCE``.  Such a family would otherwise be *silently*
+        fail-closed (pit_safe=False, known_at="") -- a loud failure forces the
+        developer to declare its provenance instead.
+    """
+    families = {s.family for s in FULL_SPECS}
+    families |= {fam for _, fam in _event_family_specs()}
+    families |= {"raw_aux", "fundamental"}
+    missing = _families_without_provenance(families)
+    if missing:
+        raise ValueError(
+            f"feature families missing PIT provenance in _FAMILY_PROVENANCE: {missing}. "
+            "Add each as (source, known_at, pit_safe) so it is not silently "
+            "fail-closed out of the base/recent models."
+        )
+
+    meta: dict[str, FeatureMetadata] = {}
+    for spec in FULL_SPECS:
+        meta[spec.name] = _metadata_for_family(spec.name, spec.family)
+    for name, family in _event_family_specs():
+        meta[name] = _metadata_for_family(name, family)
+    for name in _RAW_AUX_COLUMNS:
+        meta[name] = _metadata_for_family(name, "raw_aux")
+    for name in _FUNDAMENTAL_COLUMNS:
+        meta[name] = _metadata_for_family(name, "fundamental")
+    return meta
+
+
+def feature_metadata_lookup() -> dict[str, FeatureMetadata]:
+    """Return a fresh typed-metadata dict keyed by feature name."""
+    return build_feature_metadata()
 
 
 # ---------------------------------------------------------------------------

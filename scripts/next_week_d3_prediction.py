@@ -51,7 +51,7 @@ from quant_platform.core.logging import get_logger
 from quant_platform.features.cross_sectional import build_cross_sectional_features
 from quant_platform.features.industry import build_industry_features
 from quant_platform.features.pipeline import FeaturePipeline
-from quant_platform.features.registry import DEFAULT_SPECS, compute_feature_set_id
+from quant_platform.features.registry import DEFAULT_SPECS, compute_feature_set_id, feature_metadata_lookup
 from quant_platform.evaluation.coverage_gate import (
     compute_feature_coverage_report,
     select_features_by_gate,
@@ -242,6 +242,7 @@ def main():
         panel,
         feature_cols,
         family_by_col=_feature_family_lookup(),
+        feature_metadata=feature_metadata_lookup(),
         config=_coverage_gate_config_for_universe(panel["symbol"].nunique()),
     )
     write_coverage_gate_report(

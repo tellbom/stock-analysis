@@ -198,6 +198,7 @@ def _apply_coverage_gate(
         select_features_by_gate,
         write_coverage_gate_report,
     )
+    from quant_platform.features.registry import feature_metadata_lookup
 
     family_by_col = _feature_family_lookup()
     cfg = _coverage_gate_config_for_universe(panel["symbol"].nunique())
@@ -205,6 +206,7 @@ def _apply_coverage_gate(
         panel,
         feature_cols,
         family_by_col=family_by_col,
+        feature_metadata=feature_metadata_lookup(),
         config=cfg,
     )
     out_dir = store_root / "reports"
