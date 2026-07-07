@@ -365,6 +365,20 @@ class QStockFundFlowProvider(FundFlowProvider):
     name = "qstock"
     same_source_risk = "qstock data module aggregates public web sources including Eastmoney/THS/Sina"
 
+    # FIXED (review finding #2): "ths_money" removed from this list.
+    # THS/同花顺-sourced money-flow data uses a DIFFERENT calculation
+    # methodology from Eastmoney's main_net/super_net/large_net/medium_net/
+    # small_net, and must never be silently blended into those canonical
+    # columns just because a qstock function happens to return similarly
+    # generic Chinese column names (主力净流入 etc.). Use fetch_ths_proxy()
+    # below instead, which returns ths_*-prefixed proxy fields only.
+    CANONICAL_CANDIDATES = [
+        "stock_money",
+        "stock_fund_flow",
+        "money_flow",
+        "fund_flow",
+    ]
+
     def fetch_symbol(self, symbol: str, days: int = 120) -> ProviderResult:
         try:
             import qstock as qs
@@ -372,15 +386,8 @@ class QStockFundFlowProvider(FundFlowProvider):
             raise ImportError("qstock is not installed; optional dependency: pip install qstock") from exc
 
         code = _normalise_symbol(symbol)
-        candidates = [
-            "stock_money",
-            "stock_fund_flow",
-            "money_flow",
-            "fund_flow",
-            "ths_money",
-        ]
         last_error: Exception | None = None
-        for name in candidates:
+        for name in self.CANONICAL_CANDIDATES:
             fn = getattr(qs, name, None)
             if not callable(fn):
                 continue
@@ -395,6 +402,95 @@ class QStockFundFlowProvider(FundFlowProvider):
         if last_error:
             raise RuntimeError(f"qstock provider failed: {last_error}") from last_error
         raise RuntimeError("qstock provider has no recognised fund-flow function")
+
+    def fetch_ths_proxy(self, symbol: str, days: int = 120) -> pd.DataFrame:
+        """
+        THS/同花顺 proxy money-flow data via qstock's ``ths_money``.
+
+        Returns ONLY ths_*-prefixed proxy fields (ths_in_amount,
+        ths_out_amount, ths_net_amount, ths_amount, ths_turnover_rate,
+        ths_pct_change) -- never CANONICAL_FUND_FLOW_COLUMNS. This is
+        deliberately NOT called from fetch_symbol()/routed through
+        FundFlowCollector's provider fallback chain, so it can never be
+        silently accepted as equivalent to Eastmoney-methodology data.
+        Callers that want THS proxy data must call this explicitly and
+        store it separately, mirroring how sector/concept fund-flow proxy
+        data is kept out of silver/fund_flow.
+        """
+        try:
+            import qstock as qs
+        except ImportError as exc:
+            raise ImportError("qstock is not installed; optional dependency: pip install qstock") from exc
+
+        fn = getattr(qs, "ths_money", None)
+        if not callable(fn):
+            raise RuntimeError("qstock.ths_money is not available in this qstock version")
+
+        code = _normalise_symbol(symbol)
+        df = fn(code)
+        if df is None or df.empty:
+            raise RuntimeError("empty qstock.ths_money response")
+        if days and len(df) > days:
+            df = df.tail(days)
+        return _canonicalise_ths_proxy(code, df)
+
+
+THS_PROXY_COLUMNS = [
+    "symbol",
+    "trade_date",
+    "ths_in_amount",
+    "ths_out_amount",
+    "ths_net_amount",
+    "ths_amount",
+    "ths_turnover_rate",
+    "ths_pct_change",
+    "source",
+    "raw_update_time",
+    "fetched_at",
+]
+
+
+def _canonicalise_ths_proxy(symbol: str, df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Map raw THS/同花顺 money-flow columns into ths_*-prefixed PROXY fields
+    only. Never writes to CANONICAL_FUND_FLOW_COLUMNS -- see
+    QStockFundFlowProvider.fetch_ths_proxy()'s docstring.
+    """
+    symbol = _normalise_symbol(symbol)
+    cols = {str(c).lower(): c for c in df.columns}
+    raw_cols = {str(c): c for c in df.columns}
+
+    def pick(*names: str) -> Any:
+        for name in names:
+            if name in raw_cols:
+                return raw_cols[name]
+            if name.lower() in cols:
+                return cols[name.lower()]
+        return None
+
+    date_col = pick("trade_date", "date", "日期", "净流入日期")
+    if not date_col:
+        raise RuntimeError(f"ths_proxy: no recognisable date column: {list(df.columns)}")
+
+    mapping = {
+        "ths_in_amount":     pick("ths_in_amount", "流入资金", "流入金额", "in_amount"),
+        "ths_out_amount":    pick("ths_out_amount", "流出资金", "流出金额", "out_amount"),
+        "ths_net_amount":    pick("ths_net_amount", "净流入", "净额", "net_amount"),
+        "ths_amount":        pick("ths_amount", "成交额", "amount"),
+        "ths_turnover_rate": pick("ths_turnover_rate", "换手率", "turnover_rate"),
+        "ths_pct_change":    pick("ths_pct_change", "涨跌幅", "pct_change"),
+    }
+
+    out = pd.DataFrame()
+    out["symbol"] = [symbol] * len(df)
+    out["trade_date"] = pd.to_datetime(df[date_col], errors="coerce").dt.date
+    for col, src in mapping.items():
+        out[col] = pd.to_numeric(df[src], errors="coerce") if src else pd.NA
+    out["source"] = "qstock_ths_money_proxy"
+    out["raw_update_time"] = None
+    out["fetched_at"] = dt.datetime.now(dt.timezone.utc).isoformat()
+    out = out.dropna(subset=["trade_date"]).sort_values("trade_date").reset_index(drop=True)
+    return out[THS_PROXY_COLUMNS]
 
 
 def _canonicalise_by_guess(provider: FundFlowProvider, df: pd.DataFrame, symbol: str) -> ProviderResult:
@@ -431,3 +527,49 @@ def default_fund_flow_providers() -> list[FundFlowProvider]:
     return [
         EastmoneyH5FundFlowProvider(),
     ]
+
+
+def cross_validate_h5_vs_push2his(
+    symbol: str,
+    tolerance: float = 1.0,
+    sample_days: int = 5,
+) -> dict:
+    """
+    Review finding #7: EastmoneyH5FundFlowProvider assumes the emdatah5
+    host's f51-f63 field ordering is identical to push2his's, even though
+    they are different Eastmoney hosts/endpoints. That assumption has
+    never been independently verified against Eastmoney's own
+    documentation. This compares main_net for the most recent overlapping
+    dates between the two providers so a silent field-order mismatch
+    (e.g. medium/large swapped) is detectable rather than trusted blindly.
+
+    This is a best-effort diagnostic, not a hard gate: call sites should
+    treat a "MISMATCH" status as a strong signal to investigate, not
+    necessarily a fatal error (a genuine small revision between the two
+    fetch timestamps could also produce a small diff, hence `tolerance`).
+
+    Returns
+    -------
+    dict with keys: symbol, status ("ok" | "MISMATCH" | "no_overlapping_dates"),
+    n_compared, n_mismatched, max_diff, detail.
+    """
+    h5_result = EastmoneyH5FundFlowProvider().fetch_symbol(symbol, days=sample_days + 5)
+    native_result = NativeEastmoneyFundFlowProvider().fetch_symbol(symbol, days=sample_days + 5)
+
+    h5 = h5_result.frame[["trade_date", "main_net"]].rename(columns={"main_net": "main_net_h5"})
+    native = native_result.frame[["trade_date", "main_net"]].rename(columns={"main_net": "main_net_push2his"})
+    merged = h5.merge(native, on="trade_date", how="inner").tail(sample_days).copy()
+
+    if merged.empty:
+        return {"symbol": symbol, "status": "no_overlapping_dates", "n_compared": 0}
+
+    merged["diff"] = (merged["main_net_h5"] - merged["main_net_push2his"]).abs()
+    mismatches = merged[merged["diff"] > tolerance]
+    return {
+        "symbol": symbol,
+        "status": "ok" if mismatches.empty else "MISMATCH",
+        "n_compared": int(len(merged)),
+        "n_mismatched": int(len(mismatches)),
+        "max_diff": float(merged["diff"].max()),
+        "detail": merged.to_dict("records") if not mismatches.empty else None,
+    }

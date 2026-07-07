@@ -122,7 +122,7 @@ def _run_event3_collectors(symbols: list[str], actual_as_of: dt.date, trading_da
     summary: dict[str, dict] = {}
 
     ann = AnnouncementEventsCollector(STORE_ROOT)
-    ann_res = ann.run(symbols, start_date=start, end_date=end, overwrite=False)
+    ann_res = ann.run(symbols, start_date=start, end_date=end, trading_dates=trading_dates, overwrite=False)
     summary["announcement_events"] = {
         "ok_files_or_empty": int(sum(1 for v in ann_res.values() if v >= 0)),
         "failed": int(sum(1 for v in ann_res.values() if v < 0)),

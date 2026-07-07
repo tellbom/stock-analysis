@@ -24,6 +24,7 @@ _EMPTY_COLUMNS = [
     "symbol",
     "announce_date",
     "event_date",
+    "available_date",
     "title",
     "category",
     "category_code",
@@ -43,6 +44,37 @@ def _empty_frame(symbol: str) -> pd.DataFrame:
     df = pd.DataFrame(columns=_EMPTY_COLUMNS)
     df["symbol"] = pd.Series(dtype=str)
     return df.assign(symbol=_normalise_symbol(symbol)).iloc[0:0]
+
+
+def _next_trading_day_map(calendar_dates: list[dt.date]) -> dict[dt.date, dt.date]:
+    dates = sorted(pd.to_datetime(calendar_dates).date)
+    return {dates[i]: dates[i + 1] for i in range(len(dates) - 1)}
+
+
+def _compute_available_date(event_dates: pd.Series, next_map: dict) -> pd.Series:
+    """
+    T+1 availability: an event on date T is conservatively treated as
+    unavailable until the next trading day.
+
+    FIXED (review finding #9): previously (here and in dragon_tiger /
+    block_trade collectors) dates beyond the end of the supplied
+    trading-day calendar fell back to SAME-DAY availability
+    (`.fillna(event_date)`), which is a PIT-safety violation at the
+    calendar boundary. This falls back to event_date + 1 CALENDAR day
+    instead (never same-day) and logs a warning so callers know to
+    extend their trading-day calendar.
+    """
+    available = event_dates.map(next_map)
+    missing = available.isna() & event_dates.notna()
+    if missing.any():
+        logger.warning(
+            "_compute_available_date: %d date(s) beyond the supplied trading_dates "
+            "calendar; falling back to date + 1 calendar day (extend the calendar "
+            "passed to run() to avoid this)",
+            int(missing.sum()),
+        )
+    fallback = event_dates.map(lambda d: d + dt.timedelta(days=1) if pd.notna(d) else d)
+    return available.where(~missing, fallback)
 
 
 _CNINFO_STOCK_URL = "http://www.cninfo.com.cn/new/data/szse_stock.json"
@@ -145,6 +177,7 @@ def _fetch_announcement_events(
             "symbol": _normalise_symbol(row.get("secCode") or symbol),
             "announce_date": announce_date,
             "event_date": announce_date,
+            "available_date": pd.NaT,  # filled in by _write_one() via trading_dates
             "title": str(row.get("announcementTitle") or row.get("shortTitle") or ""),
             "category": str(row.get("announcementTypeName") or row.get("columnId") or ""),
             "category_code": str(row.get("announcementType") or ""),
@@ -172,9 +205,11 @@ class AnnouncementEventsCollector:
         *,
         start_date: str,
         end_date: str,
+        trading_dates: list[dt.date],
         overwrite: bool = False,
     ) -> dict[str, int]:
         _load_cninfo_stock_meta()
+        next_map = _next_trading_day_map(trading_dates)
         results: dict[str, int] = {}
         work = []
         for raw_symbol in symbols:
@@ -192,7 +227,7 @@ class AnnouncementEventsCollector:
                 symbol = futures[future]
                 try:
                     fetched = future.result()
-                    results[symbol] = self._write_one(symbol, fetched, overwrite)
+                    results[symbol] = self._write_one(symbol, fetched, overwrite, next_map)
                 except Exception as exc:
                     logger.warning("%s: announcement fetch failed: %s", symbol, exc)
                     results[symbol] = -1
@@ -203,24 +238,56 @@ class AnnouncementEventsCollector:
         return results
 
     def _is_existing_current(self, symbol: str, end_date: str) -> bool:
+        """
+        Return True only if the existing parquet's announcement coverage
+        already reaches end_date.
+
+        FIXED (review finding #1): previously this returned True for ANY
+        existing non-empty parquet regardless of end_date (the parameter
+        was accepted but never used, and `len(df) >= 0` is a tautology --
+        always True). That meant a symbol was refreshed exactly once, ever,
+        and every subsequent run silently reused arbitrarily stale data.
+
+        This now reads `announce_date` (not `fetched_at`) and only skips
+        the refetch if the latest announcement already on disk is at or
+        after end_date. If there simply were no new announcements between
+        the last fetch and end_date, this will trigger one "unnecessary"
+        refetch that finds nothing new -- a safe outcome, unlike silently
+        skipping a refetch when new data actually exists.
+        """
         path = announcement_events_path(self.store_root, symbol)
         if not path.exists():
             return False
         try:
-            df = pd.read_parquet(path, columns=["fetched_at"])
-            return len(df) >= 0 and path.stat().st_size > 0
+            end = pd.to_datetime(end_date).date()
+            df = pd.read_parquet(path, columns=["announce_date"])
+            if df.empty:
+                return False
+            dates = pd.to_datetime(df["announce_date"], errors="coerce").dt.date.dropna()
+            if dates.empty:
+                return False
+            return bool(dates.max() >= end)
         except Exception:
             return False
 
-    def _write_one(self, symbol: str, fetched: pd.DataFrame, overwrite: bool) -> int:
+    def _write_one(self, symbol: str, fetched: pd.DataFrame, overwrite: bool, next_map: dict) -> int:
         out_path = announcement_events_path(self.store_root, symbol)
         out_path.parent.mkdir(parents=True, exist_ok=True)
+
+        if not fetched.empty:
+            fetched = fetched.copy()
+            fetched["available_date"] = _compute_available_date(fetched["announce_date"], next_map)
 
         existing = pd.DataFrame(columns=_EMPTY_COLUMNS)
         if out_path.exists() and not overwrite:
             existing = pd.read_parquet(out_path)
             if not existing.empty:
                 existing["announce_date"] = pd.to_datetime(existing["announce_date"], errors="coerce").dt.date
+                if "available_date" not in existing.columns:
+                    # Backfill for parquet written before available_date existed.
+                    existing["available_date"] = _compute_available_date(existing["announce_date"], next_map)
+                else:
+                    existing["available_date"] = pd.to_datetime(existing["available_date"], errors="coerce").dt.date
 
         combined = fetched if overwrite or existing.empty else pd.concat([existing, fetched], ignore_index=True)
         if combined.empty:
@@ -243,4 +310,6 @@ def load_announcement_events(store_root: Path | str, symbol: str) -> pd.DataFram
     df = pd.read_parquet(path)
     if not df.empty:
         df["announce_date"] = pd.to_datetime(df["announce_date"], errors="coerce").dt.date
+        if "available_date" in df.columns:
+            df["available_date"] = pd.to_datetime(df["available_date"], errors="coerce").dt.date
     return df

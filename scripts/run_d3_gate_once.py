@@ -267,22 +267,34 @@ def _top_symbols(df: pd.DataFrame, score_col: str, n: int = 20) -> list[str]:
     return df.sort_values(score_col, ascending=False)["symbol"].head(n).astype(str).tolist()
 
 
-def _load_emdatah5_fund_flow_gate() -> dict:
-    path = REPORT_DIR / "fund_flow_emdatah5_coverage_gate.csv"
-    if not path.exists():
-        return {"path": str(path), "status": "missing"}
-    df = pd.read_csv(path)
-    if df.empty:
-        return {"path": str(path), "status": "empty"}
-    row = df.iloc[0].to_dict()
+def _emdatah5_fund_flow_gate_from_this_run(recent_gate: pd.DataFrame, family_by_col: dict) -> dict:
+    """
+    Build the fund-flow gate summary from THIS RUN's recent_gate coverage
+    report, not a persisted CSV from some earlier, unrelated run.
+
+    FIXED (review finding #4): the previous `_load_emdatah5_fund_flow_gate`
+    read `REPORT_DIR / "fund_flow_emdatah5_coverage_gate.csv"` -- whatever
+    happened to be on disk from a prior run/step -- and embedded it in
+    this run's report/JSON as though it reflected the current fetch. That
+    field could silently disagree with `flow_in_recent`/`recent_gate`
+    (which ARE computed live, correctly, a few lines below in main()),
+    giving a false impression of freshness. This function derives the
+    same summary shape directly from the live `recent_gate` DataFrame
+    already computed this run.
+    """
+    if recent_gate.empty:
+        return {"status": "no_candidates_this_run"}
+    flow_rows = recent_gate[recent_gate["feature_name"].map(lambda c: family_by_col.get(c) == "flow")]
+    if flow_rows.empty:
+        return {"status": "no_flow_candidates_this_run"}
+    row = flow_rows.iloc[0]
     return {
-        "path": str(path),
-        "covered_symbols": int(row.get("covered_symbols", 0)),
-        "latest_available_date": str(row.get("latest_available_date", "")),
+        "status": "computed_this_run",
         "recent_symbol_coverage": int(row.get("recent_symbol_coverage", 0)),
+        "latest_available_date": str(row.get("latest_available_date", "")),
         "recent_20d_avg_symbol_coverage": float(row.get("recent_20d_avg_symbol_coverage", 0.0)),
         "available_trading_days": int(row.get("available_trading_days", 0)),
-        "field_missing_rate": float(df["missing_rate"].mean()) if "missing_rate" in df.columns else None,
+        "field_missing_rate": float(flow_rows["overall_missing_rate"].mean()),
         "is_allowed_for_recent_model": bool(row.get("is_allowed_for_recent_model", False)),
         "rejection_reason": str(row.get("rejection_reason", "")),
     }
@@ -358,7 +370,7 @@ def main() -> int:
     flow_cols = [c for c in recent_candidates if family_by_col.get(c) == "flow" or "flow" in c]
     flow_in_recent = [c for c in recent_features if c in flow_cols]
     flow_in_base = [c for c in base_features if c in flow_cols]
-    fund_flow_gate = _load_emdatah5_fund_flow_gate()
+    fund_flow_gate = _emdatah5_fund_flow_gate_from_this_run(recent_gate, family_by_col)
     gate_mode = "fund_flow_enhanced_gate" if flow_in_recent else "standard_gate"
 
     base_feature_cols_path = REPORT_DIR / f"D3_base_X_train_columns_{date_tag}.csv"

@@ -76,10 +76,10 @@ LOCKUP_SPECS: list[FeatureSpec] = [
 
 
 ANNOUNCEMENT_EVENT_SPECS: list[FeatureSpec] = [
-    FeatureSpec("announcement_count_3d", "announcement_events", ("announce_date",), 3, "count announcements PIT 3d", warmup=0),
-    FeatureSpec("announcement_count_5d", "announcement_events", ("announce_date",), 5, "count announcements PIT 5d", warmup=0),
-    FeatureSpec("announcement_count_10d", "announcement_events", ("announce_date",), 10, "count announcements PIT 10d", warmup=0),
-    FeatureSpec("has_announcement_3d", "announcement_events", ("announce_date",), 3, "any announcement PIT 3d", warmup=0),
+    FeatureSpec("announcement_count_3d", "announcement_events", ("available_date",), 3, "count announcements PIT 3d (T+1 available_date)", warmup=0),
+    FeatureSpec("announcement_count_5d", "announcement_events", ("available_date",), 5, "count announcements PIT 5d (T+1 available_date)", warmup=0),
+    FeatureSpec("announcement_count_10d", "announcement_events", ("available_date",), 10, "count announcements PIT 10d (T+1 available_date)", warmup=0),
+    FeatureSpec("has_announcement_3d", "announcement_events", ("available_date",), 3, "any announcement PIT 3d (T+1 available_date)", warmup=0),
     FeatureSpec("has_major_event_10d", "announcement_events", ("title", "category"), 10, "major event announcement PIT 10d", warmup=0),
     FeatureSpec("has_risk_announcement_5d", "announcement_events", ("title", "category"), 5, "risk announcement PIT 5d", warmup=0),
     FeatureSpec("has_financial_report_30d", "announcement_events", ("title", "category"), 30, "financial report announcement PIT 30d", warmup=0),
@@ -303,6 +303,24 @@ def build_event3_features(
 
     if not ann.empty:
         ann["announce_date"] = pd.to_datetime(ann["announce_date"], errors="coerce").dt.date
+        # FIXED (review finding #5): announcement window masks previously
+        # used announce_date directly (same-day inclusive), unlike
+        # dragon_tiger/block_trade below, which correctly use a T+1
+        # available_date. cninfo announcements are frequently filed
+        # during/after market hours, so same-day announce_date risked
+        # leaking same-day (or later) disclosures into date-T features.
+        # available_date is populated by AnnouncementEventsCollector
+        # (T+1 trading day); fall back to announce_date+1 calendar day
+        # only for older parquet written before available_date existed.
+        if "available_date" in ann.columns:
+            ann["available_date"] = pd.to_datetime(ann["available_date"], errors="coerce").dt.date
+        else:
+            ann["available_date"] = ann["announce_date"].map(
+                lambda d: d + pd.Timedelta(days=1) if pd.notna(d) else d
+            )
+        ann["available_date"] = ann["available_date"].fillna(
+            ann["announce_date"].map(lambda d: d + pd.Timedelta(days=1) if pd.notna(d) else d)
+        )
         ann["_text"] = (
             ann.get("title", "").fillna("").astype(str)
             + " "
@@ -328,7 +346,7 @@ def build_event3_features(
                 blk[col] = 0.0
             blk[col] = pd.to_numeric(blk[col], errors="coerce")
 
-    ann_by_sym = {sym: grp.dropna(subset=["announce_date"]) for sym, grp in ann.groupby("symbol")} if not ann.empty else {}
+    ann_by_sym = {sym: grp.dropna(subset=["available_date"]) for sym, grp in ann.groupby("symbol")} if not ann.empty else {}
     dtg_by_sym = {sym: grp.dropna(subset=["available_date"]) for sym, grp in dtg.groupby("symbol")} if not dtg.empty else {}
     blk_by_sym = {sym: grp.dropna(subset=["available_date"]) for sym, grp in blk.groupby("symbol")} if not blk.empty else {}
 
@@ -339,13 +357,13 @@ def build_event3_features(
         a = ann_by_sym.get(sym)
         if a is not None and not a.empty:
             for days, col in [(3, "announcement_count_3d"), (5, "announcement_count_5d"), (10, "announcement_count_10d")]:
-                mask = _window_mask(a["announce_date"], as_of, days)
+                mask = _window_mask(a["available_date"], as_of, days)
                 df.at[idx, col] = float(mask.sum())
             df.at[idx, "has_announcement_3d"] = float(df.at[idx, "announcement_count_3d"] > 0)
-            df.at[idx, "has_major_event_10d"] = float((_window_mask(a["announce_date"], as_of, 10) & a["_is_major"]).any())
-            df.at[idx, "has_risk_announcement_5d"] = float((_window_mask(a["announce_date"], as_of, 5) & a["_is_risk"]).any())
-            df.at[idx, "has_financial_report_30d"] = float((_window_mask(a["announce_date"], as_of, 30) & a["_is_financial"]).any())
-            df.at[idx, "has_reduction_notice_30d"] = float((_window_mask(a["announce_date"], as_of, 30) & a["_is_reduction"]).any())
+            df.at[idx, "has_major_event_10d"] = float((_window_mask(a["available_date"], as_of, 10) & a["_is_major"]).any())
+            df.at[idx, "has_risk_announcement_5d"] = float((_window_mask(a["available_date"], as_of, 5) & a["_is_risk"]).any())
+            df.at[idx, "has_financial_report_30d"] = float((_window_mask(a["available_date"], as_of, 30) & a["_is_financial"]).any())
+            df.at[idx, "has_reduction_notice_30d"] = float((_window_mask(a["available_date"], as_of, 30) & a["_is_reduction"]).any())
 
         d = dtg_by_sym.get(sym)
         if d is not None and not d.empty:
@@ -391,7 +409,8 @@ def _load_event_panel(store_root: Path | str, symbols: list[str], path_func, dat
 def load_announcement_events_panel(store_root: Path | str, symbols: list[str]) -> pd.DataFrame:
     from quant_platform.store.lake import announcement_events_path
 
-    return _load_event_panel(store_root, symbols, announcement_events_path, ("announce_date", "event_date"))
+    return _load_event_panel(store_root, symbols, announcement_events_path,
+                              ("announce_date", "event_date", "available_date"))
 
 
 def load_dragon_tiger_panel(store_root: Path | str, symbols: list[str]) -> pd.DataFrame:

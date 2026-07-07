@@ -38,8 +38,24 @@ import pandas as pd
 
 from quant_platform.features.registry import FeatureSpec
 from quant_platform.core.logging import get_logger
+from quant_platform.ingest.fund_flow_providers import EMDATAH5_SOURCE
 
 logger = get_logger(__name__)
+
+# Review finding #3: the coverage gate and this module's own feature
+# builder previously had zero source-awareness -- load_flow_panel read
+# every row in silver/fund_flow regardless of which provider wrote it,
+# and build_flow_features dropped the `source` column before any
+# downstream consumer (including the coverage gate) ever saw it. That
+# meant a stale row written by an old/deprecated provider (or, if ever
+# wired in, an unverified-methodology fallback like qstock) could not be
+# told apart from a fresh EastmoneyH5FundFlowProvider row -- both counted
+# identically toward coverage.
+#
+# DEFAULT_ALLOWED_FUND_FLOW_SOURCES defines the currently-trusted
+# provider(s). Kept here (not duplicated) by importing EMDATAH5_SOURCE
+# directly from ingest.fund_flow_providers, the single source of truth.
+DEFAULT_ALLOWED_FUND_FLOW_SOURCES = frozenset({EMDATAH5_SOURCE})
 
 # ---------------------------------------------------------------------------
 # FeatureSpec declarations
@@ -77,6 +93,7 @@ def build_flow_features(
     panel: pd.DataFrame,
     flow_panel: pd.DataFrame,
     valuation_panel: pd.DataFrame | None = None,
+    allowed_sources: frozenset[str] | set[str] | None = DEFAULT_ALLOWED_FUND_FLOW_SOURCES,
 ) -> pd.DataFrame:
     """
     Add cross-sectional capital flow features to the universe panel.
@@ -92,6 +109,10 @@ def build_flow_features(
         Used to get float_mcap_yi for normalisation.  If None, flow values
         are normalised by their own cross-sectional mean instead (weaker but
         functional fallback).
+    allowed_sources : set[str] | None
+        FIXED (review finding #3): defense-in-depth source filter applied
+        here too (not just in load_flow_panel), in case flow_panel was
+        assembled some other way. Pass None to disable.
 
     Returns
     -------
@@ -110,6 +131,15 @@ def build_flow_features(
     # --- Prepare flow data ---
     flow = flow_panel.copy()
     flow["date"] = pd.to_datetime(flow["date"]).dt.date
+    if allowed_sources is not None and "source" in flow.columns:
+        before = len(flow)
+        flow = flow[flow["source"].isin(allowed_sources)]
+        dropped = before - len(flow)
+        if dropped:
+            logger.debug(
+                "build_flow_features: dropped %d/%d flow rows from disallowed "
+                "sources (allowed=%s)", dropped, before, sorted(allowed_sources),
+            )
     flow_cols = ["symbol", "date", "main_net", "small_net", "mid_net", "large_net", "super_net"]
     flow = flow[[c for c in flow_cols if c in flow.columns]]
 
@@ -206,8 +236,22 @@ def build_flow_features(
 def load_flow_panel(
     store_root: Path | str,
     symbols: list[str],
+    allowed_sources: frozenset[str] | set[str] | None = DEFAULT_ALLOWED_FUND_FLOW_SOURCES,
 ) -> pd.DataFrame:
-    """Load and concatenate silver fund flow Parquets for all symbols."""
+    """
+    Load and concatenate silver fund flow Parquets for all symbols.
+
+    Parameters
+    ----------
+    allowed_sources : set[str] | None
+        FIXED (review finding #3): if given (the default), rows whose
+        `source` column is not in this set are dropped BEFORE they ever
+        reach feature construction or the coverage gate -- e.g. a stale
+        row left over from an old/deprecated provider, or an
+        unverified-methodology fallback, can no longer masquerade as
+        current EMDATAH5 coverage. Pass None to disable filtering
+        (not recommended outside of tests/diagnostics).
+    """
     from quant_platform.store.lake import fund_flow_path
 
     store_root = Path(store_root)
@@ -218,6 +262,15 @@ def load_flow_panel(
             try:
                 df = pd.read_parquet(p)
                 df["date"] = pd.to_datetime(df["date"]).dt.date
+                if allowed_sources is not None and "source" in df.columns:
+                    before = len(df)
+                    df = df[df["source"].isin(allowed_sources)]
+                    dropped = before - len(df)
+                    if dropped:
+                        logger.debug(
+                            "%s: dropped %d/%d fund_flow rows from disallowed sources "
+                            "(allowed=%s)", symbol, dropped, before, sorted(allowed_sources),
+                        )
                 frames.append(df)
             except Exception as exc:
                 logger.warning("Could not load flow for %s: %s", symbol, exc)

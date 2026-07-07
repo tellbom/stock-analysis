@@ -124,8 +124,12 @@ class SectorFundFlowCollector:
         combined["date"] = combined["trade_date"]
         combined = (
             combined.dropna(subset=["trade_date"])
-            .sort_values("trade_date")
+            # FIXED (review finding #6): drop_duplicates BEFORE sort_values,
+            # same reasoning as flow_collector.py -- pandas' default sort
+            # is not stable, so keep="last" after sorting doesn't reliably
+            # prefer the freshly-fetched row for overlapping trade_dates.
             .drop_duplicates(["name", "trade_date"], keep="last")
+            .sort_values("trade_date")
             .reset_index(drop=True)
         )
         path.parent.mkdir(parents=True, exist_ok=True)

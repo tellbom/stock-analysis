@@ -51,6 +51,28 @@ def _next_trading_day_map(calendar_dates: list[dt.date]) -> dict[dt.date, dt.dat
     return {dates[i]: dates[i + 1] for i in range(len(dates) - 1)}
 
 
+def _compute_available_date(trade_dates: pd.Series, next_map: dict) -> pd.Series:
+    """
+    T+1 availability. FIXED (review finding #9): previously fell back to
+    SAME-DAY availability (`.fillna(trade_date)`) for any trade_date at or
+    beyond the end of the supplied trading_dates calendar -- a PIT-safety
+    violation at the calendar boundary. Falls back to trade_date + 1
+    CALENDAR day instead (never same-day), and logs a warning so callers
+    know to extend their trading-day calendar.
+    """
+    available = trade_dates.map(next_map)
+    missing = available.isna() & trade_dates.notna()
+    if missing.any():
+        logger.warning(
+            "_compute_available_date: %d trade_date(s) beyond the supplied "
+            "trading_dates calendar; falling back to trade_date + 1 calendar "
+            "day (extend the calendar passed to run() to avoid this)",
+            int(missing.sum()),
+        )
+    fallback = trade_dates.map(lambda d: d + dt.timedelta(days=1) if pd.notna(d) else d)
+    return available.where(~missing, fallback)
+
+
 def _datacenter_get(params: dict, retries: int = 3) -> dict:
     import time
 
@@ -122,8 +144,7 @@ def _fetch_block_trades(start_date: str, end_date: str, trading_dates: list[dt.d
     out["seller"] = df.get("seller", pd.Series("", index=df.index)).fillna("").astype(str)
     out = out.dropna(subset=["trade_date"]).copy()
     next_map = _next_trading_day_map(trading_dates)
-    out["available_date"] = out["trade_date"].map(next_map)
-    out["available_date"] = out["available_date"].fillna(out["trade_date"])
+    out["available_date"] = _compute_available_date(out["trade_date"], next_map)
     out["source"] = "datacenter-web"
     out["raw_update_time"] = pd.NaT
     out["fetched_at"] = dt.datetime.now(dt.timezone.utc).isoformat()

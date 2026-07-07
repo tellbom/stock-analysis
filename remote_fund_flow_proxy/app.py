@@ -4,6 +4,12 @@ Lightweight Eastmoney historical fund flow HTTP proxy.
 Deploy on a machine that can reach push2his.eastmoney.com reliably.
 Local clients call this proxy instead of hitting Eastmoney directly.
 
+FIXED (review finding #8): this proxy calls the H5/ZJLX endpoint
+(emdatah5.eastmoney.com), so responses are labelled
+"eastmoney_emdatah5_http_remote", matching EM_BASE_URL, and
+downstream source-based filtering (e.g. the fund_flow coverage gate) isn't
+fed a mislabeled provenance.
+
 Start:
     python3 app.py
 """
@@ -135,7 +141,7 @@ def fetch_one(symbol):
                 return {
                     "symbol": code, "success": True, "rows": 0,
                     "min_date": None, "max_date": None,
-                    "source": "eastmoney_push2his_http_remote",
+                    "source": "eastmoney_emdatah5_http_remote",
                     "data": [], "error": None,
                 }
 
@@ -150,7 +156,7 @@ def fetch_one(symbol):
             return {
                 "symbol": code, "success": True, "rows": n,
                 "min_date": min_date, "max_date": max_date,
-                "source": "eastmoney_push2his_http_remote",
+                "source": "eastmoney_emdatah5_http_remote",
                 "data": records, "error": None,
             }
 
@@ -166,7 +172,7 @@ def fetch_one(symbol):
     return {
         "symbol": code, "success": False, "rows": 0,
         "min_date": None, "max_date": None,
-        "source": "eastmoney_push2his_http_remote",
+        "source": "eastmoney_emdatah5_http_remote",
         "data": [], "error": last_error,
     }
 

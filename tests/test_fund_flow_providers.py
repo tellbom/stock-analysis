@@ -91,6 +91,65 @@ def test_qstock_provider_smoke_with_mock_module(monkeypatch):
     assert result.frame.iloc[0]["small_net"] == -3.0
 
 
+def test_qstock_provider_does_not_route_ths_money_into_canonical_fields(monkeypatch):
+    """
+    Review finding #2: ths_money must NEVER be one of fetch_symbol()'s
+    canonical-mapping candidates, even if it's the only recognised
+    function qstock exposes. fetch_symbol() must fail loudly rather than
+    silently canonicalise THS-methodology data.
+    """
+    from quant_platform.ingest.fund_flow_providers import QStockFundFlowProvider
+
+    mod = types.SimpleNamespace()
+
+    def ths_money(code):
+        return pd.DataFrame({
+            "日期": ["2026-07-03"],
+            "主力净流入": [999.0],  # would look like a plausible canonical value
+        })
+
+    mod.ths_money = ths_money
+    monkeypatch.setitem(sys.modules, "qstock", mod)
+
+    assert "ths_money" not in QStockFundFlowProvider.CANONICAL_CANDIDATES
+    with pytest.raises(RuntimeError, match="no recognised fund-flow function"):
+        QStockFundFlowProvider().fetch_symbol("000001.SZ")
+
+
+def test_qstock_ths_proxy_uses_proxy_fields_only(monkeypatch):
+    """
+    Review finding #2: fetch_ths_proxy() must return ths_*-prefixed proxy
+    fields only, never CANONICAL_FUND_FLOW_COLUMNS names.
+    """
+    from quant_platform.ingest.fund_flow_providers import (
+        CANONICAL_FUND_FLOW_COLUMNS,
+        THS_PROXY_COLUMNS,
+        QStockFundFlowProvider,
+    )
+
+    mod = types.SimpleNamespace()
+
+    def ths_money(code):
+        return pd.DataFrame({
+            "日期": ["2026-07-03"],
+            "流入资金": [12.0],
+            "流出资金": [5.0],
+            "净流入": [7.0],
+        })
+
+    mod.ths_money = ths_money
+    monkeypatch.setitem(sys.modules, "qstock", mod)
+
+    out = QStockFundFlowProvider().fetch_ths_proxy("000001.SZ")
+    assert list(out.columns) == THS_PROXY_COLUMNS
+    assert "main_net" not in out.columns
+    assert not (set(out.columns) & set(CANONICAL_FUND_FLOW_COLUMNS) - {"symbol", "trade_date", "source", "raw_update_time", "fetched_at"})
+    assert out.iloc[0]["ths_in_amount"] == 12.0
+    assert out.iloc[0]["ths_out_amount"] == 5.0
+    assert out.iloc[0]["ths_net_amount"] == 7.0
+    assert out.iloc[0]["source"] == "qstock_ths_money_proxy"
+
+
 def test_collector_routes_to_second_provider_and_reports_first_failure(tmp_path, monkeypatch):
     from quant_platform.ingest.flow_collector import FundFlowCollector
 

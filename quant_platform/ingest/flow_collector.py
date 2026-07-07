@@ -70,6 +70,11 @@ _REFETCH_THRESHOLD_DAYS = 60
 _FETCH_RETRIES = 3
 _FETCH_BACKOFF_SECONDS = (1.0, 2.0, 4.0)
 
+# Review finding #7: how often to cross-check the H5 provider's field-order
+# assumption against push2his (every Nth symbol, not every symbol, to limit
+# the extra network cost of a second fetch).
+_H5_CROSS_CHECK_SAMPLE_EVERY = 25
+
 
 @dataclass
 class FundFlowFailure:
@@ -308,6 +313,15 @@ class FundFlowCollector:
                         "%s: provider=%s wrote=%d missing_fields=%s",
                         symbol, provider_name, n, missing_fields,
                     )
+                # FIXED (review finding #7): EastmoneyH5FundFlowProvider
+                # assumes the emdatah5 host's f51-f63 fields are ordered
+                # identically to push2his's -- an assumption that has
+                # never been independently verified. Periodically (not
+                # every symbol, to limit extra network cost) cross-check
+                # a sample against push2his and log loudly on mismatch,
+                # rather than trusting the field order silently forever.
+                if provider_name == "eastmoney_emdatah5" and (i % _H5_CROSS_CHECK_SAMPLE_EVERY) == 0:
+                    self._cross_check_h5_field_order(symbol)
             except Exception as exc:
                 logger.error("%s: fund flow collection failed: %s", symbol, exc)
                 results[symbol] = 0
@@ -332,6 +346,22 @@ class FundFlowCollector:
         if failures:
             self._write_failure_report(failures)
         return results
+
+    @staticmethod
+    def _cross_check_h5_field_order(symbol: str) -> None:
+        """Best-effort, non-fatal sanity check -- see run()'s call site."""
+        try:
+            from quant_platform.ingest.fund_flow_providers import cross_validate_h5_vs_push2his
+            check = cross_validate_h5_vs_push2his(symbol)
+            if check.get("status") == "MISMATCH":
+                logger.warning(
+                    "H5/push2his field-order cross-check MISMATCH for %s: %s",
+                    symbol, check,
+                )
+            else:
+                logger.debug("H5/push2his field-order cross-check OK for %s: %s", symbol, check)
+        except Exception as exc:
+            logger.debug("H5/push2his cross-check skipped for %s: %s", symbol, exc)
 
     # ------------------------------------------------------------------
     # Internal
@@ -421,9 +451,17 @@ class FundFlowCollector:
             n_new = int((~new_df["date"].isin(known_dates)).sum())
             combined = pd.concat([existing, new_df], ignore_index=True)
 
+        # FIXED (review finding #6): drop_duplicates BEFORE sort_values.
+        # `combined` here is still in its natural concat order (existing
+        # rows, then freshly-fetched rows) -- drop_duplicates(keep="last")
+        # correctly prefers the fresh row for any overlapping date while
+        # that order is still meaningful. Previously this sorted first;
+        # pandas' default sort (kind="quicksort") is NOT stable, so
+        # keep="last" after sorting was not reliably preferring fresh data
+        # for the ~120 days of overlap that occur on every incremental run.
         combined = (
-            combined.sort_values("date")
-                    .drop_duplicates(subset=["symbol", "date"], keep="last")
+            combined.drop_duplicates(subset=["symbol", "date"], keep="last")
+                    .sort_values("date")
                     .reset_index(drop=True)
         )
         self._backup_existing(symbol, out_path)

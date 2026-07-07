@@ -4,6 +4,20 @@ Feature coverage gate for base/recent model separation.
 The gate is deliberately data-shape based: it does not decide whether a
 feature has alpha.  It decides whether a feature is eligible for a long-history
 base model, a short-window recent model, or prediction-only monitoring.
+
+Source purity (review finding #3)
+----------------------------------
+This module intentionally stays family/data-shape based and does not
+inspect a `source` column itself -- by the time a feature column reaches
+here, per-row provenance has usually already been aggregated away (e.g.
+cs_main_flow_rank_1d is a cross-sectional rank, not a single source
+value). Source-purity filtering (e.g. excluding stale/wrong-provider
+fund_flow rows) is enforced UPSTREAM instead, in the per-family panel
+loader -- see quant_platform.features.flow.load_flow_panel's
+`allowed_sources` parameter, which defaults to only the currently-trusted
+EMDATAH5 provider. Callers building a panel for this gate should load
+flow/event data through those family-specific loaders (which filter by
+source) rather than reading silver parquet directly.
 """
 
 from __future__ import annotations
