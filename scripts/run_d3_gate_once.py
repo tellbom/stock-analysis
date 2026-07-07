@@ -180,6 +180,11 @@ def _build_panel(
 
 
 def _feature_importance_top20(model, feature_cols: list[str]) -> pd.DataFrame:
+    imp = _feature_importance_all(model, feature_cols)
+    return imp.head(20).reset_index(drop=True)
+
+
+def _feature_importance_all(model, feature_cols: list[str]) -> pd.DataFrame:
     lgbm = model.named_steps.get("lgbm")
     if lgbm is None or not hasattr(lgbm, "feature_importances_"):
         return pd.DataFrame(columns=["feature", "importance"])
@@ -187,7 +192,7 @@ def _feature_importance_top20(model, feature_cols: list[str]) -> pd.DataFrame:
         "feature": feature_cols,
         "importance": lgbm.feature_importances_,
     })
-    return imp.sort_values("importance", ascending=False).head(20).reset_index(drop=True)
+    return imp.sort_values("importance", ascending=False).reset_index(drop=True)
 
 
 def _score_model(
@@ -198,7 +203,7 @@ def _score_model(
     train_start: dt.date | None,
     params: dict,
     score_prefix: str,
-) -> tuple[pd.DataFrame, dict, pd.DataFrame]:
+) -> tuple[pd.DataFrame, dict, pd.DataFrame, pd.DataFrame]:
     train = panel[(panel["date"] < actual_as_of) & panel[LABEL_COL].notna()].copy()
     if train_start is not None:
         train = train[train["date"] >= train_start].copy()
@@ -231,7 +236,8 @@ def _score_model(
         "prediction_rows": int(len(pred)),
         "feature_count": int(len(feature_cols)),
     }
-    return scored, meta, _feature_importance_top20(model, feature_cols)
+    importance_all = _feature_importance_all(model, feature_cols)
+    return scored, meta, importance_all.head(20).reset_index(drop=True), importance_all
 
 
 def _risk_flags(panel: pd.DataFrame, actual_as_of: dt.date) -> pd.DataFrame:
@@ -261,6 +267,27 @@ def _top_symbols(df: pd.DataFrame, score_col: str, n: int = 20) -> list[str]:
     return df.sort_values(score_col, ascending=False)["symbol"].head(n).astype(str).tolist()
 
 
+def _load_emdatah5_fund_flow_gate() -> dict:
+    path = REPORT_DIR / "fund_flow_emdatah5_coverage_gate.csv"
+    if not path.exists():
+        return {"path": str(path), "status": "missing"}
+    df = pd.read_csv(path)
+    if df.empty:
+        return {"path": str(path), "status": "empty"}
+    row = df.iloc[0].to_dict()
+    return {
+        "path": str(path),
+        "covered_symbols": int(row.get("covered_symbols", 0)),
+        "latest_available_date": str(row.get("latest_available_date", "")),
+        "recent_symbol_coverage": int(row.get("recent_symbol_coverage", 0)),
+        "recent_20d_avg_symbol_coverage": float(row.get("recent_20d_avg_symbol_coverage", 0.0)),
+        "available_trading_days": int(row.get("available_trading_days", 0)),
+        "field_missing_rate": float(df["missing_rate"].mean()) if "missing_rate" in df.columns else None,
+        "is_allowed_for_recent_model": bool(row.get("is_allowed_for_recent_model", False)),
+        "rejection_reason": str(row.get("rejection_reason", "")),
+    }
+
+
 def _write_list_section(lines: list[str], title: str, df: pd.DataFrame, score_col: str, n: int = 20) -> None:
     lines += [f"## {title}", "", "| Rank | Symbol | Score |", "|---:|---|---:|"]
     for i, (_, row) in enumerate(df.sort_values(score_col, ascending=False).head(n).iterrows(), 1):
@@ -278,13 +305,9 @@ def main() -> int:
         "base_ranked": REPORT_DIR / f"D3_base_ranked_{date_tag}.csv",
         "recent_ranked": REPORT_DIR / f"D3_recent_ranked_{date_tag}.csv",
         "gate_ranked": REPORT_DIR / f"D3_gate_fused_ranked_{date_tag}.csv",
-        "report": REPORT_DIR / f"D3_gate_run_report_{date_tag}.md",
-        "json": REPORT_DIR / f"D3_gate_run_summary_{date_tag}.json",
+        "report": REPORT_DIR / f"D3_gate_emdatah5_fund_flow_run_report_{date_tag}.md",
+        "json": REPORT_DIR / f"D3_gate_emdatah5_fund_flow_run_summary_{date_tag}.json",
     }
-    for path in output_paths.values():
-        if path.exists():
-            raise RuntimeError(f"Refusing to overwrite existing output: {path}")
-
     coverage_summary = {
         "ohlcv": {
             "requested_coverage": f"{ohlcv_counts.get(REQUESTED_AS_OF_DATE, 0)}/{len(symbols)}",
@@ -335,8 +358,15 @@ def main() -> int:
     flow_cols = [c for c in recent_candidates if family_by_col.get(c) == "flow" or "flow" in c]
     flow_in_recent = [c for c in recent_features if c in flow_cols]
     flow_in_base = [c for c in base_features if c in flow_cols]
+    fund_flow_gate = _load_emdatah5_fund_flow_gate()
+    gate_mode = "fund_flow_enhanced_gate" if flow_in_recent else "standard_gate"
 
-    base_scored, base_meta, base_importance = _score_model(
+    base_feature_cols_path = REPORT_DIR / f"D3_base_X_train_columns_{date_tag}.csv"
+    recent_feature_cols_path = REPORT_DIR / f"D3_recent_emdatah5_X_train_columns_{date_tag}.csv"
+    pd.DataFrame({"feature": base_features}).to_csv(base_feature_cols_path, index=False)
+    pd.DataFrame({"feature": recent_features}).to_csv(recent_feature_cols_path, index=False)
+
+    base_scored, base_meta, base_importance, _base_importance_all = _score_model(
         base_panel, actual_as_of, base_features, train_start=None, params=BASE_PARAMS, score_prefix="base"
     )
     base_importance_path = REPORT_DIR / f"D3_base_feature_importance_top20_{date_tag}.csv"
@@ -359,7 +389,7 @@ def main() -> int:
         train_start = unique_train_dates[max(0, len(unique_train_dates) - 120)]
         if len(recent_features) == 0:
             raise RuntimeError("coverage gate rejected all recent features")
-        recent_scored, recent_meta, recent_importance = _score_model(
+        recent_scored, recent_meta, recent_importance, recent_importance_all = _score_model(
             recent_panel,
             actual_as_of,
             recent_features,
@@ -369,6 +399,9 @@ def main() -> int:
         )
         recent_importance_path = REPORT_DIR / f"D3_recent_feature_importance_top20_{date_tag}.csv"
         recent_importance.to_csv(recent_importance_path, index=False)
+        fund_flow_importance = recent_importance_all[recent_importance_all["feature"].isin(flow_cols)].copy()
+        fund_flow_importance_path = REPORT_DIR / f"D3_recent_fund_flow_feature_importance_{date_tag}.csv"
+        fund_flow_importance.to_csv(fund_flow_importance_path, index=False)
         recent_scored.to_csv(output_paths["recent_ranked"], index=False)
     except Exception as exc:
         recent_status = "failed"
@@ -382,6 +415,8 @@ def main() -> int:
             "recent_pct": np.nan,
         })
         recent_scored.to_csv(output_paths["recent_ranked"], index=False)
+        fund_flow_importance_path = REPORT_DIR / f"D3_recent_fund_flow_feature_importance_{date_tag}.csv"
+        pd.DataFrame(columns=["feature", "importance"]).to_csv(fund_flow_importance_path, index=False)
 
     if recent_status == "trained":
         fused_input = base_scored.merge(
@@ -442,7 +477,11 @@ def main() -> int:
         f"- recent_enhanced_feature_set_id: `{recent_feature_set_id}`",
         f"- base candidates: {len(base_candidates)}; base admitted: {len(base_features)}",
         f"- recent candidates: {len(recent_candidates)}; recent admitted: {len(recent_features)}",
+        f"- gate_mode: {gate_mode}",
         f"- fund flow entered recent model: {'yes' if flow_in_recent else 'no'} ({', '.join(flow_in_recent) if flow_in_recent else 'none'})",
+        f"- fund_flow coverage gate result: {fund_flow_gate}",
+        f"- base final feature list: `{base_feature_cols_path}`",
+        f"- recent final feature list: `{recent_feature_cols_path}`",
         f"- fund flow forbidden from base model: {'yes' if not flow_in_base else 'no'}",
         f"- base coverage report: `{base_gate_csv}`",
         f"- recent coverage report: `{recent_gate_csv}`",
@@ -453,6 +492,7 @@ def main() -> int:
         f"- recent_enhanced_model_d3 status: {recent_status}",
         f"- recent_enhanced_model_d3: {recent_meta if recent_meta else recent_failure_reason}",
         f"- base feature importance Top20: `{base_importance_path}`",
+        f"- fund_flow feature importance: `{fund_flow_importance_path}`",
     ]
     if recent_status == "trained":
         lines.append(f"- recent feature importance Top20: `{recent_importance_path}`")
@@ -498,12 +538,17 @@ def main() -> int:
         "recent_failure_reason": recent_failure_reason,
         "flow_in_recent": flow_in_recent,
         "flow_in_base": flow_in_base,
+        "fund_flow_gate": fund_flow_gate,
+        "gate_mode": gate_mode,
         "tier_counts": tier_counts,
         "intersections": intersections,
         "boosted": boosted,
         "downgraded": downgraded,
         "vetoed": vetoed,
         "outputs": {k: str(v) for k, v in output_paths.items()},
+        "base_feature_cols": str(base_feature_cols_path),
+        "recent_feature_cols": str(recent_feature_cols_path),
+        "fund_flow_feature_importance": str(fund_flow_importance_path),
         "base_top20": base_top20,
         "recent_top20": recent_top20,
         "fused_top20": fused_top20,

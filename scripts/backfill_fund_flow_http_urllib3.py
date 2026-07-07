@@ -16,7 +16,7 @@ from quant_platform.ingest.flow_collector import (
     FundFlowRouteError,
     _normalise_symbol,
 )
-from quant_platform.ingest.fund_flow_providers import NativeEastmoneyFundFlowProvider
+from quant_platform.ingest.fund_flow_providers import EMDATAH5_SOURCE, EastmoneyH5FundFlowProvider
 from quant_platform.store.lake import fund_flow_path
 
 
@@ -25,6 +25,8 @@ REPORT_DIR = STORE_ROOT / "reports"
 CSI300_MEMBERSHIP = STORE_ROOT / "universe/csi300/membership.parquet"
 SMOKE_SYMBOLS = ["600000", "000001", "300750", "688981"]
 FIELD_COLUMNS = [
+    "symbol",
+    "trade_date",
     "main_net",
     "small_net",
     "medium_net",
@@ -42,6 +44,7 @@ FIELD_COLUMNS = [
     "raw_update_time",
     "fetched_at",
 ]
+REPORT_PREFIX = "fund_flow_emdatah5"
 
 
 def _load_csi300_symbols() -> list[str]:
@@ -67,7 +70,7 @@ def _empty_failed_frame() -> pd.DataFrame:
 
 def _write_failures(failures: list[FundFlowFailure]) -> None:
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
-    path = REPORT_DIR / "fund_flow_failed_symbols.csv"
+    path = REPORT_DIR / f"{REPORT_PREFIX}_failed_symbols.csv"
     if failures:
         df = pd.DataFrame([f.__dict__ for f in failures])
         df["reported_at"] = dt.datetime.now(dt.timezone.utc).isoformat()
@@ -127,7 +130,7 @@ def collect_symbols(
                 failures.append(
                     FundFlowFailure(
                         symbol=symbol,
-                        provider="native_eastmoney",
+                        provider="eastmoney_emdatah5",
                         error_type=type(exc).__name__,
                         error_message=str(exc),
                         retry_count=3,
@@ -150,6 +153,10 @@ def _load_fund_flow_panel(symbols: list[str]) -> pd.DataFrame:
         df = pd.read_parquet(path)
         if "date" not in df.columns and "trade_date" in df.columns:
             df["date"] = df["trade_date"]
+        if "source" in df.columns:
+            df = df[df["source"].astype(str) == EMDATAH5_SOURCE].copy()
+        if df.empty:
+            continue
         df["date"] = pd.to_datetime(df["date"], errors="coerce").dt.date
         frames.append(df)
     if not frames:
@@ -165,7 +172,8 @@ def build_coverage_gate(symbols: list[str]) -> tuple[pd.DataFrame, dict]:
             [
                 {
                     "field": "fund_flow",
-                    "latest_trade_date": "",
+                    "covered_symbols": 0,
+                    "latest_available_date": "",
                     "missing_rate": 1.0,
                     "recent_symbol_coverage": 0,
                     "recent_20d_avg_symbol_coverage": 0.0,
@@ -176,9 +184,11 @@ def build_coverage_gate(symbols: list[str]) -> tuple[pd.DataFrame, dict]:
             ]
         )
         return gate, {
-            "latest_trade_date": "",
+            "covered_symbols": 0,
+            "latest_available_date": "",
             "recent_symbol_coverage": 0,
             "recent_20d_avg_symbol_coverage": 0.0,
+            "available_trading_days": 0,
             "field_missing_rate": 1.0,
             "allowed_recent": False,
             "rejection_reason": "no-data",
@@ -214,7 +224,8 @@ def build_coverage_gate(symbols: list[str]) -> tuple[pd.DataFrame, dict]:
         rows.append(
             {
                 "field": field,
-                "latest_trade_date": latest.isoformat(),
+                "covered_symbols": int(panel["symbol"].nunique()),
+                "latest_available_date": latest.isoformat(),
                 "missing_rate": missing_rate,
                 "recent_symbol_coverage": recent_symbol_coverage,
                 "recent_20d_avg_symbol_coverage": recent_20d_avg,
@@ -227,13 +238,48 @@ def build_coverage_gate(symbols: list[str]) -> tuple[pd.DataFrame, dict]:
     key_fields = [c for c in FIELD_COLUMNS if c in panel.columns and c != "raw_update_time"]
     field_missing_rate = float(panel[key_fields].isna().mean().mean()) if key_fields else 1.0
     return gate, {
-        "latest_trade_date": latest.isoformat(),
+        "covered_symbols": int(panel["symbol"].nunique()),
+        "latest_available_date": latest.isoformat(),
         "recent_symbol_coverage": recent_symbol_coverage,
         "recent_20d_avg_symbol_coverage": recent_20d_avg,
+        "available_trading_days": available_days,
         "field_missing_rate": field_missing_rate,
         "allowed_recent": allowed_recent,
         "rejection_reason": rejection_reason,
     }
+
+
+def _required_fields_present(fields: str) -> bool:
+    required = {
+        "symbol",
+        "trade_date",
+        "main_net",
+        "small_net",
+        "medium_net",
+        "large_net",
+        "super_net",
+        "main_net_rate",
+        "small_net_rate",
+        "medium_net_rate",
+        "large_net_rate",
+        "super_net_rate",
+        "close",
+        "pct_change",
+        "source",
+        "raw_update_time",
+        "fetched_at",
+    }
+    return required.issubset(set(str(fields).split(",")))
+
+
+def _smoke_row_passed(row: pd.Series) -> bool:
+    if not bool(row.get("success")):
+        return False
+    if int(row.get("rows") or 0) < 100:
+        return False
+    if not _required_fields_present(str(row.get("fields") or "")):
+        return False
+    return bool(str(row.get("max_date") or ""))
 
 
 def write_reports(
@@ -245,11 +291,11 @@ def write_reports(
 ) -> None:
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
     success_df = full_results[full_results["success"]].copy()
-    success_df.to_csv(REPORT_DIR / "fund_flow_success_symbols.csv", index=False)
+    success_df.to_csv(REPORT_DIR / f"{REPORT_PREFIX}_success_symbols.csv", index=False)
     _write_failures(failures)
 
     gate, summary = build_coverage_gate(symbols)
-    gate.to_csv(REPORT_DIR / "fund_flow_coverage_gate.csv", index=False)
+    gate.to_csv(REPORT_DIR / f"{REPORT_PREFIX}_coverage_gate.csv", index=False)
 
     success_count = int(success_df["symbol"].nunique()) if not success_df.empty else 0
     failed_count = int(len(set(symbols) - set(success_df["symbol"].astype(str))))
@@ -259,18 +305,21 @@ def write_reports(
         rejection = stopped_reason
 
     lines = [
-        "# Fund Flow HTTP urllib3 Backfill Report",
+        "# Eastmoney H5 Fund Flow Backfill Report",
         "",
         f"Generated: {dt.datetime.now().isoformat(timespec='seconds')}",
         "",
+        "- Provider: EastmoneyH5FundFlowProvider",
+        "- Source: eastmoney_emdatah5_zjlx",
         f"- Success symbols: {success_count}",
         f"- Failed symbols: {failed_count}",
-        f"- Latest trade_date: {summary['latest_trade_date']}",
+        f"- covered_symbols: {summary['covered_symbols']}",
+        f"- latest_available_date: {summary['latest_available_date']}",
         f"- Recent valid-day coverage symbols: {summary['recent_symbol_coverage']}",
         f"- Recent 20 trading-day average coverage symbols: {summary['recent_20d_avg_symbol_coverage']:.2f}",
+        f"- available_trading_days: {summary.get('available_trading_days', 0)}",
         f"- Field missing rate: {summary['field_missing_rate']:.6f}",
-        f"- Meets recent model coverage gate: {'yes' if allowed else 'no'}",
-        f"- Allow fund_flow into recent model: {'yes' if allowed else 'no'}",
+        f"- is_allowed_for_recent_model: {'yes' if allowed else 'no'}",
     ]
     if not allowed:
         lines.append(f"- rejection_reason: {rejection or 'coverage gate rejected fund_flow'}")
@@ -281,12 +330,12 @@ def write_reports(
             "",
             "## Artifacts",
             "",
-            "- models/data/reports/fund_flow_success_symbols.csv",
-            "- models/data/reports/fund_flow_failed_symbols.csv",
-            "- models/data/reports/fund_flow_coverage_gate.csv",
+            f"- models/data/reports/{REPORT_PREFIX}_success_symbols.csv",
+            f"- models/data/reports/{REPORT_PREFIX}_failed_symbols.csv",
+            f"- models/data/reports/{REPORT_PREFIX}_coverage_gate.csv",
         ]
     )
-    (REPORT_DIR / "fund_flow_http_urllib3_backfill_report.md").write_text(
+    (REPORT_DIR / f"{REPORT_PREFIX}_backfill_report.md").write_text(
         "\n".join(lines),
         encoding="utf-8",
     )
@@ -295,11 +344,12 @@ def write_reports(
 def main() -> None:
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
     failures: list[FundFlowFailure] = []
-    collector = FundFlowCollector(STORE_ROOT, providers=[NativeEastmoneyFundFlowProvider()])
+    collector = FundFlowCollector(STORE_ROOT, providers=[EastmoneyH5FundFlowProvider()])
 
     smoke = collect_symbols(SMOKE_SYMBOLS, collector=collector, failures=failures, label="smoke")
-    print(smoke[["symbol", "rows", "min_date", "max_date", "fields", "success", "error"]].to_string(index=False))
-    smoke_success_rate = float(smoke["success"].mean()) if not smoke.empty else 0.0
+    smoke = smoke[["symbol", "rows", "min_date", "max_date", "success", "error", "fields"]]
+    print(smoke.to_string(index=False))
+    smoke_success_rate = float(smoke.apply(_smoke_row_passed, axis=1).mean()) if not smoke.empty else 0.0
 
     csi300 = _load_csi300_symbols()
     if smoke_success_rate < 0.75:
@@ -308,18 +358,6 @@ def main() -> None:
             failures=failures,
             symbols=SMOKE_SYMBOLS,
             stopped_reason=f"smoke success rate {smoke_success_rate:.0%} < 75%",
-        )
-        return
-
-    first20 = csi300[:20]
-    small = collect_symbols(first20, collector=collector, failures=failures, label="csi300_first20")
-    small_success_rate = float(small["success"].mean()) if not small.empty else 0.0
-    if small_success_rate < 0.80:
-        write_reports(
-            full_results=small,
-            failures=failures,
-            symbols=first20,
-            stopped_reason=f"CSI300 first20 success rate {small_success_rate:.0%} < 80%",
         )
         return
 

@@ -15,7 +15,14 @@ from typing import Any
 
 import pandas as pd
 
+import json
+import time
+
+import urllib3
+
 from quant_platform.ingest.flow_collector import (
+    _FETCH_BACKOFF_SECONDS,
+    _FETCH_RETRIES,
     _fetch_push2his_result,
     _market_code,
     _normalise_symbol,
@@ -42,6 +49,11 @@ CANONICAL_FUND_FLOW_COLUMNS = [
     "raw_update_time",
     "fetched_at",
 ]
+
+EMDATAH5_SOURCE = "eastmoney_emdatah5_zjlx"
+_EMDATAH5_URL = "https://emdatah5.eastmoney.com/dc/ZJLX/getDBHistoryData"
+_EMDATAH5_UT = "b2884a393a59ad64002292a3e90d46a5"
+_EMDATAH5_HTTP = urllib3.PoolManager(num_pools=1, maxsize=1, retries=0)
 
 
 @dataclass(frozen=True)
@@ -132,6 +144,158 @@ class NativeEastmoneyFundFlowProvider(FundFlowProvider):
                 "pct_change": "pct_change",
             },
         )
+
+
+class EastmoneyH5FundFlowProvider(FundFlowProvider):
+    name = "eastmoney_emdatah5"
+    same_source_risk = "Eastmoney H5 emdatah5 ZJLX host"
+
+    def fetch_symbol(self, symbol: str, days: int = 120) -> ProviderResult:
+        code = _normalise_symbol(symbol)
+        market = _market_code(code)
+        params = {
+            "secid": f"{market}.{code}",
+            "fields1": "f1,f2,f3,f7",
+            "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63",
+            "ut": _EMDATAH5_UT,
+        }
+        headers = {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": f"https://emdatah5.eastmoney.com/dc/zjlx/stock?fc={market}.{code}",
+            "Accept": "application/json,text/plain,*/*",
+        }
+
+        last_error = ""
+        retry_count = 0
+        data: dict[str, Any] = {}
+        klines: list[str] = []
+        for attempt in range(_FETCH_RETRIES):
+            retry_count = attempt + 1
+            try:
+                response = _EMDATAH5_HTTP.request(
+                    "GET",
+                    _EMDATAH5_URL,
+                    fields=params,
+                    headers=headers,
+                    timeout=urllib3.Timeout(connect=5.0, read=15.0),
+                    preload_content=True,
+                )
+                status_code = getattr(response, "status", 200)
+                body = getattr(response, "data", b"")
+                text = body.decode("utf-8", errors="replace") if isinstance(body, bytes) else str(body)
+                if isinstance(status_code, int) and status_code != 200:
+                    last_error = f"HTTP {status_code}: {text[:200]}"
+                    _EMDATAH5_HTTP.clear()
+                    time.sleep(_FETCH_BACKOFF_SECONDS[min(attempt, len(_FETCH_BACKOFF_SECONDS) - 1)])
+                    continue
+                payload = json.loads(text)
+                data = payload.get("data") or {}
+                klines = data.get("klines") or []
+                if not klines:
+                    last_error = f"empty klines for secid={market}.{code}; payload_head={str(payload)[:300]}"
+                    _EMDATAH5_HTTP.clear()
+                    time.sleep(_FETCH_BACKOFF_SECONDS[min(attempt, len(_FETCH_BACKOFF_SECONDS) - 1)])
+                    continue
+                break
+            except Exception as exc:
+                last_error = f"{type(exc).__name__}: {exc}"
+                _EMDATAH5_HTTP.clear()
+                time.sleep(_FETCH_BACKOFF_SECONDS[min(attempt, len(_FETCH_BACKOFF_SECONDS) - 1)])
+        else:
+            raise RuntimeError(last_error or "unknown emdatah5 fetch failure")
+
+        fetched_at = dt.datetime.now(dt.timezone.utc).isoformat()
+        raw_update_time = (
+            data.get("updateTime")
+            or data.get("update_time")
+            or data.get("lastUpdateTime")
+            or data.get("last_update_time")
+        )
+        rows = []
+        for line in klines:
+            parts = str(line).split(",")
+            if len(parts) < 13:
+                continue
+            rows.append({
+                "symbol": code,
+                "trade_date": parts[0],
+                "date": parts[0],
+                "main_net": _parse_h5_number(parts[1]),
+                "small_net": _parse_h5_number(parts[2]),
+                "medium_net": _parse_h5_number(parts[3]),
+                "mid_net": _parse_h5_number(parts[3]),
+                "large_net": _parse_h5_number(parts[4]),
+                "super_net": _parse_h5_number(parts[5]),
+                "main_net_rate": _parse_h5_number(parts[6]),
+                "small_net_rate": _parse_h5_number(parts[7]),
+                "medium_net_rate": _parse_h5_number(parts[8]),
+                "large_net_rate": _parse_h5_number(parts[9]),
+                "super_net_rate": _parse_h5_number(parts[10]),
+                "close": _parse_h5_number(parts[11]),
+                "pct_change": _parse_h5_number(parts[12]),
+                "source": EMDATAH5_SOURCE,
+                "raw_update_time": raw_update_time,
+                "fetched_at": fetched_at,
+            })
+
+        if not rows:
+            raise RuntimeError("all emdatah5 klines failed to parse")
+        df = pd.DataFrame(rows)
+        df["trade_date"] = pd.to_datetime(df["trade_date"], errors="coerce").dt.date
+        df["date"] = pd.to_datetime(df["date"], errors="coerce").dt.date
+        df = df.dropna(subset=["trade_date"]).sort_values("trade_date").reset_index(drop=True)
+        if days and len(df) > days:
+            df = df.tail(days).reset_index(drop=True)
+
+        result = self._canonicalise(
+            df,
+            code,
+            date_col="trade_date",
+            mapping={
+                "main_net": "main_net",
+                "small_net": "small_net",
+                "medium_net": "medium_net",
+                "mid_net": "mid_net",
+                "large_net": "large_net",
+                "super_net": "super_net",
+                "main_net_rate": "main_net_rate",
+                "small_net_rate": "small_net_rate",
+                "medium_net_rate": "medium_net_rate",
+                "large_net_rate": "large_net_rate",
+                "super_net_rate": "super_net_rate",
+                "close": "close",
+                "pct_change": "pct_change",
+            },
+        )
+        required = [
+            "main_net",
+            "small_net",
+            "medium_net",
+            "large_net",
+            "super_net",
+            "main_net_rate",
+            "small_net_rate",
+            "medium_net_rate",
+            "large_net_rate",
+            "super_net_rate",
+            "close",
+            "pct_change",
+        ]
+        missing_required = [c for c in required if c in result.missing_fields]
+        if missing_required:
+            raise RuntimeError(f"eastmoney_emdatah5 missing required fields {missing_required}")
+        return ProviderResult(
+            result.frame,
+            result.missing_fields,
+            retry_count=retry_count,
+            same_source_risk=self.same_source_risk,
+        )
+
+
+def _parse_h5_number(value: str | None) -> float | None:
+    if value in ("", "-", None):
+        return None
+    return float(value)
 
 
 class AKShareFundFlowProvider(FundFlowProvider):
@@ -265,8 +429,5 @@ def _canonicalise_by_guess(provider: FundFlowProvider, df: pd.DataFrame, symbol:
 
 def default_fund_flow_providers() -> list[FundFlowProvider]:
     return [
-        NativeEastmoneyFundFlowProvider(),
-        ADataFundFlowProvider(),
-        QStockFundFlowProvider(),
-        AKShareFundFlowProvider(),
+        EastmoneyH5FundFlowProvider(),
     ]

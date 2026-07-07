@@ -35,6 +35,34 @@ def test_native_provider_canonical_schema():
     assert "main_net_rate" in result.missing_fields
 
 
+def test_emdatah5_provider_canonical_schema():
+    from quant_platform.ingest.fund_flow_providers import (
+        CANONICAL_FUND_FLOW_COLUMNS,
+        EMDATAH5_SOURCE,
+        EastmoneyH5FundFlowProvider,
+    )
+
+    class FakeResponse:
+        status = 200
+        data = (
+            b'{"data":{"klines":["2026-07-03,1,-1,2,3,4,0.1,-0.1,0.2,0.3,0.4,10.5,1.2"]}}'
+        )
+
+    with patch(
+        "quant_platform.ingest.fund_flow_providers._EMDATAH5_HTTP.request",
+        return_value=FakeResponse(),
+    ):
+        result = EastmoneyH5FundFlowProvider().fetch_symbol("600000.SH")
+
+    assert result.ok
+    assert list(result.frame.columns) == CANONICAL_FUND_FLOW_COLUMNS
+    row = result.frame.iloc[0]
+    assert row["symbol"] == "600000"
+    assert row["source"] == EMDATAH5_SOURCE
+    assert row["medium_net"] == 2.0
+    assert row["mid_net"] == 2.0
+
+
 def test_adata_provider_missing_dependency():
     from quant_platform.ingest.fund_flow_providers import ADataFundFlowProvider
 
@@ -108,6 +136,16 @@ def test_collector_routes_to_second_provider_and_reports_first_failure(tmp_path,
     failed = pd.read_csv(tmp_path / "reports/fund_flow_failed_symbols.csv")
     assert failed.iloc[0]["provider"] == "adata"
     assert failed.iloc[0]["latest_success_provider"] == "qstock"
+
+
+def test_default_provider_prefers_emdatah5_only():
+    from quant_platform.ingest.fund_flow_providers import (
+        EastmoneyH5FundFlowProvider,
+        default_fund_flow_providers,
+    )
+
+    providers = default_fund_flow_providers()
+    assert [type(p) for p in providers] == [EastmoneyH5FundFlowProvider]
 
 
 def test_sector_flow_feature_builder_keeps_proxy_names():

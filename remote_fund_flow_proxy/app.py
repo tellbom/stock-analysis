@@ -19,11 +19,11 @@ import urllib3
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
-EM_BASE_URL = "http://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get"
+EM_BASE_URL = "https://emdatah5.eastmoney.com/dc/ZJLX/getDBHistoryData"
 EM_FIELDS1 = "f1,f2,f3,f7"
 EM_FIELDS2 = "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63"
-EM_LMT = 100000
-EM_KLT = 101
+EM_UT = "b2884a393a59ad64002292a3e90d46a5"
+EM_REFERER = "https://emdatah5.eastmoney.com/dc/zjlx/stock"
 
 FIELD_NAMES = [
     "trade_date",
@@ -105,14 +105,15 @@ def parse_kline(kline_str, symbol):
 def fetch_one(symbol):
     code, mkt = resolve_market(symbol)
     secid = "%s.%s" % (mkt, code)
-    url = "%s?lmt=%s&klt=%s&secid=%s&fields1=%s&fields2=%s" % (
-        EM_BASE_URL, EM_LMT, EM_KLT, secid, EM_FIELDS1, EM_FIELDS2
+    url = "%s?secid=%s.%s&fields1=%s&fields2=%s&ut=%s" % (
+        EM_BASE_URL, mkt, code, EM_FIELDS1, EM_FIELDS2, EM_UT
     )
 
     last_error = None
     for attempt in range(MAX_RETRIES):
         try:
-            r = http.request("GET", url, timeout=30.0, retries=0)
+            r = http.request("GET", url, timeout=30.0, retries=0,
+                headers={"User-Agent": "Mozilla/5.0", "Referer": "%s?fc=%s.%s" % (EM_REFERER, mkt, code)})
             if r.status != 200:
                 last_error = "HTTP %d" % r.status
                 logger.warning("symbol=%s secid=%s attempt=%d status=%d", symbol, secid, attempt + 1, r.status)

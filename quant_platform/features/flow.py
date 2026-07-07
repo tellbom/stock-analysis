@@ -118,18 +118,33 @@ def build_flow_features(
         val = valuation_panel.copy()
         val["date"] = pd.to_datetime(val["date"]).dt.date
         mcap = val[["symbol", "date", "float_mcap_yi"]].copy()
-        flow = flow.merge(mcap, on=["symbol", "date"], how="left")
+        mcap["date_ts"] = pd.to_datetime(mcap["date"])
+        flow["date_ts"] = pd.to_datetime(flow["date"])
+        aligned = []
+        for symbol, sym_flow in flow.groupby("symbol", sort=False):
+            sym_mcap = mcap[mcap["symbol"] == symbol].sort_values("date_ts")
+            sym_flow = sym_flow.sort_values("date_ts")
+            if sym_mcap.empty:
+                sym_flow["float_mcap_yi"] = np.nan
+            else:
+                sym_flow = pd.merge_asof(
+                    sym_flow.drop(columns=["float_mcap_yi"], errors="ignore"),
+                    sym_mcap[["date_ts", "float_mcap_yi"]],
+                    on="date_ts",
+                    direction="backward",
+                )
+            aligned.append(sym_flow)
+        flow = pd.concat(aligned, ignore_index=True).drop(columns=["date_ts"], errors="ignore")
     else:
         flow["float_mcap_yi"] = np.nan
 
     # Fallback: if float_mcap missing, use cross-sectional mean as denominator
     # (this is less informative but avoids NaN cascade)
-    flow["_mcap_denom"] = flow["float_mcap_yi"].where(
-        flow["float_mcap_yi"] > 0,
-        flow.groupby("date")["float_mcap_yi"].transform(
-            lambda x: x.clip(lower=1e-6).mean()
-        ).clip(lower=1e-6),
+    daily_mcap_mean = flow.groupby("date")["float_mcap_yi"].transform(
+        lambda x: x.where(x > 0).mean()
     )
+    flow["_mcap_denom"] = flow["float_mcap_yi"].where(flow["float_mcap_yi"] > 0, daily_mcap_mean)
+    flow["_mcap_denom"] = flow["_mcap_denom"].fillna(1.0).clip(lower=1e-6)
 
     # --- Normalised flow: value / float_mcap_yi ---
     for col in ("main_net", "small_net", "super_net"):
