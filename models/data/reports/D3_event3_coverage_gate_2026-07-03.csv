@@ -1,0 +1,4 @@
+feature_family,source,covered_symbols,date_range,latest_available_date,event_sparsity,pit_safe,non_zero_rate,missing_rate,is_allowed_for_recent_model,is_allowed_for_base_model,rejection_reason
+announcement_events,cninfo,300/300,2026-04-28 -> 2026-07-03,2026-07-03,0.9750146197667202,True,0.024985380233279758,0.0,True,False,short-history-family
+dragon_tiger,datacenter-web,300/300,2026-01-06 -> 2026-07-03,2026-07-03,0.9981468368261647,True,0.0018531631738353252,0.0,True,False,short-history-family
+block_trade,datacenter-web,300/300,2026-01-08 -> 2026-07-03,2026-07-03,0.977244880098022,True,0.022755119901977948,0.0,True,False,short-history-family

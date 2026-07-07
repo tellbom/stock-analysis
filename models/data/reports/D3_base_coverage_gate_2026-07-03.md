@@ -1,11 +1,11 @@
 # Feature Coverage Gate
 
-Generated: 2026-07-06T22:32:29
+Generated: 2026-07-07T10:51:04
 
-- Features checked: 52
+- Features checked: 50
 - Base model allowed: 35
 - Recent model allowed: 35
-- Prediction-only: 17
+- Prediction-only: 15
 
 ## Rejections
 
@@ -26,5 +26,3 @@ Generated: 2026-07-06T22:32:29
 | cs_log_mcap_rank | valuation | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |
 | pe_momentum_5d | valuation | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |
 | ind_rank_turnover | industry | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |
-| cs_margin_balance_change_5d | margin | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |
-| cs_rzrq_ratio_rank | margin | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |

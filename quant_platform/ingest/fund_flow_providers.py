@@ -32,9 +32,12 @@ CANONICAL_FUND_FLOW_COLUMNS = [
     "large_net",
     "large_net_rate",
     "medium_net",
+    "mid_net",
     "medium_net_rate",
     "small_net",
     "small_net_rate",
+    "close",
+    "pct_change",
     "source",
     "raw_update_time",
     "fetched_at",
@@ -82,9 +85,13 @@ class FundFlowProvider(ABC):
                 out[canonical] = pd.to_numeric(df[src], errors="coerce")
             else:
                 out[canonical] = pd.NA
-        out["source"] = self.name
-        out["raw_update_time"] = None
-        out["fetched_at"] = dt.datetime.now(dt.timezone.utc).isoformat()
+        out["source"] = df["source"].astype(str) if "source" in df.columns else self.name
+        out["raw_update_time"] = df["raw_update_time"] if "raw_update_time" in df.columns else None
+        out["fetched_at"] = (
+            df["fetched_at"]
+            if "fetched_at" in df.columns
+            else dt.datetime.now(dt.timezone.utc).isoformat()
+        )
         out = out.dropna(subset=["trade_date"]).sort_values("trade_date").reset_index(drop=True)
         missing = [
             c for c in CANONICAL_FUND_FLOW_COLUMNS
@@ -114,7 +121,15 @@ class NativeEastmoneyFundFlowProvider(FundFlowProvider):
                 "super_net": "super_net",
                 "large_net": "large_net",
                 "medium_net": "mid_net",
+                "mid_net": "mid_net",
                 "small_net": "small_net",
+                "main_net_rate": "main_net_rate",
+                "small_net_rate": "small_net_rate",
+                "medium_net_rate": "medium_net_rate",
+                "large_net_rate": "large_net_rate",
+                "super_net_rate": "super_net_rate",
+                "close": "close",
+                "pct_change": "pct_change",
             },
         )
 
@@ -250,8 +265,8 @@ def _canonicalise_by_guess(provider: FundFlowProvider, df: pd.DataFrame, symbol:
 
 def default_fund_flow_providers() -> list[FundFlowProvider]:
     return [
+        NativeEastmoneyFundFlowProvider(),
         ADataFundFlowProvider(),
         QStockFundFlowProvider(),
-        NativeEastmoneyFundFlowProvider(),
         AKShareFundFlowProvider(),
     ]

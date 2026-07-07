@@ -153,6 +153,9 @@ def _feature_family_lookup() -> dict[str, str]:
         ("quant_platform.features.sector_flow", "SECTOR_FLOW_SPECS", "sector_flow"),
         ("quant_platform.features.margin", "MARGIN_SPECS", "margin"),
         ("quant_platform.features.event", "LOCKUP_SPECS", "event"),
+        ("quant_platform.features.event", "ANNOUNCEMENT_EVENT_SPECS", "announcement_events"),
+        ("quant_platform.features.event", "DRAGON_TIGER_SPECS", "dragon_tiger"),
+        ("quant_platform.features.event", "BLOCK_TRADE_SPECS", "block_trade"),
     ]:
         try:
             import importlib
@@ -237,6 +240,7 @@ def _audit_training_features(
     for fam in (
         "technical", "cross_sectional", "raw_aux", "valuation", "industry",
         "flow", "sector_flow", "margin", "event", "fundamental",
+        "announcement_events", "dragon_tiger", "block_trade",
     ):
         print(f"  {fam:16s}: {counts.get(fam, 0)}")
     print("  final LightGBM feature columns:")

@@ -36,6 +36,7 @@ Spec list: LOCKUP_SPECS (for the feature registry)
 
 from __future__ import annotations
 
+import datetime as dt
 from pathlib import Path
 
 import numpy as np
@@ -72,6 +73,37 @@ LOCKUP_SPECS: list[FeatureSpec] = [
         warmup=0,
     ),
 ]
+
+
+ANNOUNCEMENT_EVENT_SPECS: list[FeatureSpec] = [
+    FeatureSpec("announcement_count_3d", "announcement_events", ("announce_date",), 3, "count announcements PIT 3d", warmup=0),
+    FeatureSpec("announcement_count_5d", "announcement_events", ("announce_date",), 5, "count announcements PIT 5d", warmup=0),
+    FeatureSpec("announcement_count_10d", "announcement_events", ("announce_date",), 10, "count announcements PIT 10d", warmup=0),
+    FeatureSpec("has_announcement_3d", "announcement_events", ("announce_date",), 3, "any announcement PIT 3d", warmup=0),
+    FeatureSpec("has_major_event_10d", "announcement_events", ("title", "category"), 10, "major event announcement PIT 10d", warmup=0),
+    FeatureSpec("has_risk_announcement_5d", "announcement_events", ("title", "category"), 5, "risk announcement PIT 5d", warmup=0),
+    FeatureSpec("has_financial_report_30d", "announcement_events", ("title", "category"), 30, "financial report announcement PIT 30d", warmup=0),
+    FeatureSpec("has_reduction_notice_30d", "announcement_events", ("title", "category"), 30, "reduction notice PIT 30d", warmup=0),
+]
+
+DRAGON_TIGER_SPECS: list[FeatureSpec] = [
+    FeatureSpec("has_dragon_tiger_5d", "dragon_tiger", ("available_date",), 5, "any dragon tiger event PIT 5d", warmup=0),
+    FeatureSpec("dragon_tiger_count_10d", "dragon_tiger", ("available_date",), 10, "count dragon tiger events PIT 10d", warmup=0),
+    FeatureSpec("dragon_tiger_net_buy_5d", "dragon_tiger", ("net_buy_amount",), 5, "sum net buy PIT 5d", warmup=0),
+    FeatureSpec("dragon_tiger_net_buy_rank_5d", "dragon_tiger", ("net_buy_amount",), 5, "cross-sectional rank of 5d net buy", warmup=0),
+    FeatureSpec("institution_net_buy_5d", "dragon_tiger", ("institution_buy_amount", "institution_sell_amount"), 5, "sum institution net buy PIT 5d", warmup=0),
+    FeatureSpec("institution_net_buy_rank_5d", "dragon_tiger", ("institution_buy_amount", "institution_sell_amount"), 5, "cross-sectional rank of institution net buy", warmup=0),
+]
+
+BLOCK_TRADE_SPECS: list[FeatureSpec] = [
+    FeatureSpec("block_trade_count_20d", "block_trade", ("available_date",), 20, "count block trades PIT 20d", warmup=0),
+    FeatureSpec("block_trade_amount_20d", "block_trade", ("amount",), 20, "sum block trade amount PIT 20d", warmup=0),
+    FeatureSpec("block_trade_amount_rank_20d", "block_trade", ("amount",), 20, "cross-sectional rank of block amount", warmup=0),
+    FeatureSpec("block_trade_discount_mean_20d", "block_trade", ("discount_rate",), 20, "mean discount rate PIT 20d", warmup=0),
+    FeatureSpec("has_large_discount_block_trade_20d", "block_trade", ("discount_rate",), 20, "discount <= -10% PIT 20d", warmup=0),
+]
+
+EVENT3_SPECS: list[FeatureSpec] = ANNOUNCEMENT_EVENT_SPECS + DRAGON_TIGER_SPECS + BLOCK_TRADE_SPECS
 
 
 # ---------------------------------------------------------------------------
@@ -220,3 +252,155 @@ def load_lockup_panel(
           .sort_values(["symbol", "unlock_date"])
           .reset_index(drop=True)
     )
+
+
+# ---------------------------------------------------------------------------
+# Event3 builder
+# ---------------------------------------------------------------------------
+
+_MAJOR_TOKENS = ("重大", "重组", "收购", "并购", "控制权", "停牌", "复牌", "诉讼", "仲裁")
+_RISK_TOKENS = ("风险", "退市", "st", "处罚", "问询", "监管", "立案", "诉讼", "冻结", "质押")
+_FINANCIAL_TOKENS = ("年度报告", "半年度报告", "季度报告", "财务报告", "业绩快报", "业绩预告")
+_REDUCTION_TOKENS = ("减持", "持股变动", "股份变动")
+
+
+def _contains_any(text: object, tokens: tuple[str, ...]) -> bool:
+    value = "" if pd.isna(text) else str(text).lower()
+    return any(tok.lower() in value for tok in tokens)
+
+
+def _window_mask(dates: pd.Series, as_of: dt.date, days: int) -> pd.Series:
+    start = as_of - dt.timedelta(days=days - 1)
+    return (dates >= start) & (dates <= as_of)
+
+
+def _rank_nonzero_by_date(df: pd.DataFrame, col: str, out_col: str) -> None:
+    def _rank(s: pd.Series) -> pd.Series:
+        out = pd.Series(0.0, index=s.index)
+        nz = s.fillna(0) != 0
+        if nz.any():
+            out.loc[nz] = s.loc[nz].rank(method="average", ascending=True, pct=True)
+        return out
+
+    df[out_col] = df.groupby("date")[col].transform(_rank)
+
+
+def build_event3_features(
+    panel: pd.DataFrame,
+    announcement_panel: pd.DataFrame | None = None,
+    dragon_tiger_panel: pd.DataFrame | None = None,
+    block_trade_panel: pd.DataFrame | None = None,
+) -> pd.DataFrame:
+    """Add recent-only announcement, dragon tiger and block trade features."""
+    df = panel.copy()
+    df["date"] = pd.to_datetime(df["date"], errors="coerce").dt.date
+    for spec in EVENT3_SPECS:
+        df[spec.name] = 0.0
+
+    ann = announcement_panel.copy() if announcement_panel is not None else pd.DataFrame()
+    dtg = dragon_tiger_panel.copy() if dragon_tiger_panel is not None else pd.DataFrame()
+    blk = block_trade_panel.copy() if block_trade_panel is not None else pd.DataFrame()
+
+    if not ann.empty:
+        ann["announce_date"] = pd.to_datetime(ann["announce_date"], errors="coerce").dt.date
+        ann["_text"] = (
+            ann.get("title", "").fillna("").astype(str)
+            + " "
+            + ann.get("category", "").fillna("").astype(str)
+        )
+        ann["_is_major"] = ann["_text"].map(lambda x: _contains_any(x, _MAJOR_TOKENS))
+        ann["_is_risk"] = ann["_text"].map(lambda x: _contains_any(x, _RISK_TOKENS))
+        ann["_is_financial"] = ann["_text"].map(lambda x: _contains_any(x, _FINANCIAL_TOKENS))
+        ann["_is_reduction"] = ann["_text"].map(lambda x: _contains_any(x, _REDUCTION_TOKENS))
+
+    if not dtg.empty:
+        dtg["available_date"] = pd.to_datetime(dtg["available_date"], errors="coerce").dt.date
+        for col in ("net_buy_amount", "institution_buy_amount", "institution_sell_amount"):
+            if col not in dtg.columns:
+                dtg[col] = 0.0
+            dtg[col] = pd.to_numeric(dtg[col], errors="coerce").fillna(0.0)
+        dtg["_institution_net"] = dtg["institution_buy_amount"] - dtg["institution_sell_amount"]
+
+    if not blk.empty:
+        blk["available_date"] = pd.to_datetime(blk["available_date"], errors="coerce").dt.date
+        for col in ("amount", "discount_rate"):
+            if col not in blk.columns:
+                blk[col] = 0.0
+            blk[col] = pd.to_numeric(blk[col], errors="coerce")
+
+    ann_by_sym = {sym: grp.dropna(subset=["announce_date"]) for sym, grp in ann.groupby("symbol")} if not ann.empty else {}
+    dtg_by_sym = {sym: grp.dropna(subset=["available_date"]) for sym, grp in dtg.groupby("symbol")} if not dtg.empty else {}
+    blk_by_sym = {sym: grp.dropna(subset=["available_date"]) for sym, grp in blk.groupby("symbol")} if not blk.empty else {}
+
+    for idx, row in df.iterrows():
+        sym = str(row["symbol"]).zfill(6)
+        as_of = row["date"]
+
+        a = ann_by_sym.get(sym)
+        if a is not None and not a.empty:
+            for days, col in [(3, "announcement_count_3d"), (5, "announcement_count_5d"), (10, "announcement_count_10d")]:
+                mask = _window_mask(a["announce_date"], as_of, days)
+                df.at[idx, col] = float(mask.sum())
+            df.at[idx, "has_announcement_3d"] = float(df.at[idx, "announcement_count_3d"] > 0)
+            df.at[idx, "has_major_event_10d"] = float((_window_mask(a["announce_date"], as_of, 10) & a["_is_major"]).any())
+            df.at[idx, "has_risk_announcement_5d"] = float((_window_mask(a["announce_date"], as_of, 5) & a["_is_risk"]).any())
+            df.at[idx, "has_financial_report_30d"] = float((_window_mask(a["announce_date"], as_of, 30) & a["_is_financial"]).any())
+            df.at[idx, "has_reduction_notice_30d"] = float((_window_mask(a["announce_date"], as_of, 30) & a["_is_reduction"]).any())
+
+        d = dtg_by_sym.get(sym)
+        if d is not None and not d.empty:
+            mask5 = _window_mask(d["available_date"], as_of, 5)
+            mask10 = _window_mask(d["available_date"], as_of, 10)
+            df.at[idx, "has_dragon_tiger_5d"] = float(mask5.any())
+            df.at[idx, "dragon_tiger_count_10d"] = float(mask10.sum())
+            df.at[idx, "dragon_tiger_net_buy_5d"] = float(d.loc[mask5, "net_buy_amount"].sum())
+            df.at[idx, "institution_net_buy_5d"] = float(d.loc[mask5, "_institution_net"].sum())
+
+        b = blk_by_sym.get(sym)
+        if b is not None and not b.empty:
+            mask20 = _window_mask(b["available_date"], as_of, 20)
+            recent = b.loc[mask20]
+            df.at[idx, "block_trade_count_20d"] = float(len(recent))
+            df.at[idx, "block_trade_amount_20d"] = float(recent["amount"].fillna(0).sum())
+            discounts = recent["discount_rate"].dropna()
+            df.at[idx, "block_trade_discount_mean_20d"] = float(discounts.mean()) if not discounts.empty else 0.0
+            df.at[idx, "has_large_discount_block_trade_20d"] = float((discounts <= -0.10).any()) if not discounts.empty else 0.0
+
+    _rank_nonzero_by_date(df, "dragon_tiger_net_buy_5d", "dragon_tiger_net_buy_rank_5d")
+    _rank_nonzero_by_date(df, "institution_net_buy_5d", "institution_net_buy_rank_5d")
+    _rank_nonzero_by_date(df, "block_trade_amount_20d", "block_trade_amount_rank_20d")
+    return df.sort_values(["date", "symbol"]).reset_index(drop=True)
+
+
+def _load_event_panel(store_root: Path | str, symbols: list[str], path_func, date_cols: tuple[str, ...]) -> pd.DataFrame:
+    frames = []
+    for symbol in symbols:
+        path = path_func(store_root, symbol)
+        if path.exists():
+            try:
+                df = pd.read_parquet(path)
+                for col in date_cols:
+                    if col in df.columns:
+                        df[col] = pd.to_datetime(df[col], errors="coerce").dt.date
+                frames.append(df)
+            except Exception as exc:
+                logger.warning("Could not load event3 data for %s from %s: %s", symbol, path, exc)
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+
+
+def load_announcement_events_panel(store_root: Path | str, symbols: list[str]) -> pd.DataFrame:
+    from quant_platform.store.lake import announcement_events_path
+
+    return _load_event_panel(store_root, symbols, announcement_events_path, ("announce_date", "event_date"))
+
+
+def load_dragon_tiger_panel(store_root: Path | str, symbols: list[str]) -> pd.DataFrame:
+    from quant_platform.store.lake import dragon_tiger_path
+
+    return _load_event_panel(store_root, symbols, dragon_tiger_path, ("trade_date", "available_date"))
+
+
+def load_block_trade_panel(store_root: Path | str, symbols: list[str]) -> pd.DataFrame:
+    from quant_platform.store.lake import block_trade_path
+
+    return _load_event_panel(store_root, symbols, block_trade_path, ("trade_date", "available_date"))

@@ -1,0 +1,281 @@
+{
+  "requested_as_of_date": "2026-07-06",
+  "actual_as_of_date": "2026-07-03",
+  "actual_reason": "requested_as_of_date 2026-07-06 has OHLCV coverage 0/300; using latest complete date 2026-07-03 with coverage 298/300",
+  "coverage_summary": {
+    "ohlcv": {
+      "requested_coverage": "0/300",
+      "actual_coverage": "298/300"
+    },
+    "features": {
+      "1474f2c4": {
+        "path": "features/1474f2c4",
+        "files": 300,
+        "symbol_file_coverage": "300/300",
+        "as_of_files": 0,
+        "latest_min": "2026-06-18",
+        "latest_max": "2026-06-18"
+      },
+      "d02a4ebf": {
+        "path": "features/d02a4ebf",
+        "files": 300,
+        "symbol_file_coverage": "300/300",
+        "as_of_files": 0,
+        "latest_min": "2026-06-18",
+        "latest_max": "2026-06-29"
+      }
+    },
+    "labels": {
+      "path": "labels/forward_returns",
+      "files": 300,
+      "symbol_file_coverage": "300/300",
+      "as_of_files": 298,
+      "latest_min": "2026-06-18",
+      "latest_max": "2026-07-03"
+    },
+    "fund_flow": {
+      "path": "silver/fund_flow",
+      "files": 12,
+      "symbol_file_coverage": "12/300",
+      "as_of_files": 7,
+      "latest_min": "2026-06-25",
+      "latest_max": "2026-07-03"
+    },
+    "fundamentals": {
+      "path": "silver/fundamentals",
+      "files": 79,
+      "symbol_file_coverage": "79/300",
+      "as_of_files": 0,
+      "latest_min": "2023-07-08",
+      "latest_max": "2026-06-15"
+    },
+    "announcement_events": {
+      "path": "silver/announcement_events",
+      "files": 300,
+      "symbol_file_coverage": "300/300",
+      "as_of_files": 6,
+      "latest_min": "2026-04-28",
+      "latest_max": "2026-07-03"
+    },
+    "dragon_tiger": {
+      "path": "silver/dragon_tiger",
+      "files": 300,
+      "symbol_file_coverage": "300/300",
+      "as_of_files": 8,
+      "latest_min": "2026-01-06",
+      "latest_max": "2026-07-03"
+    },
+    "block_trade": {
+      "path": "silver/block_trade",
+      "files": 300,
+      "symbol_file_coverage": "300/300",
+      "as_of_files": 15,
+      "latest_min": "2026-01-08",
+      "latest_max": "2026-07-03"
+    },
+    "valuation": {
+      "path": "silver/valuation",
+      "files": 300,
+      "symbol_file_coverage": "300/300",
+      "as_of_files": 0,
+      "latest_min": "2026-06-29",
+      "latest_max": "2026-06-29"
+    },
+    "margin": {
+      "path": "silver/margin",
+      "files": 295,
+      "symbol_file_coverage": "295/300",
+      "as_of_files": 0,
+      "latest_min": "2026-06-18",
+      "latest_max": "2026-06-24"
+    }
+  },
+  "base_meta": {
+    "train_start": "2023-01-03",
+    "train_end": "2026-06-29",
+    "prediction_date": "2026-07-03",
+    "x_train_rows": 250172,
+    "prediction_rows": 298,
+    "feature_count": 35
+  },
+  "recent_status": "trained",
+  "recent_meta": {
+    "train_start": "2025-12-25",
+    "train_end": "2026-06-29",
+    "prediction_date": "2026-07-03",
+    "x_train_rows": 35874,
+    "prediction_rows": 298,
+    "feature_count": 54
+  },
+  "recent_failure_reason": "",
+  "gate_mode": "event3_enhanced_gate",
+  "collector_summary": {
+    "announcement_events": {
+      "ok_files_or_empty": 300,
+      "failed": 0,
+      "rows_fetched": 58
+    },
+    "dragon_tiger": {
+      "ok_files_or_empty": 300,
+      "failed": 0,
+      "rows_fetched": 222
+    },
+    "block_trade": {
+      "ok_files_or_empty": 300,
+      "failed": 0,
+      "rows_fetched": 2718
+    }
+  },
+  "event_features_in_recent": [
+    "announcement_count_3d",
+    "announcement_count_5d",
+    "announcement_count_10d",
+    "has_announcement_3d",
+    "has_major_event_10d",
+    "has_risk_announcement_5d",
+    "has_financial_report_30d",
+    "has_reduction_notice_30d",
+    "has_dragon_tiger_5d",
+    "dragon_tiger_count_10d",
+    "dragon_tiger_net_buy_5d",
+    "dragon_tiger_net_buy_rank_5d",
+    "institution_net_buy_5d",
+    "institution_net_buy_rank_5d",
+    "block_trade_count_20d",
+    "block_trade_amount_20d",
+    "block_trade_amount_rank_20d",
+    "block_trade_discount_mean_20d",
+    "has_large_discount_block_trade_20d"
+  ],
+  "event_features_in_base": [],
+  "margin_cross_validation_only": true,
+  "margin_in_recent": [],
+  "margin_in_base": [],
+  "tier_counts": {
+    "E_REJECT": 127,
+    "UNCLASSIFIED": 91,
+    "A_MAIN": 46,
+    "RISK_VETO": 10,
+    "C_DOWNGRADE_OBSERVE": 9,
+    "B_SHORT_BOOST": 8,
+    "D_OBSERVE": 7
+  },
+  "intersections": {
+    "base_recent_top20": 1,
+    "base_gate_top20": 13,
+    "recent_gate_top20": 1,
+    "all_three_top20": 0
+  },
+  "boosted": [
+    "002463",
+    "300033",
+    "002384",
+    "300498",
+    "688036",
+    "601211",
+    "300866",
+    "688183"
+  ],
+  "downgraded": [
+    "301165",
+    "002371",
+    "002625",
+    "600489",
+    "600547",
+    "300316",
+    "688396",
+    "301269",
+    "603986"
+  ],
+  "vetoed": [
+    "002460",
+    "600549",
+    "600588",
+    "000100",
+    "000963",
+    "002352",
+    "002602",
+    "002049",
+    "300760",
+    "600221"
+  ],
+  "outputs": {
+    "base_ranked": "E:\\stock-analysis\\models\\data\\reports\\D3_base_ranked_2026-07-03.csv",
+    "recent_ranked": "E:\\stock-analysis\\models\\data\\reports\\D3_recent_ranked_2026-07-03.csv",
+    "gate_ranked": "E:\\stock-analysis\\models\\data\\reports\\D3_gate_fused_ranked_2026-07-03.csv",
+    "report": "E:\\stock-analysis\\models\\data\\reports\\D3_gate_event3_run_report_2026-07-03.md",
+    "json": "E:\\stock-analysis\\models\\data\\reports\\D3_gate_event3_run_summary_2026-07-03.json",
+    "integration_report": "E:\\stock-analysis\\a_stock_data_event3_integration_report.md"
+  },
+  "base_feature_cols": "E:\\stock-analysis\\models\\data\\reports\\D3_base_X_train_columns_2026-07-03.csv",
+  "recent_feature_cols": "E:\\stock-analysis\\models\\data\\reports\\D3_recent_event3_X_train_columns_2026-07-03.csv",
+  "event_gate": "E:\\stock-analysis\\models\\data\\reports\\D3_event3_coverage_gate_2026-07-03.csv",
+  "event_feature_stats": "E:\\stock-analysis\\models\\data\\reports\\D3_event3_feature_missing_nonzero_2026-07-03.csv",
+  "event_feature_importance": "E:\\stock-analysis\\models\\data\\reports\\D3_event3_feature_importance_2026-07-03.csv",
+  "base_top20": [
+    "301165",
+    "002422",
+    "000975",
+    "688012",
+    "300476",
+    "000807",
+    "002532",
+    "601600",
+    "002371",
+    "002625",
+    "688082",
+    "688256",
+    "600188",
+    "002460",
+    "688521",
+    "002594",
+    "600489",
+    "600547",
+    "688506",
+    "300450"
+  ],
+  "recent_top20": [
+    "002916",
+    "002028",
+    "000100",
+    "300502",
+    "002384",
+    "300274",
+    "600176",
+    "000776",
+    "600999",
+    "300033",
+    "603259",
+    "600026",
+    "601211",
+    "300442",
+    "300433",
+    "688183",
+    "300866",
+    "000338",
+    "600276",
+    "002460"
+  ],
+  "fused_top20": [
+    "002422",
+    "000975",
+    "688012",
+    "300476",
+    "000807",
+    "002532",
+    "601600",
+    "688082",
+    "688256",
+    "600188",
+    "688521",
+    "688506",
+    "300450",
+    "605499",
+    "300661",
+    "002353",
+    "300502",
+    "601066",
+    "688303",
+    "688223"
+  ]
+}

@@ -1,0 +1,17 @@
+field,latest_trade_date,missing_rate,recent_symbol_coverage,recent_20d_avg_symbol_coverage,available_trading_days,is_allowed_for_recent_model,rejection_reason
+main_net,2026-07-06,0.0,3,3.0,127,False,recent-symbol-coverage-low; recent-20d-coverage-low
+small_net,2026-07-06,0.0,3,3.0,127,False,recent-symbol-coverage-low; recent-20d-coverage-low
+medium_net,2026-07-06,0.11444141689373297,3,3.0,127,False,recent-symbol-coverage-low; recent-20d-coverage-low
+mid_net,2026-07-06,0.0,3,3.0,127,False,recent-symbol-coverage-low; recent-20d-coverage-low
+large_net,2026-07-06,0.0,3,3.0,127,False,recent-symbol-coverage-low; recent-20d-coverage-low
+super_net,2026-07-06,0.0,3,3.0,127,False,recent-symbol-coverage-low; recent-20d-coverage-low
+main_net_rate,2026-07-06,0.11444141689373297,3,3.0,127,False,recent-symbol-coverage-low; recent-20d-coverage-low
+small_net_rate,2026-07-06,0.11444141689373297,3,3.0,127,False,recent-symbol-coverage-low; recent-20d-coverage-low
+medium_net_rate,2026-07-06,0.11444141689373297,3,3.0,127,False,recent-symbol-coverage-low; recent-20d-coverage-low
+large_net_rate,2026-07-06,0.11444141689373297,3,3.0,127,False,recent-symbol-coverage-low; recent-20d-coverage-low
+super_net_rate,2026-07-06,0.11444141689373297,3,3.0,127,False,recent-symbol-coverage-low; recent-20d-coverage-low
+close,2026-07-06,0.11444141689373297,3,3.0,127,False,recent-symbol-coverage-low; recent-20d-coverage-low
+pct_change,2026-07-06,0.11444141689373297,3,3.0,127,False,recent-symbol-coverage-low; recent-20d-coverage-low
+source,2026-07-06,0.11444141689373297,3,3.0,127,False,recent-symbol-coverage-low; recent-20d-coverage-low
+raw_update_time,2026-07-06,1.0,3,3.0,127,False,recent-symbol-coverage-low; recent-20d-coverage-low
+fetched_at,2026-07-06,0.11444141689373297,3,3.0,127,False,recent-symbol-coverage-low; recent-20d-coverage-low

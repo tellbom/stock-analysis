@@ -49,10 +49,22 @@ pe_momentum_5d,valuation,silver/valuation,2026-06-29,0.01750791655395191,0,150.7
 ind_rank_rsi_6,industry,silver/industry_map,2026-07-03,0.007160702067055997,298,295.75,840,0.9929078014184397,True,True,False,allowed
 ind_rank_turnover,industry,silver/industry_map,2026-06-29,0.010410865171936413,0,164.9,837,0.9893617021276596,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
 sector_momentum_10d,industry,silver/industry_map,2026-07-03,0.011882787263497924,298,295.75,836,0.9881796690307328,True,True,False,allowed
-cs_main_flow_rank_1d,flow,silver/fund_flow,2026-06-18,0.9972311952007383,0,3.0,116,0.13711583924349882,False,False,True,short-history-family; base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
-cs_main_flow_rank_5d,flow,silver/fund_flow,2026-06-18,0.9972311952007383,0,3.0,116,0.13711583924349882,False,False,True,short-history-family; base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
-cs_small_flow_rank_1d,flow,silver/fund_flow,2026-06-18,0.9972311952007383,0,3.0,116,0.13711583924349882,False,False,True,short-history-family; base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
-cs_super_flow_rank_1d,flow,silver/fund_flow,2026-06-18,0.9972311952007383,0,3.0,116,0.13711583924349882,False,False,True,short-history-family; base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
-cs_flow_reversal_5d,flow,silver/fund_flow,2026-06-18,0.9972311952007383,0,3.0,116,0.13711583924349882,False,False,True,short-history-family; base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
-cs_margin_balance_change_5d,margin,silver/margin,2026-06-24,0.08666438585045272,0,149.0,833,0.9846335697399528,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
-cs_rzrq_ratio_rank,margin,silver/margin,2026-06-24,0.08079658832328183,0,149.0,838,0.9905437352245863,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
+announcement_count_3d,announcement_events,cninfo,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+announcement_count_5d,announcement_events,cninfo,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+announcement_count_10d,announcement_events,cninfo,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+has_announcement_3d,announcement_events,cninfo,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+has_major_event_10d,announcement_events,cninfo,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+has_risk_announcement_5d,announcement_events,cninfo,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+has_financial_report_30d,announcement_events,cninfo,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+has_reduction_notice_30d,announcement_events,cninfo,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+has_dragon_tiger_5d,dragon_tiger,datacenter-web,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+dragon_tiger_count_10d,dragon_tiger,datacenter-web,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+dragon_tiger_net_buy_5d,dragon_tiger,datacenter-web,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+dragon_tiger_net_buy_rank_5d,dragon_tiger,datacenter-web,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+institution_net_buy_5d,dragon_tiger,datacenter-web,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+institution_net_buy_rank_5d,dragon_tiger,datacenter-web,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+block_trade_count_20d,block_trade,datacenter-web,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+block_trade_amount_20d,block_trade,datacenter-web,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+block_trade_amount_rank_20d,block_trade,datacenter-web,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+block_trade_discount_mean_20d,block_trade,datacenter-web,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family
+has_large_discount_block_trade_20d,block_trade,datacenter-web,2026-07-03,0.0,298,295.75,846,1.0,False,True,False,short-history-family

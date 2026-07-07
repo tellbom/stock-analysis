@@ -229,12 +229,22 @@ def enforce_fund_flow(df: pd.DataFrame, symbol: str) -> pd.DataFrame:
     df["symbol"] = symbol
     df["date"]   = pd.to_datetime(df["date"]).dt.date
     df["trade_date"] = pd.to_datetime(df["trade_date"]).dt.date
+    if "mid_net" not in df.columns and "medium_net" in df.columns:
+        df["mid_net"] = df["medium_net"]
+    if "medium_net" not in df.columns and "mid_net" in df.columns:
+        df["medium_net"] = df["mid_net"]
     for col in ("main_net", "small_net", "mid_net", "large_net", "super_net"):
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0)
         else:
             df[col] = 0.0
+    if "medium_net" not in df.columns:
+        df["medium_net"] = df["mid_net"]
+    df["medium_net"] = pd.to_numeric(df["medium_net"], errors="coerce").fillna(0.0)
     for col in ("main_net_rate", "small_net_rate", "medium_net_rate", "large_net_rate", "super_net_rate"):
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+    for col in ("close", "pct_change"):
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
     for col in ("source", "raw_update_time", "fetched_at"):

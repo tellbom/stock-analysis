@@ -117,6 +117,9 @@ def init_lake(store_root: Path | str) -> None:
         "silver/concept_fund_flow", # P0 gate: concept fund-flow proxy
         "silver/margin",        # P4B-08: daily margin trading
         "silver/lockup",        # P4C-03: lockup expiry calendar
+        "silver/announcement_events",
+        "silver/dragon_tiger",
+        "silver/block_trade",
         "universe",
         "calendar",
         "catalog",
@@ -267,3 +270,31 @@ def lockup_path(store_root: Path | str, symbol: str) -> Path:
     PIT safe: all dates are public knowledge at the time of announcement.
     """
     return lockup_dir(store_root) / f"{symbol}.parquet"
+
+
+# ---------------------------------------------------------------------------
+# Silver: short-window event data (event3)
+# ---------------------------------------------------------------------------
+
+def announcement_events_dir(store_root: Path | str) -> Path:
+    return silver_root(store_root) / "announcement_events"
+
+
+def announcement_events_path(store_root: Path | str, symbol: str) -> Path:
+    return announcement_events_dir(store_root) / f"{symbol}.parquet"
+
+
+def dragon_tiger_dir(store_root: Path | str) -> Path:
+    return silver_root(store_root) / "dragon_tiger"
+
+
+def dragon_tiger_path(store_root: Path | str, symbol: str) -> Path:
+    return dragon_tiger_dir(store_root) / f"{symbol}.parquet"
+
+
+def block_trade_dir(store_root: Path | str) -> Path:
+    return silver_root(store_root) / "block_trade"
+
+
+def block_trade_path(store_root: Path | str, symbol: str) -> Path:
+    return block_trade_dir(store_root) / f"{symbol}.parquet"

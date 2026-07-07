@@ -1,5 +1,3 @@
-symbol,rows,latest
-002236,120,2026-07-06
-002241,120,2026-07-06
-002304,120,2026-07-06
-688041,120,2026-07-06
+symbol,rows,min_date,max_date,fields,success,error
+000001,127,2026-01-06,2026-07-06,"main_net,small_net,medium_net,mid_net,large_net,super_net,main_net_rate,small_net_rate,medium_net_rate,large_net_rate,super_net_rate,close,pct_change,source,raw_update_time,fetched_at",True,
+300750,120,2026-01-05,2026-07-06,"main_net,small_net,medium_net,mid_net,large_net,super_net,main_net_rate,small_net_rate,medium_net_rate,large_net_rate,super_net_rate,close,pct_change,source,raw_update_time,fetched_at",True,

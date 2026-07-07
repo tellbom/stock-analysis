@@ -26,7 +26,17 @@ STABLE_FAMILIES = {
     "fundamental",
 }
 
-SHORT_HISTORY_FAMILIES = {"flow", "sector_flow", "concept_flow", "proxy_flow", "event", "announcement"}
+SHORT_HISTORY_FAMILIES = {
+    "flow",
+    "sector_flow",
+    "concept_flow",
+    "proxy_flow",
+    "event",
+    "announcement",
+    "announcement_events",
+    "dragon_tiger",
+    "block_trade",
+}
 
 FUTURE_FIELD_TOKENS = (
     "future",
@@ -92,6 +102,9 @@ def _source_for_family(family: str) -> str:
         "proxy_flow": "silver/sector_fund_flow",
         "event": "silver/lockup",
         "announcement": "silver/announcement_events",
+        "announcement_events": "cninfo",
+        "dragon_tiger": "datacenter-web",
+        "block_trade": "datacenter-web",
         "fundamental": "silver/fundamentals",
         "valuation": "silver/valuation",
         "industry": "silver/industry_map",

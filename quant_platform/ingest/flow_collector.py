@@ -35,13 +35,15 @@ Usage
 from __future__ import annotations
 
 import datetime as dt
+import json
 import random
+import shutil
 import time
 from dataclasses import dataclass
 from pathlib import Path
 
 import pandas as pd
-import requests
+import urllib3
 
 from quant_platform.core.logging import get_logger
 from quant_platform.store.lake import fund_flow_path, fund_flow_dir, init_lake
@@ -50,21 +52,23 @@ from quant_platform.store.schemas import enforce_fund_flow
 logger = get_logger(__name__)
 
 _UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
-_PUSH2HIS_URL = "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get"
+_PUSH2HIS_URL = "http://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get"
+_PUSH2HIS_SOURCE = "eastmoney_push2his_http_urllib3"
 
 # Throttle: ≥1s between Eastmoney push2his calls
 _EM_MIN_INTERVAL = 1.0
 _em_last_call: list[float] = [0.0]
-_em_session = requests.Session()
-_em_session.headers.update({
+_em_http = urllib3.PoolManager(num_pools=1, maxsize=1, retries=0)
+_EM_HEADERS = {
     "User-Agent": _UA,
-    "Referer": "https://quote.eastmoney.com/",
-    "Origin": "https://quote.eastmoney.com",
-})
+    "Referer": "http://quote.eastmoney.com/",
+    "Accept": "application/json,text/plain,*/*",
+}
 
 # Days of gap before we trigger a full re-fetch instead of incremental
 _REFETCH_THRESHOLD_DAYS = 60
-_FETCH_RETRIES = 2
+_FETCH_RETRIES = 3
+_FETCH_BACKOFF_SECONDS = (1.0, 2.0, 4.0)
 
 
 @dataclass
@@ -106,23 +110,47 @@ def _market_code(code: str) -> int:
     return 0
 
 
-def _em_get(url: str, params: dict | None = None, timeout: int = 15) -> requests.Response:
-    """Throttled Eastmoney GET."""
+def _em_get(url: str, params: dict | None = None, timeout: int = 15):
+    """Throttled Eastmoney HTTP GET through a single urllib3 connection pool."""
     wait = _EM_MIN_INTERVAL - (time.time() - _em_last_call[0])
     if wait > 0:
         time.sleep(wait + random.uniform(0.1, 0.4))
     try:
-        return _em_session.get(url, params=params, timeout=timeout)
+        return _em_http.request(
+            "GET",
+            url,
+            fields=params,
+            headers=_EM_HEADERS,
+            timeout=urllib3.Timeout(connect=5.0, read=float(timeout)),
+            preload_content=True,
+        )
     finally:
         _em_last_call[0] = time.time()
 
 
+def _response_json(response) -> dict:
+    if hasattr(response, "json"):
+        return response.json()
+    data = getattr(response, "data", b"")
+    if isinstance(data, bytes):
+        data = data.decode("utf-8", errors="replace")
+    return json.loads(data)
+
+
+def _parse_number(value: str | None) -> float | None:
+    if value in ("", "-", None):
+        return None
+    return float(value)
+
+
 def _fetch_push2his_result(code: str, retries: int = _FETCH_RETRIES) -> tuple[pd.DataFrame, str | None, int]:
     """
-    Fetch up to 120 days of daily fund flow for one symbol.
+    Fetch daily fund flow history for one symbol.
 
     Returns a DataFrame with columns:
-        date, main_net, small_net, mid_net, large_net, super_net
+        date/trade_date, main_net, small_net, medium_net, mid_net,
+        large_net, super_net, rate fields, close, pct_change, source,
+        raw_update_time, fetched_at
     or empty DataFrame on failure.
 
     Units: 元 (yuan) — as returned by the API.
@@ -132,56 +160,90 @@ def _fetch_push2his_result(code: str, retries: int = _FETCH_RETRIES) -> tuple[pd
     params = {
         "secid":   f"{market}.{code}",
         "fields1": "f1,f2,f3,f7",
-        "fields2": "f51,f52,f53,f54,f55,f56",
-        "lmt":     "120",
+        "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63",
+        "lmt":     "100000",
+        "klt":     "101",
     }
     last_error: str | None = None
-    for attempt in range(retries + 1):
+    retry_count = 0
+    data: dict = {}
+    klines: list[str] = []
+    for attempt in range(retries):
         try:
             r = _em_get(_PUSH2HIS_URL, params=params)
-            status_code = getattr(r, "status_code", 200)
+            status_code = getattr(r, "status", getattr(r, "status_code", 200))
             if isinstance(status_code, int) and status_code != 200:
-                last_error = f"HTTP {status_code}: {getattr(r, 'text', '')[:200]}"
-                time.sleep(1.0 + attempt)
+                body = getattr(r, "data", getattr(r, "text", ""))
+                if isinstance(body, bytes):
+                    body = body.decode("utf-8", errors="replace")
+                last_error = f"HTTP {status_code}: {str(body)[:200]}"
+                retry_count = attempt + 1
+                _em_http.clear()
+                time.sleep(_FETCH_BACKOFF_SECONDS[min(attempt, len(_FETCH_BACKOFF_SECONDS) - 1)])
                 continue
-            payload = r.json()
+            payload = _response_json(r)
             data = payload.get("data") or {}
             klines = data.get("klines") or []
             if not klines:
                 last_error = f"empty klines for secid={market}.{code}; payload_head={str(payload)[:300]}"
-                time.sleep(1.0 + attempt)
+                retry_count = attempt + 1
+                _em_http.clear()
+                time.sleep(_FETCH_BACKOFF_SECONDS[min(attempt, len(_FETCH_BACKOFF_SECONDS) - 1)])
                 continue
             break
         except Exception as exc:
             last_error = f"{type(exc).__name__}: {exc}"
             logger.debug("%s: push2his fetch failed attempt=%d: %s", code, attempt + 1, exc)
-            time.sleep(1.0 + attempt)
+            retry_count = attempt + 1
+            _em_http.clear()
+            time.sleep(_FETCH_BACKOFF_SECONDS[min(attempt, len(_FETCH_BACKOFF_SECONDS) - 1)])
     else:
-        return pd.DataFrame(), last_error or "unknown fetch failure", retries
+        return pd.DataFrame(), last_error or "unknown fetch failure", retry_count
 
+    fetched_at = dt.datetime.now(dt.timezone.utc).isoformat()
+    raw_update_time = (
+        data.get("updateTime")
+        or data.get("update_time")
+        or data.get("lastUpdateTime")
+        or data.get("last_update_time")
+    )
     rows = []
     for line in klines:
         parts = line.split(",")
         if len(parts) < 6:
             continue
         try:
+            medium_net = _parse_number(parts[3])
             rows.append({
-                "date":      parts[0],           # YYYY-MM-DD
-                "main_net":  float(parts[1]) if parts[1] not in ("-", "") else 0.0,
-                "small_net": float(parts[2]) if parts[2] not in ("-", "") else 0.0,
-                "mid_net":   float(parts[3]) if parts[3] not in ("-", "") else 0.0,
-                "large_net": float(parts[4]) if parts[4] not in ("-", "") else 0.0,
-                "super_net": float(parts[5]) if parts[5] not in ("-", "") else 0.0,
+                "date": parts[0],
+                "trade_date": parts[0],
+                "main_net": _parse_number(parts[1]),
+                "small_net": _parse_number(parts[2]),
+                "medium_net": medium_net,
+                "mid_net": medium_net,
+                "large_net": _parse_number(parts[4]),
+                "super_net": _parse_number(parts[5]),
+                "main_net_rate": _parse_number(parts[6]) if len(parts) > 6 else None,
+                "small_net_rate": _parse_number(parts[7]) if len(parts) > 7 else None,
+                "medium_net_rate": _parse_number(parts[8]) if len(parts) > 8 else None,
+                "large_net_rate": _parse_number(parts[9]) if len(parts) > 9 else None,
+                "super_net_rate": _parse_number(parts[10]) if len(parts) > 10 else None,
+                "close": _parse_number(parts[11]) if len(parts) > 11 else None,
+                "pct_change": _parse_number(parts[12]) if len(parts) > 12 else None,
+                "source": _PUSH2HIS_SOURCE,
+                "raw_update_time": raw_update_time,
+                "fetched_at": fetched_at,
             })
         except (ValueError, IndexError):
             continue
 
     if not rows:
-        return pd.DataFrame(), "all klines failed to parse", retries
+        return pd.DataFrame(), "all klines failed to parse", retry_count
 
     df = pd.DataFrame(rows)
     df["date"] = pd.to_datetime(df["date"]).dt.date
-    return df.sort_values("date").reset_index(drop=True), None, retries
+    df["trade_date"] = pd.to_datetime(df["trade_date"]).dt.date
+    return df.sort_values("date").reset_index(drop=True), None, retry_count
 
 
 def _fetch_push2his(code: str) -> pd.DataFrame:
@@ -199,8 +261,11 @@ class FundFlowCollector:
     store_root : Path | str
     """
 
-    def __init__(self, store_root: Path | str) -> None:
+    def __init__(self, store_root: Path | str, providers: list | None = None) -> None:
         self.store_root = Path(store_root)
+        self.providers = providers
+        self._backup_dir: Path | None = None
+        self._backed_up_symbols: set[str] = set()
         init_lake(self.store_root)
 
     # ------------------------------------------------------------------
@@ -235,9 +300,9 @@ class FundFlowCollector:
             symbol = _normalise_symbol(symbol)
             try:
                 new_df, provider_name, missing_fields, provider_failures = self._fetch_with_provider_route(symbol)
-                failures.extend(provider_failures)
                 n = self._write_one(symbol, new_df, overwrite)
                 results[symbol] = n
+                failures.extend(provider_failures)
                 if missing_fields:
                     logger.info(
                         "%s: provider=%s wrote=%d missing_fields=%s",
@@ -283,7 +348,8 @@ class FundFlowCollector:
 
         symbol = _normalise_symbol(symbol)
         failures: list[FundFlowFailure] = []
-        for provider in default_fund_flow_providers():
+        providers = self.providers if self.providers is not None else default_fund_flow_providers()
+        for provider in providers:
             try:
                 result = provider.fetch_symbol(symbol, days=120)
                 if result.frame.empty:
@@ -326,8 +392,8 @@ class FundFlowCollector:
             try:
                 existing = pd.read_parquet(out_path)
                 existing["date"] = pd.to_datetime(existing["date"]).dt.date
-            except Exception:
-                existing = pd.DataFrame()
+            except Exception as exc:
+                raise RuntimeError(f"failed to read existing fund_flow parquet {out_path}: {exc}") from exc
 
         # Decide whether to do a full re-fetch
         do_full = overwrite or existing.empty
@@ -349,23 +415,32 @@ class FundFlowCollector:
 
         if do_full or existing.empty:
             combined = new_df
+            n_new = len(new_df)
         else:
-            # Only keep genuinely new rows
             known_dates = set(existing["date"].values)
-            actually_new = new_df[~new_df["date"].isin(known_dates)]
-            if actually_new.empty:
-                return 0
-            combined = pd.concat([existing, actually_new], ignore_index=True)
+            n_new = int((~new_df["date"].isin(known_dates)).sum())
+            combined = pd.concat([existing, new_df], ignore_index=True)
 
         combined = (
             combined.sort_values("date")
                     .drop_duplicates(subset=["symbol", "date"], keep="last")
                     .reset_index(drop=True)
         )
+        self._backup_existing(symbol, out_path)
         combined.to_parquet(out_path, index=False)
-        n_new = len(new_df) if do_full else len(actually_new)
         logger.debug("%s: wrote %d new rows → %s", symbol, n_new, out_path)
         return n_new
+
+    def _backup_existing(self, symbol: str, out_path: Path) -> None:
+        """Copy the previous parquet once before replacing it."""
+        if not out_path.exists() or symbol in self._backed_up_symbols:
+            return
+        if self._backup_dir is None:
+            stamp = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
+            self._backup_dir = self.store_root / f"backup_fund_flow_before_http_urllib3_{stamp}"
+            self._backup_dir.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(out_path, self._backup_dir / out_path.name)
+        self._backed_up_symbols.add(symbol)
 
     def _write_failure_report(self, failures: list[FundFlowFailure]) -> None:
         """Persist failed symbol diagnostics for post-run debugging."""
