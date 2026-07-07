@@ -98,7 +98,7 @@
 - recent candidates: 57; recent admitted: 40
 - gate_mode: fund_flow_enhanced_gate
 - fund flow entered recent model: yes (cs_main_flow_rank_1d, cs_main_flow_rank_5d, cs_small_flow_rank_1d, cs_super_flow_rank_1d, cs_flow_reversal_5d)
-- fund_flow coverage gate result: {'path': 'E:\\stock-analysis\\models\\data\\reports\\fund_flow_emdatah5_coverage_gate.csv', 'covered_symbols': 300, 'latest_available_date': '2026-07-06', 'recent_symbol_coverage': 299, 'recent_20d_avg_symbol_coverage': 292.1, 'available_trading_days': 130, 'field_missing_rate': 0.05555555555555555, 'is_allowed_for_recent_model': True, 'rejection_reason': 'allowed'}
+- fund_flow coverage gate result: {'status': 'computed_this_run', 'recent_symbol_coverage': 292, 'latest_available_date': '2026-07-03', 'recent_20d_avg_symbol_coverage': 287.9, 'available_trading_days': 129, 'field_missing_rate': 0.8614205241633913, 'is_allowed_for_recent_model': True, 'rejection_reason': 'short-history-family'}
 - base final feature list: `E:\stock-analysis\models\data\reports\D3_base_X_train_columns_2026-07-03.csv`
 - recent final feature list: `E:\stock-analysis\models\data\reports\D3_recent_emdatah5_X_train_columns_2026-07-03.csv`
 - fund flow forbidden from base model: yes
@@ -116,11 +116,11 @@
 
 ## Gate Summary
 
-- tier counts: {'E_REJECT': 140, 'UNCLASSIFIED': 85, 'A_MAIN': 49, 'C_DOWNGRADE_OBSERVE': 9, 'B_SHORT_BOOST': 8, 'D_OBSERVE': 7}
+- tier counts: {'E_REJECT': 132, 'UNCLASSIFIED': 97, 'A_MAIN': 43, 'C_DOWNGRADE_OBSERVE': 10, 'B_SHORT_BOOST': 9, 'D_OBSERVE': 7}
 - risk veto count: 0
-- top20 intersections: {'base_recent_top20': 3, 'base_gate_top20': 16, 'recent_gate_top20': 5, 'all_three_top20': 3}
-- recent boosted symbols: ['002463', '300033', '002384', '000100', '300803', '601211', '300866', '688183']
-- recent downgraded symbols: ['301165', '002625', '002594', '600547', '300316', '688396', '301269', '002179', '601899']
+- top20 intersections: {'base_recent_top20': 1, 'base_gate_top20': 12, 'recent_gate_top20': 5, 'all_three_top20': 1}
+- recent boosted symbols: ['002463', '300033', '002384', '000100', '002415', '601211', '300866', '688183', '000977']
+- recent downgraded symbols: ['301165', '002422', '002625', '688521', '600547', '300316', '688396', '301269', '603986', '002179']
 - event risk vetoed symbols: []
 
 ## Base Top20
@@ -152,51 +152,51 @@
 
 | Rank | Symbol | Score |
 |---:|---|---:|
-| 1 | 000100 | +0.030757 |
-| 2 | 002028 | +0.030487 |
-| 3 | 300661 | +0.023973 |
-| 4 | 603259 | +0.023725 |
-| 5 | 688506 | +0.023624 |
-| 6 | 002916 | +0.022616 |
-| 7 | 600118 | +0.018191 |
-| 8 | 300033 | +0.016034 |
-| 9 | 600176 | +0.014604 |
-| 10 | 300274 | +0.014434 |
-| 11 | 002384 | +0.013359 |
-| 12 | 002353 | +0.013234 |
-| 13 | 600999 | +0.012277 |
-| 14 | 002920 | +0.012174 |
-| 15 | 600276 | +0.011972 |
-| 16 | 300433 | +0.011101 |
-| 17 | 002532 | +0.009947 |
-| 18 | 300450 | +0.009371 |
-| 19 | 300866 | +0.009309 |
-| 20 | 300408 | +0.009146 |
+| 1 | 002028 | +0.029015 |
+| 2 | 000100 | +0.027939 |
+| 3 | 002384 | +0.024091 |
+| 4 | 603259 | +0.020840 |
+| 5 | 600118 | +0.019422 |
+| 6 | 002916 | +0.017051 |
+| 7 | 600999 | +0.015755 |
+| 8 | 002353 | +0.013971 |
+| 9 | 300433 | +0.013618 |
+| 10 | 600176 | +0.013222 |
+| 11 | 300502 | +0.011564 |
+| 12 | 300450 | +0.011052 |
+| 13 | 688303 | +0.011044 |
+| 14 | 002920 | +0.010745 |
+| 15 | 601211 | +0.010729 |
+| 16 | 603501 | +0.010721 |
+| 17 | 688183 | +0.010382 |
+| 18 | 300274 | +0.009933 |
+| 19 | 600276 | +0.009422 |
+| 20 | 300033 | +0.009358 |
 
 ## Gate Fused Top20
 
 | Rank | Symbol | Tier | Reason |
 |---:|---|---|---|
-| 1 | 002422 | A_MAIN | base strong, recent confirms |
-| 2 | 000975 | A_MAIN | base strong, recent confirms |
-| 3 | 688012 | A_MAIN | base strong, recent confirms |
-| 4 | 300476 | A_MAIN | base strong, recent confirms |
-| 5 | 000807 | A_MAIN | base strong, recent confirms |
-| 6 | 002532 | A_MAIN | base strong, recent confirms |
-| 7 | 601600 | A_MAIN | base strong, recent confirms |
-| 8 | 002371 | A_MAIN | base strong, recent confirms |
-| 9 | 688082 | A_MAIN | base strong, recent confirms |
-| 10 | 688256 | A_MAIN | base strong, recent confirms |
-| 11 | 600188 | A_MAIN | base strong, recent confirms |
-| 12 | 002460 | A_MAIN | base strong, recent confirms |
-| 13 | 688521 | A_MAIN | base strong, recent confirms |
-| 14 | 600489 | A_MAIN | base strong, recent confirms |
-| 15 | 688506 | A_MAIN | base strong, recent confirms |
-| 16 | 300450 | A_MAIN | base strong, recent confirms |
-| 17 | 605499 | A_MAIN | base strong, recent confirms |
-| 18 | 300661 | A_MAIN | base strong, recent confirms |
-| 19 | 002353 | A_MAIN | base strong, recent confirms |
-| 20 | 300502 | A_MAIN | base strong, recent confirms |
+| 1 | 688012 | A_MAIN | base strong, recent confirms |
+| 2 | 300476 | A_MAIN | base strong, recent confirms |
+| 3 | 000807 | A_MAIN | base strong, recent confirms |
+| 4 | 002532 | A_MAIN | base strong, recent confirms |
+| 5 | 601600 | A_MAIN | base strong, recent confirms |
+| 6 | 002371 | A_MAIN | base strong, recent confirms |
+| 7 | 688082 | A_MAIN | base strong, recent confirms |
+| 8 | 688256 | A_MAIN | base strong, recent confirms |
+| 9 | 600188 | A_MAIN | base strong, recent confirms |
+| 10 | 002460 | A_MAIN | base strong, recent confirms |
+| 11 | 688506 | A_MAIN | base strong, recent confirms |
+| 12 | 300450 | A_MAIN | base strong, recent confirms |
+| 13 | 605499 | A_MAIN | base strong, recent confirms |
+| 14 | 300661 | A_MAIN | base strong, recent confirms |
+| 15 | 002353 | A_MAIN | base strong, recent confirms |
+| 16 | 300502 | A_MAIN | base strong, recent confirms |
+| 17 | 601066 | A_MAIN | base strong, recent confirms |
+| 18 | 688303 | A_MAIN | base strong, recent confirms |
+| 19 | 688223 | A_MAIN | base strong, recent confirms |
+| 20 | 600999 | A_MAIN | base strong, recent confirms |
 
 ## Verification Artifacts
 

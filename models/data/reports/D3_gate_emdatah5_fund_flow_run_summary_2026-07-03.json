@@ -109,51 +109,52 @@
   ],
   "flow_in_base": [],
   "fund_flow_gate": {
-    "path": "E:\\stock-analysis\\models\\data\\reports\\fund_flow_emdatah5_coverage_gate.csv",
-    "covered_symbols": 300,
-    "latest_available_date": "2026-07-06",
-    "recent_symbol_coverage": 299,
-    "recent_20d_avg_symbol_coverage": 292.1,
-    "available_trading_days": 130,
-    "field_missing_rate": 0.05555555555555555,
+    "status": "computed_this_run",
+    "recent_symbol_coverage": 292,
+    "latest_available_date": "2026-07-03",
+    "recent_20d_avg_symbol_coverage": 287.9,
+    "available_trading_days": 129,
+    "field_missing_rate": 0.8614205241633913,
     "is_allowed_for_recent_model": true,
-    "rejection_reason": "allowed"
+    "rejection_reason": "short-history-family"
   },
   "gate_mode": "fund_flow_enhanced_gate",
   "tier_counts": {
-    "E_REJECT": 140,
-    "UNCLASSIFIED": 85,
-    "A_MAIN": 49,
-    "C_DOWNGRADE_OBSERVE": 9,
-    "B_SHORT_BOOST": 8,
+    "E_REJECT": 132,
+    "UNCLASSIFIED": 97,
+    "A_MAIN": 43,
+    "C_DOWNGRADE_OBSERVE": 10,
+    "B_SHORT_BOOST": 9,
     "D_OBSERVE": 7
   },
   "intersections": {
-    "base_recent_top20": 3,
-    "base_gate_top20": 16,
+    "base_recent_top20": 1,
+    "base_gate_top20": 12,
     "recent_gate_top20": 5,
-    "all_three_top20": 3
+    "all_three_top20": 1
   },
   "boosted": [
     "002463",
     "300033",
     "002384",
     "000100",
-    "300803",
+    "002415",
     "601211",
     "300866",
-    "688183"
+    "688183",
+    "000977"
   ],
   "downgraded": [
     "301165",
+    "002422",
     "002625",
-    "002594",
+    "688521",
     "600547",
     "300316",
     "688396",
     "301269",
-    "002179",
-    "601899"
+    "603986",
+    "002179"
   ],
   "vetoed": [],
   "outputs": {
@@ -189,30 +190,28 @@
     "300450"
   ],
   "recent_top20": [
-    "000100",
     "002028",
-    "300661",
-    "603259",
-    "688506",
-    "002916",
-    "600118",
-    "300033",
-    "600176",
-    "300274",
+    "000100",
     "002384",
-    "002353",
+    "603259",
+    "600118",
+    "002916",
     "600999",
-    "002920",
-    "600276",
+    "002353",
     "300433",
-    "002532",
+    "600176",
+    "300502",
     "300450",
-    "300866",
-    "300408"
+    "688303",
+    "002920",
+    "601211",
+    "603501",
+    "688183",
+    "300274",
+    "600276",
+    "300033"
   ],
   "fused_top20": [
-    "002422",
-    "000975",
     "688012",
     "300476",
     "000807",
@@ -223,13 +222,15 @@
     "688256",
     "600188",
     "002460",
-    "688521",
-    "600489",
     "688506",
     "300450",
     "605499",
     "300661",
     "002353",
-    "300502"
+    "300502",
+    "601066",
+    "688303",
+    "688223",
+    "600999"
   ]
 }

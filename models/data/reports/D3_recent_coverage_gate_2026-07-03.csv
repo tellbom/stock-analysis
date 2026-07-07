@@ -49,10 +49,10 @@ pe_momentum_5d,valuation,silver/valuation,2026-06-29,0.01750791655395191,0,150.7
 ind_rank_rsi_6,industry,silver/industry_map,2026-07-03,0.007160702067055997,298,295.75,840,0.9929078014184397,True,True,False,allowed
 ind_rank_turnover,industry,silver/industry_map,2026-06-29,0.010410865171936413,0,164.9,837,0.9893617021276596,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
 sector_momentum_10d,industry,silver/industry_map,2026-07-03,0.011882787263497924,298,295.75,836,0.9881796690307328,True,True,False,allowed
-cs_main_flow_rank_1d,flow,silver/fund_flow,2026-07-03,0.8581266012125456,298,295.75,129,0.1524822695035461,False,True,False,short-history-family
-cs_main_flow_rank_5d,flow,silver/fund_flow,2026-07-03,0.8581266012125456,298,295.75,129,0.1524822695035461,False,True,False,short-history-family
-cs_small_flow_rank_1d,flow,silver/fund_flow,2026-07-03,0.8581266012125456,298,295.75,129,0.1524822695035461,False,True,False,short-history-family
-cs_super_flow_rank_1d,flow,silver/fund_flow,2026-07-03,0.8581266012125456,298,295.75,129,0.1524822695035461,False,True,False,short-history-family
-cs_flow_reversal_5d,flow,silver/fund_flow,2026-07-03,0.8581266012125456,298,295.75,129,0.1524822695035461,False,True,False,short-history-family
+cs_main_flow_rank_1d,flow,silver/fund_flow,2026-07-03,0.8614205241633913,292,287.9,129,0.1524822695035461,False,True,False,short-history-family
+cs_main_flow_rank_5d,flow,silver/fund_flow,2026-07-03,0.8614205241633913,292,287.9,129,0.1524822695035461,False,True,False,short-history-family
+cs_small_flow_rank_1d,flow,silver/fund_flow,2026-07-03,0.8614205241633913,292,287.9,129,0.1524822695035461,False,True,False,short-history-family
+cs_super_flow_rank_1d,flow,silver/fund_flow,2026-07-03,0.8614205241633913,292,287.9,129,0.1524822695035461,False,True,False,short-history-family
+cs_flow_reversal_5d,flow,silver/fund_flow,2026-07-03,0.8614205241633913,292,287.9,129,0.1524822695035461,False,True,False,short-history-family
 cs_margin_balance_change_5d,margin,silver/margin,2026-06-24,0.08666438585045272,0,149.0,833,0.9846335697399528,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
 cs_rzrq_ratio_rank,margin,silver/margin,2026-06-24,0.08079658832328183,0,149.0,838,0.9905437352245863,False,False,True,base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale
