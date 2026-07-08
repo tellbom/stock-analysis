@@ -1,0 +1,47 @@
+{
+  "date_list": [
+    "2026-04-02",
+    "2026-04-08",
+    "2026-04-13",
+    "2026-04-16",
+    "2026-04-21",
+    "2026-04-24",
+    "2026-04-29",
+    "2026-05-07",
+    "2026-05-12",
+    "2026-05-15",
+    "2026-05-20",
+    "2026-05-25",
+    "2026-05-28",
+    "2026-06-02",
+    "2026-06-05",
+    "2026-06-10",
+    "2026-06-15",
+    "2026-06-18",
+    "2026-06-24",
+    "2026-06-29"
+  ],
+  "horizon": "ret_fwd_3d",
+  "secondary_horizon": "ret_fwd_5d",
+  "universe": "CSI300",
+  "universe_n": 300,
+  "arms": [
+    "base_only",
+    "recent_only",
+    "gate_first",
+    "rrf",
+    "fixed_weight_0.3",
+    "fixed_weight_0.5",
+    "fixed_weight_0.7",
+    "recent_heavy",
+    "gate_first_noveto"
+  ],
+  "k": [
+    20,
+    50
+  ],
+  "cost_bps": 10,
+  "coverage_config": "CoverageGateConfig() defaults via _coverage_gate_config_for_universe",
+  "promotion_rule": "GF-08 plan section 6",
+  "result_location": "/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/gf08"
+}

@@ -1,6 +1,6 @@
 # Feature Coverage Gate
 
-Generated: 2026-07-07T16:41:31
+Generated: 2026-07-08T22:27:35
 
 - Features checked: 57
 - Base model allowed: 35
@@ -11,25 +11,25 @@ Generated: 2026-07-07T16:41:31
 
 | Feature | Family | Reason |
 |---|---|---|
-| fund_revenue | fundamental | base-missing>30%; base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low |
-| fund_net_profit | fundamental | base-missing>30%; base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low |
-| fund_eps | fundamental | base-missing>30%; base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low |
-| fund_roe | fundamental | base-missing>30%; base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low |
-| fund_lag_days | fundamental | base-missing>30%; base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low |
-| pe_ttm | raw_aux | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |
-| pb | raw_aux | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |
-| turnover_pct | raw_aux | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |
-| cs_log_float_mcap | valuation | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |
-| cs_pe_ttm_rank | valuation | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |
-| cs_pb_rank | valuation | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |
-| cs_turnover_rank | valuation | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |
-| cs_log_mcap_rank | valuation | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |
-| pe_momentum_5d | valuation | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |
-| ind_rank_turnover | industry | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |
+| fund_revenue | fundamental | base-missing>30%; base-recent-coverage-low; recent-20d-coverage-low |
+| fund_net_profit | fundamental | base-missing>30%; base-recent-coverage-low; recent-20d-coverage-low |
+| fund_eps | fundamental | base-missing>30%; base-recent-coverage-low; recent-20d-coverage-low |
+| fund_roe | fundamental | base-missing>30%; base-recent-coverage-low; recent-20d-coverage-low |
+| fund_lag_days | fundamental | base-missing>30%; base-recent-coverage-low; recent-20d-coverage-low |
+| pe_ttm | raw_aux | base-recent-coverage-low; recent-20d-coverage-low; latest-date-stale |
+| pb | raw_aux | base-recent-coverage-low; recent-20d-coverage-low; latest-date-stale |
+| turnover_pct | raw_aux | base-recent-coverage-low; recent-20d-coverage-low; latest-date-stale |
+| cs_log_float_mcap | valuation | base-recent-coverage-low; recent-20d-coverage-low; latest-date-stale |
+| cs_pe_ttm_rank | valuation | base-recent-coverage-low; recent-20d-coverage-low; latest-date-stale |
+| cs_pb_rank | valuation | base-recent-coverage-low; recent-20d-coverage-low; latest-date-stale |
+| cs_turnover_rank | valuation | base-recent-coverage-low; recent-20d-coverage-low; latest-date-stale |
+| cs_log_mcap_rank | valuation | base-recent-coverage-low; recent-20d-coverage-low; latest-date-stale |
+| pe_momentum_5d | valuation | base-recent-coverage-low; recent-20d-coverage-low; latest-date-stale |
+| ind_rank_turnover | industry | base-recent-coverage-low; recent-20d-coverage-low; latest-date-stale |
 | cs_main_flow_rank_1d | flow | short-history-family |
 | cs_main_flow_rank_5d | flow | short-history-family |
 | cs_small_flow_rank_1d | flow | short-history-family |
 | cs_super_flow_rank_1d | flow | short-history-family |
 | cs_flow_reversal_5d | flow | short-history-family |
-| cs_margin_balance_change_5d | margin | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |
-| cs_rzrq_ratio_rank | margin | base-recent-symbol-coverage-low; recent-symbol-coverage-low; recent-20d-coverage-low; latest-date-stale |
+| cs_margin_balance_change_5d | margin | base-recent-coverage-low; recent-20d-coverage-low; latest-date-stale |
+| cs_rzrq_ratio_rank | margin | base-recent-coverage-low; recent-20d-coverage-low; latest-date-stale |

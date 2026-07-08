@@ -1,6 +1,6 @@
 # D3 Gate-First Fusion Report
 
-Generated: 2026-07-07T16:41:34
+Generated: 2026-07-08T22:27:39
 
 ## Pool Counts
 
@@ -8,11 +8,14 @@ Generated: 2026-07-07T16:41:34
 - Tier B short-boost candidates: 9
 - Tier C downgraded observations: 10
 - Tier D recent-only observations: 7
+- Unclassified (mid base / neutral recent): 97
 - Risk vetoes: 0
 - Risk downgrades: 0
 - Rejected double-weak: 132
 
-## Top 50
+Actionable pool: 52  |  Observe/veto pool: 246
+
+## Top 50 (actionable only)
 
 | Rank | Symbol | Base Pct | Recent Pct | Boost | Tier | Reason |
 |---:|---|---:|---:|---:|---|---|
@@ -59,10 +62,10 @@ Generated: 2026-07-07T16:41:34
 | 41 | 600845 | 0.809 | 0.732 | -0.077 | A_MAIN | base strong, recent confirms |
 | 42 | 600048 | 0.805 | 0.628 | -0.178 | A_MAIN | base strong, recent confirms |
 | 43 | 600875 | 0.802 | 0.866 | +0.064 | A_MAIN | base strong, recent confirms |
-| 44 | 002463 | 0.782 | 0.930 | +0.148 | B_SHORT_BOOST | recent model strongly boosts an acceptable base name |
-| 45 | 300033 | 0.779 | 0.936 | +0.158 | B_SHORT_BOOST | recent model strongly boosts an acceptable base name |
-| 46 | 002384 | 0.772 | 0.993 | +0.221 | B_SHORT_BOOST | recent model strongly boosts an acceptable base name |
-| 47 | 000100 | 0.735 | 0.997 | +0.262 | B_SHORT_BOOST | recent model strongly boosts an acceptable base name |
-| 48 | 002415 | 0.678 | 0.869 | +0.191 | B_SHORT_BOOST | recent model strongly boosts an acceptable base name |
-| 49 | 601211 | 0.641 | 0.953 | +0.312 | B_SHORT_BOOST | recent model strongly boosts an acceptable base name |
-| 50 | 300866 | 0.631 | 0.933 | +0.302 | B_SHORT_BOOST | recent model strongly boosts an acceptable base name |
+| 44 | 000100 | 0.735 | 0.997 | +0.262 | B_SHORT_BOOST | recent model strongly boosts an acceptable base name |
+| 45 | 002384 | 0.772 | 0.993 | +0.221 | B_SHORT_BOOST | recent model strongly boosts an acceptable base name |
+| 46 | 601211 | 0.641 | 0.953 | +0.312 | B_SHORT_BOOST | recent model strongly boosts an acceptable base name |
+| 47 | 688183 | 0.624 | 0.946 | +0.322 | B_SHORT_BOOST | recent model strongly boosts an acceptable base name |
+| 48 | 300033 | 0.779 | 0.936 | +0.158 | B_SHORT_BOOST | recent model strongly boosts an acceptable base name |
+| 49 | 300866 | 0.631 | 0.933 | +0.302 | B_SHORT_BOOST | recent model strongly boosts an acceptable base name |
+| 50 | 002463 | 0.782 | 0.930 | +0.148 | B_SHORT_BOOST | recent model strongly boosts an acceptable base name |

@@ -99,27 +99,27 @@
 - gate_mode: fund_flow_enhanced_gate
 - fund flow entered recent model: yes (cs_main_flow_rank_1d, cs_main_flow_rank_5d, cs_small_flow_rank_1d, cs_super_flow_rank_1d, cs_flow_reversal_5d)
 - fund_flow coverage gate result: {'status': 'computed_this_run', 'recent_symbol_coverage': 292, 'latest_available_date': '2026-07-03', 'recent_20d_avg_symbol_coverage': 287.9, 'available_trading_days': 129, 'field_missing_rate': 0.8614205241633913, 'is_allowed_for_recent_model': True, 'rejection_reason': 'short-history-family'}
-- base final feature list: `E:\stock-analysis\models\data\reports\D3_base_X_train_columns_2026-07-03.csv`
-- recent final feature list: `E:\stock-analysis\models\data\reports\D3_recent_emdatah5_X_train_columns_2026-07-03.csv`
+- base final feature list: `/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_base_X_train_columns_2026-07-03.csv`
+- recent final feature list: `/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_recent_emdatah5_X_train_columns_2026-07-03.csv`
 - fund flow forbidden from base model: yes
-- base coverage report: `E:\stock-analysis\models\data\reports\D3_base_coverage_gate_2026-07-03.csv`
-- recent coverage report: `E:\stock-analysis\models\data\reports\D3_recent_coverage_gate_2026-07-03.csv`
+- base coverage report: `/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_base_coverage_gate_2026-07-03.csv`
+- recent coverage report: `/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_recent_coverage_gate_2026-07-03.csv`
 
 ## Model Summary
 
 - base_model_d3: {'train_start': '2023-01-03', 'train_end': '2026-06-29', 'prediction_date': '2026-07-03', 'x_train_rows': 250172, 'prediction_rows': 298, 'feature_count': 35}
 - recent_enhanced_model_d3 status: trained
 - recent_enhanced_model_d3: {'train_start': '2025-12-25', 'train_end': '2026-06-29', 'prediction_date': '2026-07-03', 'x_train_rows': 35874, 'prediction_rows': 298, 'feature_count': 40}
-- base feature importance Top20: `E:\stock-analysis\models\data\reports\D3_base_feature_importance_top20_2026-07-03.csv`
-- fund_flow feature importance: `E:\stock-analysis\models\data\reports\D3_recent_fund_flow_feature_importance_2026-07-03.csv`
-- recent feature importance Top20: `E:\stock-analysis\models\data\reports\D3_recent_feature_importance_top20_2026-07-03.csv`
+- base feature importance Top20: `/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_base_feature_importance_top20_2026-07-03.csv`
+- fund_flow feature importance: `/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_recent_fund_flow_feature_importance_2026-07-03.csv`
+- recent feature importance Top20: `/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_recent_feature_importance_top20_2026-07-03.csv`
 
 ## Gate Summary
 
 - tier counts: {'E_REJECT': 132, 'UNCLASSIFIED': 97, 'A_MAIN': 43, 'C_DOWNGRADE_OBSERVE': 10, 'B_SHORT_BOOST': 9, 'D_OBSERVE': 7}
 - risk veto count: 0
 - top20 intersections: {'base_recent_top20': 1, 'base_gate_top20': 12, 'recent_gate_top20': 5, 'all_three_top20': 1}
-- recent boosted symbols: ['002463', '300033', '002384', '000100', '002415', '601211', '300866', '688183', '000977']
+- recent boosted symbols: ['000100', '002384', '601211', '688183', '300033', '300866', '002463', '002415', '000977']
 - recent downgraded symbols: ['301165', '002422', '002625', '688521', '600547', '300316', '688396', '301269', '603986', '002179']
 - event risk vetoed symbols: []
 
@@ -200,7 +200,7 @@
 
 ## Verification Artifacts
 
-- `E:\stock-analysis\models\data\reports\D3_base_ranked_2026-07-03.csv`
-- `E:\stock-analysis\models\data\reports\D3_recent_ranked_2026-07-03.csv`
-- `E:\stock-analysis\models\data\reports\D3_gate_fused_ranked_2026-07-03.csv`
-- `E:\stock-analysis\models\data\reports\D3_gate_emdatah5_fund_flow_run_report_2026-07-03.md`
+- `/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_base_ranked_2026-07-03.csv`
+- `/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_recent_ranked_2026-07-03.csv`
+- `/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_gate_fused_ranked_2026-07-03.csv`
+- `/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_gate_emdatah5_fund_flow_run_report_2026-07-03.md`
