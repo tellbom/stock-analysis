@@ -18,6 +18,7 @@ class StrategyType(str, Enum):
     EQUAL_TOP_K = "equal_top_k"
     PROPORTIONAL_TOP_K = "proportional_top_k"
     HYBRID = "hybrid"
+    TURNOVER_AWARE = "turnover_aware"
 
 
 @dataclass
@@ -45,6 +46,19 @@ class SelectionConfig:
         Flag "diversified" when all industries are below this.
     unknown_industry_label : str
         Label used for stocks with missing industry classification.
+    enter_rank : int
+        SR-02: a challenger not currently held is admitted only if its
+        global rank (by score_col) is <= enter_rank. Only used by
+        TurnoverAwareStrategy.
+    keep_rank : int
+        SR-02: an incumbent (already held) is kept unless its global rank
+        falls outside (>) keep_rank. keep_rank >= enter_rank -- the
+        enter/exit asymmetry is the no-churn band. Only used by
+        TurnoverAwareStrategy.
+    max_turnover : float
+        SR-02: cap on one-way turnover per rebalance, i.e. the fraction of
+        max_total slots that may change (adds == drops). Only used by
+        TurnoverAwareStrategy.
     """
 
     strategy: StrategyType = StrategyType.EQUAL_TOP_K
@@ -55,6 +69,9 @@ class SelectionConfig:
     exposure_warning_threshold: float = 0.30
     exposure_diversified_threshold: float = 0.15
     unknown_industry_label: str = "_UNKNOWN"
+    enter_rank: int = 30
+    keep_rank: int = 60
+    max_turnover: float = 0.5
 
     def __post_init__(self) -> None:
         # Validate enum coercion
@@ -80,3 +97,13 @@ class SelectionConfig:
                 f"must be > exposure_diversified_threshold "
                 f"({self.exposure_diversified_threshold})"
             )
+        if self.enter_rank < 1 or self.keep_rank < 1:
+            raise ValueError(
+                f"enter_rank ({self.enter_rank}) and keep_rank ({self.keep_rank}) must be >= 1"
+            )
+        if self.enter_rank > self.keep_rank:
+            raise ValueError(
+                f"enter_rank ({self.enter_rank}) must be <= keep_rank ({self.keep_rank})"
+            )
+        if not 0.0 < self.max_turnover <= 1.0:
+            raise ValueError(f"max_turnover must be in (0, 1], got {self.max_turnover}")

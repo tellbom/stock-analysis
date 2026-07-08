@@ -251,7 +251,7 @@ def build_date_inputs(
     write_coverage_gate_report(base_gate, coverage_dir, prefix=f"GF08_base_coverage_gate_{as_of.isoformat()}")
     write_coverage_gate_report(recent_gate, coverage_dir, prefix=f"GF08_recent_coverage_gate_{as_of.isoformat()}")
 
-    base_scored, base_meta, _, _ = d3._score_model(
+    base_scored, base_meta, _, _, _ = d3._score_model(
         base_panel[base_panel["date"] <= as_of].copy(),
         as_of,
         base_features,
@@ -261,7 +261,7 @@ def build_date_inputs(
     )
     if len(recent_features) == 0:
         raise RuntimeError("coverage gate rejected all recent features")
-    recent_scored, recent_meta, _, _ = d3._score_model(
+    recent_scored, recent_meta, _, _, _ = d3._score_model(
         recent_panel[recent_panel["date"] <= as_of].copy(),
         as_of,
         recent_features,

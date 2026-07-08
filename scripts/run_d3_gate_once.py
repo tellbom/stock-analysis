@@ -33,11 +33,14 @@ from quant_platform.evaluation.coverage_gate import (  # noqa: E402
     select_features_by_gate,
     write_coverage_gate_report,
 )
+from quant_platform.evaluation.explainability import build_explainability_report  # noqa: E402
 from quant_platform.features.event import build_lockup_features, load_lockup_panel  # noqa: E402
 from quant_platform.features.pipeline import FeaturePipeline  # noqa: E402
 from quant_platform.features.registry import DEFAULT_SPECS, feature_metadata_lookup  # noqa: E402
 from quant_platform.labels.builder import build_label_panel  # noqa: E402
+from quant_platform.selection.fusion_score import actionable_pool  # noqa: E402
 from quant_platform.selection.gate_fusion import gate_first_fusion, write_gate_fusion_outputs  # noqa: E402
+from quant_platform.selection.reco_cards import build_reco_cards  # noqa: E402
 from quant_platform.store.lake import ohlcv_path  # noqa: E402
 from quant_platform.store.parquet_store import read_ohlcv  # noqa: E402
 from quant_platform.training.lgbm_model import fit_final_model  # noqa: E402
@@ -203,7 +206,7 @@ def _score_model(
     train_start: dt.date | None,
     params: dict,
     score_prefix: str,
-) -> tuple[pd.DataFrame, dict, pd.DataFrame, pd.DataFrame]:
+) -> tuple[pd.DataFrame, dict, pd.DataFrame, pd.DataFrame, object]:
     train = panel[(panel["date"] < actual_as_of) & panel[LABEL_COL].notna()].copy()
     if train_start is not None:
         train = train[train["date"] >= train_start].copy()
@@ -237,7 +240,7 @@ def _score_model(
         "feature_count": int(len(feature_cols)),
     }
     importance_all = _feature_importance_all(model, feature_cols)
-    return scored, meta, importance_all.head(20).reset_index(drop=True), importance_all
+    return scored, meta, importance_all.head(20).reset_index(drop=True), importance_all, model
 
 
 def _risk_flags(panel: pd.DataFrame, actual_as_of: dt.date) -> pd.DataFrame:
@@ -319,6 +322,8 @@ def main() -> int:
         "base_ranked": REPORT_DIR / f"D3_base_ranked_{date_tag}.csv",
         "recent_ranked": REPORT_DIR / f"D3_recent_ranked_{date_tag}.csv",
         "gate_ranked": REPORT_DIR / f"D3_gate_fused_ranked_{date_tag}.csv",
+        "hybrid_ranked": REPORT_DIR / f"D3_hybrid_ranked_{date_tag}.csv",
+        "reco_cards": REPORT_DIR / f"D3_hybrid_reco_cards_{date_tag}.json",
         "report": REPORT_DIR / f"D3_gate_emdatah5_fund_flow_run_report_{date_tag}.md",
         "json": REPORT_DIR / f"D3_gate_emdatah5_fund_flow_run_summary_{date_tag}.json",
     }
@@ -383,7 +388,7 @@ def main() -> int:
     pd.DataFrame({"feature": base_features}).to_csv(base_feature_cols_path, index=False)
     pd.DataFrame({"feature": recent_features}).to_csv(recent_feature_cols_path, index=False)
 
-    base_scored, base_meta, base_importance, _base_importance_all = _score_model(
+    base_scored, base_meta, base_importance, _base_importance_all, _base_model = _score_model(
         base_panel, actual_as_of, base_features, train_start=None, params=BASE_PARAMS, score_prefix="base"
     )
     base_importance_path = REPORT_DIR / f"D3_base_feature_importance_top20_{date_tag}.csv"
@@ -406,7 +411,7 @@ def main() -> int:
         train_start = unique_train_dates[max(0, len(unique_train_dates) - 120)]
         if len(recent_features) == 0:
             raise RuntimeError("coverage gate rejected all recent features")
-        recent_scored, recent_meta, recent_importance, recent_importance_all = _score_model(
+        recent_scored, recent_meta, recent_importance, recent_importance_all, recent_model = _score_model(
             recent_panel,
             actual_as_of,
             recent_features,
@@ -447,6 +452,23 @@ def main() -> int:
         fused.to_csv(output_paths["gate_ranked"], index=False)
         # Also emit the standard helper report with a date-tagged prefix.
         write_gate_fusion_outputs(fused, REPORT_DIR, prefix=f"D3_gate_fused_{date_tag}", top_n=50)
+        # SR-01: hybrid score contract -- gate tiers act as a hard actionable
+        # filter, smooth fusion (default rrf) ranks within the A/B pool.
+        hybrid = actionable_pool(fused)
+        hybrid.to_csv(output_paths["hybrid_ranked"], index=False)
+        # SR-04: recommendation cards -- reuse the already-fitted recent
+        # model's SHAP drivers rather than fitting a second explainer.
+        recent_asof = recent_panel[recent_panel["date"] == actual_as_of]
+        explain_report = build_explainability_report(
+            recent_model,
+            recent_asof,
+            recent_features,
+            panel_meta=recent_asof[["symbol"]],
+        )
+        reco_cards = build_reco_cards(hybrid, explain_report.per_symbol_drivers, family_by_col)
+        output_paths["reco_cards"].write_text(
+            json.dumps(reco_cards, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
     else:
         fused = base_scored.copy()
         fused["recent_score"] = np.nan
@@ -540,8 +562,12 @@ def main() -> int:
         f"- `{output_paths['base_ranked']}`",
         f"- `{output_paths['recent_ranked']}`",
         f"- `{output_paths['gate_ranked']}`",
-        f"- `{output_paths['report']}`",
     ]
+    if output_paths["hybrid_ranked"].exists():
+        lines.append(f"- `{output_paths['hybrid_ranked']}`")
+    if output_paths["reco_cards"].exists():
+        lines.append(f"- `{output_paths['reco_cards']}`")
+    lines.append(f"- `{output_paths['report']}`")
     output_paths["report"].write_text("\n".join(lines), encoding="utf-8")
 
     summary = {

@@ -10,10 +10,12 @@ Strategies:
   EqualTopKStrategy      — top K per industry (maximises diversity)
   ProportionalTopKStrategy — proportional to industry size
   HybridStrategy         — weighted combination of ind-neutral + global score
+  TurnoverAwareStrategy  — SR-02: rank-band hysteresis to bound one-way turnover
 """
 
 from __future__ import annotations
 
+import math
 from abc import ABC, abstractmethod
 
 import pandas as pd
@@ -221,5 +223,112 @@ class HybridStrategy(SelectionStrategy):
 
         reasons = pd.Series("not_selected", index=panel.index)
         reasons.loc[panel[symbol_col].isin(selected)] = "hybrid_selected"
+
+        return selected, reasons
+
+
+# ---------------------------------------------------------------------------
+# Turnover-aware (SR-02)
+# ---------------------------------------------------------------------------
+
+class TurnoverAwareStrategy(SelectionStrategy):
+    """
+    Rank-band hysteresis selection: bounds one-way turnover vs a prior
+    selection instead of re-selecting the top set from scratch each date.
+
+    An incumbent (in ``prior_selected``) is kept unless its current global
+    rank by ``score_col`` falls outside ``config.keep_rank``. A challenger
+    (not currently held) is admitted only if its rank clears the tighter
+    ``config.enter_rank``. The enter/exit asymmetry (enter_rank <=
+    keep_rank) is the no-churn band. Net adds/drops are capped so one-way
+    turnover never exceeds ``config.max_turnover``; if the cap would leave
+    empty slots, the best-ranked incumbents that fell outside keep_rank are
+    retained rather than dropped, keeping the selected set at ``max_total``.
+
+    With an empty (or ``None``) ``prior_selected``, there is nothing to
+    apply hysteresis against, so selection reduces to a plain global
+    Top-``max_total`` by ``score_col`` -- i.e. the same outcome as
+    EqualTopKStrategy would produce absent industry floors.
+
+    Stateless per call: the caller supplies ``prior_selected`` explicitly
+    (no hidden global state, no implicit "yesterday" lookup).
+    """
+
+    def __init__(self, prior_selected: set | None = None):
+        self.prior_selected = prior_selected or set()
+
+    def select(
+        self,
+        panel: pd.DataFrame,
+        config: SelectionConfig,
+        industry_col: str,
+        score_col: str,
+        symbol_col: str,
+    ) -> tuple[set, pd.Series]:
+        target_size = config.max_total
+        reasons = pd.Series("not_selected", index=panel.index)
+
+        rank_by_symbol: dict = dict(
+            zip(
+                panel[symbol_col],
+                panel[score_col].rank(ascending=False, method="first").astype(int),
+            )
+        )
+
+        if not self.prior_selected:
+            top = panel.nlargest(target_size, score_col)
+            selected = set(top[symbol_col])
+            reasons.loc[top.index] = "cold_start_top_k"
+            return selected, reasons
+
+        allowed_changes = int(math.floor(config.max_turnover * target_size))
+
+        incumbents_in_panel = sorted(
+            ((rank_by_symbol[s], s) for s in self.prior_selected if s in rank_by_symbol)
+        )
+        kept = [s for r, s in incumbents_in_panel if r <= config.keep_rank]
+        fell_out = sorted(
+            (s for r, s in incumbents_in_panel if r > config.keep_rank),
+            key=lambda s: rank_by_symbol[s],
+        )
+
+        if len(kept) > target_size:
+            kept = sorted(kept, key=lambda s: rank_by_symbol[s])[:target_size]
+
+        candidate_pool_sorted = sorted(
+            (s for s in panel[symbol_col].unique() if s not in kept),
+            key=lambda s: rank_by_symbol.get(s, float("inf")),
+        )
+        new_entrants = [
+            s for s in candidate_pool_sorted
+            if s not in self.prior_selected and rank_by_symbol.get(s, float("inf")) <= config.enter_rank
+        ]
+
+        remaining_slots = target_size - len(kept)
+        additions_allowed = max(0, min(remaining_slots, allowed_changes, len(new_entrants)))
+        additions = new_entrants[:additions_allowed]
+
+        selected = set(kept) | set(additions)
+
+        # Turnover cap left slots unfilled -- retain best-ranked incumbents
+        # that fell outside keep_rank rather than dropping them, so the
+        # selected set stays at target_size without extra churn.
+        remaining_slots = target_size - len(selected)
+        if remaining_slots > 0 and fell_out:
+            retained = fell_out[:remaining_slots]
+            selected |= set(retained)
+
+        # Still short (e.g. prior smaller than target_size) -- fill from the
+        # best-ranked remaining candidates, ignoring enter_rank/turnover cap
+        # since there is no incumbent left to retain.
+        remaining_slots = target_size - len(selected)
+        if remaining_slots > 0:
+            fillers = [s for s in candidate_pool_sorted if s not in selected]
+            selected |= set(fillers[:remaining_slots])
+
+        symbol_series = panel[symbol_col]
+        reasons.loc[symbol_series.isin(kept)] = "kept_incumbent"
+        reasons.loc[symbol_series.isin(additions)] = "new_entrant"
+        reasons.loc[symbol_series.isin(selected - set(kept) - set(additions))] = "retained_over_turnover_cap"
 
         return selected, reasons

@@ -60,6 +60,7 @@ from quant_platform.evaluation.coverage_gate import (
 from quant_platform.selection.config import SelectionConfig, StrategyType
 from quant_platform.selection.ranker import IndustryNeutralRanker
 from quant_platform.selection.exposure import ExposureMonitor
+from quant_platform.selection.reco_schema import write_recommendation_csv
 from quant_platform.store.lake import ohlcv_path, label_path, feature_path
 from quant_platform.cli import _coverage_gate_config_for_universe, _feature_family_lookup
 
@@ -425,8 +426,12 @@ def main():
     if max_ind_frac > config.exposure_warning_threshold:
         print(f"  WARNING: Industry concentration ({max_ind_frac:.1%}) exceeds threshold ({config.exposure_warning_threshold:.1%})!")
 
-    # Save ranked
-    ranked.to_csv(OUTPUT_DIR / f"{PREDICTION_LABEL}_ranked.csv", index=False)
+    # Save ranked -- SR-06: the shipped, user-facing CSV only carries the
+    # allow-listed recommendation schema (no ret_fwd_*/*_cs/*_bin label
+    # leakage). The full frame (features + forward-return labels) is kept
+    # separately as an internal debug artifact for offline research.
+    write_recommendation_csv(ranked, OUTPUT_DIR / f"{PREDICTION_LABEL}_ranked.csv")
+    ranked.to_csv(OUTPUT_DIR / f"{PREDICTION_LABEL}_ranked_debug.csv", index=False)
     with open(OUTPUT_DIR / f"{PREDICTION_LABEL}_exposure.json", "w") as f:
         json.dump(exp_report, f, ensure_ascii=False, indent=2, default=str)
     print()
@@ -442,7 +447,8 @@ def main():
         g_ind = gs["industry_code"].value_counts()
         g_max = g_ind.max() / len(gs) if len(gs) > 0 else 0
         print(f"  Global Top-{n_top}: max industry {g_max:.1%}")
-    global_top.to_csv(OUTPUT_DIR / f"{PREDICTION_LABEL}_global_top{n_top}.csv", index=False)
+    write_recommendation_csv(global_top, OUTPUT_DIR / f"{PREDICTION_LABEL}_global_top{n_top}.csv")
+    global_top.to_csv(OUTPUT_DIR / f"{PREDICTION_LABEL}_global_top{n_top}_debug.csv", index=False)
     print()
 
     # ---- 6. Generate report ----

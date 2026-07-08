@@ -25,6 +25,7 @@ from quant_platform.selection.strategies import (
     EqualTopKStrategy,
     HybridStrategy,
     ProportionalTopKStrategy,
+    TurnoverAwareStrategy,
 )
 
 # Map StrategyType enum values → strategy instances
@@ -32,6 +33,7 @@ _STRATEGY_REGISTRY = {
     StrategyType.EQUAL_TOP_K: EqualTopKStrategy(),
     StrategyType.PROPORTIONAL_TOP_K: ProportionalTopKStrategy(),
     StrategyType.HYBRID: HybridStrategy(),
+    StrategyType.TURNOVER_AWARE: TurnoverAwareStrategy(),
 }
 
 
@@ -154,17 +156,26 @@ class IndustryNeutralRanker:
     # select()
     # ------------------------------------------------------------------
 
-    def select(self, panel: pd.DataFrame) -> pd.DataFrame:
+    def select(self, panel: pd.DataFrame, *, strategy=None) -> pd.DataFrame:
         """
         Apply the configured selection strategy.
 
         Requires *panel* to have been through :meth:`rank` (or at minimum
         contain the columns expected by the strategy).
 
+        Parameters
+        ----------
+        strategy : SelectionStrategy | None
+            Override the registry-resolved strategy for this call. Needed
+            for stateful strategies (e.g. TurnoverAwareStrategy) that carry
+            per-call state such as prior holdings -- the registry only
+            holds one stateless default instance per StrategyType.
+
         Adds columns:
           ``selected`` (bool), ``selection_reason`` (str)
         """
-        strategy = _STRATEGY_REGISTRY.get(self.config.strategy)
+        if strategy is None:
+            strategy = _STRATEGY_REGISTRY.get(self.config.strategy)
         if strategy is None:
             raise ValueError(
                 f"Unknown strategy: {self.config.strategy}. "
@@ -207,13 +218,15 @@ class IndustryNeutralRanker:
     # run() — convenience pipeline
     # ------------------------------------------------------------------
 
-    def run(self, panel: pd.DataFrame) -> pd.DataFrame:
+    def run(self, panel: pd.DataFrame, *, strategy=None) -> pd.DataFrame:
         """
         Convenience: rank → select → monitor.
+
+        *strategy* is forwarded to :meth:`select` (see its docstring).
 
         Returns *panel* with all new columns appended.
         """
         panel = self.rank(panel)
-        panel = self.select(panel)
+        panel = self.select(panel, strategy=strategy)
         panel = self.monitor(panel)
         return panel
