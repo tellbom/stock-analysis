@@ -1,0 +1,37 @@
+feature_name,feature_family,source,latest_available_date,overall_missing_rate,recent_symbol_coverage,recent_20d_avg_symbol_coverage,available_trading_days,date_coverage_rate,is_pit_safe,known_at,history_start,is_allowed_for_base_model,is_allowed_for_recent_model,is_allowed_for_prediction_only,rejection_reason
+ma_5,technical,feature_panel,2026-07-03,0.005967014344702485,299,296.25,841,0.9940898345153665,True,post_close_T,,True,True,False,allowed
+ma_10,technical,feature_panel,2026-07-03,0.01193402868940497,299,296.25,836,0.9881796690307328,True,post_close_T,,True,True,False,allowed
+ma_20,technical,feature_panel,2026-07-03,0.02386805737880994,299,296.25,826,0.9763593380614657,True,post_close_T,,True,True,False,allowed
+ma_60,technical,feature_panel,2026-07-03,0.07160417213642982,299,296.25,786,0.9290780141843972,True,post_close_T,,True,True,False,allowed
+macd_dif,technical,feature_panel,2026-07-03,0.04176910041291739,299,296.25,811,0.958628841607565,True,post_close_T,,True,True,False,allowed
+macd_dea,technical,feature_panel,2026-07-03,0.04176910041291739,299,296.25,811,0.958628841607565,True,post_close_T,,True,True,False,allowed
+macd_hist,technical,feature_panel,2026-07-03,0.04176910041291739,299,296.25,811,0.958628841607565,True,post_close_T,,True,True,False,allowed
+kdj_k,technical,feature_panel,2026-07-03,0.010740625820464473,299,296.25,837,0.9893617021276596,True,post_close_T,,True,True,False,allowed
+kdj_d,technical,feature_panel,2026-07-03,0.010740625820464473,299,296.25,837,0.9893617021276596,True,post_close_T,,True,True,False,allowed
+kdj_j,technical,feature_panel,2026-07-03,0.010740625820464473,299,296.25,837,0.9893617021276596,True,post_close_T,,True,True,False,allowed
+rsi_6,technical,feature_panel,2026-07-03,0.007160417213642981,299,296.25,840,0.9929078014184397,True,post_close_T,,True,True,False,allowed
+rsi_12,technical,feature_panel,2026-07-03,0.014320834427285963,299,296.25,834,0.9858156028368794,True,post_close_T,,True,True,False,allowed
+rsi_24,technical,feature_panel,2026-07-03,0.028641668854571926,299,296.25,822,0.9716312056737588,True,post_close_T,,True,True,False,allowed
+boll_upper,technical,feature_panel,2026-07-03,0.02386805737880994,299,296.25,826,0.9763593380614657,True,post_close_T,,True,True,False,allowed
+boll_mid,technical,feature_panel,2026-07-03,0.02386805737880994,299,296.25,826,0.9763593380614657,True,post_close_T,,True,True,False,allowed
+atr_14,technical,feature_panel,2026-07-03,0.016707640165166956,299,296.25,832,0.983451536643026,True,post_close_T,,True,True,False,allowed
+adx_14,technical,feature_panel,2026-07-03,0.03341528033033391,299,296.25,818,0.966903073286052,True,post_close_T,,True,True,False,allowed
+obv,technical,feature_panel,2026-07-03,0.029835071723512425,299,296.25,821,0.9704491725768322,True,post_close_T,,True,True,False,allowed
+cci_14,technical,feature_panel,2026-07-03,0.016707640165166956,299,296.25,832,0.983451536643026,True,post_close_T,,True,True,False,allowed
+roc_10,technical,feature_panel,2026-07-03,0.01193402868940497,299,296.25,836,0.9881796690307328,True,post_close_T,,True,True,False,allowed
+willr_14,technical,feature_panel,2026-07-03,0.016707640165166956,299,296.25,832,0.983451536643026,True,post_close_T,,True,True,False,allowed
+stoch_k,technical,feature_panel,2026-07-03,0.017901043034107455,299,296.25,831,0.9822695035460993,True,post_close_T,,True,True,False,allowed
+stoch_d,technical,feature_panel,2026-07-03,0.02028784877198845,299,296.25,829,0.9799054373522459,True,post_close_T,,True,True,False,allowed
+reversal_3d,technical,feature_panel,2026-07-03,0.0035802086068214907,299,296.25,843,0.9964539007092199,True,post_close_T,,True,True,False,allowed
+cs_rank_close,cross_sectional,feature_panel,2026-07-03,0.0,299,296.25,846,1.0,True,post_close_T,,True,True,False,allowed
+cs_rank_volume,cross_sectional,feature_panel,2026-07-03,0.0,299,296.25,846,1.0,True,post_close_T,,True,True,False,allowed
+cs_rank_rsi_6,cross_sectional,feature_panel,2026-07-03,0.007160417213642981,299,296.25,840,0.9929078014184397,True,post_close_T,,True,True,False,allowed
+cs_rank_roc_10,cross_sectional,feature_panel,2026-07-03,0.01193402868940497,299,296.25,836,0.9881796690307328,True,post_close_T,,True,True,False,allowed
+cs_rank_ma_5,cross_sectional,feature_panel,2026-07-03,0.005967014344702485,299,296.25,841,0.9940898345153665,True,post_close_T,,True,True,False,allowed
+cs_zscore_close,cross_sectional,feature_panel,2026-07-03,0.0,299,296.25,846,1.0,True,post_close_T,,True,True,False,allowed
+cs_zscore_volume,cross_sectional,feature_panel,2026-07-03,0.0,299,296.25,846,1.0,True,post_close_T,,True,True,False,allowed
+cs_zscore_rsi_6,cross_sectional,feature_panel,2026-07-03,0.007160417213642981,299,296.25,840,0.9929078014184397,True,post_close_T,,True,True,False,allowed
+ind_rank_rsi_6,unknown,feature_panel,2026-07-03,0.007160417213642981,299,296.25,840,0.9929078014184397,False,,,False,False,True,unregistered
+ind_rank_turnover,unknown,feature_panel,,1.0,0,0.0,0,0.0,False,,,False,False,False,no-data; unregistered
+ind_rank_main_flow,unknown,feature_panel,,1.0,0,0.0,0,0.0,False,,,False,False,False,no-data; unregistered
+sector_momentum_10d,unknown,feature_panel,2026-07-03,0.011882314565084215,299,296.25,836,0.9881796690307328,False,,,False,False,True,unregistered

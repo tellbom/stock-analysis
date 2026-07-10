@@ -33,17 +33,21 @@ ROOT = Path("E:/stock-analysis")
 STORE_ROOT = ROOT / "models/data"
 OUTPUT_DIR = STORE_ROOT / "reports"
 
-# Prediction config
+# Prediction config -- these module-level values are DEFAULTS for the 3d line.
+# main() overrides them from --horizon / --prediction-date / --train-end so a
+# parallel line (e.g. --horizon 10) runs without touching the 3d defaults.
+HORIZON = 3
 PREDICTION_DATE = dt.date(2026, 7, 3)   # T (Friday)
-D1_DATE = dt.date(2026, 7, 6)            # T+1 (Monday)
-D3_DATE = dt.date(2026, 7, 8)            # T+1+3 (Wednesday)
-D5_DATE = dt.date(2026, 7, 10)           # T+1+5 (Friday)
+D1_DATE = dt.date(2026, 7, 6)            # T+1 (entry) -- recomputed in main()
+D3_DATE = dt.date(2026, 7, 9)            # T+1+HORIZON (target) -- recomputed in main()
+D5_DATE = dt.date(2026, 7, 13)           # comparison -- recomputed in main()
 TRAIN_END = dt.date(2026, 6, 30)         # PIT: T<=6/29 labels observable at 7/3 close
+LABEL_COL = f"ret_fwd_{HORIZON}d"
 # FIXED (merge review): model persistence now goes through the existing
 # MLflow Model Registry (quant_platform.training.registry) instead of a
 # bespoke pickle file under models/production/ -- see step 3 in main().
-REGISTERED_MODEL_NAME = "quant_platform_d3_model"
-PREDICTION_LABEL = f"D3_Prediction_{PREDICTION_DATE.isoformat()}"
+REGISTERED_MODEL_NAME = f"quant_platform_d{HORIZON}_model"
+PREDICTION_LABEL = f"D{HORIZON}_Prediction_{PREDICTION_DATE.isoformat()}"
 
 sys.path.insert(0, str(ROOT))
 
@@ -206,13 +210,44 @@ def build_panel(
 # ===================================================================
 # Main pipeline
 # ===================================================================
+def _add_bdays(d: dt.date, n: int) -> dt.date:
+    """Approximate calendar date N business days after d (ignores CN market
+    holidays; exact realized dates are derived from real data by the review)."""
+    return np.busday_offset(np.datetime64(d, "D"), n, roll="forward").astype("O")
+
+
+def _parse_args():
+    import argparse
+    p = argparse.ArgumentParser(description="D+H stock recommendation pipeline")
+    p.add_argument("--horizon", type=int, default=3,
+                   help="forward-return horizon in trading days (default 3)")
+    p.add_argument("--prediction-date", type=dt.date.fromisoformat,
+                   default=dt.date(2026, 7, 3), help="signal date T (YYYY-MM-DD)")
+    p.add_argument("--train-end", type=dt.date.fromisoformat,
+                   default=dt.date(2026, 6, 30), help="training cutoff (exclusive)")
+    return p.parse_args()
+
+
 def main():
+    global HORIZON, PREDICTION_DATE, TRAIN_END, D1_DATE, D3_DATE, D5_DATE
+    global LABEL_COL, PREDICTION_LABEL, REGISTERED_MODEL_NAME
+    args = _parse_args()
+    HORIZON = args.horizon
+    PREDICTION_DATE = args.prediction_date
+    TRAIN_END = args.train_end
+    D1_DATE = _add_bdays(PREDICTION_DATE, 1)
+    D3_DATE = _add_bdays(PREDICTION_DATE, 1 + HORIZON)
+    D5_DATE = _add_bdays(PREDICTION_DATE, 3 + HORIZON)
+    LABEL_COL = f"ret_fwd_{HORIZON}d"
+    PREDICTION_LABEL = f"D{HORIZON}_Prediction_{PREDICTION_DATE.isoformat()}"
+    REGISTERED_MODEL_NAME = f"quant_platform_d{HORIZON}_model"
+
     today = dt.date.today()
     print("=" * 70)
-    print("NEXT-WEEK D+3 STOCK RECOMMENDATION PIPELINE")
+    print(f"NEXT-WEEK D+{HORIZON} STOCK RECOMMENDATION PIPELINE")
     print(f"Run date: {today.isoformat()} ({today.strftime('%A')})")
     print(f"Prediction date (T): {PREDICTION_DATE} ({PREDICTION_DATE.strftime('%A')})")
-    print(f"D+3 target: {D3_DATE} ({D3_DATE.strftime('%A')}) — next Wednesday")
+    print(f"D+{HORIZON} target: {D3_DATE} ({D3_DATE.strftime('%A')})")
     print("=" * 70)
     print()
 
@@ -260,7 +295,7 @@ def main():
     print()
 
     # ---- 2. Extract prediction-day rows from the unified panel ----
-    print("[2/6] Extracting prediction-day rows for 2026-07-03...")
+    print(f"[2/6] Extracting prediction-day rows for {PREDICTION_DATE}...")
     # FIXED (merge review): this pipeline is branded "D+3" (filenames,
     # report text says "Horizon | 3 trading days") but previously trained
     # on ret_fwd_5d -- a real label/target mismatch between what the code
@@ -271,7 +306,7 @@ def main():
     # 3d-vs-5d comparison with real accumulated data -- if that comparison
     # is later run and favors 5d, this should be revisited deliberately,
     # not left mismatched with the branding as it was before.
-    label_col = "ret_fwd_3d"
+    label_col = LABEL_COL
 
     pred_day = panel[panel["date"] == PREDICTION_DATE].copy()
     if pred_day.empty:
@@ -346,7 +381,7 @@ def main():
     with mlflow.start_run(experiment_id=experiment_id, run_name=PREDICTION_LABEL) as run:
         mlflow.log_params({
             "label_col": label_col,
-            "horizon_days": 3,
+            "horizon_days": HORIZON,
             "train_end": str(TRAIN_END),
             "n_train_rows": len(train),
             "n_features": len(feature_cols),
@@ -362,7 +397,7 @@ def main():
 
     model_version = register_model(
         STORE_ROOT,
-        model_name=f"ridge_d3_{PREDICTION_DATE.isoformat()}",
+        model_name=f"ridge_d{HORIZON}_{PREDICTION_DATE.isoformat()}",
         run_id=run_id,
         feature_set_id=feature_set_id,
         label_col=label_col,
@@ -454,22 +489,22 @@ def main():
     # ---- 6. Generate report ----
     print("[6/6] Generating report...")
     lines = []
-    lines.append(f"# Next-Week D+3 Stock Recommendation Report")
+    lines.append(f"# Next-Week D+{HORIZON} Stock Recommendation Report")
     lines.append(f"")
     lines.append(f"**Generated:** {dt.datetime.now().isoformat()}")
     lines.append(f"**Status:** PRODUCTION MODEL INFERENCE — Real-market prediction, NOT backtest")
     lines.append(f"")
     lines.append("---")
     lines.append("")
-    lines.append("## A. Next-Week D+3 Prediction Results")
+    lines.append("## A. Next-Week D+" + str(HORIZON) + " Prediction Results")
     lines.append("")
     lines.append(f"| Parameter | Value |")
     lines.append(f"|-----------|-------|")
-    lines.append(f"| Prediction date (T) | **{PREDICTION_DATE}** (Friday) |")
-    lines.append(f"| Earliest execution (T+1) | **{D1_DATE}** (Monday) |")
-    lines.append(f"| D+3 target date | **{D3_DATE}** (Wednesday) |")
-    lines.append(f"| D+5 comparison date | {D5_DATE} (Friday) |")
-    lines.append(f"| Horizon | 3 trading days |")
+    lines.append(f"| Prediction date (T) | **{PREDICTION_DATE}** ({PREDICTION_DATE.strftime('%A')}) |")
+    lines.append(f"| Earliest execution (T+1) | **{D1_DATE}** ({D1_DATE.strftime('%A')}) |")
+    lines.append(f"| D+{HORIZON} target date | **{D3_DATE}** ({D3_DATE.strftime('%A')}) |")
+    lines.append(f"| Comparison date | {D5_DATE} ({D5_DATE.strftime('%A')}) |")
+    lines.append(f"| Horizon | {HORIZON} trading days |")
     lines.append(f"| Model | Ridge Regression (registered: `{REGISTERED_MODEL_NAME}` v{model_version}, run {run_id[:8]}) |")
     lines.append(f"| Feature set | `{feature_set_id}` (registered DEFAULT_SPECS, includes reversal_3d) + industry |")
     lines.append(f"| Feature count | {len(feature_cols)} |")
@@ -565,46 +600,38 @@ def main():
         lines.append("All risk checks PASSED. No exposure warnings triggered.")
     lines.append("")
 
-    # D. Wednesday verification plan
-    lines.append("## D. Wednesday Review Plan (2026-07-08)")
+    # D. Verification plan
+    lines.append(f"## D. Review Plan (target ~{D3_DATE})")
     lines.append("")
-    lines.append("### Data Required (D+1 -> D+3)")
+    lines.append(f"### Data Required (T+1 -> T+1+{HORIZON})")
     lines.append("")
-    lines.append("Fetch complete OHLCV covering: **2026-07-06 (Mon) -> 2026-07-08 (Wed)**")
-    lines.append("")
-    lines.append("```python")
-    lines.append("# Fetch command (run on Wednesday after market close):")
-    lines.append("cd E:/stock-analysis && PYTHONPATH=. python -c \"")
-    lines.append("import akshare as ak")
-    lines.append("for sym in <selected_50_symbols>:")
-    lines.append("    df = ak.stock_zh_a_daily(symbol=prefix(sym), start_date='20260706', end_date='20260709', adjust='qfq')")
-    lines.append("    # ... compute realized returns")
-    lines.append("\"")
-    lines.append("```")
+    lines.append(f"Fetch complete OHLCV covering: **{D1_DATE} -> {D3_DATE}** "
+                 f"(exact realized dates are derived from real data by the review).")
     lines.append("")
     lines.append("### Metrics to Compute")
     lines.append("")
     lines.append(f"| Metric | Formula | Target |")
     lines.append(f"|--------|---------|--------|")
-    lines.append(f"| D+3 Realized Return (per stock) | close(07-08) / close(07-06) - 1 | — |")
-    lines.append(f"| D+3 Rank IC | Spearman corr(model_score, realized_ret_3d) across all scored symbols | > 0 |")
-    lines.append(f"| Selected-set D+3 Mean Return | Mean of realized_ret_3d for industry-neutral Top 50 | Positive |")
-    lines.append(f"| Hit Rate | Fraction of Top 50 with positive D+3 return | > 50% |")
-    lines.append(f"| Global Top-50 D+3 Mean Return | Mean of realized_ret_3d for naive global Top 50 | For comparison |")
+    lines.append(f"| D+{HORIZON} Realized Return (per stock) | close(T+1+{HORIZON}) / close(T+1) - 1 | — |")
+    lines.append(f"| D+{HORIZON} Rank IC | Spearman corr(model_score, realized_ret) across all scored symbols | > 0 |")
+    lines.append(f"| Selected-set Mean Return | Mean of realized_ret for industry-neutral Top 50 | Positive |")
+    lines.append(f"| Hit Rate | Fraction of Top 50 with positive D+{HORIZON} return | > 50% |")
+    lines.append(f"| Global Top-50 Mean Return | Mean of realized_ret for naive global Top 50 | For comparison |")
     lines.append(f"| Industry-neutral vs Global | Difference in mean returns | Industry-neutral > Global |")
     lines.append("")
     lines.append("### Pass Criteria")
     lines.append("")
-    lines.append("1. **D+3 Rank IC > 0** (or stable positive across multiple weeks)")
+    lines.append(f"1. **D+{HORIZON} Rank IC > 0** (or stable positive across multiple weeks)")
     lines.append("2. **Single industry <= 30%** of selected set")
-    lines.append("3. **Industry-neutral strategy outperforms global baseline** on D+3 realized returns")
-    lines.append("4. **Hit rate > 50%** (more than half of Top 50 have positive D+3 returns)")
+    lines.append("3. **Industry-neutral strategy outperforms global baseline** on realized returns")
+    lines.append("4. **Hit rate > 50%** (more than half of Top 50 have positive returns)")
     lines.append("")
     lines.append("### Validation Script")
     lines.append("")
-    lines.append("Run on Wednesday (2026-07-08) after market close:")
+    lines.append(f"Run on/after {D3_DATE} after market close:")
     lines.append("```bash")
-    lines.append("cd E:/stock-analysis && PYTHONPATH=. python scripts/d3_wednesday_review.py")
+    lines.append(f"cd E:/stock-analysis && PYTHONPATH=. python scripts/d3_wednesday_review.py "
+                 f"--horizon {HORIZON} --prediction-date {PREDICTION_DATE}")
     lines.append("```")
     lines.append("")
     lines.append("---")
@@ -612,9 +639,14 @@ def main():
     lines.append("## IMPORTANT DISCLAIMER")
     lines.append("")
     lines.append(f"- **Prediction date:** {PREDICTION_DATE} (this is a FORWARD-LOOKING prediction)")
-    lines.append(f"- **D+3 verification date:** {D3_DATE} — market data NOT YET available")
-    lines.append(f"- **Current status:** PREDICTION PHASE — realized returns are UNKNOWN")
-    lines.append(f"- **Next action:** Run Wednesday review on {D3_DATE} after market close (after 15:00 CST)")
+    if dt.date.today() >= D3_DATE:
+        lines.append(f"- **D+{HORIZON} verification date:** {D3_DATE} — market data now available")
+        lines.append(f"- **Current status:** VERIFIABLE — realized returns can now be computed")
+        lines.append(f"- **Next action:** Run review for {D3_DATE} to replace model outputs with realized P&L")
+    else:
+        lines.append(f"- **D+{HORIZON} verification date:** {D3_DATE} — market data NOT YET available")
+        lines.append(f"- **Current status:** PREDICTION PHASE — realized returns are UNKNOWN")
+        lines.append(f"- **Next action:** Run review on/after {D3_DATE} after market close (after 15:00 CST)")
     lines.append(f"- All metrics in this report are MODEL OUTPUTS, not realized P&L")
     lines.append(f"- Do NOT execute trades based solely on this prediction without Wednesday review")
 
@@ -629,8 +661,8 @@ def main():
     print("=" * 70)
     print("PREDICTION SUMMARY")
     print("=" * 70)
-    print(f"  Prediction date:  {PREDICTION_DATE} (Friday)")
-    print(f"  Target D+3:       {D3_DATE} (Wednesday)")
+    print(f"  Prediction date:  {PREDICTION_DATE} ({PREDICTION_DATE.strftime('%A')})")
+    print(f"  Target D+{HORIZON}:       {D3_DATE} ({D3_DATE.strftime('%A')})")
     print(f"  Selected stocks:  {n_sel} (industry-neutral)")
     print(f"  Exposure:         {exposure_flag}")
     print(f"  Max industry:     {max_ind_frac:.1%}")
@@ -642,7 +674,7 @@ def main():
     print()
     print(f"  Risk: {'CLEAN' if not trigger_warning else 'WARNING - check exposures'}")
     print()
-    print(f"  Next: Wednesday review on {D3_DATE}")
+    print(f"  Next: review on/after {D3_DATE}")
     print("=" * 70)
 
 

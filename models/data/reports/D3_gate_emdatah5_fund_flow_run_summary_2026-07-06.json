@@ -1,0 +1,239 @@
+{
+  "requested_as_of_date": "2026-07-06",
+  "actual_as_of_date": "2026-07-06",
+  "actual_reason": "requested date has sufficient OHLCV coverage",
+  "coverage_summary": {
+    "ohlcv": {
+      "requested_coverage": "299/300",
+      "actual_coverage": "299/300"
+    },
+    "features": {
+      "1474f2c4": {
+        "path": "features/1474f2c4",
+        "files": 300,
+        "symbol_file_coverage": "300/300",
+        "as_of_files": 0,
+        "latest_min": "2026-06-18",
+        "latest_max": "2026-06-18"
+      },
+      "d02a4ebf": {
+        "path": "features/d02a4ebf",
+        "files": 300,
+        "symbol_file_coverage": "300/300",
+        "as_of_files": 0,
+        "latest_min": "2026-06-18",
+        "latest_max": "2026-06-29"
+      }
+    },
+    "labels": {
+      "path": "labels/forward_returns",
+      "files": 300,
+      "symbol_file_coverage": "300/300",
+      "as_of_files": 0,
+      "latest_min": "2026-06-18",
+      "latest_max": "2026-07-03"
+    },
+    "fund_flow": {
+      "path": "silver/fund_flow",
+      "files": 300,
+      "symbol_file_coverage": "300/300",
+      "as_of_files": 299,
+      "latest_min": "2026-06-26",
+      "latest_max": "2026-07-06"
+    },
+    "fundamentals": {
+      "path": "silver/fundamentals",
+      "files": 79,
+      "symbol_file_coverage": "79/300",
+      "as_of_files": 0,
+      "latest_min": "2023-07-08",
+      "latest_max": "2026-06-15"
+    },
+    "lockup": {
+      "path": "silver/lockup",
+      "files": 0,
+      "symbol_file_coverage": "0/300",
+      "as_of_files": 0,
+      "latest_min": null,
+      "latest_max": null
+    },
+    "announcement_events": {
+      "path": "silver/announcement_events",
+      "files": 300,
+      "symbol_file_coverage": "300/300",
+      "as_of_files": 0,
+      "latest_min": "2026-04-28",
+      "latest_max": "2026-07-03"
+    },
+    "valuation": {
+      "path": "silver/valuation",
+      "files": 300,
+      "symbol_file_coverage": "300/300",
+      "as_of_files": 0,
+      "latest_min": "2026-06-29",
+      "latest_max": "2026-06-29"
+    },
+    "margin": {
+      "path": "silver/margin",
+      "files": 295,
+      "symbol_file_coverage": "295/300",
+      "as_of_files": 0,
+      "latest_min": "2026-06-18",
+      "latest_max": "2026-06-24"
+    }
+  },
+  "base_meta": {
+    "train_start": "2023-01-03",
+    "train_end": "2026-06-29",
+    "prediction_date": "2026-07-06",
+    "x_train_rows": 250172,
+    "prediction_rows": 299,
+    "feature_count": 35
+  },
+  "recent_status": "trained",
+  "recent_meta": {
+    "train_start": "2025-12-25",
+    "train_end": "2026-06-29",
+    "prediction_date": "2026-07-06",
+    "x_train_rows": 35874,
+    "prediction_rows": 299,
+    "feature_count": 40
+  },
+  "recent_failure_reason": "",
+  "flow_in_recent": [
+    "cs_main_flow_rank_1d",
+    "cs_main_flow_rank_5d",
+    "cs_small_flow_rank_1d",
+    "cs_super_flow_rank_1d",
+    "cs_flow_reversal_5d"
+  ],
+  "flow_in_base": [],
+  "fund_flow_gate": {
+    "status": "computed_this_run",
+    "recent_symbol_coverage": 299,
+    "latest_available_date": "2026-07-06",
+    "recent_20d_avg_symbol_coverage": 288.65,
+    "available_trading_days": 130,
+    "field_missing_rate": 0.8603629197277506,
+    "is_allowed_for_recent_model": true,
+    "rejection_reason": "short-history-family"
+  },
+  "gate_mode": "fund_flow_enhanced_gate",
+  "tier_counts": {
+    "E_REJECT": 127,
+    "UNCLASSIFIED": 105,
+    "A_MAIN": 43,
+    "B_SHORT_BOOST": 12,
+    "C_DOWNGRADE_OBSERVE": 8,
+    "D_OBSERVE": 4
+  },
+  "intersections": {
+    "base_recent_top20": 2,
+    "base_gate_top20": 12,
+    "recent_gate_top20": 3,
+    "all_three_top20": 2
+  },
+  "boosted": [
+    "603259",
+    "000725",
+    "600276",
+    "002311",
+    "300274",
+    "603296",
+    "688981",
+    "600999",
+    "688223",
+    "000338",
+    "688472",
+    "600026"
+  ],
+  "downgraded": [
+    "301165",
+    "688521",
+    "600547",
+    "600426",
+    "300502",
+    "000657",
+    "601899",
+    "000999"
+  ],
+  "vetoed": [],
+  "outputs": {
+    "base_ranked": "E:\\stock-analysis\\models\\data\\reports\\D3_base_ranked_2026-07-06.csv",
+    "recent_ranked": "E:\\stock-analysis\\models\\data\\reports\\D3_recent_ranked_2026-07-06.csv",
+    "gate_ranked": "E:\\stock-analysis\\models\\data\\reports\\D3_gate_fused_ranked_2026-07-06.csv",
+    "hybrid_ranked": "E:\\stock-analysis\\models\\data\\reports\\D3_hybrid_ranked_2026-07-06.csv",
+    "reco_cards": "E:\\stock-analysis\\models\\data\\reports\\D3_hybrid_reco_cards_2026-07-06.json",
+    "report": "E:\\stock-analysis\\models\\data\\reports\\D3_gate_emdatah5_fund_flow_run_report_2026-07-06.md",
+    "json": "E:\\stock-analysis\\models\\data\\reports\\D3_gate_emdatah5_fund_flow_run_summary_2026-07-06.json"
+  },
+  "base_feature_cols": "E:\\stock-analysis\\models\\data\\reports\\D3_base_X_train_columns_2026-07-06.csv",
+  "recent_feature_cols": "E:\\stock-analysis\\models\\data\\reports\\D3_recent_emdatah5_X_train_columns_2026-07-06.csv",
+  "fund_flow_feature_importance": "E:\\stock-analysis\\models\\data\\reports\\D3_recent_fund_flow_feature_importance_2026-07-06.csv",
+  "base_top20": [
+    "301165",
+    "688082",
+    "000975",
+    "002371",
+    "600176",
+    "002460",
+    "688012",
+    "688506",
+    "300308",
+    "688521",
+    "301308",
+    "300450",
+    "603986",
+    "300498",
+    "600547",
+    "601066",
+    "002625",
+    "002532",
+    "600660",
+    "002028"
+  ],
+  "recent_top20": [
+    "300661",
+    "002028",
+    "688506",
+    "603259",
+    "002422",
+    "000938",
+    "000725",
+    "002916",
+    "600276",
+    "002311",
+    "300274",
+    "688183",
+    "603296",
+    "000100",
+    "688256",
+    "300866",
+    "600584",
+    "600118",
+    "688981",
+    "002353"
+  ],
+  "fused_top20": [
+    "688082",
+    "000975",
+    "002371",
+    "002460",
+    "688506",
+    "300450",
+    "603986",
+    "300498",
+    "601066",
+    "002532",
+    "600660",
+    "002028",
+    "002938",
+    "300394",
+    "601225",
+    "688303",
+    "300418",
+    "605499",
+    "603799",
+    "000100"
+  ]
+}

@@ -459,8 +459,12 @@ def main() -> int:
         # SR-04: recommendation cards -- reuse the already-fitted recent
         # model's SHAP drivers rather than fitting a second explainer.
         recent_asof = recent_panel[recent_panel["date"] == actual_as_of]
+        # SHAP fix: TreeExplainer cannot consume a sklearn Pipeline -- passing the
+        # full pipeline made every SHAP driver silently fall back to 0.0.  Unwrap
+        # the final LGBM estimator (build_lgbm_pipeline names it "lgbm").
+        recent_estimator = recent_model.named_steps["lgbm"]
         explain_report = build_explainability_report(
-            recent_model,
+            recent_estimator,
             recent_asof,
             recent_features,
             panel_meta=recent_asof[["symbol"]],

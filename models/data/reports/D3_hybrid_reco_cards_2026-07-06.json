@@ -1,0 +1,1974 @@
+{
+  "688506": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": -0.00639,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.005824,
+        "family": "technical"
+      },
+      {
+        "feature": "roc_10",
+        "shap": -0.003376,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002431,
+        "family": "technical"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001256,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.00639,
+      "technical": 0.012887
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002028": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": -0.006413,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.006259,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.00261,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_6",
+        "shap": -0.001741,
+        "family": "technical"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001245,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.006413,
+      "technical": 0.011855
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002460": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.00514,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004016,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002645,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_6",
+        "shap": -0.001773,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001456,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.009558,
+      "raw_aux": 0.004016,
+      "cross_sectional": 0.001456
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "000975": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.006301,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003962,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "obv",
+        "shap": -0.003166,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_flow_reversal_5d",
+        "shap": 0.001927,
+        "family": "flow"
+      },
+      {
+        "feature": "cs_rank_close",
+        "shap": -0.001432,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.009467,
+      "raw_aux": 0.003962,
+      "flow": 0.001927,
+      "cross_sectional": 0.001432
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002916": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": -0.006451,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.006262,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002732,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_6",
+        "shap": -0.001752,
+        "family": "technical"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001247,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.006451,
+      "technical": 0.011993
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "000938": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.006468,
+        "family": "technical"
+      },
+      {
+        "feature": "roc_10",
+        "shap": -0.004013,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003952,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "cs_flow_reversal_5d",
+        "shap": 0.002491,
+        "family": "flow"
+      },
+      {
+        "feature": "cs_rank_close",
+        "shap": -0.001738,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.010481,
+      "raw_aux": 0.003952,
+      "flow": 0.002491,
+      "cross_sectional": 0.001738
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "300661": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.006253,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004058,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.00291,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_6",
+        "shap": -0.001456,
+        "family": "technical"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001233,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.011852,
+      "raw_aux": 0.004058
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "688082": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": -0.006366,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.006364,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002608,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_6",
+        "shap": -0.001644,
+        "family": "technical"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001249,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.006366,
+      "technical": 0.011865
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "300450": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005213,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003994,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001465,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001417,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.001264,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.007894,
+      "raw_aux": 0.003994,
+      "cross_sectional": 0.001465
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "601066": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.004857,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004028,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.00282,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001751,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001255,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.008931999999999999,
+      "raw_aux": 0.004028,
+      "cross_sectional": 0.001751
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "000100": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005025,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.003419,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": 0.0028,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "cs_flow_reversal_5d",
+        "shap": 0.002468,
+        "family": "flow"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001869,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.010313,
+      "cross_sectional": 0.0028,
+      "flow": 0.002468
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002422": {
+    "drivers": [
+      {
+        "feature": "roc_10",
+        "shap": -0.005948,
+        "family": "technical"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.004836,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.004753,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_close",
+        "shap": 0.004686,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003967,
+        "family": "raw_aux"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.015537,
+      "cross_sectional": 0.004686,
+      "raw_aux": 0.003967
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002938": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005218,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003998,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002193,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001549,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001443,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.008854,
+      "raw_aux": 0.003998,
+      "cross_sectional": 0.001549
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "603259": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.00484,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004007,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "roc_10",
+        "shap": -0.003793,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.00202,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.00185,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.010653,
+      "raw_aux": 0.004007,
+      "cross_sectional": 0.00185
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "688183": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.006379,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004013,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002623,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_6",
+        "shap": -0.001821,
+        "family": "technical"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.00125,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.012072999999999999,
+      "raw_aux": 0.004013
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "688256": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": -0.006381,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.006252,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002648,
+        "family": "technical"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001244,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_rank_close",
+        "shap": -0.001182,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.006381,
+      "technical": 0.010144,
+      "cross_sectional": 0.001182
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "603986": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": -0.006387,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.005231,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002311,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001648,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001436,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.006387,
+      "technical": 0.008978,
+      "cross_sectional": 0.001648
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "300476": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": -0.006456,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.005295,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002426,
+        "family": "technical"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001259,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_rank_close",
+        "shap": -0.001235,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.006456,
+      "technical": 0.00898,
+      "cross_sectional": 0.001235
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "600188": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.0063,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003939,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "obv",
+        "shap": -0.003042,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_flow_reversal_5d",
+        "shap": 0.001963,
+        "family": "flow"
+      },
+      {
+        "feature": "cs_rank_close",
+        "shap": -0.001442,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.009342,
+      "raw_aux": 0.003939,
+      "flow": 0.001963,
+      "cross_sectional": 0.001442
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002371": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": -0.006402,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.005961,
+        "family": "technical"
+      },
+      {
+        "feature": "roc_10",
+        "shap": -0.003517,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002503,
+        "family": "technical"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001254,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.006402,
+      "technical": 0.013235
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "300274": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005218,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003997,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002113,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_6",
+        "shap": -0.001715,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001554,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.009046,
+      "raw_aux": 0.003997,
+      "cross_sectional": 0.001554
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "300394": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": -0.006387,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.005216,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002248,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001675,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001418,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.006387,
+      "technical": 0.008882000000000001,
+      "cross_sectional": 0.001675
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002353": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": -0.006477,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.006055,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002747,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_flow_reversal_5d",
+        "shap": 0.002259,
+        "family": "flow"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001252,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.006477,
+      "technical": 0.010053999999999999,
+      "flow": 0.002259
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002532": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.006581,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003961,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.001523,
+        "family": "technical"
+      },
+      {
+        "feature": "obv",
+        "shap": -0.001424,
+        "family": "technical"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001255,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.010783000000000001,
+      "raw_aux": 0.003961
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "600276": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.00646,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003908,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "roc_10",
+        "shap": -0.003565,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002165,
+        "family": "technical"
+      },
+      {
+        "feature": "obv",
+        "shap": -0.001629,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.013819,
+      "raw_aux": 0.003908
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "601600": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005145,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004031,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_6",
+        "shap": -0.001736,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.001484,
+        "family": "technical"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001245,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.00961,
+      "raw_aux": 0.004031
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "300498": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.004865,
+        "family": "technical"
+      },
+      {
+        "feature": "roc_10",
+        "shap": -0.004288,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003988,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001777,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "cs_rank_close",
+        "shap": -0.001759,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.009153000000000001,
+      "raw_aux": 0.003988,
+      "cross_sectional": 0.003536
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "603296": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.006264,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004021,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002488,
+        "family": "technical"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001252,
+        "family": "technical"
+      },
+      {
+        "feature": "boll_upper",
+        "shap": 0.00115,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.011153999999999999,
+      "raw_aux": 0.004021
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "000725": {
+    "drivers": [
+      {
+        "feature": "roc_10",
+        "shap": -0.005218,
+        "family": "technical"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.005025,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": 0.002763,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "cs_flow_reversal_5d",
+        "shap": 0.002113,
+        "family": "flow"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001869,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.012112000000000001,
+      "cross_sectional": 0.002763,
+      "flow": 0.002113
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "002311": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005951,
+        "family": "technical"
+      },
+      {
+        "feature": "roc_10",
+        "shap": -0.005414,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.005183,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_close",
+        "shap": 0.004662,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003976,
+        "family": "raw_aux"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.016548,
+      "cross_sectional": 0.004662,
+      "raw_aux": 0.003976
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "600660": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005176,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003978,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "roc_10",
+        "shap": -0.003882,
+        "family": "technical"
+      },
+      {
+        "feature": "obv",
+        "shap": -0.003394,
+        "family": "technical"
+      },
+      {
+        "feature": "atr_14",
+        "shap": -0.001356,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.013807999999999999,
+      "raw_aux": 0.003978
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "688303": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.00625,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004013,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "cs_flow_reversal_5d",
+        "shap": 0.001953,
+        "family": "flow"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.001726,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_rank_close",
+        "shap": -0.00134,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.007976,
+      "raw_aux": 0.004013,
+      "flow": 0.001953,
+      "cross_sectional": 0.00134
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "600999": {
+    "drivers": [
+      {
+        "feature": "roc_10",
+        "shap": -0.005335,
+        "family": "technical"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.004857,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003974,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "cs_rank_close",
+        "shap": -0.002213,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "rsi_6",
+        "shap": -0.001563,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.011755,
+      "raw_aux": 0.003974,
+      "cross_sectional": 0.002213
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "688223": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.00503,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003951,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "cs_flow_reversal_5d",
+        "shap": 0.002196,
+        "family": "flow"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.001724,
+        "family": "technical"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001252,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.008006,
+      "raw_aux": 0.003951,
+      "flow": 0.002196
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "605499": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005801,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004006,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "roc_10",
+        "shap": -0.003375,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002427,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_6",
+        "shap": -0.002008,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.013611,
+      "raw_aux": 0.004006
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "300418": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005143,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004045,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "cs_flow_reversal_5d",
+        "shap": 0.001934,
+        "family": "flow"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001475,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.001373,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.006516,
+      "raw_aux": 0.004045,
+      "flow": 0.001934,
+      "cross_sectional": 0.001475
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "600482": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.004861,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004025,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "cs_flow_reversal_5d",
+        "shap": 0.002182,
+        "family": "flow"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001505,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001263,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.006124,
+      "raw_aux": 0.004025,
+      "flow": 0.002182,
+      "cross_sectional": 0.001505
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "601225": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.004854,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004048,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_6",
+        "shap": -0.001895,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001783,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "cs_rank_close",
+        "shap": -0.001403,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.006749,
+      "raw_aux": 0.004048,
+      "cross_sectional": 0.003186
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "688981": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005092,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004016,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002171,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001585,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "cs_rank_close",
+        "shap": -0.001334,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.007263,
+      "raw_aux": 0.004016,
+      "cross_sectional": 0.0029189999999999997
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "603501": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.004879,
+        "family": "technical"
+      },
+      {
+        "feature": "roc_10",
+        "shap": -0.00443,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004038,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.002155,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_6",
+        "shap": -0.001719,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.013182999999999999,
+      "raw_aux": 0.004038
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "600893": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.004991,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004088,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "cs_flow_reversal_5d",
+        "shap": 0.00223,
+        "family": "flow"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.001266,
+        "family": "technical"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001251,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.007507999999999999,
+      "raw_aux": 0.004088,
+      "flow": 0.00223
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "600460": {
+    "drivers": [
+      {
+        "feature": "rsi_12",
+        "shap": 0.008863,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_close",
+        "shap": 0.005982,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.005154,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003997,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001744,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.014016999999999998,
+      "cross_sectional": 0.007726,
+      "raw_aux": 0.003997
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "688472": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005272,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004019,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.001787,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001494,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "cs_flow_reversal_5d",
+        "shap": 0.001359,
+        "family": "flow"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.007058999999999999,
+      "raw_aux": 0.004019,
+      "cross_sectional": 0.001494,
+      "flow": 0.001359
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "600026": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005234,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003986,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_6",
+        "shap": -0.001625,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001484,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "cs_rank_close",
+        "shap": -0.001463,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.006859,
+      "raw_aux": 0.003986,
+      "cross_sectional": 0.002947
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "002074": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005195,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004057,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_6",
+        "shap": -0.001702,
+        "family": "technical"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001284,
+        "family": "technical"
+      },
+      {
+        "feature": "boll_upper",
+        "shap": 0.001123,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.009304000000000002,
+      "raw_aux": 0.004057
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "000338": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005168,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.003971,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.00125,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.001192,
+        "family": "technical"
+      },
+      {
+        "feature": "boll_upper",
+        "shap": 0.001146,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.008756,
+      "raw_aux": 0.003971
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "000807": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.00657,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004007,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001495,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "obv",
+        "shap": -0.001478,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_rank_close",
+        "shap": -0.001461,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.008048,
+      "raw_aux": 0.004007,
+      "cross_sectional": 0.0029560000000000003
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002558": {
+    "drivers": [
+      {
+        "feature": "roc_10",
+        "shap": -0.004716,
+        "family": "technical"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.004656,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004014,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "cs_flow_reversal_5d",
+        "shap": 0.002113,
+        "family": "flow"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001773,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.009372,
+      "raw_aux": 0.004014,
+      "flow": 0.002113,
+      "cross_sectional": 0.001773
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "688041": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": -0.006446,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.004861,
+        "family": "technical"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.003802,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001922,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "cs_rank_close",
+        "shap": -0.001258,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.006446,
+      "technical": 0.008663,
+      "cross_sectional": 0.00318
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "603799": {
+    "drivers": [
+      {
+        "feature": "rsi_12",
+        "shap": 0.007374,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_close",
+        "shap": 0.006252,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "kdj_d",
+        "shap": -0.005109,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.00402,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.00147,
+        "family": "cross_sectional"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.012483000000000001,
+      "cross_sectional": 0.007722,
+      "raw_aux": 0.00402
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "600875": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005151,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004031,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.00147,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001249,
+        "family": "technical"
+      },
+      {
+        "feature": "boll_upper",
+        "shap": 0.001147,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.007547,
+      "raw_aux": 0.004031,
+      "cross_sectional": 0.00147
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "000425": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005155,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004024,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_12",
+        "shap": 0.001635,
+        "family": "technical"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001476,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001246,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.008036,
+      "raw_aux": 0.004024,
+      "cross_sectional": 0.001476
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "600066": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005963,
+        "family": "technical"
+      },
+      {
+        "feature": "roc_10",
+        "shap": -0.004373,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004009,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "cs_rank_close",
+        "shap": -0.001624,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001265,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.011601000000000002,
+      "raw_aux": 0.004009,
+      "cross_sectional": 0.001624
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "601916": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.005546,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004009,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "rsi_6",
+        "shap": -0.001714,
+        "family": "technical"
+      },
+      {
+        "feature": "obv",
+        "shap": -0.001439,
+        "family": "technical"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001243,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.009942,
+      "raw_aux": 0.004009
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "601088": {
+    "drivers": [
+      {
+        "feature": "kdj_d",
+        "shap": -0.004113,
+        "family": "technical"
+      },
+      {
+        "feature": "volume",
+        "shap": -0.004024,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "cs_zscore_volume",
+        "shap": -0.001455,
+        "family": "cross_sectional"
+      },
+      {
+        "feature": "reversal_3d",
+        "shap": 0.001261,
+        "family": "technical"
+      },
+      {
+        "feature": "sector_momentum_10d",
+        "shap": 0.00122,
+        "family": "industry"
+      }
+    ],
+    "family_totals": {
+      "technical": 0.005374,
+      "raw_aux": 0.004024,
+      "cross_sectional": 0.001455,
+      "industry": 0.00122
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  }
+}

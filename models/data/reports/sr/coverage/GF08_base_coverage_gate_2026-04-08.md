@@ -1,6 +1,6 @@
 # Feature Coverage Gate
 
-Generated: 2026-07-09T00:27:36
+Generated: 2026-07-09T14:35:45
 
 - Features checked: 52
 - Base model allowed: 47

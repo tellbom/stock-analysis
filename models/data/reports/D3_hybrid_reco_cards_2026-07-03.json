@@ -1,0 +1,1822 @@
+{
+  "002532": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "000807": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "300476": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002353": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "300450": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "600999": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "300502": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "601600": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "603259": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002028": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "688303": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "688082": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "300661": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002460": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "600188": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002384": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "002371": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "000100": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "688256": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002920": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "300274": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "688012": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "688506": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "000408": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "000338": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002475": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "688223": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "300033": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "605499": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002463": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "000776": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002938": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "600438": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "688041": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "001979": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "600893": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "601211": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "600482": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "601066": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "688183": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "688472": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "000657": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "600875": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "300866": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "600426": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "601898": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "600030": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "002415": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "600066": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "600845": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  },
+  "000977": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "B_SHORT_BOOST",
+    "industry_rank": null
+  },
+  "600048": {
+    "drivers": [
+      {
+        "feature": "volume",
+        "shap": 0.0,
+        "family": "raw_aux"
+      },
+      {
+        "feature": "ma_5",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_10",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_20",
+        "shap": 0.0,
+        "family": "technical"
+      },
+      {
+        "feature": "ma_60",
+        "shap": 0.0,
+        "family": "technical"
+      }
+    ],
+    "family_totals": {
+      "raw_aux": 0.0,
+      "technical": 0.0
+    },
+    "gate_tier": "A_MAIN",
+    "industry_rank": null
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "prediction_date": "2026-07-03",
+  "review_date": "2026-07-09",
+  "horizon_days": 3,
+  "entry_date": "2026-07-06",
+  "exit_date": "2026-07-09",
+  "n_symbols": 298,
+  "rank_ic": -0.2506765030838564,
+  "industry_neutral": {
+    "mean_return": -0.016042684018663142,
+    "hit_rate": 0.32,
+    "n": 50
+  },
+  "global_top50": {
+    "mean_return": -0.017104747415291707,
+    "hit_rate": 0.32,
+    "n": 50
+  },
+  "checks": {
+    "Rank IC > 0": false,
+    "Industry-neutral mean return > 0": false,
+    "Hit rate > 50%": false,
+    "Industry-neutral > Global baseline": true
+  },
+  "all_pass": false
+}

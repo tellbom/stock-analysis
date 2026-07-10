@@ -25,6 +25,7 @@ Usage:
 
 from __future__ import annotations
 
+import argparse
 import datetime as dt
 import sys
 from pathlib import Path
@@ -52,25 +53,54 @@ MIN_DATE = dt.date(2026, 7, 3)
 FETCH_END_DATE = MIN_DATE + dt.timedelta(days=3)
 
 
-def _max_date_or_none(symbol: str) -> dt.date | None:
-    df = read_ohlcv(ohlcv_path(STORE_ROOT, symbol))
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Fetch latest CSI 300 OHLCV data")
+    parser.add_argument("--store-root", default=str(STORE_ROOT))
+    parser.add_argument("--min-date", default=MIN_DATE.isoformat())
+    parser.add_argument(
+        "--fetch-end-date",
+        default="",
+        help="Collector end date; defaults to min-date + 3 calendar days.",
+    )
+    parser.add_argument("--workers", type=int, default=1)
+    return parser.parse_args(argv)
+
+
+def resolve_dates(args: argparse.Namespace) -> tuple[dt.date, dt.date]:
+    min_date = pd.to_datetime(args.min_date).date()
+    fetch_end_date = (
+        pd.to_datetime(args.fetch_end_date).date()
+        if args.fetch_end_date
+        else min_date + dt.timedelta(days=3)
+    )
+    if fetch_end_date < min_date:
+        raise ValueError("--fetch-end-date must be >= --min-date")
+    return min_date, fetch_end_date
+
+
+def _max_date_or_none(store_root: Path, symbol: str) -> dt.date | None:
+    df = read_ohlcv(ohlcv_path(store_root, symbol))
     if df.empty:
         return None
     return pd.to_datetime(df["date"]).dt.date.max()
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> None:
+    args = parse_args(argv)
+    store_root = Path(args.store_root)
+    min_date, fetch_end_date = resolve_dates(args)
+
     print("=" * 70)
     print("FETCH LATEST OHLCV DATA (via ingest.ohlcv_collector.OHLCVCollector)")
-    print(f"Target: at least {MIN_DATE}")
+    print(f"Target: at least {min_date}")
     print("=" * 70)
     print()
 
-    universe_df = pd.read_parquet(STORE_ROOT / "universe/csi300/membership.parquet")
+    universe_df = pd.read_parquet(store_root / "universe/csi300/membership.parquet")
     symbols = sorted(universe_df["symbol"].tolist())
     print(f"Universe: {len(symbols)} symbols")
 
-    already_ok = [s for s in symbols if (_max_date_or_none(s) or dt.date.min) >= MIN_DATE]
+    already_ok = [s for s in symbols if (_max_date_or_none(store_root, s) or dt.date.min) >= min_date]
     print(f"Already up to date: {len(already_ok)}/{len(symbols)}")
     print()
 
@@ -78,9 +108,9 @@ def main() -> None:
     # already up to date are skipped internally (FetchResult.error == "skipped"),
     # so there's no need to pre-filter the list ourselves.
     collector = OHLCVCollector(
-        store_root=STORE_ROOT,
-        end_date=FETCH_END_DATE,
-        max_workers=1,  # serial -- AKShare/Sina warns heavy concurrency causes IP bans
+        store_root=store_root,
+        end_date=fetch_end_date,
+        max_workers=args.workers,  # serial recommended -- AKShare/Sina can rate-limit concurrency
     )
     summary = collector.run(symbols)
 
@@ -91,8 +121,8 @@ def main() -> None:
         print(f"Failed symbols ({len(summary.failed_symbols)}): {summary.failed_symbols[:10]}")
 
     # Verify
-    final_ok = sum(1 for s in symbols if (_max_date_or_none(s) or dt.date.min) >= MIN_DATE)
-    print(f"Final coverage: {final_ok}/{len(symbols)} at or beyond {MIN_DATE}")
+    final_ok = sum(1 for s in symbols if (_max_date_or_none(store_root, s) or dt.date.min) >= min_date)
+    print(f"Final coverage: {final_ok}/{len(symbols)} at or beyond {min_date}")
 
 
 if __name__ == "__main__":

@@ -336,6 +336,9 @@ def veto_metrics(gate_frame: pd.DataFrame, labels: pd.DataFrame, as_of: dt.date)
 
 
 def aggregate_metrics(per_date: pd.DataFrame) -> pd.DataFrame:
+    cols = ["arm", "metric", "mean", "std", "n", "icir"]
+    if "value" not in per_date.columns:
+        return pd.DataFrame(columns=cols)
     rows = []
     for (arm, metric), grp in per_date.dropna(subset=["value"]).groupby(["arm", "metric"]):
         vals = grp["value"].astype(float)
@@ -347,6 +350,8 @@ def aggregate_metrics(per_date: pd.DataFrame) -> pd.DataFrame:
         else:
             row["icir"] = float("nan")
         rows.append(row)
+    if not rows:
+        return pd.DataFrame(columns=cols)
     return pd.DataFrame(rows).sort_values(["metric", "arm"]).reset_index(drop=True)
 
 

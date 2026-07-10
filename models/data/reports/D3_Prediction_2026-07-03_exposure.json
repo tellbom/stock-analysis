@@ -1,15 +1,4 @@
 {
-  "乘用车": {
-    "industry_code": "乘用车",
-    "industry_name": "乘用车",
-    "count": 3,
-    "fraction": 0.06,
-    "symbols": [
-      "600104",
-      "601127",
-      "601238"
-    ]
-  },
   "化学原料": {
     "industry_code": "其他化学原料",
     "industry_name": "化学原料",
@@ -43,14 +32,24 @@
       "600547"
     ]
   },
+  "乘用车": {
+    "industry_code": "乘用车",
+    "industry_name": "乘用车",
+    "count": 2,
+    "fraction": 0.04,
+    "symbols": [
+      "600104",
+      "601238"
+    ]
+  },
   "发电设备": {
     "industry_code": "光伏设备",
     "industry_name": "发电设备",
     "count": 2,
     "fraction": 0.04,
     "symbols": [
-      "300274",
-      "300316"
+      "300316",
+      "688223"
     ]
   },
   "电子元件": {
@@ -93,23 +92,13 @@
       "601872"
     ]
   },
-  "通信设备": {
-    "industry_code": "通信系统设备及组件",
-    "industry_name": "通信设备",
-    "count": 2,
-    "fraction": 0.04,
-    "symbols": [
-      "300394",
-      "600522"
-    ]
-  },
-  "数字芯片设计": {
-    "industry_code": "BK1331",
-    "industry_name": "数字芯片设计",
+  "跨境物流": {
+    "industry_code": "BK1488",
+    "industry_name": "跨境物流",
     "count": 1,
     "fraction": 0.02,
     "symbols": [
-      "301308"
+      "001391"
     ]
   },
   "医疗器械": {
@@ -202,6 +191,15 @@
       "600066"
     ]
   },
+  "专用机械 (工程机械)": {
+    "industry_code": "工程机械",
+    "industry_name": "专用机械",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "000425"
+    ]
+  },
   "计算机软件": {
     "industry_code": "应用软件",
     "industry_name": "计算机软件",
@@ -220,6 +218,15 @@
       "002837"
     ]
   },
+  "化学制品": {
+    "industry_code": "氟化工",
+    "industry_name": "化学制品",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "600160"
+    ]
+  },
   "汽车零部件与轮胎": {
     "industry_code": "汽车电子",
     "industry_name": "汽车零部件与轮胎",
@@ -229,6 +236,15 @@
       "002920"
     ]
   },
+  "燃气": {
+    "industry_code": "燃气",
+    "industry_name": "燃气",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "600803"
+    ]
+  },
   "石油与天然气": {
     "industry_code": "燃油炼制",
     "industry_name": "石油与天然气",
@@ -236,6 +252,15 @@
     "fraction": 0.02,
     "symbols": [
       "600938"
+    ]
+  },
+  "其他非金属材料": {
+    "industry_code": "玻璃纤维",
+    "industry_name": "其他非金属材料",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "600176"
     ]
   },
   "储能设备": {
@@ -253,7 +278,7 @@
     "count": 1,
     "fraction": 0.02,
     "symbols": [
-      "600893"
+      "600372"
     ]
   },
   "软件开发": {
@@ -283,6 +308,15 @@
       "601066"
     ]
   },
+  "通信设备": {
+    "industry_code": "通信系统设备及组件",
+    "industry_name": "通信设备",
+    "count": 1,
+    "fraction": 0.02,
+    "symbols": [
+      "600522"
+    ]
+  },
   "电网设备": {
     "industry_code": "配电设备",
     "industry_name": "电网设备",
@@ -290,24 +324,6 @@
     "fraction": 0.02,
     "symbols": [
       "002028"
-    ]
-  },
-  "稀有金属": {
-    "industry_code": "钨钼",
-    "industry_name": "稀有金属",
-    "count": 1,
-    "fraction": 0.02,
-    "symbols": [
-      "000657"
-    ]
-  },
-  "稀有金属 (锂)": {
-    "industry_code": "锂",
-    "industry_name": "稀有金属",
-    "count": 1,
-    "fraction": 0.02,
-    "symbols": [
-      "002460"
     ]
   },
   "集成电路": {

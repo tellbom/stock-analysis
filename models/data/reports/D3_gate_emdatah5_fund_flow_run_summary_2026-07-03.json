@@ -158,15 +158,17 @@
   ],
   "vetoed": [],
   "outputs": {
-    "base_ranked": "/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_base_ranked_2026-07-03.csv",
-    "recent_ranked": "/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_recent_ranked_2026-07-03.csv",
-    "gate_ranked": "/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_gate_fused_ranked_2026-07-03.csv",
-    "report": "/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_gate_emdatah5_fund_flow_run_report_2026-07-03.md",
-    "json": "/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_gate_emdatah5_fund_flow_run_summary_2026-07-03.json"
+    "base_ranked": "E:\\stock-analysis\\models\\data\\reports\\D3_base_ranked_2026-07-03.csv",
+    "recent_ranked": "E:\\stock-analysis\\models\\data\\reports\\D3_recent_ranked_2026-07-03.csv",
+    "gate_ranked": "E:\\stock-analysis\\models\\data\\reports\\D3_gate_fused_ranked_2026-07-03.csv",
+    "hybrid_ranked": "E:\\stock-analysis\\models\\data\\reports\\D3_hybrid_ranked_2026-07-03.csv",
+    "reco_cards": "E:\\stock-analysis\\models\\data\\reports\\D3_hybrid_reco_cards_2026-07-03.json",
+    "report": "E:\\stock-analysis\\models\\data\\reports\\D3_gate_emdatah5_fund_flow_run_report_2026-07-03.md",
+    "json": "E:\\stock-analysis\\models\\data\\reports\\D3_gate_emdatah5_fund_flow_run_summary_2026-07-03.json"
   },
-  "base_feature_cols": "/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_base_X_train_columns_2026-07-03.csv",
-  "recent_feature_cols": "/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_recent_emdatah5_X_train_columns_2026-07-03.csv",
-  "fund_flow_feature_importance": "/Users/fuziqiang/Desktop/stock-analysis/models/data/reports/D3_recent_fund_flow_feature_importance_2026-07-03.csv",
+  "base_feature_cols": "E:\\stock-analysis\\models\\data\\reports\\D3_base_X_train_columns_2026-07-03.csv",
+  "recent_feature_cols": "E:\\stock-analysis\\models\\data\\reports\\D3_recent_emdatah5_X_train_columns_2026-07-03.csv",
+  "fund_flow_feature_importance": "E:\\stock-analysis\\models\\data\\reports\\D3_recent_fund_flow_feature_importance_2026-07-03.csv",
   "base_top20": [
     "301165",
     "002422",
