@@ -1,0 +1,14 @@
+{
+  "start": "2026-10-08",
+  "end": "2026-10-13",
+  "requested_symbols": 80,
+  "required_dates": [
+    "2026-10-08",
+    "2026-10-09",
+    "2026-10-12",
+    "2026-10-13"
+  ],
+  "rows": 324,
+  "failures": [],
+  "provider": "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get"
+}

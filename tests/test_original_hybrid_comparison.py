@@ -1,0 +1,77 @@
+import datetime as dt
+import json
+
+import numpy as np
+import pandas as pd
+import pytest
+
+from scripts.compare_original_hybrid import combine, scores, verify_reference
+from scripts.reconcile_original_hybrid import evaluate
+
+
+def test_hybrids_reuse_original_scores_and_reject_different_universe():
+    pred = pd.DataFrame({"symbol": ["000001", "000002"], "date": [dt.date(2026, 9, 30)] * 2})
+    base = scores(pred, np.array([0.01, 0.02]), "base")
+    frozen = base.copy(deep=True)
+    recent = scores(pred, np.array([0.03, -0.01]), "recent")
+    first, second = combine(base, recent), combine(base, recent.iloc[::-1])
+    pd.testing.assert_frame_equal(base, frozen)
+    assert first.base_score.tolist() == second.base_score.tolist() == [0.01, 0.02]
+    with pytest.raises(ValueError, match="universes differ"):
+        combine(base, recent.iloc[:1])
+
+
+def test_reference_rejects_retrained_score_drift_even_with_same_picks():
+    train = pd.DataFrame({"date": [dt.date(2026, 9, 23)]})
+    picks = pd.DataFrame({"symbol": ["000001"], "base_score": [0.02]})
+    reference = {"horizons": {"3": {"train_rows": 1, "train_first_date": "2026-09-23",
+                                    "train_last_date": "2026-09-23",
+                                    "selected": [{"symbol": "000001", "model_score": 0.01}]}}}
+    with pytest.raises(RuntimeError, match="scores changed"):
+        verify_reference(picks, train, reference, 3)
+
+
+@pytest.fixture
+def experiment(tmp_path):
+    (tmp_path / "training_summary.json").write_text(json.dumps({"as_of": "2026-09-30", "entry_date": "2026-10-08",
+        "horizons": {"3": {"target_date": "2026-10-13"}, "5": {"target_date": "2026-10-15"}}}), encoding="utf-8")
+    arms = ("ordinary", "hybrid_no_flow", "hybrid_flow", "hybrid_flow_score_gate")
+    pd.DataFrame([{"horizon": h, "strategy": a, "strategy_name": a, "symbol": "000001",
+                   "name": "test", "industry_name": "test", "recommendation_rank": 1,
+                   "in_equal_count_comparison": True} for h in (3, 5) for a in arms]).to_csv(tmp_path / "all_picks.csv", index=False)
+    rows = []
+    for d, price in ((8, 100), (9, 100), (12, 100), (13, 90), (14, 95), (15, 110)):
+        for symbol, close in (("000001", price), ("000300", 100)):
+            rows.append({"symbol": symbol, "date": f"2026-10-{d:02d}", "close": close})
+    path = tmp_path / "staged_prices.csv"
+    pd.DataFrame(rows).to_csv(path, index=False)
+    return tmp_path, path
+
+
+def test_each_horizon_stops_at_its_target_date(experiment):
+    out, path = experiment
+    result = evaluate(out, path, dt.date(2026, 10, 15), 10)
+    d3 = next(s for s in result["strategies"] if s["horizon"] == 3)
+    d5 = next(s for s in result["strategies"] if s["horizon"] == 5)
+    assert d3["end_date"] == "2026-10-13"
+    assert d3["net_if_exit"] == pytest.approx(-0.102)
+    assert d5["end_date"] == "2026-10-15"
+    assert d5["net_if_exit"] == pytest.approx(0.098)
+    assert d3["complete"] and d5["complete"]
+
+
+def test_early_d5_is_not_reported_as_completed(experiment):
+    out, path = experiment
+    result = evaluate(out, path, dt.date(2026, 10, 13), 10)
+    assert all(s["complete"] == (s["horizon"] == 3) for s in result["strategies"])
+
+
+def test_missing_prices_and_broad_history_are_rejected(experiment):
+    out, path = experiment
+    with pytest.raises(ValueError, match="one calendar week"):
+        evaluate(out, path, dt.date(2026, 10, 16), 10)
+    prices = pd.read_csv(path, dtype={"symbol": str})
+    prices = prices[~((prices.symbol == "000001") & (prices.date == "2026-10-12"))]
+    prices.to_csv(path, index=False)
+    with pytest.raises(ValueError, match="Missing holding-week prices"):
+        evaluate(out, path, dt.date(2026, 10, 13), 10)

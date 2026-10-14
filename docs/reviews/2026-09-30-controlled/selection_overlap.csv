@@ -1,0 +1,9 @@
+﻿horizon,strategy,count,overlap_with_ordinary,replacements_vs_ordinary
+3,ordinary,49,49,0
+3,hybrid_no_flow,49,37,12
+3,hybrid_flow,49,36,13
+3,hybrid_flow_score_gate,49,35,14
+5,ordinary,50,50,0
+5,hybrid_no_flow,50,39,11
+5,hybrid_flow,50,37,13
+5,hybrid_flow_score_gate,50,36,14

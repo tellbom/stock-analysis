@@ -1,0 +1,171 @@
+{
+  "as_of": "2026-09-30",
+  "entry_date": "2026-10-08",
+  "research_only": true,
+  "retrospective_reconstruction": true,
+  "original_features": [
+    "ma_5",
+    "ma_10",
+    "ma_20",
+    "ma_60",
+    "macd_dif",
+    "macd_dea",
+    "macd_hist",
+    "kdj_k",
+    "kdj_d",
+    "kdj_j",
+    "rsi_6",
+    "rsi_12",
+    "rsi_24",
+    "boll_upper",
+    "boll_mid",
+    "atr_14",
+    "adx_14",
+    "obv",
+    "cci_14",
+    "roc_10",
+    "willr_14",
+    "stoch_k",
+    "stoch_d",
+    "reversal_3d",
+    "cs_rank_close",
+    "cs_rank_volume",
+    "cs_rank_rsi_6",
+    "cs_rank_roc_10",
+    "cs_rank_ma_5",
+    "cs_zscore_close",
+    "cs_zscore_volume",
+    "cs_zscore_rsi_6"
+  ],
+  "flow_features": [
+    "cs_main_flow_rank_1d",
+    "cs_main_flow_rank_5d",
+    "cs_small_flow_rank_1d",
+    "cs_super_flow_rank_1d",
+    "cs_flow_reversal_5d"
+  ],
+  "original_algorithm": "Ridge(alpha=1.0)",
+  "recent_algorithm": "LightGBM",
+  "recent_params": {
+    "objective": "regression",
+    "n_estimators": 120,
+    "learning_rate": 0.05,
+    "num_leaves": 15,
+    "min_child_samples": 20,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_alpha": 0.1,
+    "reg_lambda": 0.1,
+    "random_state": 42,
+    "verbose": -1,
+    "n_jobs": 4
+  },
+  "rrf_k": 60,
+  "recent_window_dates": 120,
+  "selection": {
+    "top_k_per_industry": 3,
+    "max_total": 50
+  },
+  "gate_scope": "score tiers only; no additional event/risk factors",
+  "scored_count": 299,
+  "excluded_symbols": [
+    "601059"
+  ],
+  "prediction_feature_hash": "a0a5e43a9aeb2ac2073173b91d8d414560ea3965e342a84d50f1e10ef1280b6c",
+  "flow_source_counts": {
+    "eastmoney_emdatah5_zjlx": 38086
+  },
+  "flow_latest_date": "2026-09-30",
+  "horizons": {
+    "3": {
+      "label_col": "ret_fwd_3d",
+      "target_date": "2026-10-13",
+      "reference_audit": {
+        "ordered_selection_matches": true,
+        "train_rows_match": true,
+        "max_score_difference": 1.8492152253912764e-15
+      },
+      "original_train_rows": 250750,
+      "original_train_start": "2023-04-04",
+      "original_train_end": "2026-09-23",
+      "original_training_input_hash": "b0a6f2d011c3a609d459418abc365ab0f5a64e408f6f58f0e4ef4a5d3e0edf8c",
+      "original_scores_hash": "a56508f4dff33ecd98056de7d52b3f0999b185df33d3571cd320f460734e6caf",
+      "shared_recent_train_rows": 35883,
+      "shared_recent_dates": 120,
+      "recent_train_start": "2026-04-02",
+      "recent_train_end": "2026-09-23",
+      "recent_rows_excluded_for_missing_flow": 0,
+      "shared_recent_row_label_hash": "c48af7ec0ba118e9c031170b4fdb96e804f98fb7b6f7734f08f4a059acb37a4f",
+      "recent_feature_counts": {
+        "no_flow": 32,
+        "flow": 37
+      },
+      "flow_importances": {
+        "cs_main_flow_rank_1d": 25,
+        "cs_main_flow_rank_5d": 34,
+        "cs_small_flow_rank_1d": 29,
+        "cs_super_flow_rank_1d": 16,
+        "cs_flow_reversal_5d": 25
+      },
+      "flow_train_nonnull_dates": {
+        "cs_main_flow_rank_1d": 120,
+        "cs_main_flow_rank_5d": 120,
+        "cs_small_flow_rank_1d": 120,
+        "cs_super_flow_rank_1d": 120,
+        "cs_flow_reversal_5d": 120
+      },
+      "equal_count_n": 49,
+      "full_selection_counts": {
+        "ordinary": 50,
+        "hybrid_no_flow": 50,
+        "hybrid_flow": 50,
+        "hybrid_flow_score_gate": 49
+      }
+    },
+    "5": {
+      "label_col": "ret_fwd_5d",
+      "target_date": "2026-10-15",
+      "reference_audit": {
+        "ordered_selection_matches": true,
+        "train_rows_match": true,
+        "max_score_difference": 1.5768636396629176e-15
+      },
+      "original_train_rows": 250150,
+      "original_train_start": "2023-04-04",
+      "original_train_end": "2026-09-21",
+      "original_training_input_hash": "6710a7ae971b0d55911b79cbbfed193334101d14eb4dc043d1fc2891be771086",
+      "original_scores_hash": "a1c1fd2999c9052e9d519f0f145a978950ea27671308cbc8651656723df8bc86",
+      "shared_recent_train_rows": 35883,
+      "shared_recent_dates": 120,
+      "recent_train_start": "2026-03-31",
+      "recent_train_end": "2026-09-21",
+      "recent_rows_excluded_for_missing_flow": 0,
+      "shared_recent_row_label_hash": "9ad20211f9a9ac022c3375e9c56177fd2680300a3d593cd63311aaff8e1bf397",
+      "recent_feature_counts": {
+        "no_flow": 32,
+        "flow": 37
+      },
+      "flow_importances": {
+        "cs_main_flow_rank_1d": 17,
+        "cs_main_flow_rank_5d": 39,
+        "cs_small_flow_rank_1d": 27,
+        "cs_super_flow_rank_1d": 14,
+        "cs_flow_reversal_5d": 11
+      },
+      "flow_train_nonnull_dates": {
+        "cs_main_flow_rank_1d": 120,
+        "cs_main_flow_rank_5d": 120,
+        "cs_small_flow_rank_1d": 120,
+        "cs_super_flow_rank_1d": 120,
+        "cs_flow_reversal_5d": 120
+      },
+      "equal_count_n": 50,
+      "full_selection_counts": {
+        "ordinary": 50,
+        "hybrid_no_flow": 50,
+        "hybrid_flow": 50,
+        "hybrid_flow_score_gate": 50
+      }
+    }
+  }
+}
