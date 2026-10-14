@@ -1,0 +1,60 @@
+feature_name,feature_family,source,latest_available_date,overall_missing_rate,recent_symbol_coverage,recent_20d_avg_symbol_coverage,available_trading_days,date_coverage_rate,is_pit_safe,known_at,history_start,is_allowed_for_base_model,is_allowed_for_recent_model,is_allowed_for_prediction_only,rejection_reason
+volume,raw_aux,feature_panel,2026-10-09,0.0,299,298.55,910,1.0,True,post_close_T,,True,True,False,allowed
+ma_5,technical,feature_panel,2026-10-09,0.0055443026745716105,299,298.55,905,0.9945054945054945,True,post_close_T,,True,True,False,allowed
+ma_10,technical,feature_panel,2026-10-09,0.011088605349143221,299,298.55,900,0.989010989010989,True,post_close_T,,True,True,False,allowed
+ma_20,technical,feature_panel,2026-10-09,0.022177210698286442,299,298.55,890,0.978021978021978,True,post_close_T,,True,True,False,allowed
+ma_60,technical,feature_panel,2026-10-09,0.06653163209485932,299,298.55,850,0.9340659340659341,True,post_close_T,,True,True,False,allowed
+macd_dif,technical,feature_panel,2026-10-09,0.03881011872200127,299,298.55,875,0.9615384615384616,True,post_close_T,,True,True,False,allowed
+macd_dea,technical,feature_panel,2026-10-09,0.03881011872200127,299,298.55,875,0.9615384615384616,True,post_close_T,,True,True,False,allowed
+macd_hist,technical,feature_panel,2026-10-09,0.03881011872200127,299,298.55,875,0.9615384615384616,True,post_close_T,,True,True,False,allowed
+kdj_k,technical,feature_panel,2026-10-09,0.009979744814228898,299,298.55,901,0.9901098901098901,True,post_close_T,,True,True,False,allowed
+kdj_d,technical,feature_panel,2026-10-09,0.009979744814228898,299,298.55,901,0.9901098901098901,True,post_close_T,,True,True,False,allowed
+kdj_j,technical,feature_panel,2026-10-09,0.009979744814228898,299,298.55,901,0.9901098901098901,True,post_close_T,,True,True,False,allowed
+rsi_6,technical,feature_panel,2026-10-09,0.006653163209485932,299,298.55,904,0.9934065934065934,True,post_close_T,,True,True,False,allowed
+rsi_12,technical,feature_panel,2026-10-09,0.013306326418971864,299,298.55,898,0.9868131868131869,True,post_close_T,,True,True,False,allowed
+rsi_24,technical,feature_panel,2026-10-09,0.02661265283794373,299,298.55,886,0.9736263736263736,True,post_close_T,,True,True,False,allowed
+boll_upper,technical,feature_panel,2026-10-09,0.022177210698286442,299,298.55,890,0.978021978021978,True,post_close_T,,True,True,False,allowed
+boll_mid,technical,feature_panel,2026-10-09,0.022177210698286442,299,298.55,890,0.978021978021978,True,post_close_T,,True,True,False,allowed
+atr_14,technical,feature_panel,2026-10-09,0.015524047488800508,299,298.55,896,0.9846153846153847,True,post_close_T,,True,True,False,allowed
+adx_14,technical,feature_panel,2026-10-09,0.031048094977601016,299,298.55,882,0.9692307692307692,True,post_close_T,,True,True,False,allowed
+obv,technical,feature_panel,2026-10-09,0.02772151337285805,299,298.55,885,0.9725274725274725,True,post_close_T,,True,True,False,allowed
+cci_14,technical,feature_panel,2026-10-09,0.015524047488800508,299,298.55,896,0.9846153846153847,True,post_close_T,,True,True,False,allowed
+roc_10,technical,feature_panel,2026-10-09,0.011088605349143221,299,298.55,900,0.989010989010989,True,post_close_T,,True,True,False,allowed
+willr_14,technical,feature_panel,2026-10-09,0.015524047488800508,299,298.55,896,0.9846153846153847,True,post_close_T,,True,True,False,allowed
+stoch_k,technical,feature_panel,2026-10-09,0.01663290802371483,299,298.55,895,0.9835164835164835,True,post_close_T,,True,True,False,allowed
+stoch_d,technical,feature_panel,2026-10-09,0.018850629093543476,299,298.55,893,0.9813186813186813,True,post_close_T,,True,True,False,allowed
+reversal_3d,technical,feature_panel,2026-10-09,0.003326581604742966,299,298.55,907,0.9967032967032967,True,post_close_T,,True,True,False,allowed
+fund_revenue,fundamental,silver/fundamentals,2026-10-09,0.9752354480535801,27,27.0,647,0.710989010989011,True,announce_date,,False,False,True,base-missing>30%; base-recent-coverage-low; recent-20d-coverage-low
+fund_net_profit,fundamental,silver/fundamentals,2026-10-09,0.9752354480535801,27,27.0,647,0.710989010989011,True,announce_date,,False,False,True,base-missing>30%; base-recent-coverage-low; recent-20d-coverage-low
+fund_eps,fundamental,silver/fundamentals,2026-10-09,0.9758120555317356,26,26.0,647,0.710989010989011,True,announce_date,,False,False,True,base-missing>30%; base-recent-coverage-low; recent-20d-coverage-low
+fund_roe,fundamental,silver/fundamentals,2026-10-09,0.9758120555317356,26,26.0,647,0.710989010989011,True,announce_date,,False,False,True,base-missing>30%; base-recent-coverage-low; recent-20d-coverage-low
+fund_lag_days,fundamental,silver/fundamentals,2026-10-09,0.9752354480535801,27,27.0,647,0.710989010989011,True,announce_date,,False,False,True,base-missing>30%; base-recent-coverage-low; recent-20d-coverage-low
+cs_rank_close,cross_sectional,feature_panel,2026-10-09,0.0,299,298.55,910,1.0,True,post_close_T,,True,True,False,allowed
+cs_rank_volume,cross_sectional,feature_panel,2026-10-09,0.0,299,298.55,910,1.0,True,post_close_T,,True,True,False,allowed
+cs_rank_rsi_6,cross_sectional,feature_panel,2026-10-09,0.006653163209485932,299,298.55,904,0.9934065934065934,True,post_close_T,,True,True,False,allowed
+cs_rank_roc_10,cross_sectional,feature_panel,2026-10-09,0.011088605349143221,299,298.55,900,0.989010989010989,True,post_close_T,,True,True,False,allowed
+cs_rank_ma_5,cross_sectional,feature_panel,2026-10-09,0.0055443026745716105,299,298.55,905,0.9945054945054945,True,post_close_T,,True,True,False,allowed
+cs_zscore_close,cross_sectional,feature_panel,2026-10-09,0.0,299,298.55,910,1.0,True,post_close_T,,True,True,False,allowed
+cs_zscore_volume,cross_sectional,feature_panel,2026-10-09,0.0,299,298.55,910,1.0,True,post_close_T,,True,True,False,allowed
+cs_zscore_rsi_6,cross_sectional,feature_panel,2026-10-09,0.006653163209485932,299,298.55,904,0.9934065934065934,True,post_close_T,,True,True,False,allowed
+pe_ttm,raw_aux,feature_panel,2026-06-29,0.08054762925617635,0,0.0,837,0.9197802197802197,True,post_close_T,,False,False,True,base-recent-coverage-low; recent-20d-coverage-low; recent-trading-days-low; latest-date-stale
+pb,raw_aux,feature_panel,2026-06-29,0.08054762925617635,0,0.0,837,0.9197802197802197,True,post_close_T,,False,False,True,base-recent-coverage-low; recent-20d-coverage-low; recent-trading-days-low; latest-date-stale
+turnover_pct,raw_aux,feature_panel,2026-06-29,0.08054762925617635,0,0.0,837,0.9197802197802197,True,post_close_T,,False,False,True,base-recent-coverage-low; recent-20d-coverage-low; recent-trading-days-low; latest-date-stale
+cs_log_float_mcap,valuation,silver/valuation,2026-06-29,0.08054762925617635,0,0.0,837,0.9197802197802197,True,post_close_T,,False,False,True,base-recent-coverage-low; recent-20d-coverage-low; recent-trading-days-low; latest-date-stale
+cs_pe_ttm_rank,valuation,silver/valuation,2026-06-29,0.1424664015257921,0,0.0,837,0.9197802197802197,True,post_close_T,,False,False,True,base-recent-coverage-low; recent-20d-coverage-low; recent-trading-days-low; latest-date-stale
+cs_pb_rank,valuation,silver/valuation,2026-06-29,0.08054762925617635,0,0.0,837,0.9197802197802197,True,post_close_T,,False,False,True,base-recent-coverage-low; recent-20d-coverage-low; recent-trading-days-low; latest-date-stale
+cs_turnover_rank,valuation,silver/valuation,2026-06-29,0.08054762925617635,0,0.0,837,0.9197802197802197,True,post_close_T,,False,False,True,base-recent-coverage-low; recent-20d-coverage-low; recent-trading-days-low; latest-date-stale
+cs_log_mcap_rank,valuation,silver/valuation,2026-06-29,0.08054762925617635,0,0.0,837,0.9197802197802197,True,post_close_T,,False,False,True,base-recent-coverage-low; recent-20d-coverage-low; recent-trading-days-low; latest-date-stale
+pe_momentum_5d,valuation,silver/valuation,2026-06-29,0.08714534943891657,0,0.0,832,0.9142857142857143,True,post_close_T,,False,False,True,base-recent-coverage-low; recent-20d-coverage-low; recent-trading-days-low; latest-date-stale
+ind_rank_rsi_6,industry,silver/industry_map,2026-10-09,0.006653163209485932,299,298.55,904,0.9934065934065934,True,scd_pit_join,,True,True,False,allowed
+ind_rank_turnover,industry,silver/industry_map,2026-06-29,0.08054762925617635,0,0.0,837,0.9197802197802197,True,scd_pit_join,,False,False,True,base-recent-coverage-low; recent-20d-coverage-low; recent-trading-days-low; latest-date-stale
+sector_momentum_10d,industry,silver/industry_map,2026-10-09,0.0110405547259636,299,298.55,900,0.989010989010989,True,scd_pit_join,,True,True,False,allowed
+cs_main_flow_rank_1d,flow,silver/fund_flow,2026-10-09,0.8572748643493946,299,298.55,139,0.15274725274725276,True,post_close_T,,False,True,False,short-history-family
+cs_main_flow_rank_5d,flow,silver/fund_flow,2026-10-09,0.8572748643493946,299,298.55,139,0.15274725274725276,True,post_close_T,,False,True,False,short-history-family
+cs_small_flow_rank_1d,flow,silver/fund_flow,2026-10-09,0.8572748643493946,299,298.55,139,0.15274725274725276,True,post_close_T,,False,True,False,short-history-family
+cs_super_flow_rank_1d,flow,silver/fund_flow,2026-10-09,0.8572748643493946,299,298.55,139,0.15274725274725276,True,post_close_T,,False,True,False,short-history-family
+cs_flow_reversal_5d,flow,silver/fund_flow,2026-10-09,0.8572748643493946,299,298.55,139,0.15274725274725276,True,post_close_T,,False,True,False,short-history-family
+cs_margin_balance_change_5d,margin,silver/margin,2026-09-18,0.08031476854384434,0,158.6,895,0.9835164835164835,True,post_close_T_lag1,,False,False,True,base-recent-coverage-low; recent-20d-coverage-low; latest-date-stale
+cs_rzrq_ratio_rank,margin,silver/margin,2026-09-18,0.07477046586927273,0,158.6,900,0.989010989010989,True,post_close_T_lag1,,False,False,True,base-recent-coverage-low; recent-20d-coverage-low; latest-date-stale
+days_to_next_unlock,event,silver/lockup,2026-10-09,0.0,299,298.55,910,1.0,True,announce_date,,False,False,True,short-history-family; event-family-risk-channel-only
+unlock_size_ratio,event,silver/lockup,2026-10-09,0.0,299,298.55,910,1.0,True,announce_date,,False,False,True,short-history-family; event-family-risk-channel-only
