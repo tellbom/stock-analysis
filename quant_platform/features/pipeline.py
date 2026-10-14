@@ -65,7 +65,7 @@ from quant_platform.features.fundamental import build_fundamental_features
 from quant_platform.store.lake import (
     ohlcv_path, feature_path, feature_set_dir, init_lake,
 )
-from quant_platform.store.parquet_store import read_ohlcv
+from quant_platform.store.parquet_store import read_ohlcv, write_parquet
 
 logger = get_logger(__name__)
 
@@ -128,6 +128,7 @@ class FeaturePipeline:
         specs: list[FeatureSpec] | None = None,
         start_date: dt.date | str | None = None,
         end_date:   dt.date | str | None = None,
+        strict: bool = False,
     ) -> str:
         """
         Run the feature pipeline for all symbols.
@@ -140,6 +141,8 @@ class FeaturePipeline:
             Feature definitions.  Defaults to DEFAULT_SPECS.
         start_date, end_date : date | str | None
             Optional date filter applied to OHLCV before feature computation.
+        strict : bool
+            Raise if any symbol fails, so prediction cannot use stale cached rows.
 
         Returns
         -------
@@ -169,6 +172,8 @@ class FeaturePipeline:
             "Feature pipeline done: %d succeeded, %d failed, id=%s",
             succeeded, failed, feature_set_id,
         )
+        if strict and failed:
+            raise RuntimeError(f"Feature build failed for {failed}/{len(symbols)} symbols")
         return feature_set_id
 
     def _process_symbol(
@@ -222,7 +227,7 @@ class FeaturePipeline:
         # 5. Write feature Parquet
         out_path = feature_path(self.store_root, feature_set_id, symbol)
         out_path.parent.mkdir(parents=True, exist_ok=True)
-        df.to_parquet(out_path, index=False)
+        write_parquet(df, out_path)
         logger.debug(
             "%s: wrote %d feature rows → %s", symbol, len(df), out_path
         )

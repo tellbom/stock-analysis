@@ -147,6 +147,7 @@ def _build_panel(
     *,
     include_flow: bool,
     include_lockup: bool,
+    strict_features: bool = False,
 ) -> tuple[pd.DataFrame, str]:
     pipe = FeaturePipeline(
         store_root=STORE_ROOT,
@@ -157,7 +158,7 @@ def _build_panel(
         include_flow=include_flow,
         include_margin=True,
     )
-    feature_set_id = pipe.run(symbols, specs=DEFAULT_SPECS, end_date=actual_as_of)
+    feature_set_id = pipe.run(symbols, specs=DEFAULT_SPECS, end_date=actual_as_of, strict=strict_features)
     panel = pipe.build_panel(symbols, feature_set_id, add_cross_sectional=True)
     panel["date"] = pd.to_datetime(panel["date"]).dt.date
     panel = panel[panel["date"] <= actual_as_of].copy()
@@ -206,8 +207,9 @@ def _score_model(
     train_start: dt.date | None,
     params: dict,
     score_prefix: str,
+    label_col: str = LABEL_COL,
 ) -> tuple[pd.DataFrame, dict, pd.DataFrame, pd.DataFrame, object]:
-    train = panel[(panel["date"] < actual_as_of) & panel[LABEL_COL].notna()].copy()
+    train = panel[(panel["date"] < actual_as_of) & panel[label_col].notna()].copy()
     if train_start is not None:
         train = train[train["date"] >= train_start].copy()
     pred = panel[panel["date"] == actual_as_of].copy()
@@ -218,7 +220,7 @@ def _score_model(
     if pred.empty:
         raise RuntimeError(f"{score_prefix} prediction day has no usable rows")
 
-    model = fit_final_model(train, feature_cols, LABEL_COL, params)
+    model = fit_final_model(train, feature_cols, label_col, params)
     preds = model.predict(pred[feature_cols])
     scored = pred[["symbol", "date"]].copy()
     scored["trade_date"] = scored["date"]
@@ -232,6 +234,7 @@ def _score_model(
     scored = scored.sort_values(f"{score_prefix}_rank").reset_index(drop=True)
 
     meta = {
+        "label_col": label_col,
         "train_start": train["date"].min().isoformat(),
         "train_end": train["date"].max().isoformat(),
         "prediction_date": actual_as_of.isoformat(),
