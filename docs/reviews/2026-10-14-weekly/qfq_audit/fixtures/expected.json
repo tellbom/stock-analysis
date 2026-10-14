@@ -1,0 +1,43 @@
+{
+  "source_commit": "70119e8ab9426b88f5d04963ebecdb17c6c66214",
+  "signal_date": "2026-10-14",
+  "prediction_rows": 299,
+  "sensitivity": [
+    {
+      "horizon": 3,
+      "symbol": "300803",
+      "original_score_pct": 2.077048770074986,
+      "recomputed_input_score_pct": 0.006100832291864753,
+      "original_rank": 1,
+      "recomputed_input_rank": 174,
+      "experiment": "same frozen model, single stock corrected technical inputs, recomputed CS; no retraining"
+    },
+    {
+      "horizon": 5,
+      "symbol": "300803",
+      "original_score_pct": 3.6539267508701263,
+      "recomputed_input_score_pct": 0.23570663275805093,
+      "original_rank": 1,
+      "recomputed_input_rank": 156,
+      "experiment": "same frozen model, single stock corrected technical inputs, recomputed CS; no retraining"
+    }
+  ],
+  "old_last_date": "2026-10-14",
+  "full_fresh_rows": 913,
+  "original_models_refitted": false,
+  "history_comparison": {
+    "old_rows": 908,
+    "fresh_rows": 913,
+    "common_rows": 908,
+    "changed_common_rows": 896,
+    "unchanged_common_rows": 12,
+    "missing_old_dates": [
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26"
+    ],
+    "date_gap_cause_verified": false
+  }
+}

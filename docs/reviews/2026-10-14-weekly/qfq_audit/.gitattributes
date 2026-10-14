@@ -1,0 +1,2 @@
+# Preserve captured evidence bytes so SHA256 also verifies on cloud clones.
+* -text

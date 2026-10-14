@@ -1,0 +1,17 @@
+{
+  "files": {
+    ".gitattributes": "7b4c5d8e04e2a64e99ef7041da9bc4269aa75be62b83a92576390aa049fc4bb8",
+    "audit.json": "e6f5388734c2638006e2daadbe6ac9cd866b6a97f78b770fb31b78d84d999ba6",
+    "price_declines.csv": "a24b9f5e568db79bf471c1b2f8fdbf9a15f20ac1cc2280e355c568ba6799acd0",
+    "ridge_contributions.csv": "95ce7b682251f5f4b4db18089bd8a65de19135e70815edc9bf0488f4eafe200b",
+    "universe_price_scale_audit.json": "e9e30d6717c7dc1ff7db69075e2004490e8580838d164d3a0bafe366ed78490e",
+    "fixtures/300803_corrected_technical_row.csv": "723a43cd73874f50b6344e120f718323e0872c48a4e80b5f2a51fdbc1077039e",
+    "fixtures/300803_fresh_sina_qfq_full.csv": "d73b3fa463bab56416909414b29ca4e3a184b9179af44e78c17c1b8d742c036d",
+    "fixtures/300803_old_ohlcv.csv": "a6ff5cb02f93f00cfcca8ce04c66ee054d16a794fd935fe9bc05b39d9dbdde50",
+    "fixtures/600549_fresh_sina_qfq_recent.csv": "f239f8f29a6d7fe7b6219c3163c7ffbe71767a85f6d746db698601d950f30c61",
+    "fixtures/expected.json": "7e382ae38b2d555bf20e18116db821b1d728571b54d5fc96822ea2e14b100b7f",
+    "fixtures/prediction_features_299.csv": "a3f27640c6efc6488749f2255b62c41c240f7d74c1c58ffb836a81f7cacf2801",
+    "fixtures/ridge_snapshot.json": "15095410b669eb280012c0bd8acce4e3605f7a36705aef56085f79ba41d3f8ed"
+  },
+  "scope": "public market observations and frozen model parameters; no full universe training data; no credentials"
+}

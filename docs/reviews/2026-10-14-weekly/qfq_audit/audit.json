@@ -1,0 +1,1104 @@
+{
+  "signal_date": "2026-10-14",
+  "prediction_rows": 299,
+  "feature_hash_matches": true,
+  "source_hashes_match": {
+    "scripts/compare_original_hybrid.py": true,
+    "scripts/run_dual_horizon_rrf.py": true,
+    "quant_platform/selection/ridge_baseline.py": true,
+    "quant_platform/selection/config.py": true
+  },
+  "model_hashes_match": {
+    "D3_original_ridge.joblib": true,
+    "D3_recent_flow.joblib": true,
+    "D3_recent_no_flow.joblib": true,
+    "D5_original_ridge.joblib": true,
+    "D5_recent_flow.joblib": true,
+    "D5_recent_no_flow.joblib": true
+  },
+  "score_checks": [
+    {
+      "horizon": 3,
+      "arm": "ordinary",
+      "rows": 299,
+      "max_abs_error": 9.974659986866641e-17
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_no_flow",
+      "rows": 299,
+      "max_abs_error": 9.93129189996722e-17
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_flow",
+      "rows": 299,
+      "max_abs_error": 9.93129189996722e-17
+    },
+    {
+      "horizon": 5,
+      "arm": "ordinary",
+      "rows": 299,
+      "max_abs_error": 9.974659986866641e-17
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_no_flow",
+      "rows": 299,
+      "max_abs_error": 9.955686448848144e-17
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_flow",
+      "rows": 299,
+      "max_abs_error": 9.974659986866641e-17
+    }
+  ],
+  "selection_checks": [
+    {
+      "horizon": 3,
+      "arm": "ordinary",
+      "count": 41,
+      "ordered_picks_match": true
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_no_flow",
+      "count": 36,
+      "ordered_picks_match": true
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_flow",
+      "count": 39,
+      "ordered_picks_match": true
+    },
+    {
+      "horizon": 5,
+      "arm": "ordinary",
+      "count": 43,
+      "ordered_picks_match": true
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_no_flow",
+      "count": 36,
+      "ordered_picks_match": true
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_flow",
+      "count": 39,
+      "ordered_picks_match": true
+    }
+  ],
+  "ridge_contributions": [
+    {
+      "horizon": 3,
+      "symbol": "002353",
+      "score_pct": 1.1753187182173528,
+      "intercept_pp": 0.15277214508079817,
+      "top_positive_contributions_pp": {
+        "stoch_d": 1.1257310691370421,
+        "ma_20": 0.9622257039904833,
+        "boll_mid": 0.9622257039068417,
+        "ma_10": 0.7979429678678108,
+        "macd_dea": 0.6495496769805147,
+        "macd_dif": 0.3631769847370964
+      },
+      "top_negative_contributions_pp": {
+        "ma_60": -0.9687500224016441,
+        "macd_hist": -0.6843819099352849,
+        "stoch_k": -0.6219597349875654,
+        "roc_10": -0.6144864366780732
+      },
+      "reversal_3d_contribution_pp": 0.06616196177886817
+    },
+    {
+      "horizon": 3,
+      "symbol": "002384",
+      "score_pct": 1.0820172762134976,
+      "intercept_pp": 0.15277214508079817,
+      "top_positive_contributions_pp": {
+        "ma_20": 1.3083033621035074,
+        "boll_mid": 1.3083033619897833,
+        "stoch_d": 1.1237948040135013,
+        "ma_10": 1.077600881976279,
+        "macd_dea": 0.5960493009220832,
+        "macd_dif": 0.4268315234886905
+      },
+      "top_negative_contributions_pp": {
+        "macd_hist": -1.5373845465282399,
+        "ma_60": -1.0721101772523327,
+        "roc_10": -0.9413329684165593,
+        "stoch_k": -0.5904845456442696
+      },
+      "reversal_3d_contribution_pp": 0.061222947234430815
+    },
+    {
+      "horizon": 3,
+      "symbol": "300803",
+      "score_pct": 2.077048770074986,
+      "intercept_pp": 0.15277214508079817,
+      "top_positive_contributions_pp": {
+        "macd_dea": 1.1708593517087185,
+        "ma_20": 1.0315386572887861,
+        "boll_mid": 1.0315386571991196,
+        "stoch_d": 1.0081873824370244,
+        "macd_dif": 0.5903436710753883,
+        "atr_14": 0.22731647800610622
+      },
+      "top_negative_contributions_pp": {
+        "ma_60": -1.0963457202344498,
+        "macd_hist": -0.6086404767910211,
+        "stoch_k": -0.5201345638587369,
+        "willr_14": -0.44617971636953035
+      },
+      "reversal_3d_contribution_pp": 0.015498954589774142
+    },
+    {
+      "horizon": 3,
+      "symbol": "301308",
+      "score_pct": 1.2540955356836292,
+      "intercept_pp": 0.15277214508079817,
+      "top_positive_contributions_pp": {
+        "stoch_d": 1.057727657434336,
+        "ma_20": 0.9699630413095375,
+        "boll_mid": 0.9699630412252234,
+        "ma_10": 0.7951438344187208,
+        "macd_dea": 0.6859819520130627,
+        "macd_dif": 0.38652633310735623
+      },
+      "top_negative_contributions_pp": {
+        "ma_60": -0.9524428282883903,
+        "macd_hist": -0.751723200301535,
+        "roc_10": -0.7127299054276365,
+        "stoch_k": -0.5812665591359165
+      },
+      "reversal_3d_contribution_pp": 0.053656270018290576
+    },
+    {
+      "horizon": 3,
+      "symbol": "600549",
+      "score_pct": 1.0503960647574129,
+      "intercept_pp": 0.15277214508079817,
+      "top_positive_contributions_pp": {
+        "stoch_d": 1.1027068912090507,
+        "ma_20": 0.8746235704729355,
+        "boll_mid": 0.8746235703969087,
+        "ma_10": 0.6466033787404631,
+        "macd_dea": 0.5398436323751062,
+        "kdj_j": 0.3185801388805198
+      },
+      "top_negative_contributions_pp": {
+        "ma_60": -0.804663728428461,
+        "macd_hist": -0.6494891772811142,
+        "stoch_k": -0.610550364846572,
+        "roc_10": -0.585254222190611
+      },
+      "reversal_3d_contribution_pp": 0.06286699310857172
+    },
+    {
+      "horizon": 3,
+      "symbol": "688521",
+      "score_pct": 1.2856573239760785,
+      "intercept_pp": 0.15277214508079817,
+      "top_positive_contributions_pp": {
+        "ma_20": 1.4550984909962903,
+        "boll_mid": 1.455098490869806,
+        "ma_10": 1.4308264529467627,
+        "stoch_d": 1.137490934796638,
+        "macd_dea": 0.520246736911304,
+        "atr_14": 0.4455363051671506
+      },
+      "top_negative_contributions_pp": {
+        "macd_hist": -1.9019697021671322,
+        "ma_60": -1.1539355586245126,
+        "roc_10": -1.0440291316244144,
+        "stoch_k": -0.6154391545939497
+      },
+      "reversal_3d_contribution_pp": 0.09026829610758684
+    },
+    {
+      "horizon": 5,
+      "symbol": "002353",
+      "score_pct": 2.2266001743199886,
+      "intercept_pp": 0.2586219316718875,
+      "top_positive_contributions_pp": {
+        "stoch_d": 1.3351605438668392,
+        "macd_dea": 1.2810797046340248,
+        "boll_mid": 1.1400298356580714,
+        "ma_20": 1.1400298356230818,
+        "macd_dif": 0.9097281612993767,
+        "ma_5": 0.7132079481467971
+      },
+      "top_negative_contributions_pp": {
+        "ma_60": -1.785639636014576,
+        "macd_hist": -0.9669833521984784,
+        "stoch_k": -0.7821540053969185,
+        "kdj_d": -0.7455312199939884
+      },
+      "reversal_3d_contribution_pp": 0.30358276310505306
+    },
+    {
+      "horizon": 5,
+      "symbol": "002384",
+      "score_pct": 1.7595304682330188,
+      "intercept_pp": 0.2586219316718875,
+      "top_positive_contributions_pp": {
+        "boll_mid": 1.549910512355928,
+        "ma_20": 1.549910512308358,
+        "stoch_d": 1.332866379749242,
+        "macd_dea": 1.175598393020846,
+        "macd_dif": 1.0691241459014935,
+        "ma_5": 0.6191963138886092
+      },
+      "top_negative_contributions_pp": {
+        "macd_hist": -2.1718100743859834,
+        "ma_60": -1.9760778922604423,
+        "kdj_d": -0.7501942492299072,
+        "stoch_k": -0.7426035763673694
+      },
+      "reversal_3d_contribution_pp": 0.28092234330272003
+    },
+    {
+      "horizon": 5,
+      "symbol": "300803",
+      "score_pct": 3.6539267508701263,
+      "intercept_pp": 0.2586219316718875,
+      "top_positive_contributions_pp": {
+        "macd_dea": 2.3088935687256313,
+        "macd_dif": 1.4785714574388125,
+        "boll_mid": 1.222121353373315,
+        "ma_20": 1.2221213533358055,
+        "stoch_d": 1.1958900973774866,
+        "atr_14": 0.3862903803548251
+      },
+      "top_negative_contributions_pp": {
+        "ma_60": -2.0207312168549474,
+        "macd_hist": -0.8600020854189551,
+        "stoch_k": -0.6542046812410589,
+        "kdj_d": -0.5227513242499934
+      },
+      "reversal_3d_contribution_pp": 0.07113861842309649
+    },
+    {
+      "horizon": 5,
+      "symbol": "301308",
+      "score_pct": 2.2059840352162756,
+      "intercept_pp": 0.2586219316718875,
+      "top_positive_contributions_pp": {
+        "macd_dea": 1.3529095577791335,
+        "stoch_d": 1.254587390373656,
+        "boll_mid": 1.1491936316495994,
+        "ma_20": 1.1491936316143283,
+        "macd_dif": 0.9681967708641924,
+        "ma_5": 0.5201967838615871
+      },
+      "top_negative_contributions_pp": {
+        "ma_60": -1.7555940772044425,
+        "macd_hist": -1.0620998063092324,
+        "kdj_d": -0.7363490804758909,
+        "stoch_k": -0.7310206334589859
+      },
+      "reversal_3d_contribution_pp": 0.24620608954728213
+    },
+    {
+      "horizon": 5,
+      "symbol": "600549",
+      "score_pct": 2.0385254787422196,
+      "intercept_pp": 0.2586219316718875,
+      "top_positive_contributions_pp": {
+        "stoch_d": 1.3078805798797883,
+        "macd_dea": 1.064783328245308,
+        "boll_mid": 1.036277336978651,
+        "ma_20": 1.0362773369468459,
+        "macd_dif": 0.7769220559090289,
+        "ma_5": 0.5667287391778354
+      },
+      "top_negative_contributions_pp": {
+        "ma_60": -1.483315130568159,
+        "macd_hist": -0.9176989831843291,
+        "stoch_k": -0.7678174599003518,
+        "kdj_d": -0.7514539752948355
+      },
+      "reversal_3d_contribution_pp": 0.28846529936149207
+    },
+    {
+      "horizon": 5,
+      "symbol": "688521",
+      "score_pct": 1.9608185637062427,
+      "intercept_pp": 0.2586219316718875,
+      "top_positive_contributions_pp": {
+        "boll_mid": 1.7237688512460756,
+        "ma_20": 1.7237688511931697,
+        "stoch_d": 1.3490941015682114,
+        "macd_dif": 1.0775080788303706,
+        "macd_dea": 1.0261461000731062,
+        "ma_5": 0.8490792512934121
+      },
+      "top_negative_contributions_pp": {
+        "macd_hist": -2.686769723023318,
+        "ma_60": -2.126838917799551,
+        "stoch_k": -0.7739605121258734,
+        "kdj_d": -0.6039267141134526
+      },
+      "reversal_3d_contribution_pp": 0.41418370401529797
+    }
+  ],
+  "flow_model_contributions": [
+    {
+      "horizon": 3,
+      "symbol": "002353",
+      "score_pct": 1.738616444228137,
+      "flow_contribution_sum_pp": -0.33321744835802003,
+      "top_positive_contributions_pp": {
+        "macd_dif": 1.0840623445679602,
+        "macd_dea": 0.31914770369110806,
+        "macd_hist": 0.2950752064741712,
+        "rsi_24": 0.27184600512178364,
+        "cci_14": 0.22748131692829401
+      }
+    },
+    {
+      "horizon": 3,
+      "symbol": "002384",
+      "score_pct": 2.4247952793937255,
+      "flow_contribution_sum_pp": -0.48084785072593317,
+      "top_positive_contributions_pp": {
+        "macd_dif": 2.4672082934713973,
+        "stoch_k": 1.0674186555530456,
+        "ma_20": 0.8227404334593674,
+        "macd_dea": 0.40788269153535844,
+        "cci_14": 0.39421623447149157
+      }
+    },
+    {
+      "horizon": 3,
+      "symbol": "300803",
+      "score_pct": 6.958363358634231,
+      "flow_contribution_sum_pp": -0.15046663746931638,
+      "top_positive_contributions_pp": {
+        "macd_dif": 2.665200865979782,
+        "macd_dea": 1.9398197339618297,
+        "ma_20": 1.3563829250860617,
+        "stoch_k": 0.5166092385721537,
+        "rsi_24": 0.46341510144721054
+      }
+    },
+    {
+      "horizon": 3,
+      "symbol": "301308",
+      "score_pct": 1.2065955555933523,
+      "flow_contribution_sum_pp": -0.43671046616381803,
+      "top_positive_contributions_pp": {
+        "macd_dif": 0.6706585291975876,
+        "macd_hist": 0.40001249619708906,
+        "macd_dea": 0.3591736094119285,
+        "rsi_24": 0.34303351215838834,
+        "cci_14": 0.22981224335018735
+      }
+    },
+    {
+      "horizon": 3,
+      "symbol": "600549",
+      "score_pct": 1.6854197972490148,
+      "flow_contribution_sum_pp": -0.32339218814090565,
+      "top_positive_contributions_pp": {
+        "macd_dif": 0.8829018529112713,
+        "macd_dea": 0.31609837655592626,
+        "rsi_24": 0.30662391746360246,
+        "macd_hist": 0.28473746696116864,
+        "cci_14": 0.1734201739441765
+      }
+    },
+    {
+      "horizon": 3,
+      "symbol": "688521",
+      "score_pct": 4.280748785423576,
+      "flow_contribution_sum_pp": -0.47078524366533925,
+      "top_positive_contributions_pp": {
+        "macd_dif": 2.0981710342420956,
+        "stoch_k": 1.4400923199288178,
+        "ma_20": 0.8330027369048557,
+        "kdj_d": 0.4398530617982428,
+        "macd_dea": 0.39067375011828176
+      }
+    },
+    {
+      "horizon": 5,
+      "symbol": "002353",
+      "score_pct": 3.0978434712716005,
+      "flow_contribution_sum_pp": -0.0640850226728631,
+      "top_positive_contributions_pp": {
+        "macd_dif": 1.2088520791122042,
+        "macd_hist": 0.8236470200507175,
+        "macd_dea": 0.7236352404109274,
+        "rsi_24": 0.4744148113567599,
+        "cci_14": 0.37372166609351004
+      }
+    },
+    {
+      "horizon": 5,
+      "symbol": "002384",
+      "score_pct": 7.607421829028957,
+      "flow_contribution_sum_pp": -0.16473691030867188,
+      "top_positive_contributions_pp": {
+        "macd_dif": 5.101735207325815,
+        "ma_5": 0.8359810641594863,
+        "cs_zscore_close": 0.7519781113779919,
+        "cci_14": 0.7375445847820599,
+        "ma_60": 0.5542660533528769
+      }
+    },
+    {
+      "horizon": 5,
+      "symbol": "300803",
+      "score_pct": 7.5918484695307376,
+      "flow_contribution_sum_pp": -0.16514919662033142,
+      "top_positive_contributions_pp": {
+        "macd_dif": 4.25689669010238,
+        "macd_dea": 1.7676217443617692,
+        "macd_hist": 0.937593390679983,
+        "rsi_24": 0.42532968087684137,
+        "ma_20": 0.4051748727143882
+      }
+    },
+    {
+      "horizon": 5,
+      "symbol": "301308",
+      "score_pct": 2.7796209211950114,
+      "flow_contribution_sum_pp": -0.24394191300283297,
+      "top_positive_contributions_pp": {
+        "macd_dif": 1.0883081542072244,
+        "macd_hist": 0.8357622117043615,
+        "cci_14": 0.525023336245003,
+        "rsi_24": 0.5076783477865322,
+        "macd_dea": 0.4823189491233017
+      }
+    },
+    {
+      "horizon": 5,
+      "symbol": "600549",
+      "score_pct": 3.426335089777062,
+      "flow_contribution_sum_pp": -0.05352391316253991,
+      "top_positive_contributions_pp": {
+        "macd_dif": 1.157020546108982,
+        "macd_dea": 0.7521127800969097,
+        "macd_hist": 0.6997344766870426,
+        "rsi_24": 0.5369396970617514,
+        "cci_14": 0.42875762947240814
+      }
+    },
+    {
+      "horizon": 5,
+      "symbol": "688521",
+      "score_pct": 9.109512062254561,
+      "flow_contribution_sum_pp": 0.09643710470349108,
+      "top_positive_contributions_pp": {
+        "macd_dif": 5.3144195416798015,
+        "ma_5": 1.1018336172420065,
+        "willr_14": 0.8379673297211895,
+        "rsi_24": 0.7214238319496016,
+        "cci_14": 0.7092416433743883
+      }
+    }
+  ],
+  "prices": [
+    {
+      "symbol": "002353",
+      "name": "杰瑞股份",
+      "close": 93.02,
+      "return_5d_pct": -15.605153329704235,
+      "return_10d_pct": -21.779347460477638,
+      "return_20d_pct": -25.957175833797663,
+      "last_20_peak_drawdown_pct": -26.115965051628287,
+      "rsi_6": 2.4943310657596243,
+      "ma_20_distance_pct": -18.482166331447903,
+      "flow_main_net_latest_yuan": -268915490.0,
+      "flow_main_net_5d_yuan": -748108685.0,
+      "flow_features": {
+        "cs_main_flow_rank_1d": 0.023411371237458192,
+        "cs_main_flow_rank_5d": 0.033444816053511704,
+        "cs_small_flow_rank_1d": 0.9966555183946488,
+        "cs_super_flow_rank_1d": 0.23076923076923078,
+        "cs_flow_reversal_5d": -0.010033444816053512
+      },
+      "last_10_prices": [
+        {
+          "date": "2026-09-23",
+          "close": 116.84
+        },
+        {
+          "date": "2026-09-24",
+          "close": 116.02
+        },
+        {
+          "date": "2026-09-28",
+          "close": 110.4
+        },
+        {
+          "date": "2026-09-29",
+          "close": 109.78
+        },
+        {
+          "date": "2026-09-30",
+          "close": 110.22
+        },
+        {
+          "date": "2026-10-08",
+          "close": 109.55
+        },
+        {
+          "date": "2026-10-09",
+          "close": 103.9
+        },
+        {
+          "date": "2026-10-12",
+          "close": 99.3
+        },
+        {
+          "date": "2026-10-13",
+          "close": 97.42
+        },
+        {
+          "date": "2026-10-14",
+          "close": 93.02
+        }
+      ]
+    },
+    {
+      "symbol": "002384",
+      "name": "东山精密",
+      "close": 131.41,
+      "return_5d_pct": -21.499402628434893,
+      "return_10d_pct": -33.67151221481931,
+      "return_20d_pct": -29.5086364124021,
+      "last_20_peak_drawdown_pct": -33.67151221481931,
+      "rsi_6": 8.105263157894726,
+      "ma_20_distance_pct": -25.25155998518086,
+      "flow_main_net_latest_yuan": -560178048.0,
+      "flow_main_net_5d_yuan": -4438576240.0,
+      "flow_features": {
+        "cs_main_flow_rank_1d": 0.06020066889632107,
+        "cs_main_flow_rank_5d": 0.006688963210702341,
+        "cs_small_flow_rank_1d": 0.9832775919732442,
+        "cs_super_flow_rank_1d": 0.026755852842809364,
+        "cs_flow_reversal_5d": 0.05351170568561873
+      },
+      "last_10_prices": [
+        {
+          "date": "2026-09-23",
+          "close": 193.0
+        },
+        {
+          "date": "2026-09-24",
+          "close": 185.99
+        },
+        {
+          "date": "2026-09-28",
+          "close": 168.28
+        },
+        {
+          "date": "2026-09-29",
+          "close": 171.21
+        },
+        {
+          "date": "2026-09-30",
+          "close": 167.4
+        },
+        {
+          "date": "2026-10-08",
+          "close": 150.66
+        },
+        {
+          "date": "2026-10-09",
+          "close": 145.49
+        },
+        {
+          "date": "2026-10-12",
+          "close": 135.9
+        },
+        {
+          "date": "2026-10-13",
+          "close": 139.75
+        },
+        {
+          "date": "2026-10-14",
+          "close": 131.41
+        }
+      ]
+    },
+    {
+      "symbol": "300803",
+      "name": "指南针",
+      "close": 52.04,
+      "return_5d_pct": -1.8668678106732117,
+      "return_10d_pct": -10.058762530245424,
+      "return_20d_pct": -38.486997635933804,
+      "last_20_peak_drawdown_pct": -38.57412653446648,
+      "rsi_6": 34.15233415233416,
+      "ma_20_distance_pct": -19.8379506624485,
+      "flow_main_net_latest_yuan": -54942966.0,
+      "flow_main_net_5d_yuan": -247149206.0,
+      "flow_features": {
+        "cs_main_flow_rank_1d": 0.1505016722408027,
+        "cs_main_flow_rank_5d": 0.11705685618729098,
+        "cs_small_flow_rank_1d": 0.8595317725752508,
+        "cs_super_flow_rank_1d": 0.2809364548494983,
+        "cs_flow_reversal_5d": 0.03344481605351171
+      },
+      "last_10_prices": [
+        {
+          "date": "2026-09-23",
+          "close": 58.25
+        },
+        {
+          "date": "2026-09-24",
+          "close": 56.5
+        },
+        {
+          "date": "2026-09-28",
+          "close": 53.97
+        },
+        {
+          "date": "2026-09-29",
+          "close": 54.62
+        },
+        {
+          "date": "2026-09-30",
+          "close": 53.03
+        },
+        {
+          "date": "2026-10-08",
+          "close": 51.24
+        },
+        {
+          "date": "2026-10-09",
+          "close": 53.28
+        },
+        {
+          "date": "2026-10-12",
+          "close": 52.21
+        },
+        {
+          "date": "2026-10-13",
+          "close": 52.95
+        },
+        {
+          "date": "2026-10-14",
+          "close": 52.04
+        }
+      ]
+    },
+    {
+      "symbol": "301308",
+      "name": "江波龙",
+      "close": 259.97,
+      "return_5d_pct": -13.89726095452588,
+      "return_10d_pct": -25.35389209521347,
+      "return_20d_pct": -27.55670735105612,
+      "last_20_peak_drawdown_pct": -25.35389209521347,
+      "rsi_6": 0.0,
+      "ma_20_distance_pct": -18.633511212911735,
+      "flow_main_net_latest_yuan": -228761525.0,
+      "flow_main_net_5d_yuan": -1394144167.0,
+      "flow_features": {
+        "cs_main_flow_rank_1d": 0.05351170568561873,
+        "cs_main_flow_rank_5d": 0.016722408026755852,
+        "cs_small_flow_rank_1d": 0.9565217391304348,
+        "cs_super_flow_rank_1d": 0.04013377926421405,
+        "cs_flow_reversal_5d": 0.03678929765886288
+      },
+      "last_10_prices": [
+        {
+          "date": "2026-09-23",
+          "close": 346.0
+        },
+        {
+          "date": "2026-09-24",
+          "close": 331.77
+        },
+        {
+          "date": "2026-09-28",
+          "close": 312.0
+        },
+        {
+          "date": "2026-09-29",
+          "close": 311.66
+        },
+        {
+          "date": "2026-09-30",
+          "close": 301.93
+        },
+        {
+          "date": "2026-10-08",
+          "close": 288.6
+        },
+        {
+          "date": "2026-10-09",
+          "close": 284.0
+        },
+        {
+          "date": "2026-10-12",
+          "close": 271.81
+        },
+        {
+          "date": "2026-10-13",
+          "close": 271.2
+        },
+        {
+          "date": "2026-10-14",
+          "close": 259.97
+        }
+      ]
+    },
+    {
+      "symbol": "600549",
+      "name": "厦门钨业",
+      "close": 38.77,
+      "return_5d_pct": -12.106098390387654,
+      "return_10d_pct": -20.715746421267887,
+      "return_20d_pct": -22.25787046320432,
+      "last_20_peak_drawdown_pct": -24.188502150958147,
+      "rsi_6": 6.315789473684205,
+      "ma_20_distance_pct": -16.768639575862064,
+      "flow_main_net_latest_yuan": -164569542.0,
+      "flow_main_net_5d_yuan": -576261859.0,
+      "flow_features": {
+        "cs_main_flow_rank_1d": 0.07023411371237458,
+        "cs_main_flow_rank_5d": 0.05351170568561873,
+        "cs_small_flow_rank_1d": 0.9732441471571907,
+        "cs_super_flow_rank_1d": 0.08695652173913043,
+        "cs_flow_reversal_5d": 0.01672240802675585
+      },
+      "last_10_prices": [
+        {
+          "date": "2026-09-23",
+          "close": 48.27
+        },
+        {
+          "date": "2026-09-24",
+          "close": 46.48
+        },
+        {
+          "date": "2026-09-28",
+          "close": 43.5
+        },
+        {
+          "date": "2026-09-29",
+          "close": 43.75
+        },
+        {
+          "date": "2026-09-30",
+          "close": 44.11
+        },
+        {
+          "date": "2026-10-08",
+          "close": 43.19
+        },
+        {
+          "date": "2026-10-09",
+          "close": 43.05
+        },
+        {
+          "date": "2026-10-12",
+          "close": 40.8
+        },
+        {
+          "date": "2026-10-13",
+          "close": 40.42
+        },
+        {
+          "date": "2026-10-14",
+          "close": 38.77
+        }
+      ]
+    },
+    {
+      "symbol": "688521",
+      "name": "芯原股份",
+      "close": 130.21,
+      "return_5d_pct": -24.155405405405407,
+      "return_10d_pct": -37.408066144306105,
+      "return_20d_pct": -31.784367141659676,
+      "last_20_peak_drawdown_pct": -38.054234062797335,
+      "rsi_6": 0.0,
+      "ma_20_distance_pct": -28.122921341888784,
+      "flow_main_net_latest_yuan": -289847346.0,
+      "flow_main_net_5d_yuan": -1732627074.0,
+      "flow_features": {
+        "cs_main_flow_rank_1d": 0.020066889632107024,
+        "cs_main_flow_rank_5d": 0.0033444816053511705,
+        "cs_small_flow_rank_1d": 0.939799331103679,
+        "cs_super_flow_rank_1d": 0.06354515050167224,
+        "cs_flow_reversal_5d": 0.016722408026755852
+      },
+      "last_10_prices": [
+        {
+          "date": "2026-09-23",
+          "close": 210.2
+        },
+        {
+          "date": "2026-09-24",
+          "close": 207.45
+        },
+        {
+          "date": "2026-09-28",
+          "close": 193.0
+        },
+        {
+          "date": "2026-09-29",
+          "close": 193.64
+        },
+        {
+          "date": "2026-09-30",
+          "close": 171.68
+        },
+        {
+          "date": "2026-10-08",
+          "close": 153.39
+        },
+        {
+          "date": "2026-10-09",
+          "close": 152.02
+        },
+        {
+          "date": "2026-10-12",
+          "close": 141.0
+        },
+        {
+          "date": "2026-10-13",
+          "close": 139.0
+        },
+        {
+          "date": "2026-10-14",
+          "close": 130.21
+        }
+      ]
+    }
+  ],
+  "fresh_h5_price_checks": [
+    {
+      "symbol": "002353",
+      "status": "verified",
+      "matched_rows": 21,
+      "date": "2026-10-14",
+      "last_close_h5": 93.02,
+      "last_close_local": 93.02,
+      "max_close_difference": 0.0,
+      "h5_return_10d_pct": -21.779347460477638,
+      "source": "https://emdatah5.eastmoney.com/dc/ZJLX/getDBHistoryData"
+    },
+    {
+      "symbol": "002384",
+      "status": "verified",
+      "matched_rows": 21,
+      "date": "2026-10-14",
+      "last_close_h5": 131.41,
+      "last_close_local": 131.41,
+      "max_close_difference": 0.0,
+      "h5_return_10d_pct": -33.67151221481931,
+      "source": "https://emdatah5.eastmoney.com/dc/ZJLX/getDBHistoryData"
+    },
+    {
+      "symbol": "300803",
+      "status": "verified",
+      "matched_rows": 21,
+      "date": "2026-10-14",
+      "last_close_h5": 52.04,
+      "last_close_local": 52.04,
+      "max_close_difference": 26.29,
+      "h5_return_10d_pct": -10.058762530245424,
+      "source": "https://emdatah5.eastmoney.com/dc/ZJLX/getDBHistoryData"
+    },
+    {
+      "symbol": "301308",
+      "status": "verified",
+      "matched_rows": 21,
+      "date": "2026-10-14",
+      "last_close_h5": 259.97,
+      "last_close_local": 259.97,
+      "max_close_difference": 0.0,
+      "h5_return_10d_pct": -25.35389209521347,
+      "source": "https://emdatah5.eastmoney.com/dc/ZJLX/getDBHistoryData"
+    },
+    {
+      "symbol": "600549",
+      "status": "verified",
+      "matched_rows": 21,
+      "date": "2026-10-14",
+      "last_close_h5": 38.77,
+      "last_close_local": 38.77,
+      "max_close_difference": 0.4200000000000017,
+      "h5_return_10d_pct": -20.74816026165167,
+      "source": "https://emdatah5.eastmoney.com/dc/ZJLX/getDBHistoryData"
+    },
+    {
+      "symbol": "688521",
+      "status": "verified",
+      "matched_rows": 21,
+      "date": "2026-10-14",
+      "last_close_h5": 130.21,
+      "last_close_local": 130.21,
+      "max_close_difference": 0.0,
+      "h5_return_10d_pct": -37.408066144306105,
+      "source": "https://emdatah5.eastmoney.com/dc/ZJLX/getDBHistoryData"
+    }
+  ],
+  "fresh_sina_qfq_checks": [
+    {
+      "symbol": "002353",
+      "status": "failed",
+      "error": "('Connection aborted.', ConnectionResetError(10054, '远程主机强迫关闭了一个现有的连接。', None, 10054, None))"
+    },
+    {
+      "symbol": "002384",
+      "status": "failed",
+      "error": "HTTPSConnectionPool(host='stock.finance.sina.com.cn', port=443): Read timed out. (read timeout=5)"
+    },
+    {
+      "symbol": "300803",
+      "status": "verified",
+      "rows": 47,
+      "latest": "2026-10-14",
+      "mismatched_rows": 35,
+      "max_close_difference": 27.340000000000003,
+      "sample_mismatches": [
+        {
+          "date": "2026-09-10",
+          "close_local": 84.72,
+          "close_fresh": 58.43
+        },
+        {
+          "date": "2026-09-11",
+          "close_local": 79.32,
+          "close_fresh": 54.7
+        },
+        {
+          "date": "2026-09-14",
+          "close_local": 78.37,
+          "close_fresh": 54.05
+        },
+        {
+          "date": "2026-09-15",
+          "close_local": 77.15,
+          "close_fresh": 53.21
+        },
+        {
+          "date": "2026-09-16",
+          "close_local": 80.7,
+          "close_fresh": 55.66
+        },
+        {
+          "date": "2026-09-17",
+          "close_local": 79.06,
+          "close_fresh": 54.52
+        },
+        {
+          "date": "2026-09-18",
+          "close_local": 82.0,
+          "close_fresh": 56.55
+        }
+      ],
+      "fresh_20d_return_pct": -10.798765855330828
+    },
+    {
+      "symbol": "301308",
+      "status": "failed",
+      "error": "HTTPSConnectionPool(host='stock.finance.sina.com.cn', port=443): Read timed out. (read timeout=5)"
+    },
+    {
+      "symbol": "600549",
+      "status": "verified",
+      "rows": 47,
+      "latest": "2026-10-14",
+      "mismatched_rows": 35,
+      "max_close_difference": 0.5400000000000063,
+      "sample_mismatches": [
+        {
+          "date": "2026-09-10",
+          "close_local": 49.73,
+          "close_fresh": 49.28
+        },
+        {
+          "date": "2026-09-11",
+          "close_local": 48.79,
+          "close_fresh": 48.35
+        },
+        {
+          "date": "2026-09-14",
+          "close_local": 49.38,
+          "close_fresh": 48.94
+        },
+        {
+          "date": "2026-09-15",
+          "close_local": 51.14,
+          "close_fresh": 50.68
+        },
+        {
+          "date": "2026-09-16",
+          "close_local": 50.6,
+          "close_fresh": 50.15
+        },
+        {
+          "date": "2026-09-17",
+          "close_local": 49.72,
+          "close_fresh": 49.27
+        },
+        {
+          "date": "2026-09-18",
+          "close_local": 50.49,
+          "close_fresh": 50.04
+        }
+      ],
+      "fresh_20d_return_pct": -21.549979765277214
+    },
+    {
+      "symbol": "688521",
+      "status": "verified",
+      "rows": 47,
+      "latest": "2026-10-14",
+      "mismatched_rows": 0,
+      "max_close_difference": 0.0,
+      "sample_mismatches": [],
+      "fresh_20d_return_pct": -31.784367141659676
+    }
+  ],
+  "guide_corrected_input_sensitivity": [
+    {
+      "horizon": 3,
+      "symbol": "300803",
+      "original_score_pct": 2.077048770074986,
+      "recomputed_input_score_pct": 0.006100832291864753,
+      "original_rank": 1,
+      "recomputed_input_rank": 174,
+      "experiment": "same frozen model, single stock corrected technical inputs, recomputed CS; no retraining"
+    },
+    {
+      "horizon": 5,
+      "symbol": "300803",
+      "original_score_pct": 3.6539267508701263,
+      "recomputed_input_score_pct": 0.23570663275805093,
+      "original_rank": 1,
+      "recomputed_input_rank": 156,
+      "experiment": "same frozen model, single stock corrected technical inputs, recomputed CS; no retraining"
+    }
+  ],
+  "recommendation_validity": "WITHDRAWN_PENDING_FULL_HISTORY_QFQ_AUDIT_AND_RETRAIN",
+  "guide_history_comparison": {
+    "old_rows": 908,
+    "fresh_rows": 913,
+    "common_rows": 908,
+    "changed_common_rows": 896,
+    "unchanged_common_rows": 12,
+    "missing_old_dates": [
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26"
+    ],
+    "date_gap_cause_verified": false
+  }
+}

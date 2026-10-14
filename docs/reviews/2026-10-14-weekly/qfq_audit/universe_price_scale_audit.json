@@ -1,0 +1,2502 @@
+[
+  {
+    "symbol": "300803",
+    "different_dates": 106,
+    "max_price_diff": 33.68000000000001,
+    "max_relative_diff_pct": 45.011998628728136,
+    "first_mismatch": "2026-04-13",
+    "last_mismatch": "2026-09-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600426",
+    "different_dates": 57,
+    "max_price_diff": 9.239999999999998,
+    "max_relative_diff_pct": 31.3563975837452,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601838",
+    "different_dates": 92,
+    "max_price_diff": 1.4100000000000001,
+    "max_relative_diff_pct": 8.912768647281922,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-28",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600741",
+    "different_dates": 61,
+    "max_price_diff": 1.0000000000000018,
+    "max_relative_diff_pct": 6.891798759476231,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-15",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600809",
+    "different_dates": 71,
+    "max_price_diff": 6.5600000000000165,
+    "max_relative_diff_pct": 6.658546488022732,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-29",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601668",
+    "different_dates": 57,
+    "max_price_diff": 0.27000000000000046,
+    "max_relative_diff_pct": 6.633906633906617,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600803",
+    "different_dates": 53,
+    "max_price_diff": 0.9600000000000009,
+    "max_relative_diff_pct": 6.4690026954177915,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-03",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000568",
+    "different_dates": 91,
+    "max_price_diff": 4.420000000000002,
+    "max_relative_diff_pct": 6.270392963540927,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600039",
+    "different_dates": 65,
+    "max_price_diff": 0.46000000000000085,
+    "max_relative_diff_pct": 6.25,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-21",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600011",
+    "different_dates": 48,
+    "max_price_diff": 0.40000000000000036,
+    "max_relative_diff_pct": 6.144393241167445,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601169",
+    "different_dates": 57,
+    "max_price_diff": 0.28000000000000025,
+    "max_relative_diff_pct": 6.060606060606055,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600019",
+    "different_dates": 57,
+    "max_price_diff": 0.3100000000000005,
+    "max_relative_diff_pct": 5.838041431261787,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000651",
+    "different_dates": 84,
+    "max_price_diff": 2.0,
+    "max_relative_diff_pct": 5.760368663594462,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601825",
+    "different_dates": 108,
+    "max_price_diff": 0.4400000000000013,
+    "max_relative_diff_pct": 5.670103092783507,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600023",
+    "different_dates": 57,
+    "max_price_diff": 0.28000000000000025,
+    "max_relative_diff_pct": 5.645161290322576,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601857",
+    "different_dates": 62,
+    "max_price_diff": 0.5100000000000016,
+    "max_relative_diff_pct": 5.622932745314224,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-16",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600016",
+    "different_dates": 57,
+    "max_price_diff": 0.17000000000000037,
+    "max_relative_diff_pct": 5.448717948717952,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002027",
+    "different_dates": 64,
+    "max_price_diff": 0.2400000000000002,
+    "max_relative_diff_pct": 5.3097345132743445,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-20",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601186",
+    "different_dates": 57,
+    "max_price_diff": 0.3000000000000007,
+    "max_relative_diff_pct": 5.309734513274322,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600015",
+    "different_dates": 57,
+    "max_price_diff": 0.3200000000000003,
+    "max_relative_diff_pct": 5.271828665568368,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600000",
+    "different_dates": 57,
+    "max_price_diff": 0.4200000000000017,
+    "max_relative_diff_pct": 5.128205128205132,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000333",
+    "different_dates": 43,
+    "max_price_diff": 3.720000000000013,
+    "max_relative_diff_pct": 5.0148287948234005,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600600",
+    "different_dates": 60,
+    "max_price_diff": 2.3500000000000014,
+    "max_relative_diff_pct": 4.772542648253464,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-14",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600690",
+    "different_dates": 69,
+    "max_price_diff": 0.870000000000001,
+    "max_relative_diff_pct": 4.7103410936654155,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-05",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000596",
+    "different_dates": 61,
+    "max_price_diff": 3.4000000000000057,
+    "max_relative_diff_pct": 4.683195592286515,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-15",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601916",
+    "different_dates": 43,
+    "max_price_diff": 0.13000000000000034,
+    "max_relative_diff_pct": 4.59363957597172,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600585",
+    "different_dates": 112,
+    "max_price_diff": 0.740000000000002,
+    "max_relative_diff_pct": 4.503956177723678,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-24",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "001965",
+    "different_dates": 64,
+    "max_price_diff": 0.370000000000001,
+    "max_relative_diff_pct": 4.233409610983974,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-20",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601601",
+    "different_dates": 60,
+    "max_price_diff": 1.1500000000000057,
+    "max_relative_diff_pct": 4.21554252199412,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-14",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600999",
+    "different_dates": 58,
+    "max_price_diff": 0.620000000000001,
+    "max_relative_diff_pct": 4.203389830508475,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-15",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601225",
+    "different_dates": 43,
+    "max_price_diff": 0.9100000000000001,
+    "max_relative_diff_pct": 4.12511332728922,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600886",
+    "different_dates": 59,
+    "max_price_diff": 0.5100000000000016,
+    "max_relative_diff_pct": 4.086538461538458,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-13",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002304",
+    "different_dates": 48,
+    "max_price_diff": 1.470000000000006,
+    "max_relative_diff_pct": 3.8940397350993416,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601336",
+    "different_dates": 66,
+    "max_price_diff": 2.0600000000000094,
+    "max_relative_diff_pct": 3.859846355630503,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-05",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000858",
+    "different_dates": 60,
+    "max_price_diff": 2.5800000000000125,
+    "max_relative_diff_pct": 3.776346604215486,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-14",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600674",
+    "different_dates": 61,
+    "max_price_diff": 0.5,
+    "max_relative_diff_pct": 3.7369207772795177,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-16",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601390",
+    "different_dates": 115,
+    "max_price_diff": 0.15000000000000036,
+    "max_relative_diff_pct": 3.731343283582089,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-30",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "688009",
+    "different_dates": 57,
+    "max_price_diff": 0.17000000000000082,
+    "max_relative_diff_pct": 3.703703703703698,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002558",
+    "different_dates": 108,
+    "max_price_diff": 0.8000000000000007,
+    "max_relative_diff_pct": 3.5335689045936425,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601919",
+    "different_dates": 43,
+    "max_price_diff": 0.4400000000000013,
+    "max_relative_diff_pct": 3.293413173652704,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600926",
+    "different_dates": 108,
+    "max_price_diff": 0.4800000000000004,
+    "max_relative_diff_pct": 3.288062902072908,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600018",
+    "different_dates": 57,
+    "max_price_diff": 0.15000000000000036,
+    "max_relative_diff_pct": 3.2822757111597323,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601728",
+    "different_dates": 57,
+    "max_price_diff": 0.16000000000000014,
+    "max_relative_diff_pct": 3.1809145129224614,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601006",
+    "different_dates": 57,
+    "max_price_diff": 0.14000000000000057,
+    "max_relative_diff_pct": 3.139013452914785,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002142",
+    "different_dates": 58,
+    "max_price_diff": 0.9000000000000057,
+    "max_relative_diff_pct": 3.126085446335547,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-10",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600027",
+    "different_dates": 43,
+    "max_price_diff": 0.14000000000000057,
+    "max_relative_diff_pct": 3.111111111111109,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600900",
+    "different_dates": 57,
+    "max_price_diff": 0.7900000000000027,
+    "max_relative_diff_pct": 3.106567046795128,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600795",
+    "different_dates": 57,
+    "max_price_diff": 0.14000000000000057,
+    "max_relative_diff_pct": 3.0973451327433787,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601607",
+    "different_dates": 57,
+    "max_price_diff": 0.45000000000000284,
+    "max_relative_diff_pct": 3.032345013477089,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601899",
+    "different_dates": 72,
+    "max_price_diff": 0.8000000000000043,
+    "max_relative_diff_pct": 3.0154542027892806,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-13",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600188",
+    "different_dates": 112,
+    "max_price_diff": 0.5200000000000031,
+    "max_relative_diff_pct": 3.014492753623177,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-24",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600941",
+    "different_dates": 112,
+    "max_price_diff": 2.6599999999999966,
+    "max_relative_diff_pct": 3.0025962298227737,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-24",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000157",
+    "different_dates": 64,
+    "max_price_diff": 0.20000000000000107,
+    "max_relative_diff_pct": 2.954209748892178,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-20",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600036",
+    "different_dates": 57,
+    "max_price_diff": 1.0,
+    "max_relative_diff_pct": 2.898550724637672,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002532",
+    "different_dates": 65,
+    "max_price_diff": 0.3000000000000007,
+    "max_relative_diff_pct": 2.892960462873684,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-21",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600406",
+    "different_dates": 112,
+    "max_price_diff": 0.620000000000001,
+    "max_relative_diff_pct": 2.810516772438798,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-24",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "605499",
+    "different_dates": 110,
+    "max_price_diff": 2.9700000000000273,
+    "max_relative_diff_pct": 2.753314174469268,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-22",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600104",
+    "different_dates": 57,
+    "max_price_diff": 0.26000000000000156,
+    "max_relative_diff_pct": 2.745512143611406,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601328",
+    "different_dates": 57,
+    "max_price_diff": 0.17000000000000082,
+    "max_relative_diff_pct": 2.715654952076685,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601088",
+    "different_dates": 57,
+    "max_price_diff": 1.0300000000000011,
+    "max_relative_diff_pct": 2.709813207050771,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000001",
+    "different_dates": 108,
+    "max_price_diff": 0.2699999999999996,
+    "max_relative_diff_pct": 2.686567164179099,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600489",
+    "different_dates": 76,
+    "max_price_diff": 0.46000000000000085,
+    "max_relative_diff_pct": 2.6285714285714246,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-05",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000425",
+    "different_dates": 48,
+    "max_price_diff": 0.20000000000000107,
+    "max_relative_diff_pct": 2.493765586034935,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600061",
+    "different_dates": 48,
+    "max_price_diff": 0.15000000000000036,
+    "max_relative_diff_pct": 2.4834437086092676,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601818",
+    "different_dates": 57,
+    "max_price_diff": 0.07000000000000028,
+    "max_relative_diff_pct": 2.4822695035461084,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600026",
+    "different_dates": 57,
+    "max_price_diff": 0.38000000000000256,
+    "max_relative_diff_pct": 2.4595469255663582,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "003816",
+    "different_dates": 57,
+    "max_price_diff": 0.09000000000000075,
+    "max_relative_diff_pct": 2.4128686327077764,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600028",
+    "different_dates": 112,
+    "max_price_diff": 0.11000000000000032,
+    "max_relative_diff_pct": 2.412280701754388,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-24",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600009",
+    "different_dates": 57,
+    "max_price_diff": 0.5300000000000011,
+    "max_relative_diff_pct": 2.4079963652885006,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601669",
+    "different_dates": 57,
+    "max_price_diff": 0.11000000000000032,
+    "max_relative_diff_pct": 2.3965141612200425,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601211",
+    "different_dates": 43,
+    "max_price_diff": 0.3500000000000014,
+    "max_relative_diff_pct": 2.392344497607657,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601633",
+    "different_dates": 57,
+    "max_price_diff": 0.3500000000000014,
+    "max_relative_diff_pct": 2.3890784982935065,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601766",
+    "different_dates": 57,
+    "max_price_diff": 0.1200000000000001,
+    "max_relative_diff_pct": 2.3622047244094446,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600519",
+    "different_dates": 43,
+    "max_price_diff": 28.02000000000021,
+    "max_relative_diff_pct": 2.36061264722236,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601319",
+    "different_dates": 57,
+    "max_price_diff": 0.15000000000000036,
+    "max_relative_diff_pct": 2.351097178683381,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600958",
+    "different_dates": 57,
+    "max_price_diff": 0.20000000000000107,
+    "max_relative_diff_pct": 2.3228803716608626,
+    "first_mismatch": "2026-04-01",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600085",
+    "different_dates": 48,
+    "max_price_diff": 0.5,
+    "max_relative_diff_pct": 2.2841480127912206,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601688",
+    "different_dates": 69,
+    "max_price_diff": 0.40000000000000213,
+    "max_relative_diff_pct": 2.26757369614512,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-29",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000538",
+    "different_dates": 108,
+    "max_price_diff": 1.0500000000000043,
+    "max_relative_diff_pct": 2.2628372497824234,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601816",
+    "different_dates": 57,
+    "max_price_diff": 0.10000000000000053,
+    "max_relative_diff_pct": 2.257336343115135,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600025",
+    "different_dates": 43,
+    "max_price_diff": 0.20000000000000107,
+    "max_relative_diff_pct": 2.214839424141757,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601988",
+    "different_dates": 57,
+    "max_price_diff": 0.1200000000000001,
+    "max_relative_diff_pct": 2.2058823529411686,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600919",
+    "different_dates": 57,
+    "max_price_diff": 0.23000000000000043,
+    "max_relative_diff_pct": 2.180094786729847,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601939",
+    "different_dates": 57,
+    "max_price_diff": 0.20000000000000107,
+    "max_relative_diff_pct": 2.1715526601520097,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600989",
+    "different_dates": 75,
+    "max_price_diff": 0.46000000000000085,
+    "max_relative_diff_pct": 2.1341463414634276,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600660",
+    "different_dates": 108,
+    "max_price_diff": 1.0100000000000051,
+    "max_relative_diff_pct": 2.1272069772388935,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601318",
+    "different_dates": 87,
+    "max_price_diff": 1.0300000000000011,
+    "max_relative_diff_pct": 2.1189189189189106,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-04",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601658",
+    "different_dates": 57,
+    "max_price_diff": 0.10000000000000053,
+    "max_relative_diff_pct": 2.1008403361344685,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "001391",
+    "different_dates": 48,
+    "max_price_diff": 0.09000000000000075,
+    "max_relative_diff_pct": 2.0930232558139528,
+    "first_mismatch": "2026-04-09",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002236",
+    "different_dates": 64,
+    "max_price_diff": 0.3100000000000023,
+    "max_relative_diff_pct": 1.996136509980695,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-20",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600875",
+    "different_dates": 62,
+    "max_price_diff": 0.5300000000000011,
+    "max_relative_diff_pct": 1.9499632082413676,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-22",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601628",
+    "different_dates": 53,
+    "max_price_diff": 0.6200000000000045,
+    "max_relative_diff_pct": 1.9454032005020494,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-03",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601021",
+    "different_dates": 108,
+    "max_price_diff": 0.8300000000000054,
+    "max_relative_diff_pct": 1.9315801722131765,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000166",
+    "different_dates": 64,
+    "max_price_diff": 0.08000000000000007,
+    "max_relative_diff_pct": 1.9138755980861344,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-20",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601881",
+    "different_dates": 57,
+    "max_price_diff": 0.22000000000000064,
+    "max_relative_diff_pct": 1.8900343642611617,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601600",
+    "different_dates": 57,
+    "max_price_diff": 0.15000000000000036,
+    "max_relative_diff_pct": 1.8867924528301883,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601985",
+    "different_dates": 57,
+    "max_price_diff": 0.16000000000000014,
+    "max_relative_diff_pct": 1.875732708089095,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600196",
+    "different_dates": 59,
+    "max_price_diff": 0.39000000000000057,
+    "max_relative_diff_pct": 1.8731988472622474,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-16",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "688036",
+    "different_dates": 77,
+    "max_price_diff": 0.9500000000000028,
+    "max_relative_diff_pct": 1.870078740157477,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-17",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002415",
+    "different_dates": 72,
+    "max_price_diff": 0.5600000000000023,
+    "max_relative_diff_pct": 1.868841318382608,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-10",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300413",
+    "different_dates": 57,
+    "max_price_diff": 0.26000000000000156,
+    "max_relative_diff_pct": 1.8452803406671325,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601898",
+    "different_dates": 66,
+    "max_price_diff": 0.22000000000000242,
+    "max_relative_diff_pct": 1.8394648829431315,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-05",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600938",
+    "different_dates": 57,
+    "max_price_diff": 0.480000000000004,
+    "max_relative_diff_pct": 1.8271792919680285,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601872",
+    "different_dates": 57,
+    "max_price_diff": 0.2500000000000018,
+    "max_relative_diff_pct": 1.7998560115190854,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300433",
+    "different_dates": 53,
+    "max_price_diff": 0.45000000000000284,
+    "max_relative_diff_pct": 1.7878426698450411,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-03",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601377",
+    "different_dates": 57,
+    "max_price_diff": 0.10000000000000053,
+    "max_relative_diff_pct": 1.7825311942959,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000625",
+    "different_dates": 57,
+    "max_price_diff": 0.120000000000001,
+    "max_relative_diff_pct": 1.7804154302670572,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300628",
+    "different_dates": 108,
+    "max_price_diff": 0.5700000000000003,
+    "max_relative_diff_pct": 1.6829052258636068,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600089",
+    "different_dates": 53,
+    "max_price_diff": 0.360000000000003,
+    "max_relative_diff_pct": 1.6767582673497872,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-03",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300498",
+    "different_dates": 43,
+    "max_price_diff": 0.20000000000000284,
+    "max_relative_diff_pct": 1.6447368421052655,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000708",
+    "different_dates": 64,
+    "max_price_diff": 0.20000000000000107,
+    "max_relative_diff_pct": 1.61030595813203,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-20",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601117",
+    "different_dates": 57,
+    "max_price_diff": 0.11000000000000121,
+    "max_relative_diff_pct": 1.5514809590973178,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002352",
+    "different_dates": 94,
+    "max_price_diff": 0.47000000000000597,
+    "max_relative_diff_pct": 1.5485996705107086,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-04",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000338",
+    "different_dates": 75,
+    "max_price_diff": 0.37000000000000455,
+    "max_relative_diff_pct": 1.546822742474907,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-04",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600362",
+    "different_dates": 58,
+    "max_price_diff": 0.6000000000000014,
+    "max_relative_diff_pct": 1.5286624203821653,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-13",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000408",
+    "different_dates": 81,
+    "max_price_diff": 1.0,
+    "max_relative_diff_pct": 1.5071590052750494,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600436",
+    "different_dates": 68,
+    "max_price_diff": 1.5700000000000216,
+    "max_relative_diff_pct": 1.4751479845908078,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-27",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601800",
+    "different_dates": 57,
+    "max_price_diff": 0.08000000000000007,
+    "max_relative_diff_pct": 1.4209591474245054,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000963",
+    "different_dates": 86,
+    "max_price_diff": 0.3500000000000014,
+    "max_relative_diff_pct": 1.3430544896392949,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-21",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601058",
+    "different_dates": 57,
+    "max_price_diff": 0.15000000000000036,
+    "max_relative_diff_pct": 1.3297872340425565,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601788",
+    "different_dates": 57,
+    "max_price_diff": 0.1700000000000017,
+    "max_relative_diff_pct": 1.2705530642750373,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300015",
+    "different_dates": 57,
+    "max_price_diff": 0.10000000000000142,
+    "max_relative_diff_pct": 1.2658227848101111,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600547",
+    "different_dates": 67,
+    "max_price_diff": 0.28000000000000114,
+    "max_relative_diff_pct": 1.232394366197198,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-27",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000063",
+    "different_dates": 65,
+    "max_price_diff": 0.4100000000000037,
+    "max_relative_diff_pct": 1.2304921968787408,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-22",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600309",
+    "different_dates": 82,
+    "max_price_diff": 0.8199999999999932,
+    "max_relative_diff_pct": 1.2209828157974112,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601868",
+    "different_dates": 57,
+    "max_price_diff": 0.03000000000000025,
+    "max_relative_diff_pct": 1.2096774193548265,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002202",
+    "different_dates": 71,
+    "max_price_diff": 0.20000000000000284,
+    "max_relative_diff_pct": 1.1897679952409534,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-30",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300896",
+    "different_dates": 85,
+    "max_price_diff": 1.0100000000000051,
+    "max_relative_diff_pct": 1.183431952662728,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-20",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600050",
+    "different_dates": 43,
+    "max_price_diff": 0.05000000000000071,
+    "max_relative_diff_pct": 1.1820330969267046,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600150",
+    "different_dates": 58,
+    "max_price_diff": 0.37000000000000455,
+    "max_relative_diff_pct": 1.1437403400309076,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-10",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601878",
+    "different_dates": 57,
+    "max_price_diff": 0.10000000000000142,
+    "max_relative_diff_pct": 1.1235955056179803,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601138",
+    "different_dates": 68,
+    "max_price_diff": 0.6500000000000057,
+    "max_relative_diff_pct": 1.1078915970683445,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-30",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601901",
+    "different_dates": 57,
+    "max_price_diff": 0.07000000000000028,
+    "max_relative_diff_pct": 1.1075949367088445,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600905",
+    "different_dates": 57,
+    "max_price_diff": 0.040000000000000036,
+    "max_relative_diff_pct": 1.098901098901095,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600031",
+    "different_dates": 57,
+    "max_price_diff": 0.18000000000000327,
+    "max_relative_diff_pct": 1.0526315789473717,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600549",
+    "different_dates": 109,
+    "max_price_diff": 0.509999999999998,
+    "max_relative_diff_pct": 1.0336441021483456,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-21",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "688472",
+    "different_dates": 57,
+    "max_price_diff": 0.10000000000000142,
+    "max_relative_diff_pct": 1.031991744066052,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300760",
+    "different_dates": 94,
+    "max_price_diff": 1.3400000000000034,
+    "max_relative_diff_pct": 1.0026385224274348,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-31",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600918",
+    "different_dates": 57,
+    "max_price_diff": 0.05000000000000071,
+    "max_relative_diff_pct": 0.990099009900991,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002050",
+    "different_dates": 112,
+    "max_price_diff": 0.4000000000000057,
+    "max_relative_diff_pct": 0.9787129924149873,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-24",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601018",
+    "different_dates": 49,
+    "max_price_diff": 0.03000000000000025,
+    "max_relative_diff_pct": 0.9615384615384581,
+    "first_mismatch": "2026-04-27",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600415",
+    "different_dates": 33,
+    "max_price_diff": 0.13000000000000078,
+    "max_relative_diff_pct": 0.9475218658892226,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-04",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600522",
+    "different_dates": 57,
+    "max_price_diff": 0.2600000000000051,
+    "max_relative_diff_pct": 0.9372746935832899,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300442",
+    "different_dates": 81,
+    "max_price_diff": 0.6700000000000017,
+    "max_relative_diff_pct": 0.9195717814987736,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-01",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600160",
+    "different_dates": 108,
+    "max_price_diff": 0.2900000000000027,
+    "max_relative_diff_pct": 0.910232266164468,
+    "first_mismatch": "2026-04-09",
+    "last_mismatch": "2026-09-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601888",
+    "different_dates": 57,
+    "max_price_diff": 0.45000000000000284,
+    "max_relative_diff_pct": 0.8907363420427528,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002938",
+    "different_dates": 36,
+    "max_price_diff": 0.4799999999999969,
+    "max_relative_diff_pct": 0.879120879120876,
+    "first_mismatch": "2026-04-09",
+    "last_mismatch": "2026-06-10",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300866",
+    "different_dates": 112,
+    "max_price_diff": 0.9000000000000057,
+    "max_relative_diff_pct": 0.8031322156409892,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-24",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601066",
+    "different_dates": 57,
+    "max_price_diff": 0.1700000000000017,
+    "max_relative_diff_pct": 0.7996237064910483,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600233",
+    "different_dates": 57,
+    "max_price_diff": 0.120000000000001,
+    "max_relative_diff_pct": 0.7978723404255428,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "001979",
+    "different_dates": 57,
+    "max_price_diff": 0.05000000000000071,
+    "max_relative_diff_pct": 0.7886435331230235,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300274",
+    "different_dates": 108,
+    "max_price_diff": 0.700000000000017,
+    "max_relative_diff_pct": 0.7642703606400847,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000725",
+    "different_dates": 13,
+    "max_price_diff": 0.03000000000000025,
+    "max_relative_diff_pct": 0.7575757575757569,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-15",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "603893",
+    "different_dates": 75,
+    "max_price_diff": 1.200000000000017,
+    "max_relative_diff_pct": 0.7552870090634656,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-12",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000768",
+    "different_dates": 43,
+    "max_price_diff": 0.15000000000000213,
+    "max_relative_diff_pct": 0.7549068948162985,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "605117",
+    "different_dates": 113,
+    "max_price_diff": 0.9099999999999966,
+    "max_relative_diff_pct": 0.7533112582781443,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-10-12",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "603993",
+    "different_dates": 57,
+    "max_price_diff": 0.13000000000000256,
+    "max_relative_diff_pct": 0.7531865585167941,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601995",
+    "different_dates": 64,
+    "max_price_diff": 0.23000000000000398,
+    "max_relative_diff_pct": 0.7301587301587364,
+    "first_mismatch": "2026-04-08",
+    "last_mismatch": "2026-07-15",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000617",
+    "different_dates": 43,
+    "max_price_diff": 0.05000000000000071,
+    "max_relative_diff_pct": 0.7072135785006983,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601456",
+    "different_dates": 57,
+    "max_price_diff": 0.0600000000000005,
+    "max_relative_diff_pct": 0.7025761124121788,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300450",
+    "different_dates": 48,
+    "max_price_diff": 0.28000000000000114,
+    "max_relative_diff_pct": 0.6844292349059033,
+    "first_mismatch": "2026-04-09",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600482",
+    "different_dates": 60,
+    "max_price_diff": 0.20000000000000284,
+    "max_relative_diff_pct": 0.6686726847208169,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-14",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002602",
+    "different_dates": 108,
+    "max_price_diff": 0.08000000000000185,
+    "max_relative_diff_pct": 0.6557377049180246,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "603369",
+    "different_dates": 26,
+    "max_price_diff": 0.16000000000000014,
+    "max_relative_diff_pct": 0.6549324600900519,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-29",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600048",
+    "different_dates": 48,
+    "max_price_diff": 0.03000000000000025,
+    "max_relative_diff_pct": 0.6355932203389925,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600183",
+    "different_dates": 29,
+    "max_price_diff": 0.4200000000000017,
+    "max_relative_diff_pct": 0.6291192330736939,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-01",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "688111",
+    "different_dates": 49,
+    "max_price_diff": 1.2500000000000284,
+    "max_relative_diff_pct": 0.6288358989837928,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-01",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600930",
+    "different_dates": 48,
+    "max_price_diff": 0.03000000000000025,
+    "max_relative_diff_pct": 0.6250000000000089,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601360",
+    "different_dates": 108,
+    "max_price_diff": 0.05000000000000071,
+    "max_relative_diff_pct": 0.6031363088057962,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002736",
+    "different_dates": 9,
+    "max_price_diff": 0.07000000000000028,
+    "max_relative_diff_pct": 0.5872483221476488,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-04-29",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601100",
+    "different_dates": 57,
+    "max_price_diff": 0.5600000000000023,
+    "max_relative_diff_pct": 0.5815764876934137,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000776",
+    "different_dates": 57,
+    "max_price_diff": 0.14000000000000057,
+    "max_relative_diff_pct": 0.5806719203649946,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-04",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "603259",
+    "different_dates": 80,
+    "max_price_diff": 0.5500000000000114,
+    "max_relative_diff_pct": 0.5701845324487032,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-20",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601136",
+    "different_dates": 57,
+    "max_price_diff": 0.07000000000000028,
+    "max_relative_diff_pct": 0.5185185185185182,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002001",
+    "different_dates": 20,
+    "max_price_diff": 0.17999999999999972,
+    "max_relative_diff_pct": 0.4888647474198815,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600346",
+    "different_dates": 22,
+    "max_price_diff": 0.11999999999999744,
+    "max_relative_diff_pct": 0.48681541582149546,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-20",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002594",
+    "different_dates": 64,
+    "max_price_diff": 0.36000000000001364,
+    "max_relative_diff_pct": 0.4624871531346386,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-20",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300014",
+    "different_dates": 91,
+    "max_price_diff": 0.23000000000000398,
+    "max_relative_diff_pct": 0.45347003154574406,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-28",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002028",
+    "different_dates": 54,
+    "max_price_diff": 0.700000000000017,
+    "max_relative_diff_pct": 0.4523717203050115,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-06",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002648",
+    "different_dates": 23,
+    "max_price_diff": 0.13000000000000256,
+    "max_relative_diff_pct": 0.44673539518901295,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-21",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000657",
+    "different_dates": 53,
+    "max_price_diff": 0.23000000000000398,
+    "max_relative_diff_pct": 0.44513257209211066,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-03",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002049",
+    "different_dates": 48,
+    "max_price_diff": 0.3100000000000023,
+    "max_relative_diff_pct": 0.44495478685231404,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "688082",
+    "different_dates": 71,
+    "max_price_diff": 0.6200000000000045,
+    "max_relative_diff_pct": 0.4247157144814384,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-29",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "001280",
+    "different_dates": 53,
+    "max_price_diff": 0.2600000000000051,
+    "max_relative_diff_pct": 0.3973105134474464,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-03",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002074",
+    "different_dates": 57,
+    "max_price_diff": 0.10000000000000142,
+    "max_relative_diff_pct": 0.3920031360250764,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300750",
+    "different_dates": 71,
+    "max_price_diff": 1.6399999999999864,
+    "max_relative_diff_pct": 0.38932146829810943,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-05",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000807",
+    "different_dates": 32,
+    "max_price_diff": 0.14000000000000057,
+    "max_relative_diff_pct": 0.38845726970033745,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-04",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002311",
+    "different_dates": 55,
+    "max_price_diff": 0.15000000000000568,
+    "max_relative_diff_pct": 0.3654080389768666,
+    "first_mismatch": "2026-04-22",
+    "last_mismatch": "2026-07-31",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600584",
+    "different_dates": 108,
+    "max_price_diff": 0.15000000000000568,
+    "max_relative_diff_pct": 0.34419458467187525,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000999",
+    "different_dates": 18,
+    "max_price_diff": 0.08999999999999986,
+    "max_relative_diff_pct": 0.3307607497243681,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-14",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "688271",
+    "different_dates": 57,
+    "max_price_diff": 0.3100000000000023,
+    "max_relative_diff_pct": 0.31658496732025476,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600066",
+    "different_dates": 15,
+    "max_price_diff": 0.10999999999999943,
+    "max_relative_diff_pct": 0.31455533314269646,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-13",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "603288",
+    "different_dates": 23,
+    "max_price_diff": 0.12000000000000455,
+    "max_relative_diff_pct": 0.30112923462987107,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-08",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600460",
+    "different_dates": 58,
+    "max_price_diff": 0.0800000000000054,
+    "max_relative_diff_pct": 0.3007518796992459,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-10",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002709",
+    "different_dates": 64,
+    "max_price_diff": 0.13000000000000256,
+    "max_relative_diff_pct": 0.3002101471029528,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-20",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300251",
+    "different_dates": 6,
+    "max_price_diff": 0.05000000000000071,
+    "max_relative_diff_pct": 0.29922202274087484,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-04-23",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300394",
+    "different_dates": 85,
+    "max_price_diff": 0.6300000000000239,
+    "max_relative_diff_pct": 0.28814489571900026,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-04",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002916",
+    "different_dates": 25,
+    "max_price_diff": 0.7699999999999818,
+    "max_relative_diff_pct": 0.2875924404272645,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601059",
+    "different_dates": 73,
+    "max_price_diff": 0.0400000000000027,
+    "max_relative_diff_pct": 0.27155465037338455,
+    "first_mismatch": "2026-03-24",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-09-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002460",
+    "different_dates": 57,
+    "max_price_diff": 0.15000000000000568,
+    "max_relative_diff_pct": 0.2686246418338145,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002353",
+    "different_dates": 77,
+    "max_price_diff": 0.3100000000000023,
+    "max_relative_diff_pct": 0.26851450844520564,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-08-21",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601877",
+    "different_dates": 104,
+    "max_price_diff": 0.09000000000000341,
+    "max_relative_diff_pct": 0.26501766784453595,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-24",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "688008",
+    "different_dates": 67,
+    "max_price_diff": 0.3900000000000432,
+    "max_relative_diff_pct": 0.2593257530421056,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-27",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002230",
+    "different_dates": 57,
+    "max_price_diff": 0.10000000000000142,
+    "max_relative_diff_pct": 0.25627883136851715,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002475",
+    "different_dates": 57,
+    "max_price_diff": 0.14000000000000057,
+    "max_relative_diff_pct": 0.2547770700636942,
+    "first_mismatch": "2026-04-09",
+    "last_mismatch": "2026-07-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300316",
+    "different_dates": 112,
+    "max_price_diff": 0.10000000000000142,
+    "max_relative_diff_pct": 0.2495632642875112,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-24",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601166",
+    "different_dates": 14,
+    "max_price_diff": 0.0400000000000027,
+    "max_relative_diff_pct": 0.2376708259061333,
+    "first_mismatch": "2026-05-06",
+    "last_mismatch": "2026-05-25",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002179",
+    "different_dates": 14,
+    "max_price_diff": 0.0800000000000054,
+    "max_relative_diff_pct": 0.2308136180034781,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-08",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601689",
+    "different_dates": 18,
+    "max_price_diff": 0.10999999999999943,
+    "max_relative_diff_pct": 0.1957992168031275,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-14",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002714",
+    "different_dates": 19,
+    "max_price_diff": 0.09000000000000341,
+    "max_relative_diff_pct": 0.19556714471969938,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-15",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300408",
+    "different_dates": 9,
+    "max_price_diff": 0.11999999999999744,
+    "max_relative_diff_pct": 0.1903553299492433,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-04-28",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600887",
+    "different_dates": 18,
+    "max_price_diff": 0.05000000000000071,
+    "max_relative_diff_pct": 0.18518518518518823,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-15",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600893",
+    "different_dates": 43,
+    "max_price_diff": 0.07000000000000028,
+    "max_relative_diff_pct": 0.1846478501714488,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600570",
+    "different_dates": 27,
+    "max_price_diff": 0.05000000000000071,
+    "max_relative_diff_pct": 0.18416206261508972,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-27",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300832",
+    "different_dates": 16,
+    "max_price_diff": 0.0800000000000054,
+    "max_relative_diff_pct": 0.18340210912426436,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-21",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "603296",
+    "different_dates": 22,
+    "max_price_diff": 0.15000000000000568,
+    "max_relative_diff_pct": 0.170164492342606,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-09",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002371",
+    "different_dates": 50,
+    "max_price_diff": 0.7600000000001046,
+    "max_relative_diff_pct": 0.16903914590746805,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-07-01",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300124",
+    "different_dates": 13,
+    "max_price_diff": 0.10000000000000142,
+    "max_relative_diff_pct": 0.16431153466973658,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000975",
+    "different_dates": 10,
+    "max_price_diff": 0.05000000000000071,
+    "max_relative_diff_pct": 0.16239038648911963,
+    "first_mismatch": "2026-04-09",
+    "last_mismatch": "2026-04-22",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "688183",
+    "different_dates": 28,
+    "max_price_diff": 0.14000000000000057,
+    "max_relative_diff_pct": 0.1443001443001357,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-29",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600176",
+    "different_dates": 16,
+    "max_price_diff": 0.0400000000000027,
+    "max_relative_diff_pct": 0.12690355329949554,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-21",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002241",
+    "different_dates": 14,
+    "max_price_diff": 0.030000000000001137,
+    "max_relative_diff_pct": 0.12505210504376585,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-21",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "603799",
+    "different_dates": 17,
+    "max_price_diff": 0.0799999999999983,
+    "max_relative_diff_pct": 0.1191185229303171,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-13",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002463",
+    "different_dates": 12,
+    "max_price_diff": 0.09999999999999432,
+    "max_relative_diff_pct": 0.11717834544175965,
+    "first_mismatch": "2026-04-09",
+    "last_mismatch": "2026-04-29",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "603986",
+    "different_dates": 24,
+    "max_price_diff": 0.3300000000000409,
+    "max_relative_diff_pct": 0.11539268480311726,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-22",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600030",
+    "different_dates": 8,
+    "max_price_diff": 0.030000000000001137,
+    "max_relative_diff_pct": 0.11219147344800895,
+    "first_mismatch": "2026-04-28",
+    "last_mismatch": "2026-05-13",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601127",
+    "different_dates": 21,
+    "max_price_diff": 0.10000000000000853,
+    "max_relative_diff_pct": 0.10907504363002474,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-27",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "302132",
+    "different_dates": 25,
+    "max_price_diff": 0.0799999999999983,
+    "max_relative_diff_pct": 0.10853344186677605,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-11",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300033",
+    "different_dates": 108,
+    "max_price_diff": 0.20000000000001705,
+    "max_relative_diff_pct": 0.10371292263016141,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-09-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "688396",
+    "different_dates": 43,
+    "max_price_diff": 0.05000000000001137,
+    "max_relative_diff_pct": 0.10197838058330078,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "601698",
+    "different_dates": 43,
+    "max_price_diff": 0.030000000000001137,
+    "max_relative_diff_pct": 0.10121457489880026,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002625",
+    "different_dates": 48,
+    "max_price_diff": 0.030000000000001137,
+    "max_relative_diff_pct": 0.10010010010010895,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000938",
+    "different_dates": 1,
+    "max_price_diff": 0.030000000000001137,
+    "max_relative_diff_pct": 0.09060706735125601,
+    "first_mismatch": "2026-05-08",
+    "last_mismatch": "2026-05-08",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002422",
+    "different_dates": 2,
+    "max_price_diff": 0.030000000000001137,
+    "max_relative_diff_pct": 0.08515469770080664,
+    "first_mismatch": "2026-04-15",
+    "last_mismatch": "2026-04-16",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "688072",
+    "different_dates": 83,
+    "max_price_diff": 0.29000000000002046,
+    "max_relative_diff_pct": 0.08315173758459693,
+    "first_mismatch": "2026-04-01",
+    "last_mismatch": "2026-09-24",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "301308",
+    "different_dates": 29,
+    "max_price_diff": 0.29000000000002046,
+    "max_relative_diff_pct": 0.08118701007839846,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-29",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600760",
+    "different_dates": 10,
+    "max_price_diff": 0.03999999999999915,
+    "max_relative_diff_pct": 0.07963368504877444,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-13",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300502",
+    "different_dates": 36,
+    "max_price_diff": 0.2599999999999909,
+    "max_relative_diff_pct": 0.07443671447793232,
+    "first_mismatch": "2026-04-09",
+    "last_mismatch": "2026-06-08",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300308",
+    "different_dates": 114,
+    "max_price_diff": 0.9400000000000546,
+    "max_relative_diff_pct": 0.06805971878304229,
+    "first_mismatch": "2026-04-17",
+    "last_mismatch": "2026-09-30",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "000988",
+    "different_dates": 17,
+    "max_price_diff": 0.07000000000000739,
+    "max_relative_diff_pct": 0.06246096189881367,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "688041",
+    "different_dates": 43,
+    "max_price_diff": 0.1500000000000341,
+    "max_relative_diff_pct": 0.05942947702060053,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-06-18",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600276",
+    "different_dates": 10,
+    "max_price_diff": 0.030000000000001137,
+    "max_relative_diff_pct": 0.05436752446539295,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-13",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "002837",
+    "different_dates": 3,
+    "max_price_diff": 0.05000000000001137,
+    "max_relative_diff_pct": 0.05375766046662456,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-04-20",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "600111",
+    "different_dates": 1,
+    "max_price_diff": 0.030000000000001137,
+    "max_relative_diff_pct": 0.05197505197505059,
+    "first_mismatch": "2026-05-11",
+    "last_mismatch": "2026-05-11",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "603019",
+    "different_dates": 15,
+    "max_price_diff": 0.05000000000001137,
+    "max_relative_diff_pct": 0.05085435313262332,
+    "first_mismatch": "2026-04-27",
+    "last_mismatch": "2026-05-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "301269",
+    "different_dates": 19,
+    "max_price_diff": 0.04000000000000625,
+    "max_relative_diff_pct": 0.04851425106124907,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-26",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "301165",
+    "different_dates": 1,
+    "max_price_diff": 0.030000000000001137,
+    "max_relative_diff_pct": 0.04576659038901809,
+    "first_mismatch": "2026-04-23",
+    "last_mismatch": "2026-04-23",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "300661",
+    "different_dates": 4,
+    "max_price_diff": 0.030000000000001137,
+    "max_relative_diff_pct": 0.0387947756368856,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-04-21",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "688012",
+    "different_dates": 17,
+    "max_price_diff": 0.0800000000000125,
+    "max_relative_diff_pct": 0.03806080213140106,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-05-14",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  },
+  {
+    "symbol": "688256",
+    "different_dates": 11,
+    "max_price_diff": 0.3100000000000591,
+    "max_relative_diff_pct": 0.035381261627320804,
+    "first_mismatch": "2026-04-16",
+    "last_mismatch": "2026-04-30",
+    "last_date": "2026-10-14",
+    "latest_diff": 0.0
+  }
+]
