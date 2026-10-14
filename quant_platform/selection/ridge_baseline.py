@@ -35,6 +35,11 @@ STRATEGY_ID = "ridge32_weekly_baseline"
 STRATEGY_VERSION = "1.0-ridge-alpha1.0"
 ALPHA = 1.0
 
+# P0 快进快出适配（2026-10-15 最终裁决）：样本时间衰减权重的半衰期（天）。
+# D+3 短线下，3 年前样本与上周样本等权是不合理的；指数衰减让近期 regime
+# 占主导。180 天半衰期是保守起点——权重变化平滑，不会推倒重来。
+TIME_WEIGHT_HALF_LIFE_DAYS = 180
+
 # The original 32-column Ridge contract, verified against the delivered file.
 ORIGINAL_FEATURES = [
     "ma_5", "ma_10", "ma_20", "ma_60", "macd_dif", "macd_dea", "macd_hist",
@@ -68,6 +73,7 @@ def fit_predict_ridge32(
     as_of: dt.date,
     label: str,
     feature_cols: list[str] | None = None,
+    use_time_weight: bool = False,
 ) -> tuple[pd.DataFrame, dict, "Pipeline"]:
     """Fit the frozen Ridge32 baseline and score the as_of prediction day.
 
@@ -81,13 +87,18 @@ def fit_predict_ridge32(
         Forward-return label column, e.g. ``ret_fwd_3d``.
     feature_cols : list[str] | None
         Defaults to ORIGINAL_FEATURES.  Must all exist in *panel*.
+    use_time_weight : bool
+        P0 快进快出实验开关（默认 False = 冻结基线行为）。
+        True 时训练样本按指数衰减加权：weight = 0.5 ** (days_ago / 180)，
+        即 180 天前的样本权重衰减一半。近期 regime 占主导，适配 D+3 短线。
+        通过 sklearn 的 sample_weight 传入（Pipeline 末端 step 名为 "model"）。
 
     Returns
     -------
     (scored, meta, model)
         scored: score_frame output with prefix "base".
         meta: reproducibility metadata (strategy id/version, train window,
-        row counts).
+        row counts, time-weight flag).
         model: fitted sklearn Pipeline.
     """
     feature_cols = list(feature_cols) if feature_cols is not None else list(ORIGINAL_FEATURES)
@@ -117,7 +128,14 @@ def fit_predict_ridge32(
         ("scaler", StandardScaler()),
         ("model", Ridge(alpha=ALPHA)),
     ])
-    model.fit(train[feature_cols].values, train[label].values)
+    fit_kwargs: dict = {}
+    if use_time_weight:
+        # P0：指数时间衰减。days_ago=0（as_of 前一天）权重为 1，
+        # 180 天前权重 0.5，3 年前约 0.06。近期样本主导拟合。
+        days_ago = np.array([(as_of - d).days for d in train["date"]], dtype=float)
+        weights = 0.5 ** (days_ago / TIME_WEIGHT_HALF_LIFE_DAYS)
+        fit_kwargs["model__sample_weight"] = weights
+    model.fit(train[feature_cols].values, train[label].values, **fit_kwargs)
     scored = score_frame(pred, model.predict(pred[feature_cols].values), "base")
 
     meta = {
@@ -130,5 +148,7 @@ def fit_predict_ridge32(
         "train_last_date": train["date"].max().isoformat(),
         "prediction_date": as_of.isoformat(),
         "prediction_rows": int(len(pred)),
+        "time_weighted": bool(use_time_weight),
+        "time_weight_half_life_days": TIME_WEIGHT_HALF_LIFE_DAYS if use_time_weight else None,
     }
     return scored, meta, model

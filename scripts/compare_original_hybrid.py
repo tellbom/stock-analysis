@@ -48,6 +48,7 @@ ARM_NAMES = {
     "hybrid_no_flow": "原版+近期模型（无资金流）",
     "hybrid_flow": "原版+近期模型（有资金流）",
     "hybrid_flow_score_gate_diagnostic": "有资金流混合+分数Gate（诊断，不作为选股结果）",
+    "hybrid_timeweighted": "混合_时间权重+短窗口（P0/P1 实验臂）",
 }
 # 诊断臂的策略键（带后缀），与主策略臂区分。
 DIAGNOSTIC_ARM = "hybrid_flow_score_gate_diagnostic"
@@ -141,11 +142,17 @@ def run(
     sector_cap_tech: int | None = 10,
     overwrite: bool = False,
     horizons: tuple[int, ...] = (3, 5),
+    use_time_weight: bool = False,
+    recent_window: int = 120,
 ) -> dict:
     """每周对照实验入口。
 
     sector_cap_tech: 科技大类合计上限；None/0 = 历史复现口径（关闭约束）。
     overwrite: False 时若 out 已有内容则拒绝写入，保护历史报告不被覆盖。
+    use_time_weight: P0 实验开关。True 时新增 hybrid_timeweighted 臂，
+        其 base 用时间衰减权重 Ridge；冻结的 4 个臂不受影响。
+    recent_window: P1 实验参数。recent 模型的 label 日期窗口；
+        120 = 冻结基线。实验臂传入 60（约 3 个月，D+3 短线 regime 响应）。
     """
     horizons = tuple(sorted(set(horizons)))
     if not horizons or any(h not in (3, 5) for h in horizons):
@@ -212,7 +219,16 @@ def run(
         "original_algorithm": "Ridge(alpha=1.0)",
         "baseline_strategy_id": "ridge32_weekly_baseline",
         "recent_algorithm": "LightGBM", "recent_params": {**RECENT_PARAMS, "n_jobs": n_jobs},
-        "rrf_k": 60, "recent_window_dates": 120,
+        "rrf_k": 60, "recent_window_dates": 120,  # 冻结基线口径；实验臂见 horizons 下 experiment 段
+        "experiment": {
+            "enabled": bool(use_time_weight or recent_window != 120),
+            "use_time_weight": bool(use_time_weight),
+            "time_weight_half_life_days": 180 if use_time_weight else None,
+            "recent_window_dates": recent_window,
+            # P1：60 ≈ 3 个月 label 日期。D+3 短线 regime 变化快，
+            # 120 天窗口混入过多旧 regime 信号；60 天让 recent 模型更快响应。
+            "arm": "hybrid_timeweighted",
+        },
         "data_contract_version": "qfq-full-history-calendar-v1",
         "label_date_basis": "exchange_calendar_complete_forward_window",
         "selection": {
@@ -296,6 +312,57 @@ def run(
             }
         base.to_csv(out / f"D{h}_original_scores.csv", index=False)
         joblib.dump(model, out / f"D{h}_original_ridge.joblib")
+        # ---- 实验臂：hybrid_timeweighted（P0 时间权重 + P1 短窗口）----
+        # 在冻结臂全部处理完成后独立计算：不参与 equal_n、不进 selection_audit、
+        # 不影响冻结臂的任何输出。默认关闭（use_time_weight=False 且 recent_window=120
+        # 时整个块跳过），冻结基线零改动。
+        experiment_audit: dict = {"enabled": False}
+        if use_time_weight or recent_window != 120:
+            # P0：同一份 Ridge32 实现，仅打开时间权重开关。
+            base_tw, base_tw_meta, _ = fit_predict_ridge32(
+                panel, as_of, label, use_time_weight=True,
+            )
+            # P1：recent 窗口按参数取值（实验默认 60 ≈ 3 个月）。
+            dates_tw = sorted(train.date.unique())[-recent_window:]
+            recent_tw_avail = train[train.date.isin(dates_tw)]
+            recent_tw = recent_tw_avail.dropna(subset=FLOW_FEATURES).copy()
+            if recent_tw.date.nunique() < 80:
+                raise RuntimeError(f"D{h}: insufficient experiment recent training dates")
+            fitted_tw = fit_final_model(
+                recent_tw, ORIGINAL_FEATURES + FLOW_FEATURES, label,
+                {**RECENT_PARAMS, "n_jobs": n_jobs},
+            )
+            recent_tw_scores = scores(
+                pred, fitted_tw.predict(pred[ORIGINAL_FEATURES + FLOW_FEATURES]), "recent")
+            fused_tw = fusion_score(combine(base_tw, recent_tw_scores))
+            tw_picks, tw_cap = select(
+                fused_tw, attributes, "fusion_score_col", sector_cap_tech)
+            tw_picks = tw_picks.copy()
+            tw_picks["horizon"] = h
+            tw_picks["strategy"] = "hybrid_timeweighted"
+            tw_picks["strategy_name"] = "混合_时间权重+短窗口"
+            tw_picks["is_diagnostic"] = False
+            # 实验臂不参与等数对照（避免拉低冻结臂的 equal_n）。
+            tw_picks["in_equal_count_comparison"] = False
+            tw_picks.to_csv(out / f"D{h}_hybrid_timeweighted_picks.csv",
+                            index=False, encoding="utf-8-sig")
+            all_picks.append(tw_picks)
+            joblib.dump(fitted_tw, out / f"D{h}_recent_timeweighted.joblib")
+            experiment_audit = {
+                "enabled": True,
+                "arm": "hybrid_timeweighted",
+                "base_time_weighted": base_tw_meta.get("time_weighted"),
+                "base_train_rows": base_tw_meta.get("train_rows"),
+                "recent_window_dates": recent_window,
+                "recent_train_dates": int(recent_tw.date.nunique()),
+                "recent_train_start": recent_tw.date.min().isoformat(),
+                "recent_train_end": recent_tw.date.max().isoformat(),
+                "pick_count": len(tw_picks),
+                "pre_cap_count": tw_cap.get("pre_count"),
+                "post_cap_count": tw_cap.get("post_count"),
+            }
+            print(f"D{h}: experiment hybrid_timeweighted: {len(tw_picks)} picks, "
+                  f"recent {recent_tw.date.nunique()} dates", flush=True)
         summary["horizons"][str(h)] = {
             "label_col": label, "target_date": future[h].isoformat(), "reference_audit": reference_audit,
             "baseline_meta": base_meta,
@@ -312,6 +379,7 @@ def run(
             "flow_train_nonnull_dates": {c: int(recent_train.loc[recent_train[c].notna(), "date"].nunique()) for c in FLOW_FEATURES},
             "equal_count_n": equal_n, "full_selection_counts": {key: len(p) for key, (p, _, _) in arms.items()},
             "selection_audit": selection_audit,
+            "experiment": experiment_audit,
         }
         print(f"D{h}: reference={reference_audit}; shared recent={len(recent_train)} rows/{recent_train.date.nunique()} dates; counts={summary['horizons'][str(h)]['full_selection_counts']}", flush=True)
     combined = pd.concat(all_picks, ignore_index=True)
@@ -345,9 +413,20 @@ def main() -> None:
         "--overwrite", action="store_true",
         help="允许覆盖已有内容的输出目录；默认拒绝，保护历史报告。",
     )
+    parser.add_argument(
+        "--use-time-weight", action="store_true",
+        help="P0 实验：新增 hybrid_timeweighted 臂，其 Ridge32 base 用指数时间衰减权重 "
+             "(半衰期 180 天)。冻结的 4 个臂不受影响。默认关闭。",
+    )
+    parser.add_argument(
+        "--recent-window", type=int, default=120,
+        help="P1 实验：hybrid_timeweighted 臂的 recent 模型 label 日期窗口。120=冻结基线口径； "
+             "实验建议 60（约 3 个月，D+3 短线 regime 响应）。默认 120。",
+    )
     args = parser.parse_args()
     run(args.as_of, args.out_dir, args.original_reference, args.n_jobs,
-        sector_cap_tech=args.sector_cap_tech, overwrite=args.overwrite)
+        sector_cap_tech=args.sector_cap_tech, overwrite=args.overwrite,
+        use_time_weight=args.use_time_weight, recent_window=args.recent_window)
 
 
 if __name__ == "__main__":
