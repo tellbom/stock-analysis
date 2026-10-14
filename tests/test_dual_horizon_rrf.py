@@ -44,6 +44,37 @@ def test_d5_model_receives_exact_d5_label(monkeypatch):
     assert meta["label_col"] == "ret_fwd_5d"
 
 
+def test_missing_session_is_not_replaced_by_a_later_price():
+    dates = [d.date() for d in pd.bdate_range("2026-06-01", periods=12)]
+    calendar = pd.DataFrame({"date": dates, "is_trading": True})
+    prices = pd.DataFrame({"symbol": "000001", "date": dates, "close": np.arange(10., 22.)})
+    incomplete = prices.drop(index=2)
+    actual = observable_target(incomplete, dates[-1], 3, calendar=calendar)
+    assert pd.isna(actual.loc[actual.date == dates[0], "ret_fwd_3d"]).all()
+    assert actual.loc[actual.date == dates[0], "label_end_3d"].iloc[0] == dates[4]
+    # An unaffected later window still uses the intended exchange dates.
+    assert actual.loc[actual.date == dates[3], "ret_fwd_3d"].iloc[0] == pytest.approx(17. / 14. - 1)
+
+
+def test_stored_labels_preserve_calendar_gaps_and_all_horizons(tmp_path):
+    from quant_platform.labels.builder import build_labels, DEFAULT_HORIZONS
+    from quant_platform.store.parquet_store import write_ohlcv, write_parquet
+    from quant_platform.store.lake import ohlcv_path
+    dates = [d.date() for d in pd.bdate_range("2026-06-01", periods=30)]
+    calendar = pd.DataFrame({"date": dates, "is_trading": True})
+    write_parquet(calendar, tmp_path / "calendar/trading_calendar.parquet")
+    values = np.arange(10., 40.)
+    prices = pd.DataFrame({"symbol": "000001", "date": dates, "close": values,
+                           "open": values, "high": values + 1, "low": values - 1, "volume": 100.})
+    write_ohlcv(prices.drop(index=2), ohlcv_path(tmp_path, "000001"), "000001")
+    result = build_labels(tmp_path, ["000001"], horizons=DEFAULT_HORIZONS)
+    assert result["000001"] == 30
+    stored = pd.read_parquet(tmp_path / "labels/forward_returns/000001.parquet")
+    stored["date"] = pd.to_datetime(stored.date).dt.date
+    assert pd.isna(stored.loc[stored.date == dates[0], "ret_fwd_3d"]).all()
+    assert set(f"ret_fwd_{h}d" for h in DEFAULT_HORIZONS).issubset(stored.columns)
+
+
 def test_selection_uses_rrf_over_full_pool_gate_closed():
     """2026-10-14 裁决：分数 Gate 已关闭。select_rrf 对全量候选做 RRF 排序，
     不再按 gate_tier 过滤（RISK_VETO 也参与排名）。"""

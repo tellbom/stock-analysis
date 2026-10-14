@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 import sys
 
@@ -8,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from quant_platform.selection.ranker import TECH_SECTOR_INDUSTRIES
 
-OUT = ROOT / "outputs/01a116ce-1f0c-7d41-8967-adcca880c1b8/2026-10-14_统一基线_D3_D5"
+OUT = Path(os.environ.get("STOCK_WEEKLY_OUTPUT_DIR", ROOT / "outputs/01a116ce-1f0c-7d41-8967-adcca880c1b8/2026-10-14_复权修复_D3_D5"))
 CORE = OUT / "comparison"
 summary = json.loads((CORE / "training_summary.json").read_text(encoding="utf-8"))
 picks = pd.read_csv(CORE / "all_picks.csv", dtype={"symbol": str})
@@ -23,6 +24,9 @@ for h in (3, 5):
     rows = []
     for symbol in union:
         a = attributes.loc[symbol]
+        prices = pd.read_parquet(ROOT / f"models/data/silver/ohlcv/{symbol}.parquet").sort_values("date")
+        prices = prices[pd.to_datetime(prices.date).dt.strftime("%Y-%m-%d") <= summary["as_of"]]
+        close = prices.close
         ranks = {key: int(frame.loc[symbol, "recommendation_rank"]) if symbol in frame.index else None for key, frame in arms.items()}
         in_equal = [name for key, name in (("ordinary", "普通"), ("hybrid_no_flow", "无流"), ("hybrid_flow", "有流")) if ranks[key] is not None and ranks[key] <= summary["horizons"][str(h)]["equal_count_n"]]
         rows.append({"symbol": symbol, "name": a["name"], "industry_name": a.industry_name,
@@ -31,7 +35,9 @@ for h in (3, 5):
                      "base_score": base.loc[symbol, "base_score"], "base_rank": int(base.loc[symbol, "base_rank"]),
                      "recent_rank": int(recent.loc[symbol, "recent_rank"]),
                      "fusion_score": 1/(60+base.loc[symbol, "base_rank"])+1/(60+recent.loc[symbol, "recent_rank"]),
-                     "equal_membership": "/".join(in_equal), "is_tech": a.industry_name in TECH_SECTOR_INDUSTRIES})
+                     "equal_membership": "/".join(in_equal), "is_tech": a.industry_name in TECH_SECTOR_INDUSTRIES,
+                     "return_10d": close.iloc[-1]/close.iloc[-11]-1,
+                     "drawdown_20d": close.iloc[-1]/close.tail(20).max()-1})
     unions[str(h)] = rows
 
 diagnostic = picks[picks.is_diagnostic].fillna("").to_dict("records")

@@ -44,7 +44,8 @@ from quant_platform.store.parquet_store import read_ohlcv
 BASE_MODEL_CHOICES = ("ridge32", "lgbm-long")
 
 
-def observable_target(prices: pd.DataFrame, as_of: dt.date, horizon: int) -> pd.DataFrame:
+def observable_target(prices: pd.DataFrame, as_of: dt.date, horizon: int,
+                      calendar: pd.DataFrame | None = None) -> pd.DataFrame:
     """Use the project's T+1 close convention, excluding prices after as_of."""
     if horizon not in (3, 5):
         raise ValueError("Only the requested raw D+3/D+5 targets are supported")
@@ -53,9 +54,28 @@ def observable_target(prices: pd.DataFrame, as_of: dt.date, horizon: int) -> pd.
     frame = frame[frame["date"] <= as_of].sort_values(["symbol", "date"])
     if frame.duplicated(["symbol", "date"]).any():
         raise ValueError("Duplicate price dates")
-    groups = frame.groupby("symbol", sort=False)
-    frame[f"ret_fwd_{horizon}d"] = groups["close"].shift(-(horizon + 1)) / groups["close"].shift(-1) - 1
-    frame[f"label_end_{horizon}d"] = groups["date"].shift(-(horizon + 1))
+    if frame.empty:
+        frame[f"ret_fwd_{horizon}d"] = np.nan
+        frame[f"label_end_{horizon}d"] = None
+        return frame.drop(columns="close")
+    if calendar is None:
+        dates = sorted(frame.date.unique())
+    else:
+        dates = sorted(pd.to_datetime(calendar.loc[calendar.is_trading, "date"]).dt.date.unique())
+        dates = [d for d in dates if frame.date.min() <= d <= as_of]
+        if not set(frame.date).issubset(dates):
+            raise ValueError("Prices contain dates outside the trading calendar")
+    closes = frame.pivot(index="date", columns="symbol", values="close").reindex(dates)
+    values = closes.shift(-(horizon + 1)) / closes.shift(-1) - 1
+    complete = closes.notna() & (closes > 0)
+    for offset in range(1, horizon + 2):
+        complete &= closes.shift(-offset).notna() & (closes.shift(-offset) > 0)
+    values = values.where(complete)
+    rows = pd.Index(dates).get_indexer(frame.date)
+    cols = closes.columns.get_indexer(frame.symbol)
+    frame[f"ret_fwd_{horizon}d"] = values.to_numpy()[rows, cols]
+    end_map = pd.Series(dates, index=dates).shift(-(horizon + 1))
+    frame[f"label_end_{horizon}d"] = frame.date.map(end_map)
     return frame.drop(columns="close")
 
 

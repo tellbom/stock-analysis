@@ -2,6 +2,7 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import datetime as dt
 import json
+import os
 from pathlib import Path
 import shutil
 import sys
@@ -19,7 +20,7 @@ from quant_platform.store.parquet_store import read_ohlcv, write_ohlcv
 
 TARGET = dt.date(2026, 10, 14)
 STORE = ROOT / "models/data"
-OUT = ROOT / "temp/snapshot_20261014"
+OUT = Path(os.environ.get("STOCK_AUDIT_SNAPSHOT_DIR", ROOT / "temp/snapshot_20261014"))
 OUT.mkdir(parents=True, exist_ok=True)
 symbols = pd.read_parquet(STORE / "universe/csi300/membership.parquet").symbol.astype(str).str.zfill(6).tolist()
 local = threading.local()
@@ -60,8 +61,9 @@ def ohlcv(symbol):
         )
         if not result.success:
             return {"symbol": symbol, "status": "failed", "error": result.error[:180]}
-        return {"symbol": symbol, "status": "updated", "latest": str(result.last_date),
+        return {"symbol": symbol, "status": "updated" if result.last_date == TARGET else "stale", "latest": str(result.last_date),
                 "adjustment_history_refreshed": result.error.startswith("scale_refreshed"),
+                "refresh_result": result.error,
                 "rows": result.rows_total,
                 "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"}
     except Exception as exc:

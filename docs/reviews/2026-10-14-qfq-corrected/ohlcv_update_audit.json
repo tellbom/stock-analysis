@@ -1,0 +1,2705 @@
+{
+  "target": "2026-10-14",
+  "records": [
+    {
+      "symbol": "000001",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:901",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000002",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000166",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000157",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000301",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000333",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:839",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000338",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000408",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:852",
+      "rows": 908,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000063",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000425",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:841",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000538",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:901",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000100",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000568",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000596",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000625",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000617",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:836",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000630",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000651",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000657",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:592",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000708",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000768",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:836",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000776",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000725",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000792",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000807",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000858",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000895",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000938",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000963",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000975",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000977",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "001280",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:140",
+      "rows": 207,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000999",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "000988",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "001391",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:354",
+      "rows": 431,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "001965",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "001979",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002027",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002001",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002049",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:831",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002028",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:846",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002050",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:905",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002074",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002142",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002179",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002230",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002236",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002202",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002241",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002311",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002304",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:841",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002352",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002353",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:852",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002371",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:841",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002384",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002415",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002460",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002463",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002422",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002466",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002475",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:845",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002493",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002532",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002594",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002558",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:901",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002600",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:118",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002602",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:829",
+      "rows": 911,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002625",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:494",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002648",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002736",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002709",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002714",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002837",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002916",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002920",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "002938",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "003816",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300014",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:857",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300015",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300059",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300122",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300033",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:901",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300274",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:901",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300124",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300251",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300308",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300316",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:905",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300394",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:826",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300413",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300408",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300418",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300442",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:844",
+      "rows": 907,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300476",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300450",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:836",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300433",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:846",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300498",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:836",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300502",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300661",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300628",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:901",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300750",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300760",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300803",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:896",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300896",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300832",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300866",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:905",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "300999",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "301236",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "301165",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600000",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "301308",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "301269",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "302132",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600009",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600010",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600015",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600016",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600011",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:841",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600023",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600018",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600025",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:836",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600019",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600026",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600027",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:826",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600030",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600028",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:905",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600029",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600036",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600031",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600039",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600048",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:841",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600050",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:836",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600061",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:841",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600085",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:841",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600066",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 912,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600089",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:846",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600104",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600115",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600118",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:31",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600111",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600150",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:836",
+      "rows": 899,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600183",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600176",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600160",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:896",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600219",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600188",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:905",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600196",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600221",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600233",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600276",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600362",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600346",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600372",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 906,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600406",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:905",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600309",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600415",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600436",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600460",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600426",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600438",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600482",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:840",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600515",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600489",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600519",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:839",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600522",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600547",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600549",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:901",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600584",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:896",
+      "rows": 908,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600570",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600585",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:905",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600600",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600588",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600690",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600674",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600741",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600760",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600795",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600660",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:901",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600809",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600803",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:840",
+      "rows": 907,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600886",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600887",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600845",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600875",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600893",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:836",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600905",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600900",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600919",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600918",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600926",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:901",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600930",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:229",
+      "rows": 301,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600938",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600941",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:905",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600999",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600989",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "600958",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:840",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601009",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601012",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601018",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:847",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601006",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601021",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:901",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601058",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601059",
+      "status": "stale",
+      "latest": "2026-09-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:812",
+      "rows": 861,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601077",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601066",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601100",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601088",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:840",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601111",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601136",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601127",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601138",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601117",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601166",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601186",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601169",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601211",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:817",
+      "rows": 894,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601225",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:839",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601229",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601238",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601318",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601288",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601319",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601328",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601336",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601377",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601390",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:908",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601360",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:901",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601456",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:840",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601398",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601600",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601607",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601601",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601618",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601633",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601628",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:846",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601658",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601668",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601669",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601689",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601698",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:261",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601727",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:112",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601688",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601788",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601766",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601800",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601816",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601728",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601818",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601825",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:901",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601838",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601868",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:846",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601877",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:905",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601857",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601872",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601881",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601878",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601898",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601888",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601901",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601899",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601916",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:830",
+      "rows": 907,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601985",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601939",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601995",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:830",
+      "rows": 887,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601919",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:836",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601988",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "603019",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "601998",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "603259",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "603288",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "603296",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 769,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "603260",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "603392",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "603501",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "603799",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "603893",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "603986",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "603369",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "history_refreshed",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "605117",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "605499",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:901",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "603993",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:799",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688008",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688036",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688012",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 904,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688041",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:789",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688009",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688047",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688072",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688111",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:841",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688082",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688126",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688183",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688223",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688303",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688256",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688271",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:850",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688396",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:779",
+      "rows": 913,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688521",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 903,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688506",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 910,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688981",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": false,
+      "refresh_result": "scale_ok",
+      "rows": 907,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    },
+    {
+      "symbol": "688472",
+      "status": "updated",
+      "latest": "2026-10-14",
+      "adjustment_history_refreshed": true,
+      "refresh_result": "scale_refreshed:746",
+      "rows": 809,
+      "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"
+    }
+  ]
+}

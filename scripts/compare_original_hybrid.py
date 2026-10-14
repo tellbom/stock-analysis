@@ -173,9 +173,11 @@ def run(
         for s in symbols
     ], ignore_index=True)
     prices["symbol"] = prices.symbol.astype(str).str.zfill(6)
+    calendar = pd.read_parquet(STORE / "calendar/trading_calendar.parquet")
+    calendar["date"] = pd.to_datetime(calendar.date).dt.date
     for h in horizons:
         panel = panel.drop(columns=[f"ret_fwd_{h}d"], errors="ignore").merge(
-            observable_target(prices, as_of, h), on=["symbol", "date"], how="left", validate="one_to_one",
+            observable_target(prices, as_of, h, calendar=calendar), on=["symbol", "date"], how="left", validate="one_to_one",
         )
     panel = panel.sort_values(["symbol", "date"]).reset_index(drop=True)
     flow = load_flow_panel(STORE, symbols)
@@ -211,6 +213,8 @@ def run(
         "baseline_strategy_id": "ridge32_weekly_baseline",
         "recent_algorithm": "LightGBM", "recent_params": {**RECENT_PARAMS, "n_jobs": n_jobs},
         "rrf_k": 60, "recent_window_dates": 120,
+        "data_contract_version": "qfq-full-history-calendar-v1",
+        "label_date_basis": "exchange_calendar_complete_forward_window",
         "selection": {
             "top_k_per_industry": 3, "max_total": 50,
             "sector_cap_tech": sector_cap_tech,

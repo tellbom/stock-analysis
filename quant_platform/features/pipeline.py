@@ -84,20 +84,20 @@ logger = get_logger(__name__)
 
 def ohlcv_fingerprint(df: pd.DataFrame) -> str:
     """
-    Fingerprint of OHLCV data: SHA256 over (symbol, date, close, volume).
+    Fingerprint all inputs consumed by technical indicators, including high/low.
 
     Any price revision (including a QFQ scale change) alters this hash,
     which invalidates dependent feature/label caches.
     """
     if df.empty:
         return "empty"
-    cols = [c for c in ("symbol", "date", "close", "volume") if c in df.columns]
+    cols = [c for c in ("symbol", "date", "open", "high", "low", "close", "volume") if c in df.columns]
     sub = df[cols].copy()
     sub["date"] = pd.to_datetime(sub["date"]).dt.strftime("%Y-%m-%d")
     sub = sub.sort_values(["symbol", "date"]).reset_index(drop=True)
     h = hashlib.sha256()
-    h.update(sub.to_csv(index=False).encode("utf-8"))
-    return h.hexdigest()[:16]
+    h.update(sub.to_csv(index=False, lineterminator="\n").encode("utf-8"))
+    return h.hexdigest()
 
 
 def _feature_provenance_path(store_root: Path | str, feature_set_id: str, symbol: str) -> Path:
@@ -120,6 +120,7 @@ def record_feature_provenance(
             json.dumps({
                 "ohlcv_fingerprint": ohlcv_fingerprint(ohlcv_df),
                 "ohlcv_rows": len(ohlcv_df),
+                "ohlcv_min_date": str(pd.to_datetime(ohlcv_df["date"]).dt.date.min()),
                 "ohlcv_max_date": str(pd.to_datetime(ohlcv_df["date"]).dt.date.max()),
                 "built_at": dt.datetime.now().isoformat(timespec="seconds"),
                 "feature_set_id": feature_set_id,
@@ -152,11 +153,17 @@ def verify_feature_freshness(
             stale.append(symbol)
             continue
         try:
-            recorded = json.loads(sidecar.read_text(encoding="utf-8"))["ohlcv_fingerprint"]
+            provenance = json.loads(sidecar.read_text(encoding="utf-8"))
+            recorded = provenance["ohlcv_fingerprint"]
         except Exception:
             stale.append(symbol)
             continue
-        current = ohlcv_fingerprint(read_ohlcv(ohlcv_path(store_root, symbol)))
+        source = read_ohlcv(ohlcv_path(store_root, symbol))
+        if "ohlcv_min_date" in provenance:
+            source = source[source.date >= dt.date.fromisoformat(provenance["ohlcv_min_date"])]
+        if "ohlcv_max_date" in provenance:
+            source = source[source.date <= dt.date.fromisoformat(provenance["ohlcv_max_date"])]
+        current = ohlcv_fingerprint(source)
         if current != recorded:
             stale.append(symbol)
     return stale
@@ -301,7 +308,7 @@ class FeaturePipeline:
         # P0(300803): snapshot the source OHLCV for provenance tracking.
         # Features are derived from these prices; any later revision must
         # invalidate this cache.
-        ohlcv_snapshot = df[["symbol", "date", "close", "volume"]].copy()
+        ohlcv_snapshot = df[["symbol", "date", "open", "high", "low", "close", "volume"]].copy()
 
         # 2. Technical features
         df = build_technical_features(df, self.project_root)

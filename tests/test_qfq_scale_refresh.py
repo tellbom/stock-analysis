@@ -190,6 +190,57 @@ def test_verify_feature_freshness_flags_stale_symbol():
     print("  [OK] verify_feature_freshness flags revised-OHLCV symbols as stale")
 
 
+def test_full_refresh_adds_missing_dates_even_when_prices_match(tmp_path):
+    from quant_platform.ingest.ohlcv_collector import refresh_symbol_full_history
+    from quant_platform.store.parquet_store import read_ohlcv, write_ohlcv
+    from quant_platform.store.lake import ohlcv_path
+    new = _load_fixture("300803_fresh_sina_qfq_full.csv")
+    old = new.drop(index=range(200, 205)).reset_index(drop=True)
+    path = ohlcv_path(tmp_path, "300803")
+    write_ohlcv(old, path, "300803")
+    with patch("quant_platform.ingest.ohlcv_collector._fetch_symbol_raw", return_value=new):
+        result = refresh_symbol_full_history("300803", tmp_path, dt.date(2023, 1, 1), dt.date(2026, 10, 14))
+    assert result.success and result.error == "history_refreshed"
+    assert len(read_ohlcv(path)) == len(new)
+
+
+def test_full_refresh_rejects_missing_interior_or_required_columns(tmp_path):
+    from quant_platform.ingest.ohlcv_collector import refresh_symbol_full_history
+    from quant_platform.store.parquet_store import write_ohlcv
+    from quant_platform.store.lake import ohlcv_path
+    new = _load_fixture("300803_fresh_sina_qfq_full.csv")
+    path = ohlcv_path(tmp_path, "300803")
+    write_ohlcv(new, path, "300803")
+    original_bytes = path.read_bytes()
+    for invalid in (new.drop(index=200), new.drop(columns="volume")):
+        with patch("quant_platform.ingest.ohlcv_collector._fetch_symbol_raw", return_value=invalid):
+            result = refresh_symbol_full_history("300803", tmp_path, dt.date(2023, 1, 1), dt.date(2026, 10, 14))
+        assert not result.success and path.read_bytes() == original_bytes
+
+
+def test_automatic_new_tail_verifies_full_history_within_interval(tmp_path):
+    from quant_platform.ingest.ohlcv_collector import collect_symbol, _record_deep_verify
+    from quant_platform.store.parquet_store import write_ohlcv
+    from quant_platform.store.lake import ohlcv_path
+    old = _load_fixture("300803_old_ohlcv.csv").iloc[:-1].copy()
+    new = _load_fixture("300803_fresh_sina_qfq_full.csv")
+    write_ohlcv(old, ohlcv_path(tmp_path, "300803"), "300803")
+    _record_deep_verify(tmp_path, "300803")
+    with patch("quant_platform.ingest.ohlcv_collector._fetch_symbol_raw", return_value=new) as fetch:
+        result = collect_symbol("300803", tmp_path, dt.date(2023, 1, 1), dt.date(2026, 10, 14))
+    assert result.success and result.error.startswith("scale_refreshed")
+    assert fetch.call_count == 1
+    assert fetch.call_args.args[1] <= "20230104"
+
+
+def test_ohlcv_fingerprint_detects_high_low_revision():
+    from quant_platform.features.pipeline import ohlcv_fingerprint
+    original = _load_fixture("300803_old_ohlcv.csv")
+    changed = original.copy()
+    changed.loc[10, "high"] += 1
+    assert ohlcv_fingerprint(original) != ohlcv_fingerprint(changed)
+
+
 if __name__ == "__main__":
     print("\n=== P0 QFQ scale-refresh regression tests (offline fixtures) ===\n")
     tests = [

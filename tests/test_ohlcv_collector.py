@@ -118,7 +118,7 @@ def test_collect_symbol_incremental_append():
         with _patch_fetch(symbol, batch2):
             r2 = collect_symbol(symbol, tmp,
                                 start_date=dt.date(2024, 1, 1),
-                                end_date=dt.date(2024, 2, 28))
+                                end_date=dt.date(2024, 2, 28), deep_verify=False)
         assert r2.rows_new == 5
 
         # Should have 15 total, no duplicates
@@ -150,7 +150,7 @@ def test_collect_symbol_skips_when_up_to_date():
         with _patch_fetch_none():   # would fail if called
             result = collect_symbol(symbol, tmp,
                                     start_date=dt.date(2024, 1, 1),
-                                    end_date=stored_max)
+                                    end_date=stored_max, deep_verify=False)
 
         assert result.success
         assert result.rows_new == 0

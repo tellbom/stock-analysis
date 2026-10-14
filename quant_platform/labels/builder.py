@@ -79,6 +79,22 @@ logger = get_logger(__name__)
 # P4A-04: 3d/10d added; 5d is the primary evaluation horizon.
 DEFAULT_HORIZONS: list[int] = [1, 3, 5, 10, 20]
 
+
+def _align_to_calendar(df: pd.DataFrame, store_root: Path) -> pd.DataFrame:
+    """Keep missing exchange sessions as NaN instead of shifting by price rows."""
+    path = store_root / "calendar/trading_calendar.parquet"
+    if df.empty or not path.exists():
+        return df
+    cal = pd.read_parquet(path)
+    dates = pd.to_datetime(cal.loc[cal.is_trading, "date"]).dt.date
+    dates = sorted(d for d in dates.unique() if df.date.min() <= d <= df.date.max())
+    if not set(df.date).issubset(dates):
+        raise ValueError("Stored prices contain dates outside the trading calendar")
+    symbol = df.symbol.iloc[0]
+    aligned = df.set_index("date").reindex(dates).rename_axis("date").reset_index()
+    aligned["symbol"] = symbol
+    return aligned
+
 # Primary label used throughout the platform (shortest horizon with reasonable
 # signal decay and high independent-period count per year).
 PRIMARY_LABEL_HORIZON: int = 5
@@ -201,6 +217,7 @@ def _append_symbol_horizon_labels(
 
     df["date"] = pd.to_datetime(df["date"]).dt.date
     df = df.sort_values("date").reset_index(drop=True)
+    df = _align_to_calendar(df, store_root)
     close = df["close"].values
     n = len(df)
 
@@ -252,6 +269,9 @@ def _compute_horizon_columns(close: np.ndarray, n: int, h: int) -> dict[str, np.
         t1ph = i + 1 + h
         if t1 >= n or t1ph >= n:
             continue  # not enough future data → NaN
+        window_complete = close[i:t1ph + 1]
+        if not np.isfinite(window_complete).all() or (window_complete <= 0).any():
+            continue
         # Forward return: close(T+1+h) / close(T+1) - 1
         c_t1   = close[t1]
         c_t1ph = close[t1ph]
@@ -286,6 +306,8 @@ def _build_symbol_labels(
 
     df["date"]  = pd.to_datetime(df["date"]).dt.date
     df          = df.sort_values("date").reset_index(drop=True)
+    source_df = df.copy()
+    df = _align_to_calendar(df, store_root)
     close       = df["close"].values
     n           = len(df)
 
@@ -313,7 +335,8 @@ def _build_symbol_labels(
     out_path = label_path(store_root, "forward_returns", symbol)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     if overwrite or not out_path.exists():
-        out.to_parquet(out_path, index=False)
+        from quant_platform.store.parquet_store import write_parquet
+        write_parquet(out, out_path)
         # P0(300803): record which OHLCV snapshot these labels came from.
         from quant_platform.features.pipeline import (
             ohlcv_fingerprint, _feature_provenance_path,
@@ -323,8 +346,9 @@ def _build_symbol_labels(
         try:
             sidecar.write_text(
                 json.dumps({
-                    "ohlcv_fingerprint": ohlcv_fingerprint(df),
-                    "ohlcv_rows": len(df),
+                    "ohlcv_fingerprint": ohlcv_fingerprint(source_df),
+                    "ohlcv_rows": len(source_df),
+                    "label_date_basis": "exchange_calendar_complete_forward_window",
                     "built_at": dt.datetime.now().isoformat(timespec="seconds"),
                 }, ensure_ascii=False),
                 encoding="utf-8",

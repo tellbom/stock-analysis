@@ -3,6 +3,7 @@ from pathlib import Path
 import datetime as dt
 import hashlib
 import json
+import os
 import sys
 
 import joblib
@@ -21,7 +22,7 @@ from scripts.compare_original_hybrid import FLOW_FEATURES, fingerprint, select
 
 ASOF = dt.date(2026, 10, 14)
 STORE = ROOT / 'models/data'
-OUT = ROOT / 'outputs/01a116ce-1f0c-7d41-8967-adcca880c1b8/2026-10-14_统一基线_D3_D5'
+OUT = Path(os.environ.get('STOCK_WEEKLY_OUTPUT_DIR', ROOT / 'outputs/01a116ce-1f0c-7d41-8967-adcca880c1b8/2026-10-14_统一基线_D3_D5'))
 BATCH = OUT / 'comparison'
 summary = json.loads((BATCH / 'training_summary.json').read_text(encoding='utf-8'))
 manifest = json.loads((OUT / 'model_manifest.json').read_text(encoding='utf-8'))

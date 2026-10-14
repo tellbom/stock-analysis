@@ -72,7 +72,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--force",
         action="store_true",
-        help="强制重拉：即使已是最新也重拉最近 10 天并覆盖（修正被修订的 bar）。",
+        help="强制重拉并全历史核验：即使已是最新也刷新完整复权序列。",
     )
     parser.add_argument(
         "--deep-verify",
@@ -124,7 +124,7 @@ def main(argv: list[str] | None = None) -> int:
     already_ok = [s for s in symbols if (_max_date_or_none(store_root, s) or dt.date.min) >= target]
     print(f"Already up to date: {len(already_ok)}/{len(symbols)}")
     if args.force:
-        print("Force mode: already-up-to-date symbols will be re-fetched (10-day overlap).")
+        print("Force mode: already-up-to-date symbols will be verified/refreshed from complete history.")
     if args.deep_verify:
         print("Deep-verify mode: full-history QFQ scale check per symbol (300803 defect).")
     print()

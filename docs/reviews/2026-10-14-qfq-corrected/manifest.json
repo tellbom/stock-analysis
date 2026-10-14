@@ -1,0 +1,27 @@
+{
+  "files": {
+    ".gitattributes": "60ddf44a61d906da2df843f113ee49c6e8980b6cf1d9d1e1483ce362b0622b73",
+    "all_picks.csv": "5ab5d66c7f22b7f7cc4eec8baa2cb9ba0b9f17f2e03ad8666594cada490667b9",
+    "D3_original_scores.csv": "a21e53ab7bc2e9adc2c9e3e51e2c9e79d63b2847241d1681c85dbe534da7ee6b",
+    "D3_recent_flow_importance.csv": "6c99db95993941b1ac550233c42619ff66b0153864a4ff7a0b10c841d81ab84b",
+    "D3_recent_flow_scores.csv": "1fabfbe9ac25fea543e7f5811b253b32be54b2bf2234654da7e4ab43d0fe9e1e",
+    "D3_recent_no_flow_scores.csv": "17968520a6babc805b9aead4467a6b14d03631980c87522974c892dc433e5468",
+    "D5_original_scores.csv": "782aff7947af7493cb8a6cba05a35d69885dc423e8263d128f6fd71de0243436",
+    "D5_recent_flow_importance.csv": "d94c06d770373cbeaf61f560c2ce2e25d7b02e344238ae3d73d5f622fea1e7c7",
+    "D5_recent_flow_scores.csv": "dd229c71ba4d69aba1c564c4d4bc48019bcc83a6f461794370c2a166b6d43e8c",
+    "D5_recent_no_flow_scores.csv": "67d4733e66a0ee1e50e00b06fcec7ffd38e21546f387de7eef41fc42e5de5a73",
+    "data_coverage.csv": "0d55dfd0b10b71de94e2fe7136463e27a6a2ebac667766cac1901cb13efce51a",
+    "data_snapshot_manifest.json": "1d8f0cdfeb6b7c1d14c8696932f7c99b79f97dd2e6a19f28be307be71cdf7f3d",
+    "feature_label_rebuild.json": "fb21bdd4e967a3c1b6e3186b7cf0ec5373be39f26d8645908bf0852ffb74f9f7",
+    "historical_date_gaps.json": "63d93e75c1c8bdc3144bb2fb576996c42138d5d5a5510c2c16a2912b3884b750",
+    "model_manifest.json": "ae97e720737bd397f9a003e4f0e7b26af3fcfab1ad0538ffc6b0a7341d9eb792",
+    "model_replay_audit.json": "b39b9c966f0cb18d95b256e18c345683d005c473490fb8d022089bcf069c7de5",
+    "ohlcv_update_audit.json": "7fdd5fabc94f68b4161fb4cc56814c78b74f974b6ef0f8dba32ac6006296bd7b",
+    "paired_coverage.csv": "6185d04e81e0389ce1a21f6b3bb3c6a9206ee9ab7b1416c35bec4905768c502f",
+    "prediction_attributes.csv": "ad7c19e11c9aadd38da1e8e0e0d6a47f1ee81672ac196f520a96a83fd4efb081",
+    "selection_changes.json": "3b236c4d0bedec0eb9ad970d6a395f5f6975e5115a551aca2c76968b2baa02d0",
+    "status.json": "edf9b7e221bc013080689c00a696a9c03d91579aa89d6f7e8086ab6038fa0041",
+    "training_summary.json": "9f973d86e6bdf37a763ba6b7956d5f17f1b27aebef0d29b8937989838fbefffe"
+  },
+  "scope": "corrected cohort evidence; full data lake and model binaries remain local"
+}

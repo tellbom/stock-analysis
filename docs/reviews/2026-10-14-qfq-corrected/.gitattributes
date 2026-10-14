@@ -1,0 +1,2 @@
+# Keep audit CSV/JSON bytes and hashes identical across Windows/cloud clones.
+* -text

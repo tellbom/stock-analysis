@@ -1,0 +1,2186 @@
+[
+  {
+    "symbol": "000001",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000002",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000063",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000100",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000157",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000166",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000301",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000333",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000338",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000408",
+    "old_rows": 908,
+    "new_rows": 908,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000425",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000538",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000568",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000596",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000617",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000625",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000630",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000651",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000657",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000708",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000725",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000768",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000776",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000792",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000807",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000858",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000895",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000938",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000963",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000975",
+    "old_rows": 908,
+    "new_rows": 913,
+    "restored_dates": [
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26"
+    ],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000977",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000988",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "000999",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "001280",
+    "old_rows": 207,
+    "new_rows": 207,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "001391",
+    "old_rows": 426,
+    "new_rows": 431,
+    "restored_dates": [
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26"
+    ],
+    "lost_dates": []
+  },
+  {
+    "symbol": "001965",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "001979",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002001",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002027",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002028",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002049",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002050",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002074",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002142",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002179",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002202",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002230",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002236",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002241",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002304",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002311",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002352",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002353",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002371",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002384",
+    "old_rows": 908,
+    "new_rows": 913,
+    "restored_dates": [
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26"
+    ],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002415",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002422",
+    "old_rows": 908,
+    "new_rows": 913,
+    "restored_dates": [
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26"
+    ],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002460",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002463",
+    "old_rows": 908,
+    "new_rows": 913,
+    "restored_dates": [
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26"
+    ],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002466",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002475",
+    "old_rows": 908,
+    "new_rows": 913,
+    "restored_dates": [
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26"
+    ],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002493",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002532",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002558",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002594",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002600",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002602",
+    "old_rows": 911,
+    "new_rows": 911,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002625",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002648",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002709",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002714",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002736",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002837",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002916",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002920",
+    "old_rows": 908,
+    "new_rows": 913,
+    "restored_dates": [
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26"
+    ],
+    "lost_dates": []
+  },
+  {
+    "symbol": "002938",
+    "old_rows": 908,
+    "new_rows": 913,
+    "restored_dates": [
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26"
+    ],
+    "lost_dates": []
+  },
+  {
+    "symbol": "003816",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300014",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300015",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300033",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300059",
+    "old_rows": 908,
+    "new_rows": 913,
+    "restored_dates": [
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26"
+    ],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300122",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300124",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300251",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300274",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300308",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300316",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300394",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300408",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300413",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300418",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300433",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300442",
+    "old_rows": 907,
+    "new_rows": 907,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300450",
+    "old_rows": 908,
+    "new_rows": 913,
+    "restored_dates": [
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26"
+    ],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300476",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300498",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300502",
+    "old_rows": 908,
+    "new_rows": 913,
+    "restored_dates": [
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26"
+    ],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300628",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300661",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300750",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300760",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300803",
+    "old_rows": 908,
+    "new_rows": 913,
+    "restored_dates": [
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26"
+    ],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300832",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300866",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300896",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "300999",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "301165",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "301236",
+    "old_rows": 908,
+    "new_rows": 913,
+    "restored_dates": [
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26"
+    ],
+    "lost_dates": []
+  },
+  {
+    "symbol": "301269",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "301308",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "302132",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600000",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600009",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600010",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600011",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600015",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600016",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600018",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600019",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600023",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600025",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600026",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600027",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600028",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600029",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600030",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600031",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600036",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600039",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600048",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600050",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600061",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600066",
+    "old_rows": 912,
+    "new_rows": 912,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600085",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600089",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600104",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600111",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600115",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600118",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600150",
+    "old_rows": 899,
+    "new_rows": 899,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600160",
+    "old_rows": 908,
+    "new_rows": 913,
+    "restored_dates": [
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26"
+    ],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600176",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600183",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600188",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600196",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600219",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600221",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600233",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600276",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600309",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600346",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600362",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600372",
+    "old_rows": 906,
+    "new_rows": 906,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600406",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600415",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600426",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600436",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600438",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600460",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600482",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600489",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600515",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600519",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600522",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600547",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600549",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600570",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600584",
+    "old_rows": 908,
+    "new_rows": 908,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600585",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600588",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600600",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600660",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600674",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600690",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600741",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600760",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600795",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600803",
+    "old_rows": 907,
+    "new_rows": 907,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600809",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600845",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600875",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600886",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600887",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600893",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600900",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600905",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600918",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600919",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600926",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600930",
+    "old_rows": 301,
+    "new_rows": 301,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600938",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600941",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600958",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600989",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "600999",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601006",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601009",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601012",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601018",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601021",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601058",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601059",
+    "old_rows": 861,
+    "new_rows": 861,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601066",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601077",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601088",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601100",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601111",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601117",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601127",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601136",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601138",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601166",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601169",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601186",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601211",
+    "old_rows": 894,
+    "new_rows": 894,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601225",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601229",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601238",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601288",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601318",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601319",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601328",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601336",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601360",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601377",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601390",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601398",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601456",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601600",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601601",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601607",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601618",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601628",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601633",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601658",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601668",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601669",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601688",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601689",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601698",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601727",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601728",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601766",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601788",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601800",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601816",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601818",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601825",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601838",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601857",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601868",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601872",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601877",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601878",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601881",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601888",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601898",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601899",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601901",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601916",
+    "old_rows": 907,
+    "new_rows": 907,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601919",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601939",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601985",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601988",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601995",
+    "old_rows": 887,
+    "new_rows": 887,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "601998",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "603019",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "603259",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "603260",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "603288",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "603296",
+    "old_rows": 769,
+    "new_rows": 769,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "603369",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "603392",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "603501",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "603799",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "603893",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "603986",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "603993",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "605117",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "605499",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688008",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688009",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688012",
+    "old_rows": 904,
+    "new_rows": 904,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688036",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688041",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688047",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688072",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688082",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688111",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688126",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688183",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688223",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688256",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688271",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688303",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688396",
+    "old_rows": 913,
+    "new_rows": 913,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688472",
+    "old_rows": 809,
+    "new_rows": 809,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688506",
+    "old_rows": 910,
+    "new_rows": 910,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688521",
+    "old_rows": 903,
+    "new_rows": 903,
+    "restored_dates": [],
+    "lost_dates": []
+  },
+  {
+    "symbol": "688981",
+    "old_rows": 907,
+    "new_rows": 907,
+    "restored_dates": [],
+    "lost_dates": []
+  }
+]

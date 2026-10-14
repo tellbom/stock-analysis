@@ -22,10 +22,9 @@ Design
 
 Incremental update
 ------------------
-If a Parquet file already exists for a symbol, the collector reads its latest
-date and fetches only the tail (start = last_date + 1 day).  New rows are
-appended and the file is overwritten atomically.  This is the generalisation
-of the diff logic in ``update_stock_report.py``.
+With stored QFQ history, updates verify and replace a complete same-source
+series before appending any new dates. An explicit deep_verify=False is a
+legacy/audit opt-out; automatic updates verify whenever new bars are needed.
 
 The full-universe catalog (T0.6) sits on top of this module; this module only
 handles the per-symbol fetch-and-store logic.
@@ -85,7 +84,9 @@ def verify_qfq_scale(
     (consistent, mismatched_dates, max_abs_diff)
         consistent: True if all overlapping closes agree within tol.
     """
-    if existing.empty or fresh.empty:
+    if fresh.empty:
+        return False, [], float("inf")
+    if existing.empty:
         return True, [], 0.0
     old = existing[["date", "close"]].copy()
     new = fresh[["date", "close"]].copy()
@@ -93,7 +94,7 @@ def verify_qfq_scale(
     new["date"] = pd.to_datetime(new["date"]).dt.date
     joined = old.merge(new, on="date", suffixes=("_old", "_new"), how="inner")
     if joined.empty:
-        return True, [], 0.0
+        return False, [], float("inf")
     diff = (joined["close_old"] - joined["close_new"]).abs()
     bad = joined.loc[diff > tol, "date"]
     return (
@@ -148,7 +149,18 @@ def refresh_symbol_full_history(
         )
 
     new_df = new_df.copy()
-    new_df["date"] = pd.to_datetime(new_df["date"]).dt.date
+    required = {"symbol", "date", "open", "high", "low", "close", "volume"}
+    if not required.issubset(new_df.columns):
+        return FetchResult(symbol=symbol, success=False, rows_total=len(existing),
+                           error="Full-history refetch missing required OHLCV columns; old file kept")
+    new_df["date"] = pd.to_datetime(new_df["date"], errors="coerce").dt.date
+    if new_df.date.isna().any() or new_df.date.duplicated().any() or not new_df.symbol.astype(str).str.zfill(6).eq(symbol).all():
+        return FetchResult(symbol=symbol, success=False, rows_total=len(existing),
+                           error="Invalid or duplicate dates/symbols in full history; old file kept")
+    new_df = new_df[new_df.date <= end_date].sort_values("date").reset_index(drop=True)
+    if new_df.empty:
+        return FetchResult(symbol=symbol, success=False, rows_total=len(existing),
+                           error="Full history has no prices through requested end date; old file kept")
 
     # --- Integrity check: coverage + sane bars ---
     # The fresh fetch must cover the entire stored history range (so the
@@ -167,8 +179,13 @@ def refresh_symbol_full_history(
                 error=f"Full-history refetch does not cover stored range "
                       f"[{need_min}, {need_max}] (got [{fresh_min}, {fresh_max}]); old file kept",
             )
-    ohlc_cols = [c for c in ("open", "high", "low", "close") if c in new_df.columns]
-    if new_df[ohlc_cols].isna().any().any() or (new_df[ohlc_cols] <= 0).any().any():
+        missing_dates = set(pd.to_datetime(existing.date).dt.date) - set(new_df.date)
+        if missing_dates:
+            return FetchResult(symbol=symbol, success=False, rows_total=len(existing),
+                               error=f"Full-history refetch missing {len(missing_dates)} stored dates; old file kept")
+    ohlc_cols = ["open", "high", "low", "close"]
+    if (new_df[ohlc_cols + ["volume"]].isna().any().any()
+            or (new_df[ohlc_cols] <= 0).any().any() or (new_df.volume < 0).any()):
         return FetchResult(
             symbol=symbol, success=False,
             rows_total=len(existing),
@@ -177,7 +194,14 @@ def refresh_symbol_full_history(
 
     # --- QFQ scale consistency check over the FULL overlap ---
     consistent, mismatched, max_diff = verify_qfq_scale(existing, new_df)
-    if consistent:
+    if consistent and not existing.empty:
+        compare_cols = ["symbol", "date", "open", "high", "low", "close", "volume"]
+        old = existing[compare_cols].copy().sort_values("date").reset_index(drop=True)
+        old["date"] = pd.to_datetime(old.date).dt.date
+        same_bars = old.equals(new_df[compare_cols])
+    else:
+        same_bars = False
+    if same_bars:
         _record_deep_verify(store_root, symbol)
         return FetchResult(
             symbol=symbol, success=True,
@@ -189,11 +213,11 @@ def refresh_symbol_full_history(
     # Scale differs: replace the whole history with the fresh fetch.
     # The fresh QFQ series is self-consistent; splicing old-scale rows
     # would create an artificial jump (the 300803 defect).
-    logger.warning(
-        "%s: QFQ scale changed (%d mismatched dates, max diff %.2f) — "
-        "replacing full history",
-        symbol, len(mismatched), max_diff,
-    )
+    if not consistent:
+        logger.warning("%s: QFQ scale changed (%d mismatched dates, max diff %.2f) — replacing full history",
+                       symbol, len(mismatched), max_diff)
+    else:
+        logger.info("%s: complete history updated, including new/missing bars", symbol)
     write_ohlcv(new_df, path, symbol)
     _record_deep_verify(store_root, symbol)
 
@@ -202,7 +226,7 @@ def refresh_symbol_full_history(
         symbol=symbol, success=True,
         rows_new=len(new_df), rows_total=rows_total,
         last_date=fresh_max,
-        error=f"scale_refreshed:{len(mismatched)}",
+        error=f"scale_refreshed:{len(mismatched)}" if not consistent else "history_refreshed",
     )
 
 
@@ -377,9 +401,8 @@ def collect_symbol(
     Incremental: if existing data is found, only fetches from
     (last_stored_date + 1) onward and appends.
 
-    force=True bypasses the up-to-date skip and re-fetches a 10-calendar-day
-    overlap window; freshly fetched rows win over stored rows on (symbol,
-    date) conflicts, so revised bars are corrected.
+    force=True bypasses the up-to-date skip and requests full verification.
+    With explicit deep_verify=False only, the legacy 10-day overlap is used.
 
     deep_verify: when True, run a full-history QFQ scale consistency check
     (detects ex-rights/ex-dividend outside any tail window, e.g. 300803).
@@ -398,17 +421,19 @@ def collect_symbol(
     existing_probe = read_ohlcv(path)
     want_deep = False
     if not existing_probe.empty:
-        want_deep = deep_verify if deep_verify is not None else _deep_verify_due(store_root, symbol)
+        want_deep = deep_verify if deep_verify is not None else (
+            force or pd.to_datetime(existing_probe.date).dt.date.max() < end_date
+            or _deep_verify_due(store_root, symbol)
+        )
     if want_deep:
         deep_result = refresh_symbol_full_history(symbol, store_root, start_date, end_date)
         if not deep_result.success:
             # Full-history refetch failed: keep old file, report failure.
             # Do NOT fall through to a tail append that would splice scales.
             return deep_result
-        if deep_result.error.startswith("scale_refreshed"):
-            # History was replaced; nothing more to do this round.
-            return deep_result
-        # Scale OK: fall through to the normal incremental path below.
+        # The verified full fetch also supplies new/missing bars. Never discard
+        # it and issue a second tail fetch on a potentially different scale.
+        return deep_result
 
     # --- Read existing data to determine fetch window ---
     existing = existing_probe
