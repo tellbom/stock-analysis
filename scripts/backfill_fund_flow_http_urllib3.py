@@ -164,6 +164,20 @@ def _load_fund_flow_panel(symbols: list[str]) -> pd.DataFrame:
     return pd.concat(frames, ignore_index=True)
 
 
+def _trading_sessions_since(latest: dt.date, as_of: dt.date) -> int:
+    """Count exchange sessions after the latest data row, ignoring closures."""
+    if latest >= as_of:
+        return 0
+    calendar_path = STORE_ROOT / "calendar/trading_calendar.parquet"
+    if not calendar_path.exists():
+        return (as_of - latest).days
+    calendar = pd.read_parquet(calendar_path, columns=["date", "is_trading"])
+    dates = pd.to_datetime(calendar["date"], errors="coerce").dt.date
+    if dates.empty or dates.min() > latest or dates.max() < as_of:
+        return (as_of - latest).days
+    return int((calendar["is_trading"].fillna(False) & dates.gt(latest) & dates.le(as_of)).sum())
+
+
 def build_coverage_gate(symbols: list[str]) -> tuple[pd.DataFrame, dict]:
     cfg = CoverageGateConfig()
     panel = _load_fund_flow_panel(symbols)
@@ -189,6 +203,7 @@ def build_coverage_gate(symbols: list[str]) -> tuple[pd.DataFrame, dict]:
             "recent_symbol_coverage": 0,
             "recent_20d_avg_symbol_coverage": 0.0,
             "available_trading_days": 0,
+            "latest_lag_sessions": None,
             "field_missing_rate": 1.0,
             "allowed_recent": False,
             "rejection_reason": "no-data",
@@ -203,7 +218,7 @@ def build_coverage_gate(symbols: list[str]) -> tuple[pd.DataFrame, dict]:
     recent_20d_avg = float(daily_coverage.mean()) if not daily_coverage.empty else 0.0
     available_days = int(len(dates))
     as_of = dt.date.today()
-    latest_lag_days = (as_of - latest).days
+    latest_lag_days = _trading_sessions_since(latest, as_of)
 
     reasons: list[str] = []
     if recent_symbol_coverage < cfg.recent_symbol_threshold:
@@ -243,6 +258,7 @@ def build_coverage_gate(symbols: list[str]) -> tuple[pd.DataFrame, dict]:
         "recent_symbol_coverage": recent_symbol_coverage,
         "recent_20d_avg_symbol_coverage": recent_20d_avg,
         "available_trading_days": available_days,
+        "latest_lag_sessions": latest_lag_days,
         "field_missing_rate": field_missing_rate,
         "allowed_recent": allowed_recent,
         "rejection_reason": rejection_reason,
@@ -318,6 +334,7 @@ def write_reports(
         f"- Recent valid-day coverage symbols: {summary['recent_symbol_coverage']}",
         f"- Recent 20 trading-day average coverage symbols: {summary['recent_20d_avg_symbol_coverage']:.2f}",
         f"- available_trading_days: {summary.get('available_trading_days', 0)}",
+        f"- latest_lag_trading_sessions: {summary.get('latest_lag_sessions')}",
         f"- Field missing rate: {summary['field_missing_rate']:.6f}",
         f"- is_allowed_for_recent_model: {'yes' if allowed else 'no'}",
     ]
