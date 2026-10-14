@@ -28,6 +28,32 @@ from quant_platform.selection.strategies import (
     TurnoverAwareStrategy,
 )
 
+# ---------------------------------------------------------------------------
+# 科技板块映射（风控层）
+# ---------------------------------------------------------------------------
+# 依据 2026-10-14 裁决：科技板块 bet 是 D3/D5 主要亏损源（半导体 -5.7%、
+# 数字芯片设计 -7.7% 等），3 只/行业的粒度防不住板块级暴露。
+# 清单来自 docs/reviews/2026-09-30-controlled/all_picks.csv 的实际行业名。
+# 匹配时用 industry_name 精确匹配。
+TECH_SECTOR_INDUSTRIES = frozenset({
+    "半导体",
+    "半导体材料",
+    "半导体设备",
+    "数字芯片设计",
+    "通信设备",
+    "通信应用增值服务",
+    "元件",
+    "电子",
+    "消费电子",
+    "消费电子零部件及组装",
+    "IT服务Ⅲ",
+    "软件开发",
+    "横向通用软件",
+    "垂直应用软件",
+    "其他计算机设备",
+})
+
+
 # Map StrategyType enum values → strategy instances
 _STRATEGY_REGISTRY = {
     StrategyType.EQUAL_TOP_K: EqualTopKStrategy(),
@@ -190,10 +216,56 @@ class IndustryNeutralRanker:
             symbol_col=self.symbol_col,
         )
 
+        # 风控层：科技板块合计上限（2026-10-14 裁决）。
+        # 对所有策略一视同仁，不区分 arm。这是风控不是策略，
+        # 不影响 ordinary 组的对照纯洁性。
+        selected_set, reasons = self._apply_sector_cap(
+            panel, selected_set, reasons,
+        )
+
         df = panel.copy()
         df["selected"] = df[self.symbol_col].isin(selected_set)
         df["selection_reason"] = reasons
         return df
+
+    def _apply_sector_cap(
+        self,
+        panel: pd.DataFrame,
+        selected: set,
+        reasons: pd.Series,
+    ) -> tuple[set, pd.Series]:
+        """
+        科技板块合计上限过滤。
+
+        若选中股票中科技大类（TECH_SECTOR_INDUSTRIES）数量超过
+        config.sector_cap_tech，按分数从低到高剔除超出部分（保留高分）。
+        sector_cap_tech=0 时不启用。
+        """
+        cap = self.config.sector_cap_tech
+        if cap <= 0 or not selected:
+            return selected, reasons
+
+        # 用 name_col（industry_name）匹配科技板块
+        name_col = self.name_col if self.name_col in panel.columns else None
+        if name_col is None:
+            return selected, reasons
+
+        selected_df = panel[panel[self.symbol_col].isin(selected)]
+        is_tech = selected_df[name_col].isin(TECH_SECTOR_INDUSTRIES)
+        tech_df = selected_df[is_tech]
+
+        n_tech = len(tech_df)
+        if n_tech <= cap:
+            return selected, reasons
+
+        # 按分数从低到高剔除超出部分
+        n_drop = n_tech - cap
+        drop_df = tech_df.nsmallest(n_drop, self.score_col)
+        drop_set = set(drop_df[self.symbol_col])
+
+        selected = selected - drop_set
+        reasons.loc[panel[self.symbol_col].isin(drop_set)] = "trimmed_by_sector_cap_tech"
+        return selected, reasons
 
     # ------------------------------------------------------------------
     # monitor()

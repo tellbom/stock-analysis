@@ -200,7 +200,12 @@ def run(as_of: dt.date, out: Path, reference_path: Path | None, n_jobs: int) -> 
             "ordinary": ordinary,
             "hybrid_no_flow": select(no_flow, attributes, "fusion_score_col"),
             "hybrid_flow": select(with_flow, attributes, "fusion_score_col"),
-            "hybrid_flow_score_gate": select(actionable_pool(gated), attributes, "fusion_score_col"),
+            # 2026-10-14 战略裁决：Gate 已关闭。actionable_pool 的 ACTIONABLE_TIERS
+            # 过滤在 D3/D5 两组独立实验中稳定伤害收益（D3 -0.14pp，D5 -0.10pp），
+            # 系统性剔除逆势上涨的防御股（如中信银行+1.32%、交通银行+1.92%、宁波港+1.67%）。
+            # 改为直接对全量候选做 RRF 融合排序；fusion_score/actionable_pool
+            # 模块本身保留不动，gate_first_fusion 的 tier 列仍会写入 CSV 以便复核。
+            "hybrid_flow_score_gate": select(fusion_score(gated), attributes, "fusion_score_col"),
         }
         equal_n = min(len(p) for p in arms.values())
         if equal_n == 0:

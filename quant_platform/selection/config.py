@@ -59,6 +59,12 @@ class SelectionConfig:
         SR-02: cap on one-way turnover per rebalance, i.e. the fraction of
         max_total slots that may change (adds == drops). Only used by
         TurnoverAwareStrategy.
+    sector_cap_tech : int
+        风控层：科技大类合计上限。选股后若科技板块（半导体/芯片/通信/
+        电子/计算机等，见 TECH_SECTOR_INDUSTRIES）选中数超过此值，
+        按分数从低到高剔除超出部分。0 表示不启用。
+        依据 2026-10-14 裁决：科技板块 bet 是 D3/D5 主要亏损源，
+        3 只/行业的粒度防不住板块级暴露。
     """
 
     strategy: StrategyType = StrategyType.EQUAL_TOP_K
@@ -72,6 +78,7 @@ class SelectionConfig:
     enter_rank: int = 30
     keep_rank: int = 60
     max_turnover: float = 0.5
+    sector_cap_tech: int = 10
 
     def __post_init__(self) -> None:
         # Validate enum coercion
@@ -107,3 +114,5 @@ class SelectionConfig:
             )
         if not 0.0 < self.max_turnover <= 1.0:
             raise ValueError(f"max_turnover must be in (0, 1], got {self.max_turnover}")
+        if self.sector_cap_tech < 0:
+            raise ValueError(f"sector_cap_tech must be >= 0, got {self.sector_cap_tech}")
