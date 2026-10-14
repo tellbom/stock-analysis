@@ -75,3 +75,16 @@ def test_missing_prices_and_broad_history_are_rejected(experiment):
     prices.to_csv(path, index=False)
     with pytest.raises(ValueError, match="Missing holding-week prices"):
         evaluate(out, path, dt.date(2026, 10, 13), 10)
+
+
+def test_diagnostic_without_equal_count_rows_does_not_block_reconciliation(experiment):
+    out, path = experiment
+    picks = pd.read_csv(out / "all_picks.csv", dtype={"symbol": str})
+    mask = picks.strategy == "hybrid_flow_score_gate"
+    picks.loc[mask, "strategy"] = "hybrid_flow_score_gate_diagnostic"
+    picks.loc[mask, "in_equal_count_comparison"] = False
+    picks.to_csv(out / "all_picks.csv", index=False)
+    result = evaluate(out, path, dt.date(2026, 10, 13), 10)
+    diag = [s for s in result["strategies"] if s["strategy"].endswith("_diagnostic")]
+    assert len(diag) == 2
+    assert all(s["scope"] == "full_selection" for s in diag)

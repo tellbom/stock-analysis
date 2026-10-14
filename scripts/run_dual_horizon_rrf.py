@@ -84,6 +84,7 @@ def select_rrf(
     if pool.empty:
         raise RuntimeError("No stocks to rank")
     pool = pool.merge(attributes, on="symbol", how="left", validate="one_to_one")
+    pool = pool.sort_values(["fusion_score_col", "symbol"], ascending=[False, True], kind="stable")
     ranker = IndustryNeutralRanker(
         weekly_selection_config(sector_cap_tech=sector_cap_tech),
         industry_col="industry_code", name_col="industry_name",
@@ -95,6 +96,75 @@ def select_rrf(
     ).reset_index(drop=True)
     picks.insert(0, "recommendation_rank", np.arange(1, len(picks) + 1))
     return ranked, picks, (ranker.last_sector_cap_stats or {})
+
+
+def _run_shared_weekly(
+    as_of: dt.date, horizons: list[int], out_dir: Path, n_jobs: int,
+    sector_cap_tech: int | None, overwrite: bool,
+) -> dict:
+    """Use the exact comparison pipeline, including its recent rows and 37 columns.
+
+    Sharing only the Ridge fit function is insufficient: the previous entry
+    still fit a 40-column recent model on a different row set. Both entry
+    points now execute one implementation and export the same scores/picks.
+    """
+    from scripts.compare_original_hybrid import run as compare_run
+
+    controlled = compare_run(
+        as_of, out_dir / "comparison", None, n_jobs,
+        sector_cap_tech=sector_cap_tech, overwrite=overwrite,
+        horizons=tuple(horizons),
+    )
+    attributes = pd.read_csv(out_dir / "comparison/prediction_attributes.csv", dtype={"symbol": str})
+    summary = {
+        "as_of": controlled["as_of"], "entry_date": controlled["entry_date"],
+        "base_model": "ridge32_shared_baseline", "base_features": ORIGINAL_FEATURES,
+        "recent_features": ORIGINAL_FEATURES + controlled["flow_features"],
+        "flow_features": controlled["flow_features"], "fusion_method": "rrf", "rrf_k": 60,
+        "scored_count": controlled["scored_count"], "excluded_symbols": controlled["excluded_symbols"],
+        "selection": controlled["selection"], "score_gate_enabled": False,
+        "retrospective_reconstruction": controlled["retrospective_reconstruction"],
+        "prediction_feature_hash": controlled["prediction_feature_hash"],
+        "canonical_training_summary": "comparison/training_summary.json", "horizons": {},
+    }
+    pd.DataFrame({"feature": summary["base_features"]}).to_csv(out_dir / "base_features.csv", index=False)
+    pd.DataFrame({"feature": summary["recent_features"]}).to_csv(out_dir / "recent_features.csv", index=False)
+    for h in horizons:
+        folder = out_dir / "comparison"
+        base = pd.read_csv(folder / f"D{h}_original_scores.csv", dtype={"symbol": str})
+        recent = pd.read_csv(folder / f"D{h}_recent_flow_scores.csv", dtype={"symbol": str})
+        gate = pd.read_csv(folder / f"D{h}_score_gate.csv", dtype={"symbol": str})
+        ranked, picks, stats = select_rrf(gate, attributes, sector_cap_tech)
+        expected = pd.read_csv(folder / f"D{h}_hybrid_flow_picks.csv", dtype={"symbol": str})
+        if picks.symbol.tolist() != expected.symbol.tolist() or not np.allclose(
+            picks.fusion_score_col, expected.fusion_score_col, rtol=0, atol=1e-15
+        ):
+            raise RuntimeError("Weekly and comparison hybrid selections differ")
+        importance = pd.read_csv(folder / f"D{h}_recent_flow_importance.csv")
+        for name, frame in (("base", base), ("recent", recent), ("gate", gate),
+                            ("rrf_pool", ranked), ("picks", picks), ("recent_importance", importance)):
+            frame.to_csv(out_dir / f"D{h}_{name}.csv", index=False)
+        detail = controlled["horizons"][str(h)]
+        summary["horizons"][str(h)] = {
+            "label_col": detail["label_col"], "target_date": detail["target_date"],
+            "base": detail["baseline_meta"],
+            "recent": {"train_start": detail["recent_train_start"], "train_end": detail["recent_train_end"],
+                       "x_train_rows": detail["shared_recent_train_rows"], "feature_count": 37,
+                       "shared_row_label_hash": detail["shared_recent_row_label_hash"]},
+            "recent_train_dates": detail["shared_recent_dates"],
+            "original_scores_hash": detail["original_scores_hash"],
+            "flow_audit": {c: {"train_nonnull_rows": detail["shared_recent_train_rows"],
+                               "train_nonnull_dates": detail["flow_train_nonnull_dates"][c],
+                               "prediction_nonnull_rows": controlled["scored_count"],
+                               "importance": detail["flow_importances"][c]}
+                           for c in controlled["flow_features"]},
+            "selected_count": len(picks), "tier_counts": gate.gate_tier.value_counts().to_dict(),
+            "selection_audit": stats, "matches_comparison_hybrid": True,
+            "selected": json.loads(picks.to_json(orient="records", date_format="iso")),
+        }
+    (out_dir / "run_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8")
+    print(f"Saved shared weekly strategy {out_dir / 'run_summary.json'}", flush=True)
+    return summary
 
 
 def run(
@@ -123,6 +193,8 @@ def run(
             "historical reports. Use a new --out-dir or pass --overwrite."
         )
     out_dir.mkdir(parents=True, exist_ok=True)
+    if base_model == "ridge32":
+        return _run_shared_weekly(as_of, horizons, out_dir, n_jobs, sector_cap_tech, overwrite)
     symbols = legacy._load_symbols()
     prices = pd.concat([read_ohlcv(ohlcv_path(legacy.STORE_ROOT, s)) for s in symbols], ignore_index=True)
     prices["symbol"] = prices.symbol.astype(str).str.zfill(6)

@@ -80,8 +80,8 @@ class SelectionConfig:
     enter_rank: int = 30
     keep_rank: int = 60
     max_turnover: float = 0.5
-    sector_cap_tech: int | None = 10
-    version: str = "2026-10-14-gate-closed"
+    sector_cap_tech: int | None = None
+    version: str = "original-selection-v1"
 
     def __post_init__(self) -> None:
         # Validate enum coercion
@@ -137,4 +137,5 @@ def weekly_selection_config(*, sector_cap_tech: int | None = 10) -> SelectionCon
         top_k=3,
         max_total=50,
         sector_cap_tech=sector_cap_tech,
+        version="ridge32-weekly-v2-tech10" if sector_cap_tech == 10 else f"ridge32-weekly-v2-tech-{sector_cap_tech}",
     )

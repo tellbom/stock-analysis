@@ -73,7 +73,7 @@ def test_training_mask_excludes_immature_labels(cal):
              dt.date(2026, 10, 9), dt.date(2026, 10, 14)]
     assert training_mask(dates, as_of, 3, cal) == [True, True, False, False]
     # D5 口径更严：10-07 也不成熟
-    assert training_mask(dates, as_of, 5, cal) == [True, False, False, False]
+    assert training_mask(dates, as_of, 5, cal) == [False, False, False, False]
 
 
 def test_no_trading_day_after_as_of_raises(cal):

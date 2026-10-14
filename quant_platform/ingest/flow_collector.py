@@ -465,7 +465,10 @@ class FundFlowCollector:
                     .reset_index(drop=True)
         )
         self._backup_existing(symbol, out_path)
-        combined.to_parquet(out_path, index=False)
+        # The daily training refresh may read the previous file concurrently.
+        # Write to a sibling and replace atomically, like OHLCV/features.
+        from quant_platform.store.parquet_store import write_parquet
+        write_parquet(combined, out_path)
         logger.debug("%s: wrote %d new rows → %s", symbol, n_new, out_path)
         return n_new
 

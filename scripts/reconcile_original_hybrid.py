@@ -49,7 +49,12 @@ def evaluate(out: Path, prices_path: Path, observed_through: dt.date, one_way_co
         index_return = float(lookup["000300", endpoint] / lookup["000300", entry] - 1)
         baseline_set = set(selected[(selected.strategy == "ordinary") & selected.in_equal_count_comparison].symbol)
         for strategy, rows in selected.groupby("strategy", sort=False):
+            diagnostic = strategy.endswith("_diagnostic") or (
+                "is_diagnostic" in rows and rows.is_diagnostic.any()
+            )
             for scope in ("equal_count", "full_selection"):
+                if diagnostic and scope == "equal_count":
+                    continue
                 subset = rows[rows.in_equal_count_comparison] if scope == "equal_count" else rows
                 n = len(subset)
                 if n == 0:
@@ -82,6 +87,8 @@ def evaluate(out: Path, prices_path: Path, observed_through: dt.date, one_way_co
                               "entry_date": entry.isoformat(), "end_date": endpoint.isoformat(),
                               "target_date": target.isoformat(), "complete": endpoint == target,
                               "status": "完整持有期" if endpoint == target else "阶段收益，尚未到期"})
+            if diagnostic:
+                continue
             equal_set = set(rows[rows.in_equal_count_comparison].symbol)
             overlaps.append({"horizon": h, "strategy": strategy, "count": len(equal_set),
                              "overlap_with_ordinary": len(equal_set & baseline_set),

@@ -1,0 +1,349 @@
+{
+  "as_of": "2026-10-14",
+  "entry_date": "2026-10-15",
+  "research_only": true,
+  "retrospective_reconstruction": false,
+  "original_features": [
+    "ma_5",
+    "ma_10",
+    "ma_20",
+    "ma_60",
+    "macd_dif",
+    "macd_dea",
+    "macd_hist",
+    "kdj_k",
+    "kdj_d",
+    "kdj_j",
+    "rsi_6",
+    "rsi_12",
+    "rsi_24",
+    "boll_upper",
+    "boll_mid",
+    "atr_14",
+    "adx_14",
+    "obv",
+    "cci_14",
+    "roc_10",
+    "willr_14",
+    "stoch_k",
+    "stoch_d",
+    "reversal_3d",
+    "cs_rank_close",
+    "cs_rank_volume",
+    "cs_rank_rsi_6",
+    "cs_rank_roc_10",
+    "cs_rank_ma_5",
+    "cs_zscore_close",
+    "cs_zscore_volume",
+    "cs_zscore_rsi_6"
+  ],
+  "flow_features": [
+    "cs_main_flow_rank_1d",
+    "cs_main_flow_rank_5d",
+    "cs_small_flow_rank_1d",
+    "cs_super_flow_rank_1d",
+    "cs_flow_reversal_5d"
+  ],
+  "original_algorithm": "Ridge(alpha=1.0)",
+  "baseline_strategy_id": "ridge32_weekly_baseline",
+  "recent_algorithm": "LightGBM",
+  "recent_params": {
+    "objective": "regression",
+    "n_estimators": 120,
+    "learning_rate": 0.05,
+    "num_leaves": 15,
+    "min_child_samples": 20,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_alpha": 0.1,
+    "reg_lambda": 0.1,
+    "random_state": 42,
+    "verbose": -1,
+    "n_jobs": 4
+  },
+  "rrf_k": 60,
+  "recent_window_dates": 120,
+  "selection": {
+    "top_k_per_industry": 3,
+    "max_total": 50,
+    "sector_cap_tech": 10,
+    "strategy_version": "ridge32-weekly-v2-tech10"
+  },
+  "gate_scope": "score tiers only; no additional event/risk factors",
+  "scored_count": 299,
+  "excluded_symbols": [
+    "601059"
+  ],
+  "prediction_feature_hash": "2780dae39e67672dd2edee87e42f1b9e13dc535330c9b0b439692df245ba9948",
+  "flow_source_counts": {
+    "eastmoney_emdatah5_zjlx": 39581
+  },
+  "flow_latest_date": "2026-10-14",
+  "horizons": {
+    "3": {
+      "label_col": "ret_fwd_3d",
+      "target_date": "2026-10-20",
+      "reference_audit": {
+        "reference_supplied": false
+      },
+      "baseline_meta": {
+        "strategy_id": "ridge32_weekly_baseline",
+        "strategy_version": "1.0-ridge-alpha1.0",
+        "algorithm": "Ridge(alpha=1.0)",
+        "feature_count": 32,
+        "train_rows": 252245,
+        "train_first_date": "2023-04-04",
+        "train_last_date": "2026-10-08",
+        "prediction_date": "2026-10-14",
+        "prediction_rows": 299
+      },
+      "original_train_rows": 252245,
+      "original_train_start": "2023-04-04",
+      "original_train_end": "2026-10-08",
+      "original_training_input_hash": "ac9e09fdb1244e50e1c5033fa8b43316ca5cf9cd267a0529d042aaccc4b23e8e",
+      "original_scores_hash": "9959ce16a8da5db6e4c85af75ad357b6675a6585028dc3f0bae4795d2c01ad7f",
+      "shared_recent_train_rows": 35878,
+      "shared_recent_dates": 120,
+      "recent_train_start": "2026-04-10",
+      "recent_train_end": "2026-10-08",
+      "recent_rows_excluded_for_missing_flow": 0,
+      "shared_recent_row_label_hash": "4db64e1364356304936c028dcecfe231ed2f655c28e5cbd5a0f9ba678fc8922c",
+      "recent_feature_counts": {
+        "no_flow": 32,
+        "flow": 37
+      },
+      "flow_importances": {
+        "cs_main_flow_rank_1d": 31,
+        "cs_main_flow_rank_5d": 43,
+        "cs_small_flow_rank_1d": 22,
+        "cs_super_flow_rank_1d": 20,
+        "cs_flow_reversal_5d": 14
+      },
+      "flow_train_nonnull_dates": {
+        "cs_main_flow_rank_1d": 120,
+        "cs_main_flow_rank_5d": 120,
+        "cs_small_flow_rank_1d": 120,
+        "cs_super_flow_rank_1d": 120,
+        "cs_flow_reversal_5d": 120
+      },
+      "equal_count_n": 36,
+      "full_selection_counts": {
+        "ordinary": 41,
+        "hybrid_no_flow": 36,
+        "hybrid_flow": 39,
+        "hybrid_flow_score_gate_diagnostic": 33
+      },
+      "selection_audit": {
+        "ordinary": {
+          "is_diagnostic": false,
+          "pre_cap_count": 50,
+          "post_cap_count": 41,
+          "sector_cap_enabled": true,
+          "dropped_by_sector_cap": [
+            "002475",
+            "300408",
+            "300502",
+            "600522",
+            "600584",
+            "601138",
+            "688041",
+            "688082",
+            "688183"
+          ]
+        },
+        "hybrid_no_flow": {
+          "is_diagnostic": false,
+          "pre_cap_count": 50,
+          "post_cap_count": 36,
+          "sector_cap_enabled": true,
+          "dropped_by_sector_cap": [
+            "000977",
+            "002371",
+            "002600",
+            "300308",
+            "300502",
+            "600183",
+            "600584",
+            "601138",
+            "603019",
+            "688041",
+            "688082",
+            "688126",
+            "688183",
+            "688256"
+          ]
+        },
+        "hybrid_flow": {
+          "is_diagnostic": false,
+          "pre_cap_count": 50,
+          "post_cap_count": 39,
+          "sector_cap_enabled": true,
+          "dropped_by_sector_cap": [
+            "000977",
+            "002371",
+            "002600",
+            "002916",
+            "300308",
+            "300476",
+            "600183",
+            "601138",
+            "688041",
+            "688082",
+            "688256"
+          ]
+        },
+        "hybrid_flow_score_gate_diagnostic": {
+          "is_diagnostic": true,
+          "pre_cap_count": 44,
+          "post_cap_count": 33,
+          "sector_cap_enabled": true,
+          "dropped_by_sector_cap": [
+            "000977",
+            "002371",
+            "002600",
+            "002916",
+            "300308",
+            "300476",
+            "600183",
+            "601138",
+            "688041",
+            "688082",
+            "688256"
+          ]
+        }
+      }
+    },
+    "5": {
+      "label_col": "ret_fwd_5d",
+      "target_date": "2026-10-22",
+      "reference_audit": {
+        "reference_supplied": false
+      },
+      "baseline_meta": {
+        "strategy_id": "ridge32_weekly_baseline",
+        "strategy_version": "1.0-ridge-alpha1.0",
+        "algorithm": "Ridge(alpha=1.0)",
+        "feature_count": 32,
+        "train_rows": 251645,
+        "train_first_date": "2023-04-04",
+        "train_last_date": "2026-09-29",
+        "prediction_date": "2026-10-14",
+        "prediction_rows": 299
+      },
+      "original_train_rows": 251645,
+      "original_train_start": "2023-04-04",
+      "original_train_end": "2026-09-29",
+      "original_training_input_hash": "44da35682590b704dff01e6266b23869d4eeb612b5ca62992e3f5e1bcf17a88f",
+      "original_scores_hash": "476253b66437c97f7be2d85f5a09f91b68506f3cbdc8e04c52132aca4757c2b9",
+      "shared_recent_train_rows": 35878,
+      "shared_recent_dates": 120,
+      "recent_train_start": "2026-04-08",
+      "recent_train_end": "2026-09-29",
+      "recent_rows_excluded_for_missing_flow": 0,
+      "shared_recent_row_label_hash": "f508c0d7dd76ab5ce72b031b80464272a73868747dc64a6aa327b3bfe57d26ef",
+      "recent_feature_counts": {
+        "no_flow": 32,
+        "flow": 37
+      },
+      "flow_importances": {
+        "cs_main_flow_rank_1d": 18,
+        "cs_main_flow_rank_5d": 38,
+        "cs_small_flow_rank_1d": 18,
+        "cs_super_flow_rank_1d": 10,
+        "cs_flow_reversal_5d": 13
+      },
+      "flow_train_nonnull_dates": {
+        "cs_main_flow_rank_1d": 120,
+        "cs_main_flow_rank_5d": 120,
+        "cs_small_flow_rank_1d": 120,
+        "cs_super_flow_rank_1d": 120,
+        "cs_flow_reversal_5d": 120
+      },
+      "equal_count_n": 36,
+      "full_selection_counts": {
+        "ordinary": 43,
+        "hybrid_no_flow": 36,
+        "hybrid_flow": 39,
+        "hybrid_flow_score_gate_diagnostic": 38
+      },
+      "selection_audit": {
+        "ordinary": {
+          "is_diagnostic": false,
+          "pre_cap_count": 50,
+          "post_cap_count": 43,
+          "sector_cap_enabled": true,
+          "dropped_by_sector_cap": [
+            "300408",
+            "300476",
+            "300502",
+            "600522",
+            "600584",
+            "601138",
+            "688041"
+          ]
+        },
+        "hybrid_no_flow": {
+          "is_diagnostic": false,
+          "pre_cap_count": 50,
+          "post_cap_count": 36,
+          "sector_cap_enabled": true,
+          "dropped_by_sector_cap": [
+            "000977",
+            "002371",
+            "002475",
+            "002600",
+            "300308",
+            "300408",
+            "300476",
+            "300502",
+            "600183",
+            "601138",
+            "603019",
+            "688041",
+            "688082",
+            "688256"
+          ]
+        },
+        "hybrid_flow": {
+          "is_diagnostic": false,
+          "pre_cap_count": 50,
+          "post_cap_count": 39,
+          "sector_cap_enabled": true,
+          "dropped_by_sector_cap": [
+            "000977",
+            "002600",
+            "300308",
+            "300408",
+            "300502",
+            "600183",
+            "600584",
+            "603019",
+            "688041",
+            "688126",
+            "688256"
+          ]
+        },
+        "hybrid_flow_score_gate_diagnostic": {
+          "is_diagnostic": true,
+          "pre_cap_count": 50,
+          "post_cap_count": 38,
+          "sector_cap_enabled": true,
+          "dropped_by_sector_cap": [
+            "000977",
+            "002600",
+            "300308",
+            "300408",
+            "300502",
+            "600183",
+            "600584",
+            "603019",
+            "688041",
+            "688082",
+            "688126",
+            "688256"
+          ]
+        }
+      }
+    }
+  }
+}

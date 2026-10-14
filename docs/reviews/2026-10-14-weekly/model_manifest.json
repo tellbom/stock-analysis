@@ -1,0 +1,19 @@
+{
+  "signal_date": "2026-10-14",
+  "model_hashes": {
+    "D3_original_ridge.joblib": "a84e6b41fff8ded77ad2b7797fb1549a2f2db97d9f27fc981f132bb8ace28900",
+    "D3_recent_flow.joblib": "5c36518f65a617dcd05f3b7c3e58483a48e87127ff4b076039f544c7a7eb2c67",
+    "D3_recent_no_flow.joblib": "6f44c14432f7a01f9e390cdad25b9ff42641b199956a75229db793c9e2bb02c2",
+    "D5_original_ridge.joblib": "6e7c8406034a1e9f416c681d5fb525d3ff1b7116cabaf36bfb6d3ae0799f54a6",
+    "D5_recent_flow.joblib": "78b60f0b7069424c0463cea6150b10cf63f2f5065e0fac377505f08c699e6117",
+    "D5_recent_no_flow.joblib": "f6b1eea32b3ebef774460643615db8b4705bdc8cc04a024a02df9cf056e7cac8"
+  },
+  "model_count": 6,
+  "runtime_source_hashes": {
+    "scripts/compare_original_hybrid.py": "90dfb6cd19e5a13b6f908930e49fa13729f2049cfa95cffd957858ae868175fd",
+    "scripts/run_dual_horizon_rrf.py": "2809444d4ae220b7ae79148086d8671b7aa6aaa5449a6f902c371d83acef9ead",
+    "quant_platform/selection/ridge_baseline.py": "505d2aebc821c4657adb7e79f10bb2c9390e7365a53559c0d511bea41dde75fd",
+    "quant_platform/selection/config.py": "b370c129c4343c2fd3400e54ab7fd2f3c3a581dace960b3da8fd84dc75c17629"
+  },
+  "production_registry_promoted": false
+}

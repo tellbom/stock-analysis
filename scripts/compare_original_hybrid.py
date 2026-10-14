@@ -83,6 +83,7 @@ def select(
     sector_cap_tech 由调用方传入（None/0 = 历史复现口径，关闭约束）。
     """
     frame = frame.merge(attributes, on="symbol", how="left", validate="one_to_one")
+    frame = frame.sort_values([score_col, "symbol"], ascending=[False, True], kind="stable")
     ranker = IndustryNeutralRanker(
         weekly_selection_config(sector_cap_tech=sector_cap_tech),
         industry_col="industry_code", name_col="industry_name", score_col=score_col,
@@ -139,12 +140,16 @@ def run(
     n_jobs: int,
     sector_cap_tech: int | None = 10,
     overwrite: bool = False,
+    horizons: tuple[int, ...] = (3, 5),
 ) -> dict:
     """每周对照实验入口。
 
     sector_cap_tech: 科技大类合计上限；None/0 = 历史复现口径（关闭约束）。
     overwrite: False 时若 out 已有内容则拒绝写入，保护历史报告不被覆盖。
     """
+    horizons = tuple(sorted(set(horizons)))
+    if not horizons or any(h not in (3, 5) for h in horizons):
+        raise ValueError("Only raw D3/D5 horizons are supported")
     if out.exists() and any(out.iterdir()) and not overwrite:
         raise RuntimeError(
             f"Output directory {out} already contains files; refusing to overwrite "
@@ -168,7 +173,7 @@ def run(
         for s in symbols
     ], ignore_index=True)
     prices["symbol"] = prices.symbol.astype(str).str.zfill(6)
-    for h in (3, 5):
+    for h in horizons:
         panel = panel.drop(columns=[f"ret_fwd_{h}d"], errors="ignore").merge(
             observable_target(prices, as_of, h), on=["symbol", "date"], how="left", validate="one_to_one",
         )
@@ -195,12 +200,12 @@ def run(
     calendar = pd.read_parquet(STORE / "calendar/trading_calendar.parquet")
     calendar["date"] = pd.to_datetime(calendar.date).dt.date
     future = sorted(calendar.loc[calendar.is_trading & (calendar.date > as_of), "date"])
-    if len(future) < 6:
+    if len(future) <= max(horizons):
         raise RuntimeError("Insufficient trading calendar")
     selection_cfg = weekly_selection_config(sector_cap_tech=sector_cap_tech)
     summary = {
         "as_of": as_of.isoformat(), "entry_date": future[0].isoformat(),
-        "research_only": True, "retrospective_reconstruction": True,
+        "research_only": True, "retrospective_reconstruction": as_of < dt.date.today(),
         "original_features": ORIGINAL_FEATURES, "flow_features": FLOW_FEATURES,
         "original_algorithm": "Ridge(alpha=1.0)",
         "baseline_strategy_id": "ridge32_weekly_baseline",
@@ -218,7 +223,8 @@ def run(
         "flow_latest_date": flow.date.max().isoformat(), "horizons": {},
     }
     all_picks = []
-    for h in (3, 5):
+    attributes.to_csv(out / "prediction_attributes.csv", index=False)
+    for h in horizons:
         label = f"ret_fwd_{h}d"
         # 共享 Ridge32 基线：与 run_dual_horizon_rrf.py 同一份实现。
         base, base_meta, model = fit_predict_ridge32(panel, as_of, label)
