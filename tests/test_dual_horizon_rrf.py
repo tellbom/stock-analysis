@@ -44,16 +44,20 @@ def test_d5_model_receives_exact_d5_label(monkeypatch):
     assert meta["label_col"] == "ret_fwd_5d"
 
 
-def test_selection_uses_rrf_inside_actionable_gate():
+def test_selection_uses_rrf_over_full_pool_gate_closed():
+    """2026-10-14 裁决：分数 Gate 已关闭。select_rrf 对全量候选做 RRF 排序，
+    不再按 gate_tier 过滤（RISK_VETO 也参与排名）。"""
     fused = pd.DataFrame({"symbol": ["000001", "000002", "000003"],
                           "gate_tier": ["A_MAIN", "B_SHORT_BOOST", "RISK_VETO"],
                           "base_rank": [2, 10, 1], "recent_rank": [30, 2, 1],
                           "final_rank": [1, 2, 3]})
     attributes = pd.DataFrame({"symbol": fused.symbol, "industry_code": "x", "industry_name": "test"})
-    pool, picks = select_rrf(fused, attributes)
-    assert len(pool) == 2
-    assert picks.symbol.tolist() == ["000002", "000001"]
-    assert picks.recommendation_rank.tolist() == [1, 2]
+    pool, picks, cap_stats = select_rrf(fused, attributes, sector_cap_tech=None)
+    # 全量 3 只都在池中（含 RISK_VETO）。RRF: 000003=2/61 > 000002=1/70+1/62 > 000001=1/62+1/90
+    assert len(pool) == 3
+    assert picks.symbol.tolist() == ["000003", "000002", "000001"]
+    assert picks.recommendation_rank.tolist() == [1, 2, 3]
+    assert cap_stats["enabled"] is False
 
 
 def test_strict_feature_build_stops_after_write_failure(tmp_path, monkeypatch):

@@ -1,4 +1,12 @@
-"""Run the existing long/recent LightGBM + gate + RRF strategy for D+3/D+5.
+"""Run the weekly RRF strategy for D+3/D+5.
+
+Base model (default): shared Ridge32 baseline
+(quant_platform.selection.ridge_baseline) — the SAME prediction the
+ordinary arm of compare_original_hybrid.py uses.  The long-history
+LightGBM base remains available as --base-model lgbm-long, explicitly
+marked as an independent strategy, not the weekly baseline.
+
+Score gate: closed (2026-10-14 verdict); selection ranks the full RRF pool.
 
 Example: python scripts/run_dual_horizon_rrf.py --as-of 2026-10-09
 Writes research rankings and the exact input-feature audit; no registry promotion.
@@ -22,12 +30,18 @@ from quant_platform.cli import _build_feature_cols, _coverage_gate_config_for_un
 from quant_platform.evaluation.coverage_gate import compute_feature_coverage_report, select_features_by_gate
 from quant_platform.features.flow import FLOW_SPECS
 from quant_platform.features.registry import feature_metadata_lookup
-from quant_platform.selection.config import SelectionConfig, StrategyType
+from quant_platform.selection.config import weekly_selection_config
 from quant_platform.selection.fusion_score import fusion_score
 from quant_platform.selection.gate_fusion import gate_first_fusion
 from quant_platform.selection.ranker import IndustryNeutralRanker
+from quant_platform.selection.ridge_baseline import ORIGINAL_FEATURES, fit_predict_ridge32
 from quant_platform.store.lake import ohlcv_path
 from quant_platform.store.parquet_store import read_ohlcv
+
+#: Base-model choices. "ridge32" reuses the shared weekly baseline;
+#: "lgbm-long" keeps the legacy long-history LightGBM as an explicitly
+#: marked INDEPENDENT strategy (not the weekly baseline).
+BASE_MODEL_CHOICES = ("ridge32", "lgbm-long")
 
 
 def observable_target(prices: pd.DataFrame, as_of: dt.date, horizon: int) -> pd.DataFrame:
@@ -52,7 +66,15 @@ def recent_train_start(panel: pd.DataFrame, as_of: dt.date, label: str) -> dt.da
     return dates[max(0, len(dates) - 120)]
 
 
-def select_rrf(fused: pd.DataFrame, attributes: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+def select_rrf(
+    fused: pd.DataFrame,
+    attributes: pd.DataFrame,
+    sector_cap_tech: int | None = 10,
+) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
+    """RRF 全量候选选股（Gate 关闭），返回 (ranked, picks, cap_stats)。
+
+    配置走 weekly_selection_config()，与 compare_original_hybrid.py 同口径。
+    """
     # 2026-10-14 战略裁决：Gate 已关闭。actionable_pool 的 ACTIONABLE_TIERS
     # 过滤在 D3/D5 两组独立实验中稳定伤害收益（D3 -0.14pp，D5 -0.10pp），
     # 系统性剔除逆势上涨的防御股（如中信银行+1.32%、交通银行+1.92%、宁波港+1.67%）。
@@ -62,19 +84,44 @@ def select_rrf(fused: pd.DataFrame, attributes: pd.DataFrame) -> tuple[pd.DataFr
     if pool.empty:
         raise RuntimeError("No stocks to rank")
     pool = pool.merge(attributes, on="symbol", how="left", validate="one_to_one")
-    ranked = IndustryNeutralRanker(
-        SelectionConfig(strategy=StrategyType.EQUAL_TOP_K, top_k=3, max_total=50),
+    ranker = IndustryNeutralRanker(
+        weekly_selection_config(sector_cap_tech=sector_cap_tech),
         industry_col="industry_code", name_col="industry_name",
         score_col="fusion_score_col", symbol_col="symbol",
-    ).run(pool)
+    )
+    ranked = ranker.run(pool)
     picks = ranked[ranked.selected].sort_values(
         ["fusion_score_col", "symbol"], ascending=[False, True]
     ).reset_index(drop=True)
     picks.insert(0, "recommendation_rank", np.arange(1, len(picks) + 1))
-    return ranked, picks
+    return ranked, picks, (ranker.last_sector_cap_stats or {})
 
 
-def run(as_of: dt.date, horizons: list[int], out_dir: Path, n_jobs: int) -> dict:
+def run(
+    as_of: dt.date,
+    horizons: list[int],
+    out_dir: Path,
+    n_jobs: int,
+    base_model: str = "ridge32",
+    sector_cap_tech: int | None = 10,
+    overwrite: bool = False,
+) -> dict:
+    """Weekly RRF strategy entry.
+
+    base_model: "ridge32" (default) reuses the shared Ridge32 baseline —
+        identical to the ordinary arm of compare_original_hybrid.py.
+        "lgbm-long" keeps the legacy long-history LightGBM base, marked
+        in the summary as an independent strategy.
+    sector_cap_tech: tech-sector cap; None/0 disables (historical repro).
+    overwrite: False refuses to write into a non-empty out_dir.
+    """
+    if base_model not in BASE_MODEL_CHOICES:
+        raise ValueError(f"base_model must be one of {BASE_MODEL_CHOICES}, got {base_model!r}")
+    if out_dir.exists() and any(out_dir.iterdir()) and not overwrite:
+        raise RuntimeError(
+            f"Output directory {out_dir} already contains files; refusing to overwrite "
+            "historical reports. Use a new --out-dir or pass --overwrite."
+        )
     out_dir.mkdir(parents=True, exist_ok=True)
     symbols = legacy._load_symbols()
     prices = pd.concat([read_ohlcv(ohlcv_path(legacy.STORE_ROOT, s)) for s in symbols], ignore_index=True)
@@ -130,37 +177,62 @@ def run(as_of: dt.date, horizons: list[int], out_dir: Path, n_jobs: int) -> dict
     future = sorted(calendar.loc[calendar.is_trading & (calendar.date > as_of), "date"])
     if len(future) <= max(horizons):
         raise RuntimeError("Trading calendar does not cover the target observation dates")
+    selection_cfg = weekly_selection_config(sector_cap_tech=sector_cap_tech)
     summary = {
         "as_of": as_of.isoformat(), "feature_set_id": feature_set_id,
         "universe_count": len(symbols), "scored_count": len(pred),
         "excluded_symbols": sorted(set(symbols) - covered),
+        "base_model": (
+            "ridge32_shared_baseline"
+            if base_model == "ridge32"
+            else "lgbm_long_independent_strategy"
+        ),
         "base_features": base_features, "recent_features": recent_features,
         "flow_features": flow_features, "fusion_method": "rrf", "rrf_k": 60,
-        "selection": "RRF fusion, no gate (gate closed 2026-10-14); equal_top_k=3; max_total=50; rank by RRF",
+        "selection": (
+            "RRF fusion, no gate (gate closed 2026-10-14); "
+            f"equal_top_k=3; max_total=50; sector_cap_tech={sector_cap_tech}; "
+            f"strategy_version={selection_cfg.version}; rank by RRF"
+        ),
         "entry_date": future[0].isoformat(), "horizons": {},
     }
     print(f"Features: base={len(base_features)}, recent={len(recent_features)}, flow={flow_features}", flush=True)
     for h in horizons:
         label = f"ret_fwd_{h}d"
         start = recent_train_start(panel, as_of, label)
-        print(f"D+{h}: fitting {label}; recent start {start}", flush=True)
-        base, base_meta, _, base_imp, _ = legacy._score_model(
-            panel, as_of, base_features, train_start=None,
-            params={**legacy.BASE_PARAMS, "n_jobs": n_jobs}, score_prefix="base", label_col=label,
-        )
+        print(f"D+{h}: fitting {label}; recent start {start}; base_model={base_model}", flush=True)
+        if base_model == "ridge32":
+            # 共享基线：与 compare_original_hybrid.py 的 ordinary 臂同一份 Ridge32 预测。
+            base, base_meta, _ = fit_predict_ridge32(panel, as_of, label, ORIGINAL_FEATURES)
+            base_imp = pd.DataFrame(columns=["feature", "importance"])
+        else:
+            # 独立策略：长期 LightGBM 基线（35/40 因子），明确标记，不混入周基线。
+            base, base_meta, _, base_imp, _ = legacy._score_model(
+                panel, as_of, base_features, train_start=None,
+                params={**legacy.BASE_PARAMS, "n_jobs": n_jobs}, score_prefix="base", label_col=label,
+            )
+            base_meta["independent_strategy"] = True
+            base_meta["note"] = (
+                "lgbm-long is an INDEPENDENT strategy, not the shared weekly baseline"
+            )
         recent, recent_meta, _, recent_imp, _ = legacy._score_model(
             panel, as_of, recent_features, train_start=start,
             params={**legacy.RECENT_PARAMS, "n_jobs": n_jobs}, score_prefix="recent", label_col=label,
         )
         for scored, prefix in ((base, "base"), (recent, "recent")):
-            if set(scored.symbol) != covered or not np.isfinite(scored[f"{prefix}_score"]).all():
+            if prefix == "base" and base_model == "ridge32":
+                # 共享基线按 32 特征完备性过滤（与 compare_original_hybrid.py 同口径），
+                # 允许略小于 full universe；recent 仍要求全覆盖。
+                if len(scored) < 250 or not np.isfinite(scored["base_score"]).all():
+                    raise RuntimeError(f"D+{h}: insufficient Ridge32 base coverage {len(scored)}")
+            elif set(scored.symbol) != covered or not np.isfinite(scored[f"{prefix}_score"]).all():
                 raise RuntimeError(f"D+{h}: missing or nonfinite {prefix} scores")
         joined = base.merge(recent[["symbol", "trade_date", "recent_score", "recent_rank", "recent_pct"]],
                             on=["symbol", "trade_date"], validate="one_to_one")
         joined = joined.merge(risk, on=["symbol", "trade_date"], how="left", validate="one_to_one")
         joined[["risk_flags", "event_flags"]] = joined[["risk_flags", "event_flags"]].fillna("")
         fused = gate_first_fusion(joined)
-        ranked, picks = select_rrf(fused, attributes)
+        ranked, picks, cap_stats = select_rrf(fused, attributes, sector_cap_tech)
         flow_imp = recent_imp[recent_imp.feature.isin(flow_features)]
         train = panel[(panel.date >= start) & (panel.date < as_of) & panel[label].notna()]
         flow_audit = {
@@ -184,6 +256,12 @@ def run(as_of: dt.date, horizons: list[int], out_dir: Path, n_jobs: int) -> dict
             "recent_train_dates": int(train.date.nunique()),
             "flow_audit": flow_audit, "actionable_count": len(ranked), "selected_count": len(picks),
             "tier_counts": fused.gate_tier.value_counts().to_dict(),
+            "selection_audit": {
+                "pre_cap_count": cap_stats.get("pre_count"),
+                "post_cap_count": cap_stats.get("post_count"),
+                "sector_cap_enabled": cap_stats.get("enabled"),
+                "dropped_by_sector_cap": cap_stats.get("dropped_symbols", []),
+            },
             "selected": json.loads(picks.to_json(orient="records", date_format="iso")),
         }
         print(f"D+{h}: {len(picks)} selected; flow split importances {flow_imp.to_dict('records')}", flush=True)
@@ -192,15 +270,39 @@ def run(as_of: dt.date, horizons: list[int], out_dir: Path, n_jobs: int) -> dict
     return summary
 
 
+def _parse_sector_cap(value: str) -> int | None:
+    """--sector-cap-tech 解析：'off'/'none' -> None（历史复现口径），否则为非负整数。"""
+    if value.lower() in ("off", "none"):
+        return None
+    ivalue = int(value)
+    if ivalue < 0:
+        raise argparse.ArgumentTypeError("--sector-cap-tech must be >= 0 or 'off'")
+    return ivalue
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--as-of", type=dt.date.fromisoformat, required=True)
     parser.add_argument("--horizons", type=int, nargs="+", choices=(3, 5), default=[3, 5])
     parser.add_argument("--out-dir", type=Path)
     parser.add_argument("--n-jobs", type=int, default=4)
+    parser.add_argument(
+        "--base-model", choices=BASE_MODEL_CHOICES, default="ridge32",
+        help="ridge32=共享周基线（默认）；lgbm-long=长期LightGBM独立策略。",
+    )
+    parser.add_argument(
+        "--sector-cap-tech", type=_parse_sector_cap, default=10,
+        help="科技大类合计上限；'off' 关闭约束（历史复现口径）。默认 10。",
+    )
+    parser.add_argument(
+        "--overwrite", action="store_true",
+        help="允许覆盖已有内容的输出目录；默认拒绝，保护历史报告。",
+    )
     args = parser.parse_args()
     output = args.out_dir or legacy.REPORT_DIR / f"dual_horizon_rrf_{args.as_of}"
-    run(args.as_of, sorted(set(args.horizons)), output, args.n_jobs)
+    run(args.as_of, sorted(set(args.horizons)), output, args.n_jobs,
+        base_model=args.base_model, sector_cap_tech=args.sector_cap_tech,
+        overwrite=args.overwrite)
 
 
 if __name__ == "__main__":

@@ -35,7 +35,7 @@ def test_reference_rejects_retrained_score_drift_even_with_same_picks():
 def experiment(tmp_path):
     (tmp_path / "training_summary.json").write_text(json.dumps({"as_of": "2026-09-30", "entry_date": "2026-10-08",
         "horizons": {"3": {"target_date": "2026-10-13"}, "5": {"target_date": "2026-10-15"}}}), encoding="utf-8")
-    arms = ("ordinary", "hybrid_no_flow", "hybrid_flow", "hybrid_flow_score_gate")
+    arms = ("ordinary", "hybrid_no_flow", "hybrid_flow", "hybrid_flow_score_gate_diagnostic")
     pd.DataFrame([{"horizon": h, "strategy": a, "strategy_name": a, "symbol": "000001",
                    "name": "test", "industry_name": "test", "recommendation_rank": 1,
                    "in_equal_count_comparison": True} for h in (3, 5) for a in arms]).to_csv(tmp_path / "all_picks.csv", index=False)

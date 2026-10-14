@@ -93,12 +93,17 @@ def evaluate(out: Path, prices_path: Path, observed_through: dt.date, one_way_co
             for s in rows:
                 s["return_delta_vs_ordinary"] = s["net_if_exit"] - by_key["ordinary"]["net_if_exit"]
                 s["flow_increment_vs_no_flow"] = by_key["hybrid_flow"]["net_if_exit"] - by_key["hybrid_no_flow"]["net_if_exit"]
-                s["score_gate_increment"] = by_key["hybrid_flow_score_gate"]["net_if_exit"] - by_key["hybrid_flow"]["net_if_exit"]
+                # 诊断臂：分数 Gate 的增量只做诊断参考，不参与主策略比较。
+                gate_key = "hybrid_flow_score_gate_diagnostic"
+                if gate_key in by_key:
+                    s["score_gate_increment_diagnostic"] = (
+                        by_key[gate_key]["net_if_exit"] - by_key["hybrid_flow"]["net_if_exit"]
+                    )
     result = {"signal_date": train["as_of"], "entry_date": entry.isoformat(),
               "observed_through": observed_through.isoformat(), "one_way_cost_bps": one_way_cost_bps,
               "research_only": True, "retrospective_reconstruction": True,
               "cost_convention": "gross minus two one-way costs; early endpoints assume exit",
-              "comparison_n_rule": "minimum selected count across four arms, fixed before reading returns",
+              "comparison_n_rule": "minimum selected count across the three main arms (diagnostic arm excluded), fixed before reading returns",
               "strategies": stats, "overlaps": overlaps}
     for name, data in (("stock_returns", details), ("daily_returns", daily), ("selection_overlap", overlaps)):
         pd.DataFrame(data).to_csv(out / f"{name}.csv", index=False, encoding="utf-8-sig")

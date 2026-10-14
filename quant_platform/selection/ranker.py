@@ -94,6 +94,8 @@ class IndustryNeutralRanker:
         self.name_col = name_col
         self.score_col = score_col
         self.symbol_col = symbol_col
+        # 最近一次 select() 的板块约束统计；select() 未调用时为 None。
+        self.last_sector_cap_stats: dict | None = None
 
     # ------------------------------------------------------------------
     # rank()
@@ -219,9 +221,10 @@ class IndustryNeutralRanker:
         # 风控层：科技板块合计上限（2026-10-14 裁决）。
         # 对所有策略一视同仁，不区分 arm。这是风控不是策略，
         # 不影响 ordinary 组的对照纯洁性。
-        selected_set, reasons = self._apply_sector_cap(
+        selected_set, reasons, cap_stats = self._apply_sector_cap(
             panel, selected_set, reasons,
         )
+        self.last_sector_cap_stats = cap_stats
 
         df = panel.copy()
         df["selected"] = df[self.symbol_col].isin(selected_set)
@@ -233,22 +236,34 @@ class IndustryNeutralRanker:
         panel: pd.DataFrame,
         selected: set,
         reasons: pd.Series,
-    ) -> tuple[set, pd.Series]:
+    ) -> tuple[set, pd.Series, dict]:
         """
         科技板块合计上限过滤。
 
         若选中股票中科技大类（TECH_SECTOR_INDUSTRIES）数量超过
         config.sector_cap_tech，按分数从低到高剔除超出部分（保留高分）。
-        sector_cap_tech=0 时不启用。
+        sector_cap_tech 为 0/None 时不启用（历史复现口径）。
+
+        返回 (selected, reasons, stats)，stats 记录约束前后数量，
+        供 run summary 输出审计。
         """
         cap = self.config.sector_cap_tech
-        if cap <= 0 or not selected:
-            return selected, reasons
+        pre_count = len(selected)
+        disabled = cap is None or cap <= 0
+        stats: dict = {
+            "enabled": not disabled,
+            "cap": cap,
+            "pre_count": pre_count,
+            "post_count": pre_count,
+            "dropped_symbols": [],
+        }
+        if disabled or not selected:
+            return selected, reasons, stats
 
         # 用 name_col（industry_name）匹配科技板块
         name_col = self.name_col if self.name_col in panel.columns else None
         if name_col is None:
-            return selected, reasons
+            return selected, reasons, stats
 
         selected_df = panel[panel[self.symbol_col].isin(selected)]
         is_tech = selected_df[name_col].isin(TECH_SECTOR_INDUSTRIES)
@@ -256,7 +271,7 @@ class IndustryNeutralRanker:
 
         n_tech = len(tech_df)
         if n_tech <= cap:
-            return selected, reasons
+            return selected, reasons, stats
 
         # 按分数从低到高剔除超出部分
         n_drop = n_tech - cap
@@ -265,7 +280,9 @@ class IndustryNeutralRanker:
 
         selected = selected - drop_set
         reasons.loc[panel[self.symbol_col].isin(drop_set)] = "trimmed_by_sector_cap_tech"
-        return selected, reasons
+        stats["post_count"] = len(selected)
+        stats["dropped_symbols"] = sorted(drop_set)
+        return selected, reasons, stats
 
     # ------------------------------------------------------------------
     # monitor()

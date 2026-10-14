@@ -16,10 +16,6 @@ import sys
 import joblib
 import numpy as np
 import pandas as pd
-from sklearn.impute import SimpleImputer
-from sklearn.linear_model import Ridge
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -28,10 +24,15 @@ from quant_platform.features import industry as industry_module
 from quant_platform.features.flow import FLOW_SPECS, build_flow_features, load_flow_panel
 from quant_platform.features.registry import DEFAULT_SPECS, compute_feature_set_id
 from quant_platform.features.valuation import load_valuation_panel
-from quant_platform.selection.config import SelectionConfig, StrategyType
+from quant_platform.selection.config import weekly_selection_config
 from quant_platform.selection.fusion_score import actionable_pool, fusion_score
 from quant_platform.selection.gate_fusion import gate_first_fusion
 from quant_platform.selection.ranker import IndustryNeutralRanker
+from quant_platform.selection.ridge_baseline import (
+    ORIGINAL_FEATURES,
+    fit_predict_ridge32,
+    score_frame,
+)
 from quant_platform.training.lgbm_model import fit_final_model
 from scripts.next_week_d3_prediction import build_panel, load_symbols
 from scripts.run_d3_gate_once import RECENT_PARAMS, _feature_importance_all
@@ -39,22 +40,17 @@ from scripts.run_dual_horizon_rrf import observable_target
 from temp.latest_dual_horizon import _fast_join_industry
 
 STORE = ROOT / "models/data"
-# The original 32-column Ridge contract, verified against the delivered file.
-ORIGINAL_FEATURES = [
-    "ma_5", "ma_10", "ma_20", "ma_60", "macd_dif", "macd_dea", "macd_hist",
-    "kdj_k", "kdj_d", "kdj_j", "rsi_6", "rsi_12", "rsi_24", "boll_upper",
-    "boll_mid", "atr_14", "adx_14", "obv", "cci_14", "roc_10", "willr_14",
-    "stoch_k", "stoch_d", "reversal_3d", "cs_rank_close", "cs_rank_volume",
-    "cs_rank_rsi_6", "cs_rank_roc_10", "cs_rank_ma_5", "cs_zscore_close",
-    "cs_zscore_volume", "cs_zscore_rsi_6",
-]
 FLOW_FEATURES = [s.name for s in FLOW_SPECS]
+# 诊断组后缀：分数 Gate 诊断臂的输出文件/策略名标记，不作为默认选股结果。
+DIAGNOSTIC_SUFFIX = "_diagnostic"
 ARM_NAMES = {
     "ordinary": "原版Ridge32",
     "hybrid_no_flow": "原版+近期模型（无资金流）",
     "hybrid_flow": "原版+近期模型（有资金流）",
-    "hybrid_flow_score_gate": "有资金流混合+分数Gate",
+    "hybrid_flow_score_gate_diagnostic": "有资金流混合+分数Gate（诊断，不作为选股结果）",
 }
+# 诊断臂的策略键（带后缀），与主策略臂区分。
+DIAGNOSTIC_ARM = "hybrid_flow_score_gate_diagnostic"
 
 
 def fingerprint(frame: pd.DataFrame, columns: list[str]) -> str:
@@ -62,15 +58,8 @@ def fingerprint(frame: pd.DataFrame, columns: list[str]) -> str:
     return hashlib.sha256(values.tobytes()).hexdigest()
 
 
-def scores(pred: pd.DataFrame, values: np.ndarray, prefix: str) -> pd.DataFrame:
-    if len(values) != len(pred) or not np.isfinite(values).all():
-        raise ValueError("Missing or nonfinite predictions")
-    result = pred[["symbol", "date"]].copy()
-    result["trade_date"] = result.date
-    result[f"{prefix}_score"] = values
-    result[f"{prefix}_rank"] = result[f"{prefix}_score"].rank(ascending=False, method="first").astype(int)
-    result[f"{prefix}_pct"] = result[f"{prefix}_score"].rank(ascending=True, pct=True)
-    return result
+# 保持旧测试的导入兼容：scores 即共享基线模块的 score_frame。
+scores = score_frame
 
 
 def combine(base: pd.DataFrame, recent: pd.DataFrame) -> pd.DataFrame:
@@ -82,31 +71,85 @@ def combine(base: pd.DataFrame, recent: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def select(frame: pd.DataFrame, attributes: pd.DataFrame, score_col: str) -> pd.DataFrame:
+def select(
+    frame: pd.DataFrame,
+    attributes: pd.DataFrame,
+    score_col: str,
+    sector_cap_tech: int | None = 10,
+) -> tuple[pd.DataFrame, dict]:
+    """选股并返回 (picks, cap_stats)。
+
+    普通与混合必须同口径：配置统一走 weekly_selection_config()，
+    sector_cap_tech 由调用方传入（None/0 = 历史复现口径，关闭约束）。
+    """
     frame = frame.merge(attributes, on="symbol", how="left", validate="one_to_one")
-    ranked = IndustryNeutralRanker(
-        SelectionConfig(strategy=StrategyType.EQUAL_TOP_K, top_k=3, max_total=50),
+    ranker = IndustryNeutralRanker(
+        weekly_selection_config(sector_cap_tech=sector_cap_tech),
         industry_col="industry_code", name_col="industry_name", score_col=score_col,
-    ).run(frame)
+    )
+    ranked = ranker.run(frame)
     picks = ranked[ranked.selected].sort_values([score_col, "symbol"], ascending=[False, True]).reset_index(drop=True)
     picks.insert(0, "recommendation_rank", np.arange(1, len(picks) + 1))
-    return picks
+    return picks, (ranker.last_sector_cap_stats or {})
 
 
-def verify_reference(picks: pd.DataFrame, train: pd.DataFrame, reference: dict, horizon: int) -> dict:
+def verify_reference(
+    picks: pd.DataFrame,
+    train: pd.DataFrame,
+    reference: dict,
+    horizon: int,
+    check_picks: bool = True,
+) -> dict:
+    """核对历史参考。
+
+    check_picks=True（默认）：完整核对，要求选股名单与参考完全一致。
+    check_picks=False：板块约束开启时期望名单本来就会变，只核对训练窗口
+    和基线分数（分数漂移仍是硬错误），名单核对跳过并记录。
+    """
     expected = reference["horizons"][str(horizon)]
     old = expected["selected"]
     if len(train) != expected["train_rows"] or train.date.min().isoformat() != expected["train_first_date"] or train.date.max().isoformat() != expected["train_last_date"]:
         raise RuntimeError("Original training window/row count cannot be reproduced")
-    if picks.symbol.tolist() != [r["symbol"] for r in old]:
-        raise RuntimeError("Original ordered selection cannot be reproduced")
-    difference = float(np.max(np.abs(picks.base_score.to_numpy() - np.array([r["model_score"] for r in old]))))
+    result = {"train_rows_match": True, "ordered_selection_matches": None}
+    if check_picks:
+        if picks.symbol.tolist() != [r["symbol"] for r in old]:
+            raise RuntimeError("Original ordered selection cannot be reproduced")
+        result["ordered_selection_matches"] = True
+    else:
+        result["ordered_selection_skipped"] = "sector cap enabled; picks expected to differ"
+    # 分数核对：只对参考中仍存在的 symbol 比对（约束只做减法，不改变分数）。
+    ref_scores = {r["symbol"]: r["model_score"] for r in old}
+    common = picks[picks.symbol.isin(ref_scores)]
+    if len(common) == 0:
+        raise RuntimeError("No overlapping symbols with reference for score check")
+    difference = float(np.max(np.abs(
+        common.base_score.to_numpy() - np.array([ref_scores[s] for s in common.symbol])
+    )))
     if difference > 1e-12:
         raise RuntimeError(f"Original scores changed: {difference}")
-    return {"ordered_selection_matches": True, "train_rows_match": True, "max_score_difference": difference}
+    result["max_score_difference"] = difference
+    result["score_check_symbols"] = int(len(common))
+    return result
 
 
-def run(as_of: dt.date, out: Path, reference_path: Path | None, n_jobs: int) -> dict:
+def run(
+    as_of: dt.date,
+    out: Path,
+    reference_path: Path | None,
+    n_jobs: int,
+    sector_cap_tech: int | None = 10,
+    overwrite: bool = False,
+) -> dict:
+    """每周对照实验入口。
+
+    sector_cap_tech: 科技大类合计上限；None/0 = 历史复现口径（关闭约束）。
+    overwrite: False 时若 out 已有内容则拒绝写入，保护历史报告不被覆盖。
+    """
+    if out.exists() and any(out.iterdir()) and not overwrite:
+        raise RuntimeError(
+            f"Output directory {out} already contains files; refusing to overwrite "
+            "historical reports. Use a new --out-dir or pass --overwrite."
+        )
     out.mkdir(parents=True, exist_ok=True)
     symbols = load_symbols()
     reference = json.loads(reference_path.read_text(encoding="utf-8")) if reference_path else None
@@ -154,14 +197,20 @@ def run(as_of: dt.date, out: Path, reference_path: Path | None, n_jobs: int) -> 
     future = sorted(calendar.loc[calendar.is_trading & (calendar.date > as_of), "date"])
     if len(future) < 6:
         raise RuntimeError("Insufficient trading calendar")
+    selection_cfg = weekly_selection_config(sector_cap_tech=sector_cap_tech)
     summary = {
         "as_of": as_of.isoformat(), "entry_date": future[0].isoformat(),
         "research_only": True, "retrospective_reconstruction": True,
         "original_features": ORIGINAL_FEATURES, "flow_features": FLOW_FEATURES,
         "original_algorithm": "Ridge(alpha=1.0)",
+        "baseline_strategy_id": "ridge32_weekly_baseline",
         "recent_algorithm": "LightGBM", "recent_params": {**RECENT_PARAMS, "n_jobs": n_jobs},
         "rrf_k": 60, "recent_window_dates": 120,
-        "selection": {"top_k_per_industry": 3, "max_total": 50},
+        "selection": {
+            "top_k_per_industry": 3, "max_total": 50,
+            "sector_cap_tech": sector_cap_tech,
+            "strategy_version": selection_cfg.version,
+        },
         "gate_scope": "score tiers only; no additional event/risk factors",
         "scored_count": len(pred), "excluded_symbols": sorted(set(symbols) - set(pred.symbol)),
         "prediction_feature_hash": fingerprint(pred, ["symbol", "date"] + ORIGINAL_FEATURES),
@@ -171,12 +220,16 @@ def run(as_of: dt.date, out: Path, reference_path: Path | None, n_jobs: int) -> 
     all_picks = []
     for h in (3, 5):
         label = f"ret_fwd_{h}d"
+        # 共享 Ridge32 基线：与 run_dual_horizon_rrf.py 同一份实现。
+        base, base_meta, model = fit_predict_ridge32(panel, as_of, label)
         train = panel[panel.date < as_of].dropna(subset=ORIGINAL_FEATURES + [label]).copy()
-        model = Pipeline([("imputer", SimpleImputer(strategy="median")), ("scaler", StandardScaler()), ("model", Ridge(alpha=1.0))])
-        model.fit(train[ORIGINAL_FEATURES].values, train[label].values)
-        base = scores(pred, model.predict(pred[ORIGINAL_FEATURES].values), "base")
-        ordinary = select(base, attributes, "base_score")
-        reference_audit = verify_reference(ordinary, train, reference, h) if reference else {"reference_supplied": False}
+        ordinary, ordinary_cap = select(base, attributes, "base_score", sector_cap_tech)
+        # 历史复现口径（约束关闭）才要求名单完全一致；约束开启时只核对分数。
+        check_picks = sector_cap_tech is None or sector_cap_tech == 0
+        reference_audit = (
+            verify_reference(ordinary, train, reference, h, check_picks=check_picks)
+            if reference else {"reference_supplied": False}
+        )
         dates = sorted(train.date.unique())[-120:]
         recent_available = train[train.date.isin(dates)]
         recent_train = recent_available.dropna(subset=FLOW_FEATURES).copy()
@@ -196,32 +249,46 @@ def run(as_of: dt.date, out: Path, reference_path: Path | None, n_jobs: int) -> 
         with_flow = fusion_score(combine(base, recent_scores["flow"]))
         gated = gate_first_fusion(combine(base, recent_scores["flow"]))
         gated.to_csv(out / f"D{h}_score_gate.csv", index=False)
+        # 主策略臂：分数 Gate 保持关闭（2026-10-14 战略裁决）。
+        hybrid_no_flow, no_flow_cap = select(no_flow, attributes, "fusion_score_col", sector_cap_tech)
+        hybrid_flow, flow_cap = select(with_flow, attributes, "fusion_score_col", sector_cap_tech)
+        # 诊断臂：恢复真正的分数 Gate 过滤，仅用于诊断 tier 行为，
+        # 明确不作为默认选股结果（文件名/strategy 列带 _diagnostic 后缀）。
+        diag_pool = actionable_pool(gated)
+        diag_picks, diag_cap = select(diag_pool, attributes, "fusion_score_col", sector_cap_tech)
         arms = {
-            "ordinary": ordinary,
-            "hybrid_no_flow": select(no_flow, attributes, "fusion_score_col"),
-            "hybrid_flow": select(with_flow, attributes, "fusion_score_col"),
-            # 2026-10-14 战略裁决：Gate 已关闭。actionable_pool 的 ACTIONABLE_TIERS
-            # 过滤在 D3/D5 两组独立实验中稳定伤害收益（D3 -0.14pp，D5 -0.10pp），
-            # 系统性剔除逆势上涨的防御股（如中信银行+1.32%、交通银行+1.92%、宁波港+1.67%）。
-            # 改为直接对全量候选做 RRF 融合排序；fusion_score/actionable_pool
-            # 模块本身保留不动，gate_first_fusion 的 tier 列仍会写入 CSV 以便复核。
-            "hybrid_flow_score_gate": select(fusion_score(gated), attributes, "fusion_score_col"),
+            "ordinary": (ordinary, ordinary_cap, False),
+            "hybrid_no_flow": (hybrid_no_flow, no_flow_cap, False),
+            "hybrid_flow": (hybrid_flow, flow_cap, False),
+            DIAGNOSTIC_ARM: (diag_picks, diag_cap, True),
         }
-        equal_n = min(len(p) for p in arms.values())
+        # 等数对照只在主策略臂之间取最小；诊断臂不参与、不拉低对照数。
+        main_arms = {k: v for k, v in arms.items() if not v[2]}
+        equal_n = min(len(p) for p, _, _ in main_arms.values())
         if equal_n == 0:
             raise RuntimeError("No selections in a comparison arm")
-        for key, picks in arms.items():
+        selection_audit = {}
+        for key, (picks, cap_stats, is_diagnostic) in arms.items():
             picks = picks.copy()
             picks["horizon"] = h
             picks["strategy"] = key
             picks["strategy_name"] = ARM_NAMES[key]
-            picks["in_equal_count_comparison"] = picks.recommendation_rank <= equal_n
+            picks["is_diagnostic"] = is_diagnostic
+            picks["in_equal_count_comparison"] = (not is_diagnostic) & (picks.recommendation_rank <= equal_n)
             picks.to_csv(out / f"D{h}_{key}_picks.csv", index=False, encoding="utf-8-sig")
             all_picks.append(picks)
+            selection_audit[key] = {
+                "is_diagnostic": is_diagnostic,
+                "pre_cap_count": cap_stats.get("pre_count"),
+                "post_cap_count": cap_stats.get("post_count"),
+                "sector_cap_enabled": cap_stats.get("enabled"),
+                "dropped_by_sector_cap": cap_stats.get("dropped_symbols", []),
+            }
         base.to_csv(out / f"D{h}_original_scores.csv", index=False)
         joblib.dump(model, out / f"D{h}_original_ridge.joblib")
         summary["horizons"][str(h)] = {
             "label_col": label, "target_date": future[h].isoformat(), "reference_audit": reference_audit,
+            "baseline_meta": base_meta,
             "original_train_rows": len(train), "original_train_start": train.date.min().isoformat(),
             "original_train_end": train.date.max().isoformat(),
             "original_training_input_hash": fingerprint(train, ["symbol", "date"] + ORIGINAL_FEATURES + [label]),
@@ -233,7 +300,8 @@ def run(as_of: dt.date, out: Path, reference_path: Path | None, n_jobs: int) -> 
             "recent_feature_counts": {"no_flow": 32, "flow": 37},
             "flow_importances": {c: importances["flow"][c] for c in FLOW_FEATURES},
             "flow_train_nonnull_dates": {c: int(recent_train.loc[recent_train[c].notna(), "date"].nunique()) for c in FLOW_FEATURES},
-            "equal_count_n": equal_n, "full_selection_counts": {key: len(p) for key, p in arms.items()},
+            "equal_count_n": equal_n, "full_selection_counts": {key: len(p) for key, (p, _, _) in arms.items()},
+            "selection_audit": selection_audit,
         }
         print(f"D{h}: reference={reference_audit}; shared recent={len(recent_train)} rows/{recent_train.date.nunique()} dates; counts={summary['horizons'][str(h)]['full_selection_counts']}", flush=True)
     combined = pd.concat(all_picks, ignore_index=True)
@@ -243,14 +311,33 @@ def run(as_of: dt.date, out: Path, reference_path: Path | None, n_jobs: int) -> 
     return summary
 
 
+def _parse_sector_cap(value: str) -> int | None:
+    """--sector-cap-tech 解析：'off'/'none' -> None（历史复现口径），否则为非负整数。"""
+    if value.lower() in ("off", "none"):
+        return None
+    ivalue = int(value)
+    if ivalue < 0:
+        raise argparse.ArgumentTypeError("--sector-cap-tech must be >= 0 or 'off'")
+    return ivalue
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--as-of", type=dt.date.fromisoformat, required=True)
     parser.add_argument("--out-dir", type=Path, required=True)
     parser.add_argument("--original-reference", type=Path)
     parser.add_argument("--n-jobs", type=int, default=4)
+    parser.add_argument(
+        "--sector-cap-tech", type=_parse_sector_cap, default=10,
+        help="科技大类合计上限；'off' 关闭约束（历史复现口径）。默认 10。",
+    )
+    parser.add_argument(
+        "--overwrite", action="store_true",
+        help="允许覆盖已有内容的输出目录；默认拒绝，保护历史报告。",
+    )
     args = parser.parse_args()
-    run(args.as_of, args.out_dir, args.original_reference, args.n_jobs)
+    run(args.as_of, args.out_dir, args.original_reference, args.n_jobs,
+        sector_cap_tech=args.sector_cap_tech, overwrite=args.overwrite)
 
 
 if __name__ == "__main__":

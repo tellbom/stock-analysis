@@ -59,12 +59,14 @@ class SelectionConfig:
         SR-02: cap on one-way turnover per rebalance, i.e. the fraction of
         max_total slots that may change (adds == drops). Only used by
         TurnoverAwareStrategy.
-    sector_cap_tech : int
+    sector_cap_tech : int | None
         风控层：科技大类合计上限。选股后若科技板块（半导体/芯片/通信/
         电子/计算机等，见 TECH_SECTOR_INDUSTRIES）选中数超过此值，
-        按分数从低到高剔除超出部分。0 表示不启用。
+        按分数从低到高剔除超出部分。0 或 None 表示不启用（历史复现用）。
         依据 2026-10-14 裁决：科技板块 bet 是 D3/D5 主要亏损源，
         3 只/行业的粒度防不住板块级暴露。
+    version : str
+        策略版本标签，随 run summary 输出，用于复现时核对口径。
     """
 
     strategy: StrategyType = StrategyType.EQUAL_TOP_K
@@ -78,7 +80,8 @@ class SelectionConfig:
     enter_rank: int = 30
     keep_rank: int = 60
     max_turnover: float = 0.5
-    sector_cap_tech: int = 10
+    sector_cap_tech: int | None = 10
+    version: str = "2026-10-14-gate-closed"
 
     def __post_init__(self) -> None:
         # Validate enum coercion
@@ -114,5 +117,24 @@ class SelectionConfig:
             )
         if not 0.0 < self.max_turnover <= 1.0:
             raise ValueError(f"max_turnover must be in (0, 1], got {self.max_turnover}")
-        if self.sector_cap_tech < 0:
-            raise ValueError(f"sector_cap_tech must be >= 0, got {self.sector_cap_tech}")
+        if self.sector_cap_tech is not None and self.sector_cap_tech < 0:
+            raise ValueError(f"sector_cap_tech must be >= 0 or None, got {self.sector_cap_tech}")
+
+
+def weekly_selection_config(*, sector_cap_tech: int | None = 10) -> SelectionConfig:
+    """Shared weekly selection aperture.
+
+    普通组与混合组必须同口径：两个入口（compare_original_hybrid.py、
+    run_dual_horizon_rrf.py）都用这个工厂构造配置，禁止各自手写参数。
+
+    Parameters
+    ----------
+    sector_cap_tech : int | None
+        科技大类合计上限。None/0 = 关闭（历史复现）；新实验统一开启。
+    """
+    return SelectionConfig(
+        strategy=StrategyType.EQUAL_TOP_K,
+        top_k=3,
+        max_total=50,
+        sector_cap_tech=sector_cap_tech,
+    )

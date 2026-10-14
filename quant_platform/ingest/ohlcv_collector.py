@@ -185,12 +185,18 @@ def collect_symbol(
     store_root: Path | str,
     start_date: dt.date,
     end_date: dt.date,
+    *,
+    force: bool = False,
 ) -> FetchResult:
     """
     Fetch OHLCV for *symbol* and write/append to the silver lake.
 
     Incremental: if existing data is found, only fetches from
     (last_stored_date + 1) onward and appends.
+
+    force=True bypasses the up-to-date skip and re-fetches a 10-calendar-day
+    overlap window; freshly fetched rows win over stored rows on (symbol,
+    date) conflicts, so revised bars are corrected.
 
     Returns a FetchResult describing the outcome.
     """
@@ -201,14 +207,18 @@ def collect_symbol(
     existing = read_ohlcv(path)
     if not existing.empty:
         last_stored = pd.to_datetime(existing["date"]).dt.date.max()
-        if last_stored >= end_date:
+        if last_stored >= end_date and not force:
             logger.info("%s: already up to date (last=%s)", symbol, last_stored)
             return FetchResult(
                 symbol=symbol, success=True,
                 rows_new=0, rows_total=len(existing),
                 last_date=last_stored, error="skipped",
             )
-        fetch_start = last_stored + dt.timedelta(days=1)
+        if force:
+            # Overlap window: re-fetch recent bars so corrections overwrite.
+            fetch_start = max(start_date, end_date - dt.timedelta(days=10))
+        else:
+            fetch_start = last_stored + dt.timedelta(days=1)
     else:
         fetch_start = start_date
 
@@ -229,7 +239,12 @@ def collect_symbol(
 
     # --- Merge with existing and write ---
     if not existing.empty:
-        combined = pd.concat([existing, new_df], ignore_index=True)
+        if force:
+            # Fresh rows first: enforce_ohlcv keeps the FIRST row on
+            # (symbol, date) duplicates, so re-fetched bars overwrite.
+            combined = pd.concat([new_df, existing], ignore_index=True)
+        else:
+            combined = pd.concat([existing, new_df], ignore_index=True)
     else:
         combined = new_df
 
@@ -269,6 +284,9 @@ class OHLCVCollector:
     max_workers : int
         Thread pool size.  Default 1 (serial).  Increase cautiously —
         AKShare warns that heavy concurrency causes IP bans.
+    force : bool
+        Re-fetch even symbols already up to date (10-day overlap window,
+        fresh rows win).  Default False (incremental skip).
     """
 
     def __init__(
@@ -277,6 +295,7 @@ class OHLCVCollector:
         start_date: dt.date | str | None = None,
         end_date:   dt.date | str | None = None,
         max_workers: int = 1,
+        force: bool = False,
     ) -> None:
         self.store_root  = Path(store_root)
         self.start_date  = _as_date(start_date) if start_date else (
@@ -284,6 +303,7 @@ class OHLCVCollector:
         )
         self.end_date    = _as_date(end_date) if end_date else dt.date.today()
         self.max_workers = max_workers
+        self.force       = force
         init_lake(self.store_root)
 
     def run(self, symbols: list[str]) -> CollectorSummary:
@@ -341,7 +361,8 @@ class OHLCVCollector:
 
     def _collect_one(self, symbol: str) -> FetchResult:
         try:
-            return collect_symbol(symbol, self.store_root, self.start_date, self.end_date)
+            return collect_symbol(symbol, self.store_root, self.start_date, self.end_date,
+                                  force=self.force)
         except Exception as exc:
             logger.error("Unexpected error collecting %s: %s", symbol, exc)
             return FetchResult(symbol=symbol, success=False, error=str(exc))
