@@ -74,6 +74,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="强制重拉：即使已是最新也重拉最近 10 天并覆盖（修正被修订的 bar）。",
     )
+    parser.add_argument(
+        "--deep-verify",
+        action="store_true",
+        help="P0(300803)：全历史前复权尺度一致性检查。比对完整重叠历史，"
+        "发现除权/分红导致的历史尺度变化时整体替换（原子写入）。"
+        "默认每 30 天自动触发一次；此开关强制本次执行。",
+    )
     parser.add_argument("--workers", type=int, default=1)
     return parser.parse_args(argv)
 
@@ -106,7 +113,7 @@ def main(argv: list[str] | None = None) -> int:
 
     print("=" * 70)
     print("FETCH LATEST OHLCV DATA (via ingest.ohlcv_collector.OHLCVCollector)")
-    print(f"Target: at least {target}" + (" [FORCE]" if args.force else ""))
+    print(f"Target: at least {target}" + (" [FORCE]" if args.force else "") + (" [DEEP-VERIFY]" if args.deep_verify else ""))
     print("=" * 70)
     print()
 
@@ -118,6 +125,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Already up to date: {len(already_ok)}/{len(symbols)}")
     if args.force:
         print("Force mode: already-up-to-date symbols will be re-fetched (10-day overlap).")
+    if args.deep_verify:
+        print("Deep-verify mode: full-history QFQ scale check per symbol (300803 defect).")
     print()
 
     # OHLCVCollector.run() is already incremental per symbol -- symbols
@@ -128,6 +137,7 @@ def main(argv: list[str] | None = None) -> int:
         end_date=fetch_end_date,
         max_workers=args.workers,  # serial recommended -- AKShare/Sina can rate-limit concurrency
         force=args.force,
+        deep_verify=True if args.deep_verify else None,  # None = auto-trigger by interval
     )
     summary = collector.run(symbols)
 

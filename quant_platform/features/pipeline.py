@@ -51,6 +51,8 @@ Usage
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
+import json
 from pathlib import Path
 
 import pandas as pd
@@ -68,6 +70,96 @@ from quant_platform.store.lake import (
 from quant_platform.store.parquet_store import read_ohlcv, write_parquet
 
 logger = get_logger(__name__)
+
+
+# ---------------------------------------------------------------------------
+# OHLCV provenance tracking (P0: 300803 QFQ defect)
+# ---------------------------------------------------------------------------
+# Feature Parquets are cached per (feature_set_id, symbol).  When the
+# underlying OHLCV is revised (e.g. a QFQ scale change from ex-rights),
+# the cached features are silently stale: the fingerprint proves
+# reproducibility of the pipeline, not validity of the inputs.
+# We record a fingerprint of the source OHLCV alongside each feature file
+# and refuse to serve stale features.
+
+def ohlcv_fingerprint(df: pd.DataFrame) -> str:
+    """
+    Fingerprint of OHLCV data: SHA256 over (symbol, date, close, volume).
+
+    Any price revision (including a QFQ scale change) alters this hash,
+    which invalidates dependent feature/label caches.
+    """
+    if df.empty:
+        return "empty"
+    cols = [c for c in ("symbol", "date", "close", "volume") if c in df.columns]
+    sub = df[cols].copy()
+    sub["date"] = pd.to_datetime(sub["date"]).dt.strftime("%Y-%m-%d")
+    sub = sub.sort_values(["symbol", "date"]).reset_index(drop=True)
+    h = hashlib.sha256()
+    h.update(sub.to_csv(index=False).encode("utf-8"))
+    return h.hexdigest()[:16]
+
+
+def _feature_provenance_path(store_root: Path | str, feature_set_id: str, symbol: str) -> Path:
+    from quant_platform.store.lake import feature_path
+    p = feature_path(Path(store_root), feature_set_id, symbol)
+    return p.with_suffix(".provenance.json")
+
+
+def record_feature_provenance(
+    store_root: Path | str,
+    feature_set_id: str,
+    symbol: str,
+    ohlcv_df: pd.DataFrame,
+) -> None:
+    """Record which OHLCV snapshot a feature file was built from."""
+    sidecar = _feature_provenance_path(store_root, feature_set_id, symbol)
+    try:
+        sidecar.parent.mkdir(parents=True, exist_ok=True)
+        sidecar.write_text(
+            json.dumps({
+                "ohlcv_fingerprint": ohlcv_fingerprint(ohlcv_df),
+                "ohlcv_rows": len(ohlcv_df),
+                "ohlcv_max_date": str(pd.to_datetime(ohlcv_df["date"]).dt.date.max()),
+                "built_at": dt.datetime.now().isoformat(timespec="seconds"),
+                "feature_set_id": feature_set_id,
+            }, ensure_ascii=False),
+            encoding="utf-8",
+        )
+    except Exception as exc:  # non-fatal bookkeeping
+        logger.debug("Could not write provenance for %s: %s", symbol, exc)
+
+
+def verify_feature_freshness(
+    store_root: Path | str,
+    feature_set_id: str,
+    symbols: list[str],
+) -> list[str]:
+    """
+    Return symbols whose cached features are stale vs current OHLCV.
+
+    A symbol is stale when its feature file is missing, its provenance
+    sidecar is missing, or the current OHLCV fingerprint differs from the
+    recorded one (price revision happened after the features were built).
+    """
+    from quant_platform.store.lake import feature_path, ohlcv_path
+    from quant_platform.store.parquet_store import read_ohlcv
+    stale: list[str] = []
+    for symbol in symbols:
+        fp = feature_path(Path(store_root), feature_set_id, symbol)
+        sidecar = _feature_provenance_path(store_root, feature_set_id, symbol)
+        if not fp.exists() or not sidecar.exists():
+            stale.append(symbol)
+            continue
+        try:
+            recorded = json.loads(sidecar.read_text(encoding="utf-8"))["ohlcv_fingerprint"]
+        except Exception:
+            stale.append(symbol)
+            continue
+        current = ohlcv_fingerprint(read_ohlcv(ohlcv_path(store_root, symbol)))
+        if current != recorded:
+            stale.append(symbol)
+    return stale
 
 
 class FeaturePipeline:
@@ -206,6 +298,11 @@ class FeaturePipeline:
 
         df = df.sort_values("date").reset_index(drop=True)
 
+        # P0(300803): snapshot the source OHLCV for provenance tracking.
+        # Features are derived from these prices; any later revision must
+        # invalidate this cache.
+        ohlcv_snapshot = df[["symbol", "date", "close", "volume"]].copy()
+
         # 2. Technical features
         df = build_technical_features(df, self.project_root)
 
@@ -228,6 +325,9 @@ class FeaturePipeline:
         out_path = feature_path(self.store_root, feature_set_id, symbol)
         out_path.parent.mkdir(parents=True, exist_ok=True)
         write_parquet(df, out_path)
+        # P0(300803): record which OHLCV snapshot these features came from,
+        # so a later price revision invalidates this cache.
+        record_feature_provenance(self.store_root, feature_set_id, symbol, ohlcv_snapshot)
         logger.debug(
             "%s: wrote %d feature rows → %s", symbol, len(df), out_path
         )

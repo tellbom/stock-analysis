@@ -63,6 +63,7 @@ The excess label is NaN for any date where the index return is unavailable.
 
 from __future__ import annotations
 
+import datetime as dt
 from pathlib import Path
 
 import numpy as np
@@ -313,6 +314,23 @@ def _build_symbol_labels(
     out_path.parent.mkdir(parents=True, exist_ok=True)
     if overwrite or not out_path.exists():
         out.to_parquet(out_path, index=False)
+        # P0(300803): record which OHLCV snapshot these labels came from.
+        from quant_platform.features.pipeline import (
+            ohlcv_fingerprint, _feature_provenance_path,
+        )
+        import json
+        sidecar = out_path.with_suffix(".provenance.json")
+        try:
+            sidecar.write_text(
+                json.dumps({
+                    "ohlcv_fingerprint": ohlcv_fingerprint(df),
+                    "ohlcv_rows": len(df),
+                    "built_at": dt.datetime.now().isoformat(timespec="seconds"),
+                }, ensure_ascii=False),
+                encoding="utf-8",
+            )
+        except Exception as exc:
+            logger.debug("Could not write label provenance for %s: %s", symbol, exc)
         logger.debug("%s: wrote %d label rows → %s", symbol, len(out), out_path)
 
     return len(out)

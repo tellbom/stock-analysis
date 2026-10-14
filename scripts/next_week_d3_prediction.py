@@ -138,6 +138,7 @@ def build_panel(
     symbols: list[str],
     feature_set_id: str,
     max_date: dt.date | None = None,
+    verify_freshness: bool = True,
 ) -> pd.DataFrame:
     """
     Build feature+label panel from the registered production feature set.
@@ -147,7 +148,22 @@ def build_panel(
     stored per-symbol parquet files. Keep this loader intentionally boring:
     no ad hoc technical-feature patching here, so training and prediction use
     one persisted feature source of truth.
+
+    P0(300803): when verify_freshness is True (default), symbols whose cached
+    features were built from a different OHLCV snapshot (price revision after
+    caching) cause a RuntimeError instead of silently serving stale features.
+    Pass verify_freshness=False only for historical audit replay.
     """
+    if verify_freshness:
+        from quant_platform.features.pipeline import verify_feature_freshness
+        stale = verify_feature_freshness(STORE_ROOT, feature_set_id, symbols)
+        if stale:
+            raise RuntimeError(
+                f"Feature cache stale for {len(stale)} symbol(s) vs current OHLCV "
+                f"(e.g. {stale[:5]}); price revision detected after features were built. "
+                "Rebuild features through FeaturePipeline before training. "
+                "See P0/300803 QFQ audit."
+            )
     frames = []
 
     for sym in symbols:

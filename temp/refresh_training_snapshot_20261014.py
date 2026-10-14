@@ -44,39 +44,26 @@ def backup(path: Path, category: str):
 
 
 def ohlcv(symbol):
+    # P0(2026-10-14 审计)：此前手工重叠判断只比较近期 N 天，除权日在窗口外时
+    # 漏判（如 300803）。现委托统一采集实现做全历史复权尺度检查，
+    # 不在此处重复不充分的判断。
+    from quant_platform.ingest.ohlcv_collector import collect_symbol
     try:
         path = STORE / "silver/ohlcv" / f"{symbol}.parquet"
         old = read_ohlcv(path)
-        # One overlapping stored session checks the current adjustment scale.
-        overlap = max(old.date.max(), dt.date(2026, 10, 9))
-        fresh = _fetch_symbol_raw(symbol, overlap.strftime("%Y%m%d"), "20261015")
-        if fresh is None or fresh.empty:
-            raise RuntimeError("No daily data")
-        fresh["date"] = pd.to_datetime(fresh.date).dt.date
-        fresh = fresh[fresh.date <= TARGET].copy()
-        if fresh.empty or fresh.date.max() != TARGET:
-            return {"symbol": symbol, "status": "stale", "latest": str(fresh.date.max() if not fresh.empty else old.date.max())}
-        values = fresh[["open", "high", "low", "close", "volume"]]
-        if values.isna().any().any() or (values <= 0).any().any():
-            raise RuntimeError("Incomplete or nonpositive daily bar")
-        joined = old[["date", "close"]].merge(fresh[["date", "close"]], on="date", suffixes=("_old", "_new"))
-        revised = bool(((joined.close_old - joined.close_new).abs() > 0.020001).any())
-        if revised:
-            # A new qfq scale requires all old prices to be on that scale,
-            # rather than creating an artificial jump by appending the tail.
-            fresh = _fetch_symbol_raw(symbol, old.date.min().strftime("%Y%m%d"), "20261015")
-            fresh["date"] = pd.to_datetime(fresh.date).dt.date
-            fresh = fresh[fresh.date <= TARGET].copy()
-            if fresh.date.max() != TARGET or fresh.date.min() > old.date.min():
-                raise RuntimeError("Revised adjustment history is incomplete")
-            combined = fresh
-        else:
-            combined = pd.concat([fresh, old], ignore_index=True).drop_duplicates(["symbol", "date"], keep="first")
         backup(path, "ohlcv")
-        write_ohlcv(combined, path, symbol)
-        return {"symbol": symbol, "status": "updated", "latest": str(TARGET),
-                "adjustment_history_refreshed": revised, "rows": len(combined),
-                "source": "akshare_sina_primary_or_eastmoney_fallback_qfq"}
+        result = collect_symbol(
+            symbol, STORE,
+            start_date=old["date"].min() if not old.empty else TARGET - dt.timedelta(days=365 * 3),
+            end_date=TARGET,
+            deep_verify=True,  # 强制全历史 QFQ 尺度检查
+        )
+        if not result.success:
+            return {"symbol": symbol, "status": "failed", "error": result.error[:180]}
+        return {"symbol": symbol, "status": "updated", "latest": str(result.last_date),
+                "adjustment_history_refreshed": result.error.startswith("scale_refreshed"),
+                "rows": result.rows_total,
+                "source": "ingest.ohlcv_collector.collect_symbol(deep_verify=True)"}
     except Exception as exc:
         return {"symbol": symbol, "status": "failed", "error": str(exc)[:180]}
 

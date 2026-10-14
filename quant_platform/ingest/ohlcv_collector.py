@@ -52,6 +52,188 @@ logger = get_logger(__name__)
 # AKShare date format
 _DATE_FMT = "%Y%m%d"
 
+# QFQ scale consistency check
+# ---------------------------
+# Forward-adjusted (qfq) prices change scale on ex-rights/ex-dividend dates.
+# An incremental tail append cannot detect a scale change that happened
+# BEFORE the fetched window: the tail matches (post-ex-date) while the stored
+# history is on the old scale.  The 300803 (指南针) case proved this: 896 of
+# 908 shared dates differed, only the last 12 matched.
+_QFQ_TOL = 0.02  # yuan; matches the audit's 0.020001 threshold
+_DEEP_VERIFY_INTERVAL_DAYS = 30  # auto-trigger full history check
+
+
+def _verify_sidecar_path(store_root: Path | str, symbol: str) -> Path:
+    """Sidecar tracking last deep QFQ verification per symbol."""
+    return Path(store_root) / "silver" / "ohlcv" / f"{symbol}.verify.json"
+
+
+def verify_qfq_scale(
+    existing: pd.DataFrame,
+    fresh: pd.DataFrame,
+    tol: float = _QFQ_TOL,
+) -> tuple[bool, list, float]:
+    """
+    Compare stored history vs freshly fetched full history on overlapping dates.
+
+    Unlike a tail-only overlap check, this compares the FULL overlap so an
+    ex-rights/ex-dividend outside any tail window is still detected
+    (the 300803 case: tail 12 days matched, 896 earlier dates differed).
+
+    Returns
+    -------
+    (consistent, mismatched_dates, max_abs_diff)
+        consistent: True if all overlapping closes agree within tol.
+    """
+    if existing.empty or fresh.empty:
+        return True, [], 0.0
+    old = existing[["date", "close"]].copy()
+    new = fresh[["date", "close"]].copy()
+    old["date"] = pd.to_datetime(old["date"]).dt.date
+    new["date"] = pd.to_datetime(new["date"]).dt.date
+    joined = old.merge(new, on="date", suffixes=("_old", "_new"), how="inner")
+    if joined.empty:
+        return True, [], 0.0
+    diff = (joined["close_old"] - joined["close_new"]).abs()
+    bad = joined.loc[diff > tol, "date"]
+    return (
+        len(bad) == 0,
+        sorted(bad.tolist()),
+        float(diff.max()),
+    )
+
+
+def refresh_symbol_full_history(
+    symbol: str,
+    store_root: Path | str,
+    start_date: dt.date,
+    end_date: dt.date,
+) -> FetchResult:
+    """
+    Full-history QFQ refresh for *symbol*.
+
+    Fetches the complete history from the earliest stored date (or
+    *start_date* when no data exists), runs the QFQ scale consistency check
+    over the FULL overlap, and — only when the scale differs — replaces the
+    stored history with the fresh fetch after an integrity check.
+
+    Integrity check before write: fresh data must be non-empty, span
+    [earliest_needed, end_date], and contain no null/non-positive OHLCV.
+    The write is atomic (temp file + rename via write_ohlcv).
+
+    On ANY failure the old file is kept untouched and success=False
+    is returned — never a partial or spliced write.
+    """
+    store_root = Path(store_root)
+    path = ohlcv_path(store_root, symbol)
+    existing = read_ohlcv(path)
+
+    if not existing.empty:
+        earliest_needed = pd.to_datetime(existing["date"]).dt.date.min()
+        earliest_needed = min(earliest_needed, start_date)
+    else:
+        earliest_needed = start_date
+
+    # --- Fetch full history ---
+    new_df = _fetch_symbol_raw(
+        symbol,
+        earliest_needed.strftime(_DATE_FMT),
+        end_date.strftime(_DATE_FMT),
+    )
+    if new_df is None or new_df.empty:
+        return FetchResult(
+            symbol=symbol, success=False,
+            rows_total=len(existing),
+            error="Full-history refetch returned no data; old file kept",
+        )
+
+    new_df = new_df.copy()
+    new_df["date"] = pd.to_datetime(new_df["date"]).dt.date
+
+    # --- Integrity check: coverage + sane bars ---
+    # The fresh fetch must cover the entire stored history range (so the
+    # scale comparison is meaningful).  It does not need to reach end_date:
+    # on weekends/holidays no new bars exist yet; the incremental path
+    # below handles the tail.
+    fresh_min = new_df["date"].min()
+    fresh_max = new_df["date"].max()
+    if not existing.empty:
+        need_min = pd.to_datetime(existing["date"]).dt.date.min()
+        need_max = pd.to_datetime(existing["date"]).dt.date.max()
+        if fresh_min > need_min or fresh_max < need_max:
+            return FetchResult(
+                symbol=symbol, success=False,
+                rows_total=len(existing),
+                error=f"Full-history refetch does not cover stored range "
+                      f"[{need_min}, {need_max}] (got [{fresh_min}, {fresh_max}]); old file kept",
+            )
+    ohlc_cols = [c for c in ("open", "high", "low", "close") if c in new_df.columns]
+    if new_df[ohlc_cols].isna().any().any() or (new_df[ohlc_cols] <= 0).any().any():
+        return FetchResult(
+            symbol=symbol, success=False,
+            rows_total=len(existing),
+            error="Full-history refetch has null/non-positive OHLCV; old file kept",
+        )
+
+    # --- QFQ scale consistency check over the FULL overlap ---
+    consistent, mismatched, max_diff = verify_qfq_scale(existing, new_df)
+    if consistent:
+        _record_deep_verify(store_root, symbol)
+        return FetchResult(
+            symbol=symbol, success=True,
+            rows_new=0, rows_total=len(existing),
+            last_date=pd.to_datetime(existing["date"]).dt.date.max() if not existing.empty else fresh_max,
+            error="scale_ok",
+        )
+
+    # Scale differs: replace the whole history with the fresh fetch.
+    # The fresh QFQ series is self-consistent; splicing old-scale rows
+    # would create an artificial jump (the 300803 defect).
+    logger.warning(
+        "%s: QFQ scale changed (%d mismatched dates, max diff %.2f) — "
+        "replacing full history",
+        symbol, len(mismatched), max_diff,
+    )
+    write_ohlcv(new_df, path, symbol)
+    _record_deep_verify(store_root, symbol)
+
+    rows_total = len(pd.read_parquet(path))
+    return FetchResult(
+        symbol=symbol, success=True,
+        rows_new=len(new_df), rows_total=rows_total,
+        last_date=fresh_max,
+        error=f"scale_refreshed:{len(mismatched)}",
+    )
+
+
+def _record_deep_verify(store_root: Path | str, symbol: str) -> None:
+    """Record that a deep QFQ verification completed for *symbol* today."""
+    sidecar = _verify_sidecar_path(store_root, symbol)
+    try:
+        sidecar.parent.mkdir(parents=True, exist_ok=True)
+        import json
+        sidecar.write_text(
+            json.dumps({"last_deep_verify": dt.date.today().isoformat()}),
+            encoding="utf-8",
+        )
+    except Exception as exc:  # non-fatal bookkeeping
+        logger.debug("Could not write verify sidecar for %s: %s", symbol, exc)
+
+
+def _deep_verify_due(store_root: Path | str, symbol: str) -> bool:
+    """True when no deep verification ran within the interval."""
+    sidecar = _verify_sidecar_path(store_root, symbol)
+    if not sidecar.exists():
+        return True
+    try:
+        import json
+        last = dt.date.fromisoformat(
+            json.loads(sidecar.read_text(encoding="utf-8"))["last_deep_verify"]
+        )
+        return (dt.date.today() - last).days >= _DEEP_VERIFY_INTERVAL_DAYS
+    except Exception:
+        return True
+
 
 # ---------------------------------------------------------------------------
 # Result tracking
@@ -187,6 +369,7 @@ def collect_symbol(
     end_date: dt.date,
     *,
     force: bool = False,
+    deep_verify: bool | None = None,
 ) -> FetchResult:
     """
     Fetch OHLCV for *symbol* and write/append to the silver lake.
@@ -198,13 +381,37 @@ def collect_symbol(
     overlap window; freshly fetched rows win over stored rows on (symbol,
     date) conflicts, so revised bars are corrected.
 
+    deep_verify: when True, run a full-history QFQ scale consistency check
+    (detects ex-rights/ex-dividend outside any tail window, e.g. 300803).
+    When None (default), the check auto-triggers if no deep verification ran
+    within _DEEP_VERIFY_INTERVAL_DAYS.  When False, skip the check.
+
     Returns a FetchResult describing the outcome.
     """
     store_root = Path(store_root)
     path = ohlcv_path(store_root, symbol)
 
+    # --- Automatic deep QFQ verification (P0: 300803 defect) ---
+    # A tail-only overlap cannot detect a scale change whose ex-date is
+    # outside the fetched window.  The deep check compares the FULL overlap.
+    # Skipped when there is no stored history (nothing to compare against).
+    existing_probe = read_ohlcv(path)
+    want_deep = False
+    if not existing_probe.empty:
+        want_deep = deep_verify if deep_verify is not None else _deep_verify_due(store_root, symbol)
+    if want_deep:
+        deep_result = refresh_symbol_full_history(symbol, store_root, start_date, end_date)
+        if not deep_result.success:
+            # Full-history refetch failed: keep old file, report failure.
+            # Do NOT fall through to a tail append that would splice scales.
+            return deep_result
+        if deep_result.error.startswith("scale_refreshed"):
+            # History was replaced; nothing more to do this round.
+            return deep_result
+        # Scale OK: fall through to the normal incremental path below.
+
     # --- Read existing data to determine fetch window ---
-    existing = read_ohlcv(path)
+    existing = existing_probe
     if not existing.empty:
         last_stored = pd.to_datetime(existing["date"]).dt.date.max()
         if last_stored >= end_date and not force:
@@ -287,6 +494,9 @@ class OHLCVCollector:
     force : bool
         Re-fetch even symbols already up to date (10-day overlap window,
         fresh rows win).  Default False (incremental skip).
+    deep_verify : bool | None
+        Full-history QFQ scale check per symbol.  None (default) auto-triggers
+        when the last deep verification is older than the interval.
     """
 
     def __init__(
@@ -296,6 +506,7 @@ class OHLCVCollector:
         end_date:   dt.date | str | None = None,
         max_workers: int = 1,
         force: bool = False,
+        deep_verify: bool | None = None,
     ) -> None:
         self.store_root  = Path(store_root)
         self.start_date  = _as_date(start_date) if start_date else (
@@ -304,6 +515,7 @@ class OHLCVCollector:
         self.end_date    = _as_date(end_date) if end_date else dt.date.today()
         self.max_workers = max_workers
         self.force       = force
+        self.deep_verify = deep_verify
         init_lake(self.store_root)
 
     def run(self, symbols: list[str]) -> CollectorSummary:
@@ -362,7 +574,7 @@ class OHLCVCollector:
     def _collect_one(self, symbol: str) -> FetchResult:
         try:
             return collect_symbol(symbol, self.store_root, self.start_date, self.end_date,
-                                  force=self.force)
+                                  force=self.force, deep_verify=self.deep_verify)
         except Exception as exc:
             logger.error("Unexpected error collecting %s: %s", symbol, exc)
             return FetchResult(symbol=symbol, success=False, error=str(exc))
