@@ -34,10 +34,29 @@ from scripts.next_week_d3_prediction import (
     build_panel,
     load_symbols,
 )
+from scripts.run_dual_horizon_rrf import observable_target
 
 AS_OF = dt.date(2026, 9, 30)
 STORE = ROOT / "models" / "data"
 OUT = ROOT / "temp" / "latest_dual_horizon.json"
+
+
+def restrict_targets_as_of(panel: pd.DataFrame, prices: pd.DataFrame, as_of: dt.date) -> pd.DataFrame:
+    """Replace mutable stored labels using only prices observable at the signal.
+
+    Rebuilding the label store later must not make a historical Ridge rerun
+    consume outcomes after its signal date. Do not expose target-end dates as
+    feature candidates.
+    """
+    result = panel.loc[panel["date"] <= as_of].copy()
+    for horizon in (3, 5):
+        label = f"ret_fwd_{horizon}d"
+        target = observable_target(prices, as_of, horizon)
+        result = result.drop(columns=[label], errors="ignore").merge(
+            target[["symbol", "date", label]], on=["symbol", "date"],
+            how="left", validate="one_to_one",
+        )
+    return result
 
 
 def _fast_join_industry(panel: pd.DataFrame, industry_map: pd.DataFrame) -> pd.DataFrame:
@@ -95,6 +114,12 @@ def main() -> None:
     industry_module._join_industry = _fast_join_industry
     panel = build_panel(symbols, feature_set_id, max_date=AS_OF)
     panel["symbol"] = panel["symbol"].astype(str).str.zfill(6)
+    prices = pd.concat([
+        pd.read_parquet(STORE / "silver" / "ohlcv" / f"{symbol}.parquet", columns=["symbol", "date", "close"])
+        for symbol in symbols
+    ], ignore_index=True)
+    prices["symbol"] = prices["symbol"].astype(str).str.zfill(6)
+    panel = restrict_targets_as_of(panel, prices, AS_OF)
     pred_day = panel.loc[panel["date"] == AS_OF].copy()
     if len(pred_day) < 250:
         raise RuntimeError(f"Prediction-day coverage too low: {len(pred_day)}/300")

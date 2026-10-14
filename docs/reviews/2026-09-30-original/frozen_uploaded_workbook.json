@@ -1,0 +1,824 @@
+{
+  "source_file": "user_uploaded:2026-09-30_D3_D5_选股推荐(1).xlsx",
+  "source_sha256": "ebd81ba8c12bb74d74e0fc74c6c7eb9fedac6614c764f933a1bf5e92785187d4",
+  "signal_date": "2026-09-30",
+  "as_of": "2026-10-13",
+  "horizons": {
+    "3": {
+      "label_col": "ret_fwd_3d",
+      "entry_date": "2026-10-08",
+      "target_date": "2026-10-13",
+      "last_training_sample": "2026-09-23",
+      "selected": [
+        {
+          "rank": 1,
+          "symbol": "300803",
+          "name": "指南针",
+          "industry_name": "垂直应用软件",
+          "model_score": 0.015670050079758583,
+          "signal_close": 53.03
+        },
+        {
+          "rank": 2,
+          "symbol": "002709",
+          "name": "天赐材料",
+          "industry_name": "电池化学品",
+          "model_score": 0.012486939713574657,
+          "signal_close": 31.2
+        },
+        {
+          "rank": 3,
+          "symbol": "002625",
+          "name": "光启技术",
+          "industry_name": "航空装备Ⅲ",
+          "model_score": 0.011232821641994935,
+          "signal_close": 23.57
+        },
+        {
+          "rank": 4,
+          "symbol": "301308",
+          "name": "江波龙",
+          "industry_name": "数字芯片设计",
+          "model_score": 0.010790955693502463,
+          "signal_close": 301.93
+        },
+        {
+          "rank": 5,
+          "symbol": "300750",
+          "name": "宁德时代",
+          "industry_name": "电池",
+          "model_score": 0.009834275977553802,
+          "signal_close": 291.11
+        },
+        {
+          "rank": 6,
+          "symbol": "002460",
+          "name": "赣锋锂业",
+          "industry_name": "能源金属",
+          "model_score": 0.009785180512468006,
+          "signal_close": 43.43
+        },
+        {
+          "rank": 7,
+          "symbol": "300413",
+          "name": "芒果超媒",
+          "industry_name": "传媒",
+          "model_score": 0.0093497597363356,
+          "signal_close": 21
+        },
+        {
+          "rank": 8,
+          "symbol": "002028",
+          "name": "思源电气",
+          "industry_name": "电网设备",
+          "model_score": 0.008748213486898058,
+          "signal_close": 120.46
+        },
+        {
+          "rank": 9,
+          "symbol": "600930",
+          "name": "华电新能",
+          "industry_name": "公用事业",
+          "model_score": 0.008623184181086648,
+          "signal_close": 3.88
+        },
+        {
+          "rank": 10,
+          "symbol": "300274",
+          "name": "阳光电源",
+          "industry_name": "光伏设备",
+          "model_score": 0.008333687248062197,
+          "signal_close": 82.49
+        },
+        {
+          "rank": 11,
+          "symbol": "601998",
+          "name": "中信银行",
+          "industry_name": "银行Ⅱ",
+          "model_score": 0.008164694752193466,
+          "signal_close": 9.1
+        },
+        {
+          "rank": 12,
+          "symbol": "600803",
+          "name": "新奥股份",
+          "industry_name": "公用事业",
+          "model_score": 0.00814687169393495,
+          "signal_close": 19.2
+        },
+        {
+          "rank": 13,
+          "symbol": "600549",
+          "name": "厦门钨业",
+          "industry_name": "有色金属",
+          "model_score": 0.008135235481804205,
+          "signal_close": 44.11
+        },
+        {
+          "rank": 14,
+          "symbol": "002466",
+          "name": "天齐锂业",
+          "industry_name": "有色金属",
+          "model_score": 0.008106524565944863,
+          "signal_close": 40.25
+        },
+        {
+          "rank": 15,
+          "symbol": "688472",
+          "name": "阿特斯",
+          "industry_name": "光伏电池组件",
+          "model_score": 0.007734719662348868,
+          "signal_close": 8.42
+        },
+        {
+          "rank": 16,
+          "symbol": "600160",
+          "name": "巨化股份",
+          "industry_name": "氟化工",
+          "model_score": 0.007434656713994172,
+          "signal_close": 33.13
+        },
+        {
+          "rank": 17,
+          "symbol": "600547",
+          "name": "山东黄金",
+          "industry_name": "有色金属",
+          "model_score": 0.007303325529385635,
+          "signal_close": 27.3
+        },
+        {
+          "rank": 18,
+          "symbol": "300124",
+          "name": "汇川技术",
+          "industry_name": "机械设备",
+          "model_score": 0.007192651913336288,
+          "signal_close": 51.9
+        },
+        {
+          "rank": 19,
+          "symbol": "601127",
+          "name": "赛力斯",
+          "industry_name": "汽车",
+          "model_score": 0.007059100581193649,
+          "signal_close": 46.94
+        },
+        {
+          "rank": 20,
+          "symbol": "002558",
+          "name": "巨人网络",
+          "industry_name": "传媒",
+          "model_score": 0.007047521950349659,
+          "signal_close": 22.5
+        },
+        {
+          "rank": 21,
+          "symbol": "688223",
+          "name": "晶科能源",
+          "industry_name": "光伏电池组件",
+          "model_score": 0.006997180878603246,
+          "signal_close": 3.83
+        },
+        {
+          "rank": 22,
+          "symbol": "000988",
+          "name": "华工科技",
+          "industry_name": "激光设备",
+          "model_score": 0.006938022118018123,
+          "signal_close": 92.25
+        },
+        {
+          "rank": 23,
+          "symbol": "688041",
+          "name": "海光信息",
+          "industry_name": "半导体",
+          "model_score": 0.0067711258386224365,
+          "signal_close": 226.8
+        },
+        {
+          "rank": 24,
+          "symbol": "000977",
+          "name": "浪潮信息",
+          "industry_name": "其他计算机设备",
+          "model_score": 0.006747493405288121,
+          "signal_close": 65.93
+        },
+        {
+          "rank": 25,
+          "symbol": "688521",
+          "name": "芯原股份",
+          "industry_name": "数字芯片设计",
+          "model_score": 0.0064638676565009455,
+          "signal_close": 171.68
+        },
+        {
+          "rank": 26,
+          "symbol": "002384",
+          "name": "东山精密",
+          "industry_name": "元件",
+          "model_score": 0.006456515209890436,
+          "signal_close": 167.4
+        },
+        {
+          "rank": 27,
+          "symbol": "601018",
+          "name": "宁波港",
+          "industry_name": "航运港口",
+          "model_score": 0.006446829339154074,
+          "signal_close": 3.53
+        },
+        {
+          "rank": 28,
+          "symbol": "002353",
+          "name": "杰瑞股份",
+          "industry_name": "专用设备",
+          "model_score": 0.006252501126318383,
+          "signal_close": 110.22
+        },
+        {
+          "rank": 29,
+          "symbol": "600346",
+          "name": "恒力石化",
+          "industry_name": "石油石化",
+          "model_score": 0.006247053885153722,
+          "signal_close": 16.07
+        },
+        {
+          "rank": 30,
+          "symbol": "000792",
+          "name": "盐湖股份",
+          "industry_name": "钾肥",
+          "model_score": 0.0062466261910178855,
+          "signal_close": 23.83
+        },
+        {
+          "rank": 31,
+          "symbol": "002837",
+          "name": "英维克",
+          "industry_name": "其他专用设备",
+          "model_score": 0.006083114195697735,
+          "signal_close": 53.95
+        },
+        {
+          "rank": 32,
+          "symbol": "000938",
+          "name": "紫光股份",
+          "industry_name": "IT服务Ⅲ",
+          "model_score": 0.0060150229862656595,
+          "signal_close": 31.02
+        },
+        {
+          "rank": 33,
+          "symbol": "002475",
+          "name": "立讯精密",
+          "industry_name": "消费电子",
+          "model_score": 0.005843916432551435,
+          "signal_close": 49.43
+        },
+        {
+          "rank": 34,
+          "symbol": "300476",
+          "name": "胜宏科技",
+          "industry_name": "电子",
+          "model_score": 0.005783726239132604,
+          "signal_close": 210.3
+        },
+        {
+          "rank": 35,
+          "symbol": "600011",
+          "name": "华能国际",
+          "industry_name": "公用事业",
+          "model_score": 0.00565567613358497,
+          "signal_close": 7.04
+        },
+        {
+          "rank": 36,
+          "symbol": "601328",
+          "name": "交通银行",
+          "industry_name": "银行Ⅱ",
+          "model_score": 0.0056202265984905825,
+          "signal_close": 7.75
+        },
+        {
+          "rank": 37,
+          "symbol": "600522",
+          "name": "中天科技",
+          "industry_name": "通信设备",
+          "model_score": 0.0055696015753290435,
+          "signal_close": 31.13
+        },
+        {
+          "rank": 38,
+          "symbol": "603501",
+          "name": "豪威集团",
+          "industry_name": "半导体",
+          "model_score": 0.005556726703785233,
+          "signal_close": 82.21
+        },
+        {
+          "rank": 39,
+          "symbol": "600276",
+          "name": "恒瑞医药",
+          "industry_name": "化学制药",
+          "model_score": 0.0055421020150860905,
+          "signal_close": 47.2
+        },
+        {
+          "rank": 40,
+          "symbol": "600089",
+          "name": "特变电工",
+          "industry_name": "电网设备",
+          "model_score": 0.005456085413743969,
+          "signal_close": 17.32
+        },
+        {
+          "rank": 41,
+          "symbol": "000338",
+          "name": "潍柴动力",
+          "industry_name": "汽车零部件",
+          "model_score": 0.0054355520010919735,
+          "signal_close": 25.1
+        },
+        {
+          "rank": 42,
+          "symbol": "688111",
+          "name": "金山办公",
+          "industry_name": "横向通用软件",
+          "model_score": 0.005422484950373887,
+          "signal_close": 218.8
+        },
+        {
+          "rank": 43,
+          "symbol": "301165",
+          "name": "锐捷网络",
+          "industry_name": "通信设备",
+          "model_score": 0.005389060001999136,
+          "signal_close": 100.74
+        },
+        {
+          "rank": 44,
+          "symbol": "600000",
+          "name": "浦发银行",
+          "industry_name": "银行Ⅱ",
+          "model_score": 0.005369423229892754,
+          "signal_close": 9.48
+        },
+        {
+          "rank": 45,
+          "symbol": "000157",
+          "name": "中联重科",
+          "industry_name": "工程机械整机",
+          "model_score": 0.005290029157182023,
+          "signal_close": 5.97
+        },
+        {
+          "rank": 46,
+          "symbol": "600438",
+          "name": "通威股份",
+          "industry_name": "光伏主材",
+          "model_score": 0.0052861547724229515,
+          "signal_close": 11.52
+        },
+        {
+          "rank": 47,
+          "symbol": "300316",
+          "name": "晶盛机电",
+          "industry_name": "光伏加工设备",
+          "model_score": 0.00524099066604846,
+          "signal_close": 35.88
+        },
+        {
+          "rank": 48,
+          "symbol": "603986",
+          "name": "兆易创新",
+          "industry_name": "半导体",
+          "model_score": 0.005232522212048765,
+          "signal_close": 353.9
+        },
+        {
+          "rank": 49,
+          "symbol": "000963",
+          "name": "华东医药",
+          "industry_name": "化学制药",
+          "model_score": 0.0052113348260233346,
+          "signal_close": 27.69
+        },
+        {
+          "rank": 50,
+          "symbol": "688126",
+          "name": "沪硅产业",
+          "industry_name": "半导体材料",
+          "model_score": 0.0051507509793165315,
+          "signal_close": 23.38
+        }
+      ]
+    },
+    "5": {
+      "label_col": "ret_fwd_5d",
+      "entry_date": "2026-10-08",
+      "target_date": "2026-10-15",
+      "last_training_sample": "2026-09-21",
+      "selected": [
+        {
+          "rank": 1,
+          "symbol": "300803",
+          "name": "指南针",
+          "industry_name": "垂直应用软件",
+          "model_score": 0.02034248458243984,
+          "signal_close": 53.03
+        },
+        {
+          "rank": 2,
+          "symbol": "301308",
+          "name": "江波龙",
+          "industry_name": "数字芯片设计",
+          "model_score": 0.016605869517722523,
+          "signal_close": 301.93
+        },
+        {
+          "rank": 3,
+          "symbol": "002709",
+          "name": "天赐材料",
+          "industry_name": "电池化学品",
+          "model_score": 0.016481323077412766,
+          "signal_close": 31.2
+        },
+        {
+          "rank": 4,
+          "symbol": "688521",
+          "name": "芯原股份",
+          "industry_name": "数字芯片设计",
+          "model_score": 0.015984951340542737,
+          "signal_close": 171.68
+        },
+        {
+          "rank": 5,
+          "symbol": "300750",
+          "name": "宁德时代",
+          "industry_name": "电池",
+          "model_score": 0.015436357392696715,
+          "signal_close": 291.11
+        },
+        {
+          "rank": 6,
+          "symbol": "688041",
+          "name": "海光信息",
+          "industry_name": "半导体",
+          "model_score": 0.012726551060164407,
+          "signal_close": 226.8
+        },
+        {
+          "rank": 7,
+          "symbol": "300274",
+          "name": "阳光电源",
+          "industry_name": "光伏设备",
+          "model_score": 0.01246273986330807,
+          "signal_close": 82.49
+        },
+        {
+          "rank": 8,
+          "symbol": "002028",
+          "name": "思源电气",
+          "industry_name": "电网设备",
+          "model_score": 0.012422096044397299,
+          "signal_close": 120.46
+        },
+        {
+          "rank": 9,
+          "symbol": "002460",
+          "name": "赣锋锂业",
+          "industry_name": "能源金属",
+          "model_score": 0.012320592280901363,
+          "signal_close": 43.43
+        },
+        {
+          "rank": 10,
+          "symbol": "688472",
+          "name": "阿特斯",
+          "industry_name": "光伏电池组件",
+          "model_score": 0.011292843854652061,
+          "signal_close": 8.42
+        },
+        {
+          "rank": 11,
+          "symbol": "600930",
+          "name": "华电新能",
+          "industry_name": "公用事业",
+          "model_score": 0.01104580860331216,
+          "signal_close": 3.88
+        },
+        {
+          "rank": 12,
+          "symbol": "601998",
+          "name": "中信银行",
+          "industry_name": "银行Ⅱ",
+          "model_score": 0.011031099392285972,
+          "signal_close": 9.1
+        },
+        {
+          "rank": 13,
+          "symbol": "600160",
+          "name": "巨化股份",
+          "industry_name": "氟化工",
+          "model_score": 0.01060425154649169,
+          "signal_close": 33.13
+        },
+        {
+          "rank": 14,
+          "symbol": "600549",
+          "name": "厦门钨业",
+          "industry_name": "有色金属",
+          "model_score": 0.010526178286914142,
+          "signal_close": 44.11
+        },
+        {
+          "rank": 15,
+          "symbol": "688223",
+          "name": "晶科能源",
+          "industry_name": "光伏电池组件",
+          "model_score": 0.01030185147383639,
+          "signal_close": 3.83
+        },
+        {
+          "rank": 16,
+          "symbol": "300124",
+          "name": "汇川技术",
+          "industry_name": "机械设备",
+          "model_score": 0.01020761337167761,
+          "signal_close": 51.9
+        },
+        {
+          "rank": 17,
+          "symbol": "002625",
+          "name": "光启技术",
+          "industry_name": "航空装备Ⅲ",
+          "model_score": 0.010196258051711364,
+          "signal_close": 23.57
+        },
+        {
+          "rank": 18,
+          "symbol": "300316",
+          "name": "晶盛机电",
+          "industry_name": "光伏加工设备",
+          "model_score": 0.010151846955384241,
+          "signal_close": 35.88
+        },
+        {
+          "rank": 19,
+          "symbol": "300476",
+          "name": "胜宏科技",
+          "industry_name": "电子",
+          "model_score": 0.010143418983553875,
+          "signal_close": 210.3
+        },
+        {
+          "rank": 20,
+          "symbol": "601127",
+          "name": "赛力斯",
+          "industry_name": "汽车",
+          "model_score": 0.01005429731102383,
+          "signal_close": 46.94
+        },
+        {
+          "rank": 21,
+          "symbol": "002466",
+          "name": "天齐锂业",
+          "industry_name": "有色金属",
+          "model_score": 0.009733027648661869,
+          "signal_close": 40.25
+        },
+        {
+          "rank": 22,
+          "symbol": "000938",
+          "name": "紫光股份",
+          "industry_name": "IT服务Ⅲ",
+          "model_score": 0.00917012934602899,
+          "signal_close": 31.02
+        },
+        {
+          "rank": 23,
+          "symbol": "000988",
+          "name": "华工科技",
+          "industry_name": "激光设备",
+          "model_score": 0.009126630542078127,
+          "signal_close": 92.25
+        },
+        {
+          "rank": 24,
+          "symbol": "600803",
+          "name": "新奥股份",
+          "industry_name": "公用事业",
+          "model_score": 0.009095075695383663,
+          "signal_close": 19.2
+        },
+        {
+          "rank": 25,
+          "symbol": "000977",
+          "name": "浪潮信息",
+          "industry_name": "其他计算机设备",
+          "model_score": 0.00900622576263194,
+          "signal_close": 65.93
+        },
+        {
+          "rank": 26,
+          "symbol": "000657",
+          "name": "中钨高新",
+          "industry_name": "有色金属",
+          "model_score": 0.008956171928755849,
+          "signal_close": 52.74
+        },
+        {
+          "rank": 27,
+          "symbol": "603986",
+          "name": "兆易创新",
+          "industry_name": "半导体",
+          "model_score": 0.008574769393400503,
+          "signal_close": 353.9
+        },
+        {
+          "rank": 28,
+          "symbol": "002558",
+          "name": "巨人网络",
+          "industry_name": "传媒",
+          "model_score": 0.008284438357135646,
+          "signal_close": 22.5
+        },
+        {
+          "rank": 29,
+          "symbol": "002353",
+          "name": "杰瑞股份",
+          "industry_name": "专用设备",
+          "model_score": 0.008212475534749273,
+          "signal_close": 110.22
+        },
+        {
+          "rank": 30,
+          "symbol": "600346",
+          "name": "恒力石化",
+          "industry_name": "石油石化",
+          "model_score": 0.0081201669502141,
+          "signal_close": 16.07
+        },
+        {
+          "rank": 31,
+          "symbol": "002475",
+          "name": "立讯精密",
+          "industry_name": "消费电子",
+          "model_score": 0.007919611915479977,
+          "signal_close": 49.43
+        },
+        {
+          "rank": 32,
+          "symbol": "002384",
+          "name": "东山精密",
+          "industry_name": "元件",
+          "model_score": 0.00774911035151154,
+          "signal_close": 167.4
+        },
+        {
+          "rank": 33,
+          "symbol": "000157",
+          "name": "中联重科",
+          "industry_name": "工程机械整机",
+          "model_score": 0.007746646804476304,
+          "signal_close": 5.97
+        },
+        {
+          "rank": 34,
+          "symbol": "000792",
+          "name": "盐湖股份",
+          "industry_name": "钾肥",
+          "model_score": 0.007746495382871647,
+          "signal_close": 23.83
+        },
+        {
+          "rank": 35,
+          "symbol": "688047",
+          "name": "龙芯中科",
+          "industry_name": "数字芯片设计",
+          "model_score": 0.007724027274589408,
+          "signal_close": 98.1
+        },
+        {
+          "rank": 36,
+          "symbol": "600089",
+          "name": "特变电工",
+          "industry_name": "电网设备",
+          "model_score": 0.007386513917858594,
+          "signal_close": 17.32
+        },
+        {
+          "rank": 37,
+          "symbol": "600066",
+          "name": "宇通客车",
+          "industry_name": "商用载客车",
+          "model_score": 0.007314557920524097,
+          "signal_close": 26.72
+        },
+        {
+          "rank": 38,
+          "symbol": "300413",
+          "name": "芒果超媒",
+          "industry_name": "传媒",
+          "model_score": 0.007240133446202836,
+          "signal_close": 21
+        },
+        {
+          "rank": 39,
+          "symbol": "688111",
+          "name": "金山办公",
+          "industry_name": "横向通用软件",
+          "model_score": 0.007224862869227652,
+          "signal_close": 218.8
+        },
+        {
+          "rank": 40,
+          "symbol": "601328",
+          "name": "交通银行",
+          "industry_name": "银行Ⅱ",
+          "model_score": 0.007157815854324897,
+          "signal_close": 7.75
+        },
+        {
+          "rank": 41,
+          "symbol": "603501",
+          "name": "豪威集团",
+          "industry_name": "半导体",
+          "model_score": 0.007013112946217136,
+          "signal_close": 82.21
+        },
+        {
+          "rank": 42,
+          "symbol": "300308",
+          "name": "中际旭创",
+          "industry_name": "通信设备",
+          "model_score": 0.006992061881450689,
+          "signal_close": 808.44
+        },
+        {
+          "rank": 43,
+          "symbol": "000425",
+          "name": "徐工机械",
+          "industry_name": "工程机械整机",
+          "model_score": 0.0069462921314400895,
+          "signal_close": 7.2
+        },
+        {
+          "rank": 44,
+          "symbol": "000768",
+          "name": "中航西飞",
+          "industry_name": "航空装备Ⅲ",
+          "model_score": 0.0069274327484280165,
+          "signal_close": 23.12
+        },
+        {
+          "rank": 45,
+          "symbol": "600522",
+          "name": "中天科技",
+          "industry_name": "通信设备",
+          "model_score": 0.006878420483926492,
+          "signal_close": 31.13
+        },
+        {
+          "rank": 46,
+          "symbol": "688126",
+          "name": "沪硅产业",
+          "industry_name": "半导体材料",
+          "model_score": 0.006865657557948211,
+          "signal_close": 23.38
+        },
+        {
+          "rank": 47,
+          "symbol": "301165",
+          "name": "锐捷网络",
+          "industry_name": "通信设备",
+          "model_score": 0.006821073561493859,
+          "signal_close": 100.74
+        },
+        {
+          "rank": 48,
+          "symbol": "600276",
+          "name": "恒瑞医药",
+          "industry_name": "化学制药",
+          "model_score": 0.006482300339937633,
+          "signal_close": 47.2
+        },
+        {
+          "rank": 49,
+          "symbol": "688506",
+          "name": "百利天恒",
+          "industry_name": "其他生物制品",
+          "model_score": 0.006426023711676994,
+          "signal_close": 242
+        },
+        {
+          "rank": 50,
+          "symbol": "300442",
+          "name": "润泽科技",
+          "industry_name": "通信应用增值服务",
+          "model_score": 0.006316714769223658,
+          "signal_close": 64.02
+        }
+      ]
+    }
+  }
+}

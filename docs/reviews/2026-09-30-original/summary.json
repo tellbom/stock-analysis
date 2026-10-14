@@ -1,0 +1,105 @@
+{
+  "source_file": "user_uploaded:2026-09-30_D3_D5_选股推荐(1).xlsx",
+  "source_sha256": "ebd81ba8c12bb74d74e0fc74c6c7eb9fedac6614c764f933a1bf5e92785187d4",
+  "signal_date": "2026-09-30",
+  "as_of": "2026-10-13",
+  "entry_date": "2026-10-08",
+  "benchmark_return": -0.00802732073090362,
+  "cost_per_side": 0.001,
+  "horizons": {
+    "3": {
+      "label_col": "ret_fwd_3d",
+      "last_training_sample": "2026-09-23",
+      "target_date": "2026-10-13",
+      "selected_count": 50,
+      "priced_count": 50,
+      "gross_return": -0.01513691303674747,
+      "net_if_exit": -0.01713691303674747,
+      "excess_if_exit": -0.00910959230584385,
+      "stock_win_rate": 0.34,
+      "mature": true,
+      "status": "完整D3"
+    },
+    "5": {
+      "label_col": "ret_fwd_5d",
+      "last_training_sample": "2026-09-21",
+      "target_date": "2026-10-15",
+      "selected_count": 50,
+      "priced_count": 50,
+      "gross_return": -0.016153593074641145,
+      "net_if_exit": -0.018153593074641143,
+      "excess_if_exit": -0.010126272343737523,
+      "stock_win_rate": 0.32,
+      "mature": false,
+      "status": "D5阶段收益"
+    }
+  },
+  "daily": [
+    {
+      "horizon": 3,
+      "date": "2026-10-08",
+      "gross_return": 0.0,
+      "net_if_exit": -0.002,
+      "benchmark_return": 0.0,
+      "excess_if_exit": -0.002
+    },
+    {
+      "horizon": 3,
+      "date": "2026-10-09",
+      "gross_return": 0.008328407591379703,
+      "net_if_exit": 0.006328407591379703,
+      "benchmark_return": 0.0016170643206474544,
+      "excess_if_exit": 0.004711343270732249
+    },
+    {
+      "horizon": 3,
+      "date": "2026-10-12",
+      "gross_return": -0.009748058625553373,
+      "net_if_exit": -0.011748058625553373,
+      "benchmark_return": -0.005173677812114308,
+      "excess_if_exit": -0.0065743808134390656
+    },
+    {
+      "horizon": 3,
+      "date": "2026-10-13",
+      "gross_return": -0.01513691303674747,
+      "net_if_exit": -0.01713691303674747,
+      "benchmark_return": -0.00802732073090362,
+      "excess_if_exit": -0.00910959230584385
+    },
+    {
+      "horizon": 5,
+      "date": "2026-10-08",
+      "gross_return": 0.0,
+      "net_if_exit": -0.002,
+      "benchmark_return": 0.0,
+      "excess_if_exit": -0.002
+    },
+    {
+      "horizon": 5,
+      "date": "2026-10-09",
+      "gross_return": 0.006145591036052795,
+      "net_if_exit": 0.004145591036052795,
+      "benchmark_return": 0.0016170643206474544,
+      "excess_if_exit": 0.0025285267154053406
+    },
+    {
+      "horizon": 5,
+      "date": "2026-10-12",
+      "gross_return": -0.011906395694821546,
+      "net_if_exit": -0.013906395694821546,
+      "benchmark_return": -0.005173677812114308,
+      "excess_if_exit": -0.008732717882707238
+    },
+    {
+      "horizon": 5,
+      "date": "2026-10-13",
+      "gross_return": -0.016153593074641145,
+      "net_if_exit": -0.018153593074641143,
+      "benchmark_return": -0.00802732073090362,
+      "excess_if_exit": -0.010126272343737523
+    }
+  ],
+  "mixed_same_batch_available": false,
+  "comparison_scope": "Only the uploaded 2026-09-30 stock lists. Later 2026-10-09 models are not compared."
+}
