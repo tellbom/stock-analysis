@@ -1,0 +1,202 @@
+{
+  "signal_date": "2026-10-14",
+  "entry_date": "2026-10-15",
+  "entry_price_basis": "T+1 close",
+  "source_commit": "a1e2ad83fe69ffa3c37d356c89914f8f683831e1",
+  "feature_set_id": "80fd2338",
+  "feature_snapshot_hash_verified_symbols": 300,
+  "prediction_rows": 299,
+  "prediction_feature_hash": "758abf4db57c0d3ca20ed98f97575d24d68c5accb71d9f426bee7b3db9066cde",
+  "score_checks": [
+    {
+      "horizon": 3,
+      "model": "original_ridge",
+      "rows": 299,
+      "max_abs_error": 9.974659986866641e-17,
+      "ranks_match": true
+    },
+    {
+      "horizon": 3,
+      "model": "recent_no_flow",
+      "rows": 299,
+      "max_abs_error": 9.990923019453923e-17,
+      "ranks_match": true
+    },
+    {
+      "horizon": 3,
+      "model": "recent_flow",
+      "rows": 299,
+      "max_abs_error": 9.980080997729068e-17,
+      "ranks_match": true
+    },
+    {
+      "horizon": 5,
+      "model": "original_ridge",
+      "rows": 299,
+      "max_abs_error": 9.974659986866641e-17,
+      "ranks_match": true
+    },
+    {
+      "horizon": 5,
+      "model": "recent_no_flow",
+      "rows": 299,
+      "max_abs_error": 9.974659986866641e-17,
+      "ranks_match": true
+    },
+    {
+      "horizon": 5,
+      "model": "recent_flow",
+      "rows": 299,
+      "max_abs_error": 9.898765834792655e-17,
+      "ranks_match": true
+    }
+  ],
+  "selection_checks": [
+    {
+      "horizon": 3,
+      "arm": "ordinary",
+      "rows": 42,
+      "ordered_picks_match": true
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_no_flow",
+      "rows": 44,
+      "ordered_picks_match": true
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_flow",
+      "rows": 42,
+      "ordered_picks_match": true
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_flow_score_gate_diagnostic",
+      "rows": 35,
+      "ordered_picks_match": true
+    },
+    {
+      "horizon": 5,
+      "arm": "ordinary",
+      "rows": 43,
+      "ordered_picks_match": true
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_no_flow",
+      "rows": 37,
+      "ordered_picks_match": true
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_flow",
+      "rows": 38,
+      "ordered_picks_match": true
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_flow_score_gate_diagnostic",
+      "rows": 38,
+      "ordered_picks_match": true
+    }
+  ],
+  "training_hash_checks": [
+    {
+      "horizon": 3,
+      "original_rows": 252183,
+      "recent_rows": 35932,
+      "original_matrix_matches": true,
+      "recent_rows_labels_match": true
+    },
+    {
+      "horizon": 5,
+      "original_rows": 251517,
+      "recent_rows": 35924,
+      "original_matrix_matches": true,
+      "recent_rows_labels_match": true
+    }
+  ],
+  "prices": [
+    {
+      "symbol": "688521",
+      "name": "芯原股份",
+      "last_price_date": "2026-10-14",
+      "last_flow_date": "2026-10-14",
+      "close": 130.21,
+      "return_5d_pct": -24.155405405405407,
+      "return_10d_pct": -37.408066144306105,
+      "last_20_close_peak_drawdown_pct": -38.054234062797335,
+      "rsi_6": 0.0,
+      "ma_20_distance_pct": -28.122921341888784,
+      "main_net_1d_yuan": -289847346.0,
+      "main_net_5d_yuan": -1732627074.0,
+      "main_flow_rank_5d": 0.0033444816053511705,
+      "rebuild_technical_max_abs_error": 0.0,
+      "six_latest_close_changes_negative": true
+    },
+    {
+      "symbol": "301308",
+      "name": "江波龙",
+      "last_price_date": "2026-10-14",
+      "last_flow_date": "2026-10-14",
+      "close": 259.97,
+      "return_5d_pct": -13.89726095452588,
+      "return_10d_pct": -25.35389209521347,
+      "last_20_close_peak_drawdown_pct": -25.35389209521347,
+      "rsi_6": 0.0,
+      "ma_20_distance_pct": -18.633511212911735,
+      "main_net_1d_yuan": -228761525.0,
+      "main_net_5d_yuan": -1394144167.0,
+      "main_flow_rank_5d": 0.016722408026755852,
+      "rebuild_technical_max_abs_error": 0.0,
+      "six_latest_close_changes_negative": true
+    }
+  ],
+  "data_hashes": {
+    "688521": {
+      "ohlcv": "2d79622750b92ac6e72bea1f0047633e935c1433f15d8f40f4a3561416faa964",
+      "features": "463c7272b43591d2e21933ee65b111a266e18d13bcfbc1d1b7a551e5ad5460cf",
+      "labels": "2d3376840504f11ffd136d2bf60e552e0fa4c1337c12919ca9e8f4f2e0b31c25",
+      "fund_flow_current_sha256": "fdf2891ef616c8e4005bde86a3965433c7ee388f0808a0d86f6b1f94c6f373a1"
+    },
+    "301308": {
+      "ohlcv": "247d591d48bacbd22766a55335f5c1fd56eb9b696458544c64a31abd473b812f",
+      "features": "7127045067c91ad3b68695715eed1c3ed537d0bcf244971e6756c5c8370559cc",
+      "labels": "9afef9f4289505c5f244e99d491cdd682cbeda82e1787d4ff69054aba98f7099",
+      "fund_flow_current_sha256": "bd33771076d71e944206b556605a77618c338db58edd41bb3f7afe5062cc45ea"
+    }
+  },
+  "model_hashes": {
+    "D3_original_ridge.joblib": "d211e01328f827a1c147a3ccdbbfa2bc2f34539b6467a1e8492ec403b2d1b4f6",
+    "D3_recent_no_flow.joblib": "6f1ddbfedcbd284ebd27d68f928974ed7830e53eee74c0ede76b9110e7fd9348",
+    "D3_recent_flow.joblib": "d3f3931eb6bbfaa6509652e60430d1634c2b9efb0f312ce0e08676defab65ffc",
+    "D5_original_ridge.joblib": "834fd6f419300fcfcc8050c2eef413eaf7323b9823b75522927aa84f133eaf70",
+    "D5_recent_no_flow.joblib": "89cb86b88b3882ef376f8f8b42ed273406a63a8a3040174ef258c002f808fa88",
+    "D5_recent_flow.joblib": "df41698a45c2b33eb2270a2ad8997fb3b140749b9f8a7caeedcf360a976c397e"
+  },
+  "source_hashes": {
+    "scripts/run_dual_horizon_rrf.py": "9515bf801a432797aade976139b27c4cede20fdd67942b30a1d1ec18ca39f8f3",
+    "scripts/compare_original_hybrid.py": "2c94e441d7d92414ce447d3edd66ce0f4f5999c68acc1563616e52f776dedadd",
+    "quant_platform/selection/ridge_baseline.py": "505d2aebc821c4657adb7e79f10bb2c9390e7365a53559c0d511bea41dde75fd",
+    "quant_platform/selection/config.py": "b370c129c4343c2fd3400e54ab7fd2f3c3a581dace960b3da8fd84dc75c17629",
+    "quant_platform/ingest/ohlcv_collector.py": "e76ab5a9301975ae319da719c6334b640ac157a5f8539edf4fa681bef53f89c4",
+    "quant_platform/features/pipeline.py": "2c04b6dfda605d69c1a8ffaa47f01557f9946f88e0d4537951b92b55dea59869",
+    "quant_platform/labels/builder.py": "5b340f54cc083bda7f89c2f4400c0d8a84f39fa30e2af02c129f857c4944c5b0"
+  },
+  "limits": [
+    "Replay is inference and attribution, not independent retraining or realized-return validation.",
+    "Current provider consistency does not prove historical point-in-time availability."
+  ],
+  "review_date": "2026-10-15",
+  "review_source_hashes": {
+    "quant_platform/features/technical.py": "e5316664f46a2231eb7d624a5d692c9581c7f4faf8d6f7bff357edb915f54689",
+    "technical_indicators.py": "79ae32626dbb26a07d64cb7fc803aeec08689f859e04e3d222c5465e11456eb6",
+    "quant_platform/features/flow.py": "04fbd2545c7fe3186542daa5d5382b4179e268861aef0807e612628e6447ce25",
+    "quant_platform/features/cross_sectional.py": "96f5576b224cef3cf1e7ae171300e200318fa71f234520d2ce16ceaa747f1f18",
+    "quant_platform/selection/fusion_score.py": "52450b194e6c1fa469f5d586eb4fbdcfdcecc94f7e656c8eadd68cc19e03d33e",
+    "quant_platform/selection/gate_fusion.py": "1cd68e0f6e20bf4f060c7bc29d2efb87f123ef5e840df0cf43cc28459e2d35de",
+    "quant_platform/selection/ranker.py": "0d22fbbe673bd8cfdb1949f4323823a740bf3a3908297e6003e09797c135180c",
+    "quant_platform/selection/strategies.py": "59625757a57a89fb7397409a821ed9aef15ac9dd1921e0e778a74576ba6579e3"
+  }
+}

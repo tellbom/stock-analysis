@@ -1,0 +1,22 @@
+{
+  "files": {
+    ".gitattributes": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+    "audit.json": "0f1c7583a42e0b3b4bdc3a3667dbe8dff7c20e72c762905dbe2a9442da153619",
+    "D3_recent_flow_booster.txt": "ed65de1805ec834dd1fe5602ac07de4afdc1be12f3f7dada0c1e4b6dbb420182",
+    "D3_recent_no_flow_booster.txt": "4d62a63c93351f881bfee0ab8541f152d1978a9e1cb937db935216cfdf5a317a",
+    "D5_recent_flow_booster.txt": "828a123af4f23c5f3e3be65f4df163615c0ccfdeeafb6276d54d845cfae20fc1",
+    "D5_recent_no_flow_booster.txt": "fb0eb14b69077a930a128c50997b76bcbdc0fa1c3b355fab22e6d8d7e5c89dd2",
+    "fund_flow_301308.csv": "19c32f8ef53f6b113edcd0c0a9b1a982fd809d94bec62daaa45fb863cd8e98ee",
+    "fund_flow_688521.csv": "c484f9dfd1b8c299877f83e8332ee414249befb7c85a3c6aa40c3c4db838c31f",
+    "mature_training_tail.csv": "e9039ab950533bb3ac57e0922eb424732ae1b0aea2a5dd6fa3498ea711c8cf2b",
+    "model_parameters.json": "ae9abc276fd2d67fc144a7cc0a251e19d349aea8f6dcdd492dff51b6b3f10d07",
+    "offline_replay_result.json": "0fd40aac9fb209cbf780a86b0b1e3f76746adc9a54332736a8261b97a6a21d79",
+    "ohlcv_301308.csv": "39ad6863ac50004a683e0e41dbaf9a2d0e600593ebdcd177b03315a5eac5bd42",
+    "ohlcv_688521.csv": "e78d277a064aa372f775e8fb2c3b028ed3d2cba621cb6f64c2a6ca8d6c25ce46",
+    "prediction_features_299.csv": "91df3999acb4900e3a539760b7aafe7c4345bcf134d78e7826d7357ffadbe7f0",
+    "README.md": "cf76b3a4defbe088da67a5ab3fb3139203fd79a4e4a27e01c10836d6828c2fb0",
+    "ridge_contributions.csv": "152cf25ae08128bd7352a2efcf739e7b26cbc3373ec0ac0cbf1ee5fbe8c60356",
+    "training_feature_ranges.csv": "9f38189819c46570b27b7895d4859870d84941fd45126c16c5f91bcf15b6597c",
+    "tree_contributions.csv": "c8a8b40d6e5f52de869455e8d4ae7142fe95e4cc9dc02b2522ac14be3cad5d0c"
+  }
+}

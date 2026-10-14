@@ -1,0 +1,216 @@
+{
+  "mode": "all six models",
+  "score_checks": [
+    {
+      "horizon": 3,
+      "model": "original_ridge",
+      "rows": 299,
+      "scores_and_ranks_match": true,
+      "max_abs_error": 9.974659986866641e-17
+    },
+    {
+      "horizon": 3,
+      "model": "recent_no_flow",
+      "rows": 299,
+      "scores_and_ranks_match": true,
+      "max_abs_error": 9.990923019453923e-17
+    },
+    {
+      "horizon": 3,
+      "model": "recent_flow",
+      "rows": 299,
+      "scores_and_ranks_match": true,
+      "max_abs_error": 9.980080997729068e-17
+    },
+    {
+      "horizon": 5,
+      "model": "original_ridge",
+      "rows": 299,
+      "scores_and_ranks_match": true,
+      "max_abs_error": 9.974659986866641e-17
+    },
+    {
+      "horizon": 5,
+      "model": "recent_no_flow",
+      "rows": 299,
+      "scores_and_ranks_match": true,
+      "max_abs_error": 9.974659986866641e-17
+    },
+    {
+      "horizon": 5,
+      "model": "recent_flow",
+      "rows": 299,
+      "scores_and_ranks_match": true,
+      "max_abs_error": 9.898765834792655e-17
+    }
+  ],
+  "selection_checks": [
+    {
+      "horizon": 3,
+      "arm": "ordinary",
+      "count": 42,
+      "ordered_picks_match": true,
+      "target_ranks": {
+        "688521": 1,
+        "301308": 2
+      }
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_no_flow",
+      "count": 44,
+      "ordered_picks_match": true,
+      "target_ranks": {
+        "688521": 1,
+        "301308": 3
+      }
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_flow",
+      "count": 42,
+      "ordered_picks_match": true,
+      "target_ranks": {
+        "688521": 1,
+        "301308": 3
+      }
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_flow_score_gate_diagnostic",
+      "count": 35,
+      "ordered_picks_match": true,
+      "target_ranks": {
+        "688521": 1,
+        "301308": 3
+      }
+    },
+    {
+      "horizon": 5,
+      "arm": "ordinary",
+      "count": 43,
+      "ordered_picks_match": true,
+      "target_ranks": {
+        "688521": 3,
+        "301308": 1
+      }
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_no_flow",
+      "count": 37,
+      "ordered_picks_match": true,
+      "target_ranks": {
+        "688521": 2,
+        "301308": 4
+      }
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_flow",
+      "count": 38,
+      "ordered_picks_match": true,
+      "target_ranks": {
+        "688521": 1,
+        "301308": 3
+      }
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_flow_score_gate_diagnostic",
+      "count": 38,
+      "ordered_picks_match": true,
+      "target_ranks": {
+        "688521": 1,
+        "301308": 3
+      }
+    }
+  ],
+  "target_scores": [
+    {
+      "horizon": 3,
+      "model": "original_ridge",
+      "symbol": "688521",
+      "score_pct": 1.3254027328139195,
+      "global_rank": 1
+    },
+    {
+      "horizon": 3,
+      "model": "original_ridge",
+      "symbol": "301308",
+      "score_pct": 1.2756591568970304,
+      "global_rank": 2
+    },
+    {
+      "horizon": 3,
+      "model": "recent_no_flow",
+      "symbol": "688521",
+      "score_pct": 4.2306771549816204,
+      "global_rank": 2
+    },
+    {
+      "horizon": 3,
+      "model": "recent_no_flow",
+      "symbol": "301308",
+      "score_pct": 2.421883152035223,
+      "global_rank": 5
+    },
+    {
+      "horizon": 3,
+      "model": "recent_flow",
+      "symbol": "688521",
+      "score_pct": 6.441544470421102,
+      "global_rank": 1
+    },
+    {
+      "horizon": 3,
+      "model": "recent_flow",
+      "symbol": "301308",
+      "score_pct": 2.421969808880249,
+      "global_rank": 4
+    },
+    {
+      "horizon": 5,
+      "model": "original_ridge",
+      "symbol": "688521",
+      "score_pct": 2.073806008888917,
+      "global_rank": 3
+    },
+    {
+      "horizon": 5,
+      "model": "original_ridge",
+      "symbol": "301308",
+      "score_pct": 2.2671830364682686,
+      "global_rank": 1
+    },
+    {
+      "horizon": 5,
+      "model": "recent_no_flow",
+      "symbol": "688521",
+      "score_pct": 6.196239168807228,
+      "global_rank": 2
+    },
+    {
+      "horizon": 5,
+      "model": "recent_no_flow",
+      "symbol": "301308",
+      "score_pct": 2.830138721783345,
+      "global_rank": 6
+    },
+    {
+      "horizon": 5,
+      "model": "recent_flow",
+      "symbol": "688521",
+      "score_pct": 7.73956921331414,
+      "global_rank": 1
+    },
+    {
+      "horizon": 5,
+      "model": "recent_flow",
+      "symbol": "301308",
+      "score_pct": 2.413532430593809,
+      "global_rank": 7
+    }
+  ],
+  "scope": "frozen inference and attribution; no training or realized-return validation"
+}
