@@ -23,7 +23,7 @@ from quant_platform.evaluation.coverage_gate import compute_feature_coverage_rep
 from quant_platform.features.flow import FLOW_SPECS
 from quant_platform.features.registry import feature_metadata_lookup
 from quant_platform.selection.config import SelectionConfig, StrategyType
-from quant_platform.selection.fusion_score import actionable_pool
+from quant_platform.selection.fusion_score import fusion_score
 from quant_platform.selection.gate_fusion import gate_first_fusion
 from quant_platform.selection.ranker import IndustryNeutralRanker
 from quant_platform.store.lake import ohlcv_path
@@ -53,9 +53,14 @@ def recent_train_start(panel: pd.DataFrame, as_of: dt.date, label: str) -> dt.da
 
 
 def select_rrf(fused: pd.DataFrame, attributes: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
-    pool = actionable_pool(fused, method="rrf", k=60)
+    # 2026-10-14 战略裁决：Gate 已关闭。actionable_pool 的 ACTIONABLE_TIERS
+    # 过滤在 D3/D5 两组独立实验中稳定伤害收益（D3 -0.14pp，D5 -0.10pp），
+    # 系统性剔除逆势上涨的防御股（如中信银行+1.32%、交通银行+1.92%、宁波港+1.67%）。
+    # 改为直接对全量候选做 RRF 融合排序；fused 仍经过 gate_first_fusion，
+    # tier 列会写入 D{h}_gate.csv 和 run_summary.json 以便复核。
+    pool = fusion_score(fused, method="rrf", k=60)
     if pool.empty:
-        raise RuntimeError("No actionable stocks passed the gate")
+        raise RuntimeError("No stocks to rank")
     pool = pool.merge(attributes, on="symbol", how="left", validate="one_to_one")
     ranked = IndustryNeutralRanker(
         SelectionConfig(strategy=StrategyType.EQUAL_TOP_K, top_k=3, max_total=50),
@@ -131,7 +136,7 @@ def run(as_of: dt.date, horizons: list[int], out_dir: Path, n_jobs: int) -> dict
         "excluded_symbols": sorted(set(symbols) - covered),
         "base_features": base_features, "recent_features": recent_features,
         "flow_features": flow_features, "fusion_method": "rrf", "rrf_k": 60,
-        "selection": "A/B gate; equal_top_k=3; max_total=50; rank by RRF",
+        "selection": "RRF fusion, no gate (gate closed 2026-10-14); equal_top_k=3; max_total=50; rank by RRF",
         "entry_date": future[0].isoformat(), "horizons": {},
     }
     print(f"Features: base={len(base_features)}, recent={len(recent_features)}, flow={flow_features}", flush=True)
