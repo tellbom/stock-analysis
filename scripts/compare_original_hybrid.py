@@ -28,6 +28,14 @@ from quant_platform.selection.config import weekly_selection_config
 from quant_platform.selection.fusion_score import actionable_pool, fusion_score
 from quant_platform.selection.gate_fusion import gate_first_fusion
 from quant_platform.selection.ranker import IndustryNeutralRanker
+from quant_platform.selection.risk_audit import (
+    RISK_FLAG_COLUMNS,
+    RISK_RULE_VERSION,
+    RISK_UNKNOWN,
+    annotate_picks,
+    coalesce_flag_values,
+    disagreement_threshold,
+)
 from quant_platform.selection.ridge_baseline import (
     ORIGINAL_FEATURES,
     fit_predict_ridge32,
@@ -87,11 +95,32 @@ scores = score_frame
 
 
 def combine(base: pd.DataFrame, recent: pd.DataFrame) -> pd.DataFrame:
+    """合并基线与近期分数；风险标记透传上游，缺失标 UNKNOWN。
+
+    历史行为是无条件清空 risk_flags/event_flags（""），会被下游误读为
+    "无风险"。P0 可观测性裁决（2026-10-15）：空 = 未知，必须显式标记
+    UNKNOWN，不默认为安全。选股行为不变（UNKNOWN 不触发 gate veto，
+    因无 timed code）。
+    """
     if set(base.symbol) != set(recent.symbol):
         raise ValueError("The baseline and recent scoring universes differ")
     out = base.merge(recent.drop(columns="date"), on=["symbol", "trade_date"], validate="one_to_one")
-    out["risk_flags"] = ""
-    out["event_flags"] = ""
+    for col in RISK_FLAG_COLUMNS:
+        x, y = f"{col}_x", f"{col}_y"
+        if x in out.columns or y in out.columns:
+            # 两路都有该列（merge 加了后缀）：base 优先，recent 补位
+            parts = [out[c] for c in (x, y) if c in out.columns]
+            merged = parts[0]
+            for extra in parts[1:]:
+                merged = coalesce_flag_values(merged, extra)
+            out[col] = merged
+            out = out.drop(columns=[c for c in (x, y) if c in out.columns])
+        elif col in out.columns:
+            # 只有一路有该列：清洗空值 -> UNKNOWN
+            out[col] = coalesce_flag_values(out[col], pd.Series("", index=out.index))
+        else:
+            # 上游没有任何风险数据：显式 UNKNOWN，不默认为安全
+            out[col] = RISK_UNKNOWN
     return out
 
 
@@ -320,6 +349,14 @@ def run(
         equal_n = min(len(p) for p, _, _ in main_arms.values())
         if equal_n == 0:
             raise RuntimeError("No selections in a comparison arm")
+        # P0 风险与分歧可观测性：分歧阈值必须在选股前的全池上计算。
+        # ordinary 臂无 recent 模型 -> 阈值 None，分歧标记全 False。
+        disagreement_pools = {
+            "ordinary": None,
+            "hybrid_no_flow": no_flow,
+            "hybrid_flow": with_flow,
+            DIAGNOSTIC_ARM: gated,
+        }
         selection_audit = {}
         for key, (picks, cap_stats, is_diagnostic) in arms.items():
             picks = picks.copy()
@@ -329,6 +366,10 @@ def run(
             picks["is_diagnostic"] = is_diagnostic
             picks["is_experimental"] = False
             picks["in_equal_count_comparison"] = (not is_diagnostic) & (picks.recommendation_rank <= equal_n)
+            # P0 审计字段：只追加列，不改变选股行为。
+            pool = disagreement_pools.get(key)
+            rank_gap_threshold = disagreement_threshold(pool) if pool is not None else None
+            picks = annotate_picks(picks, as_of=as_of, rank_gap_threshold=rank_gap_threshold)
             picks.to_csv(out / f"D{h}_{key}_picks.csv", index=False, encoding="utf-8-sig")
             all_picks.append(picks)
             selection_audit[key] = {
@@ -337,6 +378,10 @@ def run(
                 "post_cap_count": cap_stats.get("post_count"),
                 "sector_cap_enabled": cap_stats.get("enabled"),
                 "dropped_by_sector_cap": cap_stats.get("dropped_symbols", []),
+                "risk_rule_version": RISK_RULE_VERSION,
+                "disagreement_rank_gap_threshold": rank_gap_threshold,
+                "disagreement_flagged_count": int(picks["disagreement_flag"].sum()),
+                "risk_data_status": picks["risk_data_status"].iloc[0] if len(picks) else RISK_UNKNOWN,
             }
         base.to_csv(out / f"D{h}_original_scores.csv", index=False)
         joblib.dump(model, out / f"D{h}_original_ridge.joblib")
@@ -369,6 +414,11 @@ def run(
             tw_picks["is_experimental"] = True
             # 实验臂不参与等数对照（避免拉低冻结臂的 equal_n）。
             tw_picks["in_equal_count_comparison"] = False
+            # P0 审计字段：实验臂同样补齐（阈值取自本臂全池 fused_tw）。
+            tw_picks = annotate_picks(
+                tw_picks, as_of=as_of,
+                rank_gap_threshold=disagreement_threshold(fused_tw),
+            )
             tw_picks.to_csv(out / f"D{h}_hybrid_timeweighted_picks.csv",
                             index=False, encoding="utf-8-sig")
             all_picks.append(tw_picks)
@@ -396,6 +446,9 @@ def run(
                 "pick_count": len(tw_picks),
                 "pre_cap_count": tw_cap.get("pre_count"),
                 "post_cap_count": tw_cap.get("post_count"),
+                "risk_rule_version": RISK_RULE_VERSION,
+                "disagreement_flagged_count": int(tw_picks["disagreement_flag"].sum()),
+                "risk_data_status": tw_picks["risk_data_status"].iloc[0] if len(tw_picks) else RISK_UNKNOWN,
             }
             print(f"D{h}: experiment hybrid_timeweighted: {len(tw_picks)} picks, "
                   f"recent {recent_tw.date.nunique()} dates", flush=True)
