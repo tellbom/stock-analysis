@@ -35,6 +35,7 @@ from quant_platform.selection.fusion_score import fusion_score
 from quant_platform.selection.gate_fusion import gate_first_fusion
 from quant_platform.selection.ranker import IndustryNeutralRanker
 from quant_platform.selection.ridge_baseline import ORIGINAL_FEATURES, fit_predict_ridge32
+from quant_platform.selection.risk_audit import attach_audit_columns
 from quant_platform.store.lake import ohlcv_path
 from quant_platform.store.parquet_store import read_ohlcv
 
@@ -163,11 +164,17 @@ def _run_shared_weekly(
             picks.fusion_score_col, expected.fusion_score_col, rtol=0, atol=1e-15
         ):
             raise RuntimeError("Weekly and comparison hybrid selections differ")
+        # R2（2026-10-15）：一致性校验通过后，按 symbol 把比较名单的 8 个
+        # 审计列 merge 回每周 picks，保证比较名单/顶层 CSV/JSON 三方逐字段一致。
+        picks = attach_audit_columns(picks, expected)
         importance = pd.read_csv(folder / f"D{h}_recent_flow_importance.csv")
         for name, frame in (("base", base), ("recent", recent), ("gate", gate),
                             ("rrf_pool", ranked), ("picks", picks), ("recent_importance", importance)):
             frame.to_csv(out_dir / f"D{h}_{name}.csv", index=False)
         detail = controlled["horizons"][str(h)]
+        # R2：每周汇总同步记录 P0 审计合同（规则版本/分歧阈值/状态/标记数），
+        # 取自比较入口 hybrid_flow 臂的 selection_audit（与顶层 picks 同源）。
+        comp_risk = detail["selection_audit"]["hybrid_flow"]
         summary["horizons"][str(h)] = {
             "label_col": detail["label_col"], "target_date": detail["target_date"],
             "base": detail["baseline_meta"],
@@ -184,6 +191,12 @@ def _run_shared_weekly(
             "selected_count": len(picks), "tier_counts": gate.gate_tier.value_counts().to_dict(),
             "selection_audit": stats, "matches_comparison_hybrid": True,
             "experiment": detail["experiment"],
+            "risk_audit": {
+                "risk_rule_version": comp_risk["risk_rule_version"],
+                "disagreement_rank_gap_threshold": comp_risk["disagreement_rank_gap_threshold"],
+                "disagreement_flagged_count": comp_risk["disagreement_flagged_count"],
+                "risk_data_status": comp_risk["risk_data_status"],
+            },
             "selected": json.loads(picks.to_json(orient="records", date_format="iso")),
         }
     (out_dir / "run_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8")

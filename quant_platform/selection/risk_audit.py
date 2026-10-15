@@ -9,9 +9,23 @@ P0 风险与分歧可观测性（Claude 2026-10-15 最终裁决）。
   rule_version），为 P1 风险过滤器预留合同字段。
 
 本模块只依赖 pandas/numpy，无 sklearn/lightgbm 依赖，可离线测试。
+
+2026-10-15 R1/R2/R3 修复（Codex 本机验证发现，Claude 裁决必须修）：
+- R1：coalesce_flag_values 改为并集语义——UNKNOWN 视同缺失回退对方；
+  双有效不同代码做并集合并去重，不再静默丢弃 secondary 的有效否决码。
+- R2：attach_audit_columns 供每周出口按 symbol 把比较名单的 8 个审计列
+  merge 回顶层 picks/JSON，保证双出口逐字段一致。
+- R3：risk_data_status 最小版时间校验——代码时间戳不可解析或晚于 as_of
+  时标 INVALID，不伪造"当时可得"证明。
+
+作用域（写死）：risk_data_status 是池级聚合不是逐股状态；eligible=True
+不得解读为通过风险检查；disagreement_flag=False 不得解读为股票安全。
 """
 
 from __future__ import annotations
+
+import datetime as dt
+import re
 
 import pandas as pd
 
@@ -37,17 +51,52 @@ AUDIT_COLUMNS = (
     "rule_version",
 )
 
+#: risk_data_status 的无效时间状态：任一代码时间戳不可解析或晚于 as_of。
+#: P0 最小版（2026-10-15 R3）：不能伪造"当时可得"证明。
+#: 完整 known_at/observed_at 合同时序等 P1 有真实风险生产者时再定。
+RISK_INVALID_TIME = "INVALID"
+
+#: 代码尾部 @时间戳（如 extreme_outflow@2026-10-14）。
+_TS_TAIL_RE = re.compile(r"@([^@;]*?)\s*$")
+
+#: CSV 往返后的布尔字符串还原。
+_BOOL_LIKE = {"True": True, "False": False}
+
 
 def _clean(series: pd.Series) -> pd.Series:
     return series.fillna("").astype(str).str.strip()
 
 
+def _split_codes(value: str) -> list[str]:
+    """把可能含 ';' 的标记串拆成去重后的有效代码（丢弃空值和 UNKNOWN）。"""
+    seen: list[str] = []
+    for part in str(value).split(";"):
+        part = part.strip()
+        if not part or part == RISK_UNKNOWN or part in seen:
+            continue
+        seen.append(part)
+    return seen
+
+
 def coalesce_flag_values(primary: pd.Series, secondary: pd.Series) -> pd.Series:
-    """合并两路风险标记：primary 优先，空位由 secondary 补，仍空则 UNKNOWN。"""
+    """合并两路风险标记（独立风险事件并集语义）。
+
+    - 空值和 UNKNOWN 均视为缺失，由对方补位；
+    - 两路都有有效代码时做并集去重（独立风险事件不是互斥选项），
+      保留各自时间和来源，primary 的代码排在前面；
+    - 结果仍空则 UNKNOWN。
+
+    R1 修复（2026-10-15）：旧实现只把 "" 当缺失，UNKNOWN 作为非空值
+    被优先保留，会静默吞掉 secondary 的有效否决码。
+    """
     p = _clean(primary)
-    s = _clean(secondary)
-    merged = p.where(p != "", s)
-    return merged.where(merged != "", RISK_UNKNOWN)
+    s = _clean(secondary.reindex(p.index))
+    out = []
+    for pv, sv in zip(p.tolist(), s.tolist()):
+        codes = _split_codes(pv)
+        codes += [c for c in _split_codes(sv) if c not in codes]
+        out.append(";".join(codes) if codes else RISK_UNKNOWN)
+    return pd.Series(out, index=p.index)
 
 
 def unknown_flag_series(index) -> pd.Series:
@@ -92,11 +141,56 @@ def reason_codes(frame: pd.DataFrame) -> pd.Series:
     return codes.where(codes != "", RISK_UNKNOWN)
 
 
-def risk_data_status(codes: pd.Series) -> str:
-    """整池风险数据状态：全 UNKNOWN / 部分 / 完整。"""
+def _as_date(value) -> dt.date:
+    """as_of 归一化为 date（接受 date/datetime/ISO 字符串）。"""
+    if isinstance(value, dt.datetime):
+        return value.date()
+    if isinstance(value, dt.date):
+        return value
+    return dt.date.fromisoformat(str(value)[:10])
+
+
+def _future_or_bad_codes(code: str, as_of: dt.date) -> list[str]:
+    """返回 code 串中时间戳无效的子代码：不可解析，或晚于 as_of。
+
+    无 @时间戳的子代码在 P0 最小版中不裁决（P1 有真实风险生产者时
+    再定完整合同时序）；"当时可得"的未来事件（如已公告事项）也不应
+    一律剔除——这里只拦"时间戳晚于信号日却标 OK"的伪造证明行为。
+    """
+    bad = []
+    for part in str(code).split(";"):
+        part = part.strip()
+        if not part or part == RISK_UNKNOWN:
+            continue
+        m = _TS_TAIL_RE.search(part)
+        if not m:
+            continue  # 无时间戳：最小版不裁决
+        try:
+            ts = dt.date.fromisoformat(m.group(1).strip())
+        except ValueError:
+            bad.append(part)
+            continue
+        if ts > as_of:
+            bad.append(part)
+    return bad
+
+
+def risk_data_status(codes: pd.Series, as_of) -> str:
+    """整池风险数据状态（池级聚合，不是逐股状态）。
+
+    - 全 UNKNOWN -> UNKNOWN（无风险数据）
+    - 任一代码时间戳不可解析或晚于 as_of -> INVALID
+      （不能伪造"当时可得"证明；R3 最小版，2026-10-15）
+    - 部分 UNKNOWN -> PARTIAL
+    - 否则 OK
+    """
+    as_of = _as_date(as_of)
     unknown = codes == RISK_UNKNOWN
     if bool(unknown.all()):
         return RISK_UNKNOWN
+    for code in codes[~unknown].tolist():
+        if _future_or_bad_codes(code, as_of):
+            return RISK_INVALID_TIME
     if bool(unknown.any()):
         return "PARTIAL"
     return "OK"
@@ -113,13 +207,18 @@ def annotate_picks(
 
     P0 无过滤：eligible 全 True，pre/post_filter_rank 均为 recommendation_rank。
     不改变任何选股行为，只追加列。
+
+    作用域声明（写死）：
+    - risk_data_status 是整池聚合，不是逐股状态；
+    - eligible=True 只表示"本版无风险过滤"，不得解读为"已通过风险检查"；
+    - disagreement_flag=False 只表示未达到本版分歧条件，不得解读为"股票安全"。
     """
     out = picks.copy()
     out["disagreement_flag"] = disagreement_flag(out, rank_gap_threshold)
     out["risk_as_of"] = as_of.isoformat() if hasattr(as_of, "isoformat") else str(as_of)
     codes = reason_codes(out)
     out["risk_reason_codes"] = codes
-    out["risk_data_status"] = risk_data_status(codes)
+    out["risk_data_status"] = risk_data_status(codes, as_of)
     out["eligible"] = True
     if "recommendation_rank" in out.columns:
         out["pre_filter_rank"] = out["recommendation_rank"]
@@ -129,3 +228,34 @@ def annotate_picks(
         out["post_filter_rank"] = pd.NA
     out["rule_version"] = rule_version
     return out
+
+
+def attach_audit_columns(picks: pd.DataFrame, source: pd.DataFrame) -> pd.DataFrame:
+    """R2：按 symbol 把 source（含审计列）的 AUDIT_COLUMNS merge 回 picks。
+
+    要求：
+    - source 必须含全部 8 个审计列；缺失即抛错——说明上游比较入口的
+      审计接线断了，静默写出无审计列的名单比报错更危险；
+    - picks 与 source 的 symbol 必须一一对应（调用方在 merge 前已做
+      symbol 顺序 + 融合分数一致性校验）。
+
+    返回带审计列的 picks 副本；disagreement_flag/eligible 从 CSV 的
+    "True"/"False" 字符串还原为 bool，保持 JSON 输出类型正确。
+    不改变行顺序与选股内容，只追加列。
+    """
+    missing = [c for c in AUDIT_COLUMNS if c not in source.columns]
+    if missing:
+        raise ValueError(f"Audit source missing columns: {missing}")
+    merged = picks.merge(
+        source[["symbol", *AUDIT_COLUMNS]], on="symbol", how="left",
+        validate="one_to_one",
+    )
+    if merged[list(AUDIT_COLUMNS)].isna().any().any():
+        raise ValueError("Audit columns failed to attach for some symbols")
+    for col in ("disagreement_flag", "eligible"):
+        vals = merged[col]
+        if vals.dtype == object:
+            mapped = vals.map(_BOOL_LIKE)
+            if mapped.notna().all():
+                merged[col] = mapped.astype(bool)
+    return merged

@@ -15,9 +15,11 @@ import pandas as pd
 
 from quant_platform.selection.risk_audit import (
     AUDIT_COLUMNS,
+    RISK_INVALID_TIME,
     RISK_RULE_VERSION,
     RISK_UNKNOWN,
     annotate_picks,
+    attach_audit_columns,
     coalesce_flag_values,
     disagreement_flag,
     disagreement_threshold,
@@ -64,10 +66,47 @@ def test_combine_marks_unknown_instead_of_defaulting_safe():
     assert out["base_score"].tolist() == [0.05, 0.03, -0.02]
 
 
-def test_coalesce_prefers_primary_then_secondary_then_unknown():
-    p = pd.Series(["A", "", None, ""])
-    s = pd.Series(["X", "B", "C", None])
-    assert coalesce_flag_values(p, s).tolist() == ["A", "B", "C", RISK_UNKNOWN]
+def test_coalesce_union_semantics():
+    """R1：独立风险事件做并集合并，UNKNOWN 视同缺失回退对方。"""
+    p = pd.Series(["A", "", None, "", "A", "A"])
+    s = pd.Series(["X", "B", "C", None, "A", RISK_UNKNOWN])
+    assert coalesce_flag_values(p, s).tolist() == [
+        "A;X",          # 双有效不同代码：并集合并，primary 在前
+        "B",            # primary 空：secondary 补位
+        "C",            # primary None：secondary 补位
+        RISK_UNKNOWN,   # 双空：UNKNOWN
+        "A",            # 重复代码：去重
+        "A",            # secondary UNKNOWN 视同缺失
+    ]
+
+
+def test_coalesce_unknown_falls_back_to_secondary_veto():
+    """R1 最小复现：base=UNKNOWN + recent=有效否决码，否决码不得被吞。"""
+    p = pd.Series([RISK_UNKNOWN])
+    s = pd.Series(["extreme_outflow@2026-10-14"])
+    assert coalesce_flag_values(p, s).tolist() == ["extreme_outflow@2026-10-14"]
+
+
+def test_coalesce_two_valid_different_codes_keeps_both_with_time():
+    """R1：双有效不同代码并集，保留各自时间和来源。"""
+    p = pd.Series(["coverage@2026-10-14"])
+    s = pd.Series(["extreme_outflow@2026-10-14"])
+    assert coalesce_flag_values(p, s).tolist() == [
+        "coverage@2026-10-14;extreme_outflow@2026-10-14"
+    ]
+
+
+def test_coalesce_multi_code_strings_union_dedup():
+    p = pd.Series(["A@2026-10-01;B@2026-10-02"])
+    s = pd.Series(["B@2026-10-02;C@2026-10-03"])
+    assert coalesce_flag_values(p, s).tolist() == ["A@2026-10-01;B@2026-10-02;C@2026-10-03"]
+
+
+def test_coalesce_aligns_misaligned_index():
+    """R1：错位索引按 primary 索引对齐，secondary 缺失位置视为空。"""
+    p = pd.Series(["A", ""], index=[10, 20])
+    s = pd.Series(["X"], index=[10])
+    assert coalesce_flag_values(p, s).tolist() == ["A;X", RISK_UNKNOWN]
 
 
 def test_disagreement_threshold_is_pool_median():
@@ -103,9 +142,45 @@ def test_reason_codes_merges_flags_and_unknown_when_empty():
 
 
 def test_risk_data_status_levels():
-    assert risk_data_status(pd.Series([RISK_UNKNOWN, RISK_UNKNOWN])) == "UNKNOWN"
-    assert risk_data_status(pd.Series(["A", RISK_UNKNOWN])) == "PARTIAL"
-    assert risk_data_status(pd.Series(["A", "B"])) == "OK"
+    as_of = dt.date(2026, 10, 14)
+    assert risk_data_status(pd.Series([RISK_UNKNOWN, RISK_UNKNOWN]), as_of) == "UNKNOWN"
+    assert risk_data_status(pd.Series(["A", RISK_UNKNOWN]), as_of) == "PARTIAL"
+    assert risk_data_status(pd.Series(["A", "B"]), as_of) == "OK"
+
+
+def test_risk_data_status_rejects_future_timestamp():
+    """R3 最小复现：extreme_outflow@2026-10-16 在信号日 10-14 不得标 OK。"""
+    as_of = dt.date(2026, 10, 14)
+    codes = pd.Series(["extreme_outflow@2026-10-16"])
+    assert risk_data_status(codes, as_of) == RISK_INVALID_TIME
+
+
+def test_risk_data_status_rejects_unparsable_timestamp():
+    as_of = dt.date(2026, 10, 14)
+    codes = pd.Series(["extreme_outflow@tomorrow"])
+    assert risk_data_status(codes, as_of) == RISK_INVALID_TIME
+    codes = pd.Series(["extreme_outflow@2026-13-45"])
+    assert risk_data_status(codes, as_of) == RISK_INVALID_TIME
+
+
+def test_risk_data_status_accepts_past_and_untimestamped_codes():
+    """R3 最小版：过去时间戳 OK；无 @时间戳的代码不裁决（P1 再定）。"""
+    as_of = dt.date(2026, 10, 14)
+    assert risk_data_status(pd.Series(["extreme_outflow@2026-10-14"]), as_of) == "OK"
+    assert risk_data_status(pd.Series(["extreme_outflow@2026-10-13"]), as_of) == "OK"
+    assert risk_data_status(pd.Series(["DRAWDOWN"]), as_of) == "OK"
+
+
+def test_risk_data_status_future_code_among_unknowns_is_invalid_not_partial():
+    as_of = dt.date(2026, 10, 14)
+    codes = pd.Series(["extreme_outflow@2026-10-16", RISK_UNKNOWN])
+    assert risk_data_status(codes, as_of) == RISK_INVALID_TIME
+
+
+def test_risk_data_status_accepts_datetime_as_of():
+    as_of = dt.datetime(2026, 10, 14, 15, 0, 0)
+    assert risk_data_status(pd.Series(["A@2026-10-14"]), as_of) == "OK"
+    assert risk_data_status(pd.Series(["A@2026-10-15"]), as_of) == RISK_INVALID_TIME
 
 
 def test_annotate_picks_adds_all_audit_columns_without_changing_selection():
@@ -132,3 +207,64 @@ def test_annotate_picks_adds_all_audit_columns_without_changing_selection():
     assert ann["pre_filter_rank"].tolist() == [1, 2]
     assert ann["post_filter_rank"].tolist() == [1, 2]
     assert (ann["rule_version"] == RISK_RULE_VERSION).all()
+
+
+def _audit_source(symbols=("000001", "000002")):
+    """模拟比较名单 D{h}_hybrid_flow_picks.csv（含 8 个审计列，CSV 往返形态）。"""
+    return pd.DataFrame({
+        "symbol": list(symbols),
+        "fusion_score_col": [0.9, 0.8][: len(symbols)],
+        "disagreement_flag": ["True", "False"][: len(symbols)],
+        "risk_as_of": ["2026-10-14"] * len(symbols),
+        "risk_data_status": ["UNKNOWN"] * len(symbols),
+        "risk_reason_codes": [RISK_UNKNOWN] * len(symbols),
+        "eligible": ["True"] * len(symbols),
+        "pre_filter_rank": [1, 2][: len(symbols)],
+        "post_filter_rank": [1, 2][: len(symbols)],
+        "rule_version": [RISK_RULE_VERSION] * len(symbols),
+    })
+
+
+def test_attach_audit_columns_merges_all_eight_fields():
+    """R2：每周 picks 按 symbol 拿回 8 个审计列，逐字段与比较名单一致。"""
+    picks = pd.DataFrame({
+        "symbol": ["000001", "000002"],
+        "fusion_score_col": [0.9, 0.8],
+        "recommendation_rank": [1, 2],
+    })
+    source = _audit_source()
+    out = attach_audit_columns(picks, source)
+    for col in AUDIT_COLUMNS:
+        assert col in out.columns, f"missing {col}"
+        assert out[col].tolist() == source[col].tolist() or (
+            out[col].astype(str).tolist() == source[col].astype(str).tolist()
+        ), f"column {col} mismatch"
+    # 选股内容不变
+    assert out["symbol"].tolist() == ["000001", "000002"]
+    assert out["fusion_score_col"].tolist() == [0.9, 0.8]
+    # 布尔列从 CSV 字符串还原为 bool
+    assert out["disagreement_flag"].tolist() == [True, False]
+    assert out["eligible"].tolist() == [True, True]
+
+
+def test_attach_audit_columns_rejects_missing_columns():
+    """R2：上游审计接线断了（缺列）必须抛错，不能静默写出无审计列名单。"""
+    picks = pd.DataFrame({"symbol": ["000001"], "fusion_score_col": [0.9]})
+    source = _audit_source().drop(columns=["risk_reason_codes"])
+    try:
+        attach_audit_columns(picks, source)
+    except ValueError as e:
+        assert "risk_reason_codes" in str(e)
+    else:
+        raise AssertionError("expected ValueError for missing audit column")
+
+
+def test_attach_audit_columns_rejects_symbol_mismatch():
+    """R2：symbol 对不上必须抛错。"""
+    picks = pd.DataFrame({"symbol": ["000001", "999999"], "fusion_score_col": [0.9, 0.1]})
+    try:
+        attach_audit_columns(picks, _audit_source())
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("expected ValueError for symbol mismatch")

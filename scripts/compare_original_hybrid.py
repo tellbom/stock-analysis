@@ -101,6 +101,10 @@ def combine(base: pd.DataFrame, recent: pd.DataFrame) -> pd.DataFrame:
     "无风险"。P0 可观测性裁决（2026-10-15）：空 = 未知，必须显式标记
     UNKNOWN，不默认为安全。选股行为不变（UNKNOWN 不触发 gate veto，
     因无 timed code）。
+
+    两路标记合并走并集语义（coalesce_flag_values）：UNKNOWN 视同缺失
+    回退对方；双有效不同代码做并集合并去重，独立风险事件不是互斥选项
+    （R1 修复，2026-10-15）。
     """
     if set(base.symbol) != set(recent.symbol):
         raise ValueError("The baseline and recent scoring universes differ")
@@ -415,9 +419,10 @@ def run(
             # 实验臂不参与等数对照（避免拉低冻结臂的 equal_n）。
             tw_picks["in_equal_count_comparison"] = False
             # P0 审计字段：实验臂同样补齐（阈值取自本臂全池 fused_tw）。
+            tw_gap_threshold = disagreement_threshold(fused_tw)
             tw_picks = annotate_picks(
                 tw_picks, as_of=as_of,
-                rank_gap_threshold=disagreement_threshold(fused_tw),
+                rank_gap_threshold=tw_gap_threshold,
             )
             tw_picks.to_csv(out / f"D{h}_hybrid_timeweighted_picks.csv",
                             index=False, encoding="utf-8-sig")
@@ -447,6 +452,7 @@ def run(
                 "pre_cap_count": tw_cap.get("pre_count"),
                 "post_cap_count": tw_cap.get("post_count"),
                 "risk_rule_version": RISK_RULE_VERSION,
+                "disagreement_rank_gap_threshold": tw_gap_threshold,
                 "disagreement_flagged_count": int(tw_picks["disagreement_flag"].sum()),
                 "risk_data_status": tw_picks["risk_data_status"].iloc[0] if len(tw_picks) else RISK_UNKNOWN,
             }
