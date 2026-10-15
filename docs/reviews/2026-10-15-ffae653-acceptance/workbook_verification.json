@@ -1,0 +1,19 @@
+{
+  "workbook_file": "2026-10-14_D3_D5_四臂及时间权重实验.xlsx",
+  "sha256": "938c15740cf82e8617f01b60b1ec5e1f23c2987a9f9dcd061d7ef5ed06ae5794",
+  "bytes": 79835,
+  "saved_cell_checks": "passed",
+  "sheet_count": 7,
+  "formula_errors": [],
+  "experimental_counts": [
+    47,
+    49
+  ],
+  "experiment_pair_counts": [
+    42,
+    43
+  ],
+  "visual_review": "all 7 sheets inspected using read-only grid preview; no clipping",
+  "artifact_native_renderer": "exit 1 without output",
+  "native_excel_tested": false
+}

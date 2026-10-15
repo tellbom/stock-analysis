@@ -121,6 +121,7 @@ def select_rrf(
 def _run_shared_weekly(
     as_of: dt.date, horizons: list[int], out_dir: Path, n_jobs: int,
     sector_cap_tech: int | None, overwrite: bool,
+    use_time_weight: bool = False, recent_window: int = 120,
 ) -> dict:
     """Use the exact comparison pipeline, including its recent rows and 37 columns.
 
@@ -134,6 +135,7 @@ def _run_shared_weekly(
         as_of, out_dir / "comparison", None, n_jobs,
         sector_cap_tech=sector_cap_tech, overwrite=overwrite,
         horizons=tuple(horizons),
+        use_time_weight=use_time_weight, recent_window=recent_window,
     )
     attributes = pd.read_csv(out_dir / "comparison/prediction_attributes.csv", dtype={"symbol": str})
     summary = {
@@ -145,6 +147,7 @@ def _run_shared_weekly(
         "selection": controlled["selection"], "score_gate_enabled": False,
         "retrospective_reconstruction": controlled["retrospective_reconstruction"],
         "prediction_feature_hash": controlled["prediction_feature_hash"],
+        "experiment": controlled["experiment"],
         "canonical_training_summary": "comparison/training_summary.json", "horizons": {},
     }
     pd.DataFrame({"feature": summary["base_features"]}).to_csv(out_dir / "base_features.csv", index=False)
@@ -180,6 +183,7 @@ def _run_shared_weekly(
                            for c in controlled["flow_features"]},
             "selected_count": len(picks), "tier_counts": gate.gate_tier.value_counts().to_dict(),
             "selection_audit": stats, "matches_comparison_hybrid": True,
+            "experiment": detail["experiment"],
             "selected": json.loads(picks.to_json(orient="records", date_format="iso")),
         }
     (out_dir / "run_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8")
@@ -195,6 +199,8 @@ def run(
     base_model: str = "ridge32",
     sector_cap_tech: int | None = 10,
     overwrite: bool = False,
+    use_time_weight: bool = False,
+    recent_window: int = 120,
 ) -> dict:
     """Weekly RRF strategy entry.
 
@@ -207,6 +213,10 @@ def run(
     """
     if base_model not in BASE_MODEL_CHOICES:
         raise ValueError(f"base_model must be one of {BASE_MODEL_CHOICES}, got {base_model!r}")
+    from scripts.compare_original_hybrid import validate_experiment_options
+    validate_experiment_options(use_time_weight, recent_window)
+    if base_model != "ridge32" and (use_time_weight or recent_window != 120):
+        raise ValueError("Time-weight/window experiments require the shared ridge32 baseline")
     if out_dir.exists() and any(out_dir.iterdir()) and not overwrite:
         raise RuntimeError(
             f"Output directory {out_dir} already contains files; refusing to overwrite "
@@ -214,7 +224,8 @@ def run(
         )
     out_dir.mkdir(parents=True, exist_ok=True)
     if base_model == "ridge32":
-        return _run_shared_weekly(as_of, horizons, out_dir, n_jobs, sector_cap_tech, overwrite)
+        return _run_shared_weekly(as_of, horizons, out_dir, n_jobs, sector_cap_tech, overwrite,
+                                  use_time_weight=use_time_weight, recent_window=recent_window)
     symbols = legacy._load_symbols()
     prices = pd.concat([read_ohlcv(ohlcv_path(legacy.STORE_ROOT, s)) for s in symbols], ignore_index=True)
     prices["symbol"] = prices.symbol.astype(str).str.zfill(6)
@@ -390,11 +401,14 @@ def main() -> None:
         "--overwrite", action="store_true",
         help="允许覆盖已有内容的输出目录；默认拒绝，保护历史报告。",
     )
+    parser.add_argument("--use-time-weight", action="store_true", help="增加独立时间权重实验臂，保持冻结四臂不变。")
+    parser.add_argument("--recent-window", type=int, default=120, help="实验近期窗口，至少60个成熟标签日期；默认120。")
     args = parser.parse_args()
     output = args.out_dir or legacy.REPORT_DIR / f"dual_horizon_rrf_{args.as_of}"
     run(args.as_of, sorted(set(args.horizons)), output, args.n_jobs,
         base_model=args.base_model, sector_cap_tech=args.sector_cap_tech,
-        overwrite=args.overwrite)
+        overwrite=args.overwrite, use_time_weight=args.use_time_weight,
+        recent_window=args.recent_window)
 
 
 if __name__ == "__main__":

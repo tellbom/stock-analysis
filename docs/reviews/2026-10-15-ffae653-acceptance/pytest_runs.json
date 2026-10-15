@@ -1,0 +1,115 @@
+[
+  {
+    "file": "pytest_ffae653.xml",
+    "name": "pytest",
+    "errors": "0",
+    "failures": "12",
+    "skipped": "0",
+    "tests": "429",
+    "time": "407.604",
+    "timestamp": "2026-10-15T08:18:21.142678+08:00",
+    "hostname": "fzq",
+    "failures_detail": [
+      {
+        "class": "tests.test_p1",
+        "name": "test_label_builder_writes_parquet",
+        "failure": "AssertionError: Label Parquet not found for 600519"
+      },
+      {
+        "class": "tests.test_p1",
+        "name": "test_label_tail_rows_are_nan",
+        "failure": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\24203\\\\AppData\\\\Local\\\\Temp\\\\tmpha9durzk\\\\labels\\\\forward_returns\\\\600519.parquet'"
+      },
+      {
+        "class": "tests.test_p1",
+        "name": "test_label_panel_cross_sectional_decile",
+        "failure": "AssertionError: assert 'ret_fwd_5d_cs' in RangeIndex(start=0, stop=0, step=1)"
+      },
+      {
+        "class": "tests.test_p2",
+        "name": "test_mlflow_experiment_creation",
+        "failure": "PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'C:\\\\Users\\\\24203\\\\AppData\\\\Local\\\\Temp\\\\tmpgfx90y2a\\\\mlflow\\\\mlflow.db'"
+      },
+      {
+        "class": "tests.test_p2",
+        "name": "test_mlflow_run_logger",
+        "failure": "PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'C:\\\\Users\\\\24203\\\\AppData\\\\Local\\\\Temp\\\\tmp_br7z_r3\\\\mlflow\\\\mlflow.db'"
+      },
+      {
+        "class": "tests.test_p3",
+        "name": "test_hpo_study_creates_and_resumes",
+        "failure": "ModuleNotFoundError: No module named 'optuna'"
+      },
+      {
+        "class": "tests.test_p3",
+        "name": "test_hpo_best_params_accessible",
+        "failure": "ModuleNotFoundError: No module named 'optuna'"
+      },
+      {
+        "class": "tests.test_p3",
+        "name": "test_hpo_lockbox_never_used",
+        "failure": "ModuleNotFoundError: No module named 'optuna'"
+      },
+      {
+        "class": "tests.test_p3",
+        "name": "test_model_zoo_uniform_interface",
+        "failure": "ModuleNotFoundError: No module named 'xgboost'"
+      },
+      {
+        "class": "tests.test_p3",
+        "name": "test_zoo_fit_oof_produces_predictions",
+        "failure": "ModuleNotFoundError: No module named 'xgboost'"
+      },
+      {
+        "class": "tests.test_p3",
+        "name": "test_model_registry_register_and_retrieve",
+        "failure": "PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'C:\\\\Users\\\\24203\\\\AppData\\\\Local\\\\Temp\\\\tmp912wbeii\\\\mlflow\\\\mlflow.db'"
+      },
+      {
+        "class": "tests.test_p3",
+        "name": "test_model_card_written",
+        "failure": "PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'C:\\\\Users\\\\24203\\\\AppData\\\\Local\\\\Temp\\\\tmpbpx1jpqu\\\\mlflow\\\\mlflow.db'"
+      }
+    ]
+  },
+  {
+    "file": "pytest_after_fixes.xml",
+    "name": "pytest",
+    "errors": "0",
+    "failures": "3",
+    "skipped": "0",
+    "tests": "444",
+    "time": "220.750",
+    "timestamp": "2026-10-15T08:33:27.567256+08:00",
+    "hostname": "fzq",
+    "failures_detail": [
+      {
+        "class": "tests.test_p3",
+        "name": "test_hpo_study_creates_and_resumes",
+        "failure": "PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'C:\\\\Users\\\\24203\\\\AppData\\\\Local\\\\Temp\\\\tmpq60r51yr\\\\mlflow\\\\optuna.db'"
+      },
+      {
+        "class": "tests.test_p3",
+        "name": "test_hpo_best_params_accessible",
+        "failure": "PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'C:\\\\Users\\\\24203\\\\AppData\\\\Local\\\\Temp\\\\tmp9mwc0dc1\\\\mlflow\\\\optuna.db'"
+      },
+      {
+        "class": "tests.test_p3",
+        "name": "test_hpo_lockbox_never_used",
+        "failure": "PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'C:\\\\Users\\\\24203\\\\AppData\\\\Local\\\\Temp\\\\tmpr3kwks2k\\\\mlflow\\\\optuna.db'"
+      }
+    ]
+  },
+  {
+    "file": "pytest_final.xml",
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "446",
+    "time": "250.153",
+    "timestamp": "2026-10-15T08:40:02.286500+08:00",
+    "hostname": "fzq",
+    "failures_detail": []
+  }
+]

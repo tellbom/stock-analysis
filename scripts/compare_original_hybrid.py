@@ -52,6 +52,29 @@ ARM_NAMES = {
 }
 # 诊断臂的策略键（带后缀），与主策略臂区分。
 DIAGNOSTIC_ARM = "hybrid_flow_score_gate_diagnostic"
+EXPERIMENT_ARM = "hybrid_timeweighted"
+MIN_EXPERIMENT_WINDOW = 60
+
+
+def validate_experiment_options(use_time_weight: bool, recent_window: int) -> None:
+    if not isinstance(use_time_weight, bool):
+        raise ValueError("use_time_weight must be a boolean")
+    if isinstance(recent_window, bool) or not isinstance(recent_window, int) or recent_window < MIN_EXPERIMENT_WINDOW:
+        raise ValueError("recent_window must be an integer >= 60 label dates")
+
+
+def experiment_recent_train(train: pd.DataFrame, recent_window: int) -> pd.DataFrame:
+    """Require the requested number of usable dates, including the 60-date arm."""
+    validate_experiment_options(False, recent_window)
+    dates = sorted(train.date.unique())
+    if len(dates) < recent_window:
+        raise RuntimeError(f"Experiment requires {recent_window} label dates; only {len(dates)} available")
+    recent = train[train.date.isin(dates[-recent_window:])].dropna(subset=FLOW_FEATURES).copy()
+    if recent.date.nunique() != recent_window:
+        raise RuntimeError(
+            f"Experiment requires {recent_window} usable flow dates; got {recent.date.nunique()}"
+        )
+    return recent
 
 
 def fingerprint(frame: pd.DataFrame, columns: list[str]) -> str:
@@ -154,6 +177,7 @@ def run(
     recent_window: P1 实验参数。recent 模型的 label 日期窗口；
         120 = 冻结基线。实验臂传入 60（约 3 个月，D+3 短线 regime 响应）。
     """
+    validate_experiment_options(use_time_weight, recent_window)
     horizons = tuple(sorted(set(horizons)))
     if not horizons or any(h not in (3, 5) for h in horizons):
         raise ValueError("Only raw D3/D5 horizons are supported")
@@ -225,8 +249,7 @@ def run(
             "use_time_weight": bool(use_time_weight),
             "time_weight_half_life_days": 180 if use_time_weight else None,
             "recent_window_dates": recent_window,
-            # P1：60 ≈ 3 个月 label 日期。D+3 短线 regime 变化快，
-            # 120 天窗口混入过多旧 regime 信号；60 天让 recent 模型更快响应。
+            # 60/120 均为待验证的实验窗口，不预设短窗口收益更好。
             "arm": "hybrid_timeweighted",
         },
         "data_contract_version": "qfq-full-history-calendar-v1",
@@ -249,6 +272,10 @@ def run(
         # 共享 Ridge32 基线：与 run_dual_horizon_rrf.py 同一份实现。
         base, base_meta, model = fit_predict_ridge32(panel, as_of, label)
         train = panel[panel.date < as_of].dropna(subset=ORIGINAL_FEATURES + [label]).copy()
+        experiment_train = (
+            experiment_recent_train(train, recent_window)
+            if use_time_weight or recent_window != 120 else None
+        )
         ordinary, ordinary_cap = select(base, attributes, "base_score", sector_cap_tech)
         # 历史复现口径（约束关闭）才要求名单完全一致；约束开启时只核对分数。
         check_picks = sector_cap_tech is None or sector_cap_tech == 0
@@ -300,6 +327,7 @@ def run(
             picks["strategy"] = key
             picks["strategy_name"] = ARM_NAMES[key]
             picks["is_diagnostic"] = is_diagnostic
+            picks["is_experimental"] = False
             picks["in_equal_count_comparison"] = (not is_diagnostic) & (picks.recommendation_rank <= equal_n)
             picks.to_csv(out / f"D{h}_{key}_picks.csv", index=False, encoding="utf-8-sig")
             all_picks.append(picks)
@@ -317,17 +345,13 @@ def run(
         # 不影响冻结臂的任何输出。默认关闭（use_time_weight=False 且 recent_window=120
         # 时整个块跳过），冻结基线零改动。
         experiment_audit: dict = {"enabled": False}
-        if use_time_weight or recent_window != 120:
+        if experiment_train is not None:
             # P0：同一份 Ridge32 实现，仅打开时间权重开关。
-            base_tw, base_tw_meta, _ = fit_predict_ridge32(
-                panel, as_of, label, use_time_weight=True,
+            base_tw, base_tw_meta, base_tw_model = fit_predict_ridge32(
+                panel, as_of, label, use_time_weight=use_time_weight,
             )
-            # P1：recent 窗口按参数取值（实验默认 60 ≈ 3 个月）。
-            dates_tw = sorted(train.date.unique())[-recent_window:]
-            recent_tw_avail = train[train.date.isin(dates_tw)]
-            recent_tw = recent_tw_avail.dropna(subset=FLOW_FEATURES).copy()
-            if recent_tw.date.nunique() < 80:
-                raise RuntimeError(f"D{h}: insufficient experiment recent training dates")
+            # P1：只影响实验臂，冻结臂始终保持120日；60日需完整60日可用。
+            recent_tw = experiment_train
             fitted_tw = fit_final_model(
                 recent_tw, ORIGINAL_FEATURES + FLOW_FEATURES, label,
                 {**RECENT_PARAMS, "n_jobs": n_jobs},
@@ -339,22 +363,34 @@ def run(
                 fused_tw, attributes, "fusion_score_col", sector_cap_tech)
             tw_picks = tw_picks.copy()
             tw_picks["horizon"] = h
-            tw_picks["strategy"] = "hybrid_timeweighted"
-            tw_picks["strategy_name"] = "混合_时间权重+短窗口"
+            tw_picks["strategy"] = EXPERIMENT_ARM
+            tw_picks["strategy_name"] = f"实验：时间权重{'开' if use_time_weight else '关'}+近期{recent_window}日"
             tw_picks["is_diagnostic"] = False
+            tw_picks["is_experimental"] = True
             # 实验臂不参与等数对照（避免拉低冻结臂的 equal_n）。
             tw_picks["in_equal_count_comparison"] = False
             tw_picks.to_csv(out / f"D{h}_hybrid_timeweighted_picks.csv",
                             index=False, encoding="utf-8-sig")
             all_picks.append(tw_picks)
+            base_tw.to_csv(out / f"D{h}_experiment_base_scores.csv", index=False)
+            recent_tw_scores.to_csv(out / f"D{h}_experiment_recent_scores.csv", index=False)
+            joblib.dump(base_tw_model, out / f"D{h}_experiment_base_ridge.joblib")
             joblib.dump(fitted_tw, out / f"D{h}_recent_timeweighted.joblib")
             experiment_audit = {
                 "enabled": True,
                 "arm": "hybrid_timeweighted",
                 "base_time_weighted": base_tw_meta.get("time_weighted"),
+                "base_meta": base_tw_meta,
                 "base_train_rows": base_tw_meta.get("train_rows"),
+                "base_training_input_hash": fingerprint(train, ["symbol", "date"] + ORIGINAL_FEATURES + [label]),
+                "base_scores_hash": fingerprint(base_tw, ["symbol", "base_score", "base_rank"]),
                 "recent_window_dates": recent_window,
                 "recent_train_dates": int(recent_tw.date.nunique()),
+                "recent_train_rows": len(recent_tw),
+                "recent_training_input_hash": fingerprint(recent_tw, ["symbol", "date"] + ORIGINAL_FEATURES + FLOW_FEATURES + [label]),
+                "recent_row_label_hash": fingerprint(recent_tw, ["symbol", "date", label]),
+                "in_equal_count_comparison": False,
+                "is_experimental": True,
                 "recent_train_start": recent_tw.date.min().isoformat(),
                 "recent_train_end": recent_tw.date.max().isoformat(),
                 "pick_count": len(tw_picks),

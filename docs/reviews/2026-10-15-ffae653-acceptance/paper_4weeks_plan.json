@@ -1,0 +1,46 @@
+{
+  "status": "ready_for_entry",
+  "signal_dates": [
+    "2026-10-14",
+    "2026-10-21",
+    "2026-10-28",
+    "2026-11-04"
+  ],
+  "entry_basis": "next exchange session close",
+  "last_scheduled_d5_exit": "2026-11-12",
+  "frozen_primary_arms": [
+    "ordinary",
+    "hybrid_no_flow",
+    "hybrid_flow"
+  ],
+  "diagnostic_arm": "hybrid_flow_score_gate_diagnostic",
+  "experimental_arm": "hybrid_timeweighted",
+  "experiment": {
+    "use_time_weight": true,
+    "half_life_calendar_days": 180,
+    "recent_label_dates": 60
+  },
+  "entry_fee_bps": 10,
+  "exit_fee_bps": 10,
+  "entry_slippage_bps": 7.5,
+  "exit_slippage_bps": 7.5,
+  "round_trip_cost_bps": 35,
+  "cost_basis": "initial notional; charge on entry and exit once, never once per valuation day",
+  "comparison_scopes": [
+    "primary_equal_count",
+    "full_selection",
+    "separate_ordinary_experiment_pair"
+  ],
+  "independence_limit": "four paired signal weeks, not 200 independent stock observations",
+  "promotion": "no automatic production promotion",
+  "frozen_picks_replacement": "prohibited",
+  "first_cohort": "E:\\stock-analysis\\outputs\\01a116ce-1f0c-7d41-8967-adcca880c1b8\\2026-10-14_ffae653_本机验收\\paper_4weeks\\week_1",
+  "first_cohort_entry_status": "pending_2026-10-15_close",
+  "first_cohort_signal_generation": "post_signal_pre_entry",
+  "first_cohort_pick_sha256": "390d7031f567995864349db1a431388a00849903c62145dd48935bedc4eb25d7",
+  "initial_validation": {
+    "full_pytest_passed": 446,
+    "entrypoint_csv_matches": 28,
+    "original_scores_max_delta": 0.0
+  }
+}

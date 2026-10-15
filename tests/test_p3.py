@@ -55,12 +55,12 @@ LABEL = "ret_fwd_1d"
 # T3.1 — HPO with Optuna
 # ---------------------------------------------------------------------------
 
-def test_hpo_study_creates_and_resumes():
+def test_hpo_study_creates_and_resumes(mlflow_tempdir):
     """HPOStudy creates a study and resumes from SQLite on second call."""
     from quant_platform.training.hpo import HPOStudy
 
     panel = _make_panel(n_days=200)
-    with tempfile.TemporaryDirectory() as tmp:
+    with mlflow_tempdir() as tmp:
         study_obj = HPOStudy(tmp, "test_study", n_splits=2, horizon=5, embargo=2)
 
         study1 = study_obj.run(panel, FEAT, LABEL, n_trials=3)
@@ -74,12 +74,12 @@ def test_hpo_study_creates_and_resumes():
     print(f"  [OK] T3.1 HPO: study creates ({n1} trials) and resumes (5 total)")
 
 
-def test_hpo_best_params_accessible():
+def test_hpo_best_params_accessible(mlflow_tempdir):
     """best_params() returns a dict with LightGBM parameter names."""
     from quant_platform.training.hpo import HPOStudy
 
     panel = _make_panel(n_days=200)
-    with tempfile.TemporaryDirectory() as tmp:
+    with mlflow_tempdir() as tmp:
         study_obj = HPOStudy(tmp, "param_test", n_splits=2, horizon=5, embargo=2)
         study_obj.run(panel, FEAT, LABEL, n_trials=3)
         params = study_obj.best_params()
@@ -90,7 +90,7 @@ def test_hpo_best_params_accessible():
     print(f"  [OK] T3.1 HPO best_params: {params}")
 
 
-def test_hpo_lockbox_never_used():
+def test_hpo_lockbox_never_used(mlflow_tempdir):
     """The lockbox slice is never seen during HPO (verified by date ordering)."""
     from quant_platform.training.hpo import HPOStudy
     from quant_platform.training.splitter import make_lockbox_split
@@ -100,7 +100,7 @@ def test_hpo_lockbox_never_used():
 
     lb_min_date = pd.to_datetime(lockbox["date"]).min()
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with mlflow_tempdir() as tmp:
         study_obj = HPOStudy(tmp, "lockbox_test", n_splits=2, horizon=5, embargo=2)
         # HPO runs only on train_val — lockbox dates must not appear
         study_obj.run(train_val, FEAT, LABEL, n_trials=2)
@@ -394,7 +394,7 @@ def test_shap_report_saved():
 # T3.7 — Model registry
 # ---------------------------------------------------------------------------
 
-def test_model_registry_register_and_retrieve():
+def test_model_registry_register_and_retrieve(mlflow_tempdir):
     """register_model creates a version; load_champion returns it after promotion."""
     from quant_platform.training.registry import (
         register_model, promote_champion, load_champion,
@@ -404,7 +404,7 @@ def test_model_registry_register_and_retrieve():
     from sklearn.linear_model import LinearRegression
     import numpy as np
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with mlflow_tempdir() as tmp:
         exp_id = get_or_create_experiment(tmp, "registry_test")
 
         # Log a dummy model to create a run_id
@@ -433,7 +433,7 @@ def test_model_registry_register_and_retrieve():
     print(f"  [OK] T3.7 registry: registered v{version}, promoted to champion, tags={tags}")
 
 
-def test_model_card_written():
+def test_model_card_written(mlflow_tempdir):
     """register_model writes a model card file."""
     from quant_platform.training.registry import register_model, get_model_card
     from quant_platform.training.tracking import get_or_create_experiment
@@ -442,7 +442,7 @@ def test_model_card_written():
     import numpy as np
     from mlflow.models import infer_signature
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with mlflow_tempdir() as tmp:
         get_or_create_experiment(tmp, "card_test")
         mlflow.set_tracking_uri(f"sqlite:///{tmp}/mlflow/mlflow.db")
         X = np.random.randn(10, 2)

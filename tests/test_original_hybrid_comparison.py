@@ -88,3 +88,25 @@ def test_diagnostic_without_equal_count_rows_does_not_block_reconciliation(exper
     diag = [s for s in result["strategies"] if s["strategy"].endswith("_diagnostic")]
     assert len(diag) == 2
     assert all(s["scope"] == "full_selection" for s in diag)
+
+
+def test_independent_experiment_has_own_pair_and_does_not_break_frozen_scopes(experiment):
+    out, path = experiment
+    picks = pd.read_csv(out / "all_picks.csv", dtype={"symbol": str})
+    extra = picks[picks.strategy == "ordinary"].copy()
+    extra["strategy"] = "hybrid_timeweighted"
+    extra["strategy_name"] = "independent experiment"
+    extra["is_experimental"] = True
+    extra["in_equal_count_comparison"] = False
+    pd.concat([picks, extra], ignore_index=True).to_csv(out / "all_picks.csv", index=False)
+    result = evaluate(out, path, dt.date(2026, 10, 13), 17.5)
+    exp = [s for s in result["strategies"] if s["strategy"] == "hybrid_timeweighted"]
+    assert {s["scope"] for s in exp} == {"full_selection", "experiment_pair"}
+    pairs = [s for s in result["strategies"] if s["scope"] == "experiment_pair"]
+    assert len(pairs) == 4 and {s["count"] for s in pairs} == {1}
+    assert len([s for s in result["strategies"] if s["scope"] == "equal_count"]) == 6
+    daily = pd.read_csv(out / "daily_returns.csv")
+    active_d5 = daily[(daily.horizon == 5) & (daily.strategy == "ordinary") & (daily.scope == "equal_count")]
+    assert active_d5.cumulative_cost.tolist() == pytest.approx([.00175] * 4)
+    completed_d3 = daily[(daily.horizon == 3) & (daily.strategy == "ordinary") & (daily.scope == "equal_count")]
+    assert completed_d3.cumulative_cost.tolist() == pytest.approx([.00175, .00175, .00175, .0035])

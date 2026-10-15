@@ -67,7 +67,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--fetch-end-date",
         default="",
-        help="Collector end date; defaults to target + 3 calendar days.",
+        help="Collector end date; defaults to the target itself. A later explicit date changes the QFQ anchor.",
     )
     parser.add_argument(
         "--force",
@@ -91,7 +91,7 @@ def resolve_dates(args: argparse.Namespace) -> tuple[dt.date, dt.date]:
     fetch_end_date = (
         pd.to_datetime(args.fetch_end_date).date()
         if args.fetch_end_date
-        else target + dt.timedelta(days=3)
+        else target
     )
     if fetch_end_date < target:
         raise ValueError("--fetch-end-date must be >= --as-of")

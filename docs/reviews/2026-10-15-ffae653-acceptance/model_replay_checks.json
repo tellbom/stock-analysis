@@ -1,0 +1,62 @@
+[
+  {
+    "horizon": 3,
+    "model": "original_ridge",
+    "rows": 299,
+    "max_abs_error": 0.0
+  },
+  {
+    "horizon": 3,
+    "model": "recent_no_flow",
+    "rows": 299,
+    "max_abs_error": 0.0
+  },
+  {
+    "horizon": 3,
+    "model": "recent_flow",
+    "rows": 299,
+    "max_abs_error": 0.0
+  },
+  {
+    "horizon": 3,
+    "model": "experiment_base_ridge",
+    "rows": 299,
+    "max_abs_error": 0.0
+  },
+  {
+    "horizon": 3,
+    "model": "recent_timeweighted",
+    "rows": 299,
+    "max_abs_error": 0.0
+  },
+  {
+    "horizon": 5,
+    "model": "original_ridge",
+    "rows": 299,
+    "max_abs_error": 0.0
+  },
+  {
+    "horizon": 5,
+    "model": "recent_no_flow",
+    "rows": 299,
+    "max_abs_error": 0.0
+  },
+  {
+    "horizon": 5,
+    "model": "recent_flow",
+    "rows": 299,
+    "max_abs_error": 0.0
+  },
+  {
+    "horizon": 5,
+    "model": "experiment_base_ridge",
+    "rows": 299,
+    "max_abs_error": 0.0
+  },
+  {
+    "horizon": 5,
+    "model": "recent_timeweighted",
+    "rows": 299,
+    "max_abs_error": 0.0
+  }
+]

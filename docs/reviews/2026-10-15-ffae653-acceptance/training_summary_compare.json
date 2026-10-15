@@ -1,0 +1,411 @@
+{
+  "as_of": "2026-10-14",
+  "entry_date": "2026-10-15",
+  "research_only": true,
+  "retrospective_reconstruction": true,
+  "original_features": [
+    "ma_5",
+    "ma_10",
+    "ma_20",
+    "ma_60",
+    "macd_dif",
+    "macd_dea",
+    "macd_hist",
+    "kdj_k",
+    "kdj_d",
+    "kdj_j",
+    "rsi_6",
+    "rsi_12",
+    "rsi_24",
+    "boll_upper",
+    "boll_mid",
+    "atr_14",
+    "adx_14",
+    "obv",
+    "cci_14",
+    "roc_10",
+    "willr_14",
+    "stoch_k",
+    "stoch_d",
+    "reversal_3d",
+    "cs_rank_close",
+    "cs_rank_volume",
+    "cs_rank_rsi_6",
+    "cs_rank_roc_10",
+    "cs_rank_ma_5",
+    "cs_zscore_close",
+    "cs_zscore_volume",
+    "cs_zscore_rsi_6"
+  ],
+  "flow_features": [
+    "cs_main_flow_rank_1d",
+    "cs_main_flow_rank_5d",
+    "cs_small_flow_rank_1d",
+    "cs_super_flow_rank_1d",
+    "cs_flow_reversal_5d"
+  ],
+  "original_algorithm": "Ridge(alpha=1.0)",
+  "baseline_strategy_id": "ridge32_weekly_baseline",
+  "recent_algorithm": "LightGBM",
+  "recent_params": {
+    "objective": "regression",
+    "n_estimators": 120,
+    "learning_rate": 0.05,
+    "num_leaves": 15,
+    "min_child_samples": 20,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_alpha": 0.1,
+    "reg_lambda": 0.1,
+    "random_state": 42,
+    "verbose": -1,
+    "n_jobs": 4
+  },
+  "rrf_k": 60,
+  "recent_window_dates": 120,
+  "experiment": {
+    "enabled": true,
+    "use_time_weight": true,
+    "time_weight_half_life_days": 180,
+    "recent_window_dates": 60,
+    "arm": "hybrid_timeweighted"
+  },
+  "data_contract_version": "qfq-full-history-calendar-v1",
+  "label_date_basis": "exchange_calendar_complete_forward_window",
+  "selection": {
+    "top_k_per_industry": 3,
+    "max_total": 50,
+    "sector_cap_tech": 10,
+    "strategy_version": "ridge32-weekly-v2-tech10"
+  },
+  "gate_scope": "score tiers only; no additional event/risk factors",
+  "scored_count": 299,
+  "excluded_symbols": [
+    "601059"
+  ],
+  "prediction_feature_hash": "758abf4db57c0d3ca20ed98f97575d24d68c5accb71d9f426bee7b3db9066cde",
+  "flow_source_counts": {
+    "eastmoney_emdatah5_zjlx": 39581
+  },
+  "flow_latest_date": "2026-10-14",
+  "horizons": {
+    "3": {
+      "label_col": "ret_fwd_3d",
+      "target_date": "2026-10-20",
+      "reference_audit": {
+        "reference_supplied": false
+      },
+      "baseline_meta": {
+        "strategy_id": "ridge32_weekly_baseline",
+        "strategy_version": "1.0-ridge-alpha1.0",
+        "algorithm": "Ridge(alpha=1.0)",
+        "feature_count": 32,
+        "train_rows": 252183,
+        "train_first_date": "2023-04-04",
+        "train_last_date": "2026-10-08",
+        "prediction_date": "2026-10-14",
+        "prediction_rows": 299,
+        "time_weighted": false,
+        "time_weight_half_life_days": null
+      },
+      "original_train_rows": 252183,
+      "original_train_start": "2023-04-04",
+      "original_train_end": "2026-10-08",
+      "original_training_input_hash": "cbe13aee74acbb19d0a3078d08fa9988f6ffaa046dc86917344594251531e30d",
+      "original_scores_hash": "73a7e93d6511ff10283adbd85d22e7c10750b41d0fea07232a5cd3c88da0d27b",
+      "shared_recent_train_rows": 35932,
+      "shared_recent_dates": 120,
+      "recent_train_start": "2026-04-10",
+      "recent_train_end": "2026-10-08",
+      "recent_rows_excluded_for_missing_flow": 0,
+      "shared_recent_row_label_hash": "0e845ca62abad14ef19c5a89a89f99d6b847182cdfee2ea594bc4c85c4d1eac3",
+      "recent_feature_counts": {
+        "no_flow": 32,
+        "flow": 37
+      },
+      "flow_importances": {
+        "cs_main_flow_rank_1d": 27,
+        "cs_main_flow_rank_5d": 33,
+        "cs_small_flow_rank_1d": 21,
+        "cs_super_flow_rank_1d": 12,
+        "cs_flow_reversal_5d": 15
+      },
+      "flow_train_nonnull_dates": {
+        "cs_main_flow_rank_1d": 120,
+        "cs_main_flow_rank_5d": 120,
+        "cs_small_flow_rank_1d": 120,
+        "cs_super_flow_rank_1d": 120,
+        "cs_flow_reversal_5d": 120
+      },
+      "equal_count_n": 42,
+      "full_selection_counts": {
+        "ordinary": 42,
+        "hybrid_no_flow": 44,
+        "hybrid_flow": 42,
+        "hybrid_flow_score_gate_diagnostic": 35
+      },
+      "selection_audit": {
+        "ordinary": {
+          "is_diagnostic": false,
+          "pre_cap_count": 50,
+          "post_cap_count": 42,
+          "sector_cap_enabled": true,
+          "dropped_by_sector_cap": [
+            "002475",
+            "300408",
+            "600522",
+            "600584",
+            "601138",
+            "688041",
+            "688082",
+            "688183"
+          ]
+        },
+        "hybrid_no_flow": {
+          "is_diagnostic": false,
+          "pre_cap_count": 50,
+          "post_cap_count": 44,
+          "sector_cap_enabled": true,
+          "dropped_by_sector_cap": [
+            "000977",
+            "002600",
+            "300308",
+            "600183",
+            "603019",
+            "688256"
+          ]
+        },
+        "hybrid_flow": {
+          "is_diagnostic": false,
+          "pre_cap_count": 50,
+          "post_cap_count": 42,
+          "sector_cap_enabled": true,
+          "dropped_by_sector_cap": [
+            "000977",
+            "002371",
+            "002600",
+            "002916",
+            "600183",
+            "600584",
+            "688082",
+            "688126"
+          ]
+        },
+        "hybrid_flow_score_gate_diagnostic": {
+          "is_diagnostic": true,
+          "pre_cap_count": 42,
+          "post_cap_count": 35,
+          "sector_cap_enabled": true,
+          "dropped_by_sector_cap": [
+            "000977",
+            "002371",
+            "002600",
+            "002916",
+            "600183",
+            "600584",
+            "688082"
+          ]
+        }
+      },
+      "experiment": {
+        "enabled": true,
+        "arm": "hybrid_timeweighted",
+        "base_time_weighted": true,
+        "base_meta": {
+          "strategy_id": "ridge32_weekly_baseline",
+          "strategy_version": "1.0-ridge-alpha1.0",
+          "algorithm": "Ridge(alpha=1.0)",
+          "feature_count": 32,
+          "train_rows": 252183,
+          "train_first_date": "2023-04-04",
+          "train_last_date": "2026-10-08",
+          "prediction_date": "2026-10-14",
+          "prediction_rows": 299,
+          "time_weighted": true,
+          "time_weight_half_life_days": 180
+        },
+        "base_train_rows": 252183,
+        "base_training_input_hash": "cbe13aee74acbb19d0a3078d08fa9988f6ffaa046dc86917344594251531e30d",
+        "base_scores_hash": "1773d7e56cdb924a20721ef86de2a4ab80068c05e51757570a7bb85c99af97fd",
+        "recent_window_dates": 60,
+        "recent_train_dates": 60,
+        "recent_train_rows": 17958,
+        "recent_training_input_hash": "2d4fcf95177fcaf8789acc22d3b38066919b83e548df661ff2dab71ed591b9ae",
+        "recent_row_label_hash": "ab67b15c6fad050afb4a22182b411793b335706080fa20f609579ee599f6eaaf",
+        "in_equal_count_comparison": false,
+        "is_experimental": true,
+        "recent_train_start": "2026-07-09",
+        "recent_train_end": "2026-10-08",
+        "pick_count": 47,
+        "pre_cap_count": 50,
+        "post_cap_count": 47
+      }
+    },
+    "5": {
+      "label_col": "ret_fwd_5d",
+      "target_date": "2026-10-22",
+      "reference_audit": {
+        "reference_supplied": false
+      },
+      "baseline_meta": {
+        "strategy_id": "ridge32_weekly_baseline",
+        "strategy_version": "1.0-ridge-alpha1.0",
+        "algorithm": "Ridge(alpha=1.0)",
+        "feature_count": 32,
+        "train_rows": 251517,
+        "train_first_date": "2023-04-04",
+        "train_last_date": "2026-09-29",
+        "prediction_date": "2026-10-14",
+        "prediction_rows": 299,
+        "time_weighted": false,
+        "time_weight_half_life_days": null
+      },
+      "original_train_rows": 251517,
+      "original_train_start": "2023-04-04",
+      "original_train_end": "2026-09-29",
+      "original_training_input_hash": "17d7901b3cb77743b89dbc8bf527c9147768c9f2e8c6d223b6a573d5ecc3560f",
+      "original_scores_hash": "b4c60a0d495ecfa965f2cd9cda824087a8bb657e6ac5bd94545f151c90a9d7dd",
+      "shared_recent_train_rows": 35924,
+      "shared_recent_dates": 120,
+      "recent_train_start": "2026-04-08",
+      "recent_train_end": "2026-09-29",
+      "recent_rows_excluded_for_missing_flow": 0,
+      "shared_recent_row_label_hash": "4e0ede39c16c7212bbd947ccf8beb52a368fef87aa42a1714b3d2445a3299c84",
+      "recent_feature_counts": {
+        "no_flow": 32,
+        "flow": 37
+      },
+      "flow_importances": {
+        "cs_main_flow_rank_1d": 26,
+        "cs_main_flow_rank_5d": 38,
+        "cs_small_flow_rank_1d": 12,
+        "cs_super_flow_rank_1d": 17,
+        "cs_flow_reversal_5d": 12
+      },
+      "flow_train_nonnull_dates": {
+        "cs_main_flow_rank_1d": 120,
+        "cs_main_flow_rank_5d": 120,
+        "cs_small_flow_rank_1d": 120,
+        "cs_super_flow_rank_1d": 120,
+        "cs_flow_reversal_5d": 120
+      },
+      "equal_count_n": 37,
+      "full_selection_counts": {
+        "ordinary": 43,
+        "hybrid_no_flow": 37,
+        "hybrid_flow": 38,
+        "hybrid_flow_score_gate_diagnostic": 38
+      },
+      "selection_audit": {
+        "ordinary": {
+          "is_diagnostic": false,
+          "pre_cap_count": 50,
+          "post_cap_count": 43,
+          "sector_cap_enabled": true,
+          "dropped_by_sector_cap": [
+            "000977",
+            "300408",
+            "300476",
+            "600522",
+            "600584",
+            "601138",
+            "688041"
+          ]
+        },
+        "hybrid_no_flow": {
+          "is_diagnostic": false,
+          "pre_cap_count": 50,
+          "post_cap_count": 37,
+          "sector_cap_enabled": true,
+          "dropped_by_sector_cap": [
+            "000977",
+            "002371",
+            "002600",
+            "300308",
+            "300408",
+            "300476",
+            "600183",
+            "600522",
+            "600584",
+            "603019",
+            "688012",
+            "688183",
+            "688256"
+          ]
+        },
+        "hybrid_flow": {
+          "is_diagnostic": false,
+          "pre_cap_count": 50,
+          "post_cap_count": 38,
+          "sector_cap_enabled": true,
+          "dropped_by_sector_cap": [
+            "000977",
+            "002371",
+            "002600",
+            "300308",
+            "300476",
+            "300502",
+            "600183",
+            "600584",
+            "603019",
+            "688012",
+            "688183",
+            "688256"
+          ]
+        },
+        "hybrid_flow_score_gate_diagnostic": {
+          "is_diagnostic": true,
+          "pre_cap_count": 49,
+          "post_cap_count": 38,
+          "sector_cap_enabled": true,
+          "dropped_by_sector_cap": [
+            "000977",
+            "002371",
+            "002600",
+            "300308",
+            "300502",
+            "600183",
+            "600584",
+            "603019",
+            "688012",
+            "688183",
+            "688256"
+          ]
+        }
+      },
+      "experiment": {
+        "enabled": true,
+        "arm": "hybrid_timeweighted",
+        "base_time_weighted": true,
+        "base_meta": {
+          "strategy_id": "ridge32_weekly_baseline",
+          "strategy_version": "1.0-ridge-alpha1.0",
+          "algorithm": "Ridge(alpha=1.0)",
+          "feature_count": 32,
+          "train_rows": 251517,
+          "train_first_date": "2023-04-04",
+          "train_last_date": "2026-09-29",
+          "prediction_date": "2026-10-14",
+          "prediction_rows": 299,
+          "time_weighted": true,
+          "time_weight_half_life_days": 180
+        },
+        "base_train_rows": 251517,
+        "base_training_input_hash": "17d7901b3cb77743b89dbc8bf527c9147768c9f2e8c6d223b6a573d5ecc3560f",
+        "base_scores_hash": "4274dbead71fddda9dad4a19cc5943b6b6f79da2abc400a4e2a9260684f0e229",
+        "recent_window_dates": 60,
+        "recent_train_dates": 60,
+        "recent_train_rows": 17952,
+        "recent_training_input_hash": "12c6bedc98b84a950d04d0300cf5f08a52bc53f023ed88647908ab79e7612c24",
+        "recent_row_label_hash": "2cdd9c3a2191f62b9933feb1bcb99a6bbc2379decf5e8fc69819f0b7b9a63942",
+        "in_equal_count_comparison": false,
+        "is_experimental": true,
+        "recent_train_start": "2026-07-07",
+        "recent_train_end": "2026-09-29",
+        "pick_count": 49,
+        "pre_cap_count": 50,
+        "post_cap_count": 49
+      }
+    }
+  }
+}

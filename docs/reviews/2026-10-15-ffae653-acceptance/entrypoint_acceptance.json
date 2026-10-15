@@ -1,0 +1,137 @@
+{
+  "entrypoint_files": [
+    "all_picks.csv",
+    "D3_experiment_base_scores.csv",
+    "D3_experiment_recent_scores.csv",
+    "D3_hybrid_flow_picks.csv",
+    "D3_hybrid_flow_score_gate_diagnostic_picks.csv",
+    "D3_hybrid_no_flow_picks.csv",
+    "D3_hybrid_timeweighted_picks.csv",
+    "D3_ordinary_picks.csv",
+    "D3_original_scores.csv",
+    "D3_recent_flow_importance.csv",
+    "D3_recent_flow_scores.csv",
+    "D3_recent_no_flow_importance.csv",
+    "D3_recent_no_flow_scores.csv",
+    "D3_score_gate.csv",
+    "D5_experiment_base_scores.csv",
+    "D5_experiment_recent_scores.csv",
+    "D5_hybrid_flow_picks.csv",
+    "D5_hybrid_flow_score_gate_diagnostic_picks.csv",
+    "D5_hybrid_no_flow_picks.csv",
+    "D5_hybrid_timeweighted_picks.csv",
+    "D5_ordinary_picks.csv",
+    "D5_original_scores.csv",
+    "D5_recent_flow_importance.csv",
+    "D5_recent_flow_scores.csv",
+    "D5_recent_no_flow_importance.csv",
+    "D5_recent_no_flow_scores.csv",
+    "D5_score_gate.csv",
+    "prediction_attributes.csv"
+  ],
+  "frozen_score_checks": [
+    {
+      "horizon": 3,
+      "model": "original",
+      "max_abs_error": 0.0
+    },
+    {
+      "horizon": 3,
+      "model": "recent_no_flow",
+      "max_abs_error": 0.0
+    },
+    {
+      "horizon": 3,
+      "model": "recent_flow",
+      "max_abs_error": 0.0
+    },
+    {
+      "horizon": 5,
+      "model": "original",
+      "max_abs_error": 0.0
+    },
+    {
+      "horizon": 5,
+      "model": "recent_no_flow",
+      "max_abs_error": 0.0
+    },
+    {
+      "horizon": 5,
+      "model": "recent_flow",
+      "max_abs_error": 0.0
+    }
+  ],
+  "arm_schema": [
+    {
+      "horizon": 3,
+      "arm": "ordinary",
+      "count": 42,
+      "diagnostic": false,
+      "experimental": false
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_no_flow",
+      "count": 44,
+      "diagnostic": false,
+      "experimental": false
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_flow",
+      "count": 42,
+      "diagnostic": false,
+      "experimental": false
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_flow_score_gate_diagnostic",
+      "count": 35,
+      "diagnostic": true,
+      "experimental": false
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_timeweighted",
+      "count": 47,
+      "diagnostic": false,
+      "experimental": true
+    },
+    {
+      "horizon": 5,
+      "arm": "ordinary",
+      "count": 43,
+      "diagnostic": false,
+      "experimental": false
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_no_flow",
+      "count": 37,
+      "diagnostic": false,
+      "experimental": false
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_flow",
+      "count": 38,
+      "diagnostic": false,
+      "experimental": false
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_flow_score_gate_diagnostic",
+      "count": 38,
+      "diagnostic": true,
+      "experimental": false
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_timeweighted",
+      "count": 49,
+      "diagnostic": false,
+      "experimental": true
+    }
+  ],
+  "model_count_per_entry": 10
+}

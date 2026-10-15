@@ -10,7 +10,7 @@ def test_fetch_latest_ohlcv_accepts_as_of():
     target, fetch_end_date = resolve_dates(args)
 
     assert target == dt.date(2026, 10, 14)
-    assert fetch_end_date == dt.date(2026, 10, 17)
+    assert fetch_end_date == dt.date(2026, 10, 14)
 
 
 def test_fetch_latest_ohlcv_min_date_backward_compat():
@@ -20,7 +20,7 @@ def test_fetch_latest_ohlcv_min_date_backward_compat():
     target, fetch_end_date = resolve_dates(args)
 
     assert target == dt.date(2026, 7, 8)
-    assert fetch_end_date == dt.date(2026, 7, 11)
+    assert fetch_end_date == dt.date(2026, 7, 8)
 
 
 def test_fetch_latest_ohlcv_accepts_explicit_fetch_end_date():
@@ -40,7 +40,7 @@ def test_fetch_latest_ohlcv_defaults_to_today():
     target, fetch_end_date = resolve_dates(args)
 
     assert target == dt.date.today()
-    assert fetch_end_date == dt.date.today() + dt.timedelta(days=3)
+    assert fetch_end_date == dt.date.today()
 
 
 def test_fetch_latest_ohlcv_rejects_end_before_target():

@@ -31,7 +31,7 @@ def test_weight_at_half_life_is_half():
 def test_weight_monotonic_decreasing():
     days = np.array([0.0, 1.0, 90.0, 180.0, 365.0, 1095.0])
     w = _weights(days)
-    assert w[0] == 1.0  # as_of 前一天权重为 1
+    assert w[0] == 1.0  # as_of 当天数学权重为1；实际训练排除该日
     assert bool((w[:-1] > w[1:]).all())  # 严格递减
     assert w[-1] < 0.02  # 3 年前权重可忽略
 

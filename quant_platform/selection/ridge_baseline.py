@@ -36,8 +36,8 @@ STRATEGY_VERSION = "1.0-ridge-alpha1.0"
 ALPHA = 1.0
 
 # P0 快进快出适配（2026-10-15 最终裁决）：样本时间衰减权重的半衰期（天）。
-# D+3 短线下，3 年前样本与上周样本等权是不合理的；指数衰减让近期 regime
-# 占主导。180 天半衰期是保守起点——权重变化平滑，不会推倒重来。
+# 指数衰减改变不同历史日期的拟合权重，作为独立实验验证。
+# 180个自然日是实验起点，不代表已经证实比等权收益更好。
 TIME_WEIGHT_HALF_LIFE_DAYS = 180
 
 # The original 32-column Ridge contract, verified against the delivered file.
@@ -90,7 +90,7 @@ def fit_predict_ridge32(
     use_time_weight : bool
         P0 快进快出实验开关（默认 False = 冻结基线行为）。
         True 时训练样本按指数衰减加权：weight = 0.5 ** (days_ago / 180)，
-        即 180 天前的样本权重衰减一半。近期 regime 占主导，适配 D+3 短线。
+        即 180 个自然日前的样本权重衰减一半；收益效果需独立验证。
         通过 sklearn 的 sample_weight 传入（Pipeline 末端 step 名为 "model"）。
 
     Returns
@@ -130,8 +130,8 @@ def fit_predict_ridge32(
     ])
     fit_kwargs: dict = {}
     if use_time_weight:
-        # P0：指数时间衰减。days_ago=0（as_of 前一天）权重为 1，
-        # 180 天前权重 0.5，3 年前约 0.06。近期样本主导拟合。
+        # 相对信号日计算自然日差；前一天是1，180天前0.5，1095天前约0.0148。
+        # 只对Ridge拟合加权，插补和标准化仍保持原实现。
         days_ago = np.array([(as_of - d).days for d in train["date"]], dtype=float)
         weights = 0.5 ** (days_ago / TIME_WEIGHT_HALF_LIFE_DAYS)
         fit_kwargs["model__sample_weight"] = weights

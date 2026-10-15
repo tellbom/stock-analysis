@@ -491,12 +491,12 @@ def test_robustness_subperiod():
 # T2.7 — MLflow tracking
 # ---------------------------------------------------------------------------
 
-def test_mlflow_experiment_creation():
+def test_mlflow_experiment_creation(mlflow_tempdir):
     """get_or_create_experiment creates a SQLite experiment without error."""
     from quant_platform.training.tracking import get_or_create_experiment
     import mlflow
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with mlflow_tempdir() as tmp:
         exp_id = get_or_create_experiment(tmp, "test_exp")
         assert exp_id is not None
         # Calling twice is idempotent
@@ -505,12 +505,12 @@ def test_mlflow_experiment_creation():
     print(f"  [OK] T2.7 MLflow: experiment created (id={exp_id}), idempotent")
 
 
-def test_mlflow_run_logger():
+def test_mlflow_run_logger(mlflow_tempdir):
     """RunLogger logs params and metrics to MLflow."""
     from quant_platform.training.tracking import get_or_create_experiment, RunLogger
     import mlflow
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with mlflow_tempdir() as tmp:
         exp_id = get_or_create_experiment(tmp, "run_logger_test")
 
         with RunLogger(tmp, exp_id, run_name="test_run") as run:

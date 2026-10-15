@@ -59,9 +59,7 @@ def _build_lake(tmp: str, symbols: list[str] = None,
     """Populate a temp lake with OHLCV, universe, and calendar."""
     from quant_platform.store.lake import init_lake, ohlcv_path
     from quant_platform.store.parquet_store import write_ohlcv
-    from quant_platform.ingest.calendar_service import CalendarService
     from quant_platform.ingest.universe_service import UniverseService
-    import quant_platform.ingest.calendar_service as calendar_service
 
     symbols = symbols or ["600519", "000858"]
     init_lake(tmp)
@@ -70,13 +68,13 @@ def _build_lake(tmp: str, symbols: list[str] = None,
         df = _make_ohlcv(sym, n=n)
         write_ohlcv(df, ohlcv_path(tmp, sym), sym)
 
-    # Calendar
-    original_akshare = calendar_service._build_from_akshare
-    calendar_service._build_from_akshare = lambda start, end: None
-    try:
-        CalendarService(tmp).build_and_save(start="2022-01-01", end="2024-12-31")
-    finally:
-        calendar_service._build_from_akshare = original_akshare
+    # This fixture's prices use synthetic B-days, including exchange holidays.
+    # Its synthetic calendar must match them. Production tests separately
+    # verify rejection of real prices outside the exchange calendar.
+    from quant_platform.store.parquet_store import write_parquet
+    dates = pd.date_range("2022-01-01", "2024-12-31", freq="D")
+    write_parquet(pd.DataFrame({"date": dates.date, "is_trading": dates.dayofweek < 5}),
+                  Path(tmp) / "calendar/trading_calendar.parquet")
 
     # Universe membership
     csv_path = Path(tmp) / "cons.csv"

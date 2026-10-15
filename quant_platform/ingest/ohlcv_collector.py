@@ -327,6 +327,34 @@ def _normalise_hist(df: pd.DataFrame, symbol: str) -> pd.DataFrame:
     return df
 
 
+def qfq_as_of(raw: pd.DataFrame, factors: pd.DataFrame, end_date: str) -> pd.DataFrame:
+    """Anchor Sina forward adjustment to the requested cutoff, not fetch day.
+
+    Sina revises historical qfq factors when a later corporate action occurs.
+    Its ready-made qfq endpoint then changes even the cutoff day's close.
+    Rebuilding from unadjusted bars with factor(cutoff)/factor(bar) cancels
+    that later normalization and keeps the cutoff close on its traded scale.
+    """
+    cutoff = pd.Timestamp(end_date)
+    prices = raw.copy()
+    prices["date"] = pd.to_datetime(prices["date"])
+    prices = prices[prices.date <= cutoff].sort_values("date")
+    factor = factors[["date", "qfq_factor"]].copy()
+    factor["date"] = pd.to_datetime(factor.date)
+    factor["qfq_factor"] = pd.to_numeric(factor.qfq_factor, errors="raise")
+    factor = factor[factor.date <= cutoff].sort_values("date")
+    if factor.empty or factor.date.duplicated().any() or factor.qfq_factor.isna().any() or (factor.qfq_factor <= 0).any():
+        raise ValueError("Missing, duplicate or invalid as-of QFQ factors")
+    anchor = float(factor.qfq_factor.iloc[-1])
+    merged = pd.merge_asof(prices, factor, on="date", direction="backward")
+    if merged.qfq_factor.isna().any():
+        raise ValueError("QFQ factors do not cover the complete requested price history")
+    for col in ("open", "high", "low", "close"):
+        merged[col] = (merged[col] * anchor / merged.qfq_factor).round(2)
+    merged["date"] = merged.date.dt.date
+    return merged.drop(columns="qfq_factor")
+
+
 def _fetch_symbol_raw(
     symbol: str,
     start_date: str,
@@ -345,34 +373,46 @@ def _fetch_symbol_raw(
 
     mi = detect_market(symbol)
 
-    # --- Endpoint 1: stock_zh_a_daily (Sina, English columns) ---
+    # Fetch unadjusted bars and explicitly anchor the factor series. Asking
+    # the ready-made qfq endpoint for a historical end_date is insufficient.
     df = safe_call(
         ak.stock_zh_a_daily,
         symbol=mi.prefixed,
         start_date=start_date,
         end_date=end_date,
-        adjust="qfq",
+        adjust="",
         label=f"stock_zh_a_daily {symbol}",
         retries=3,
     )
     if df is not None and not df.empty:
-        return _normalise_daily(df, symbol)
+        raw = _normalise_daily(df, symbol)
+    else:
+        raw = None
 
-    logger.warning("stock_zh_a_daily failed for %s, trying stock_zh_a_hist", symbol)
+    if raw is None:
+        logger.warning("stock_zh_a_daily failed for %s, trying stock_zh_a_hist", symbol)
 
-    # --- Endpoint 2: stock_zh_a_hist (EM, Chinese columns, has turnover) ---
-    df = safe_call(
-        ak.stock_zh_a_hist,
-        symbol=symbol,
-        period="daily",
-        start_date=start_date,
-        end_date=end_date,
-        adjust="qfq",
-        label=f"stock_zh_a_hist {symbol}",
-        retries=3,
-    )
-    if df is not None and not df.empty:
-        return _normalise_hist(df, symbol)
+        # EM fallback also starts with unadjusted bars; it shares the explicit
+        # factor cutoff instead of silently returning fetch-day qfq prices.
+        df = safe_call(
+            ak.stock_zh_a_hist,
+            symbol=symbol, period="daily", start_date=start_date,
+            end_date=end_date, adjust="", label=f"stock_zh_a_hist {symbol}", retries=3,
+        )
+        if df is not None and not df.empty:
+            raw = _normalise_hist(df, symbol)
+
+    if raw is not None:
+        factors = safe_call(
+            ak.stock_zh_a_daily, symbol=mi.prefixed, adjust="qfq-factor",
+            label=f"Sina as-of QFQ factors {symbol}", retries=3,
+        )
+        if factors is not None and not factors.empty:
+            try:
+                return qfq_as_of(raw, factors, end_date)
+            except (ValueError, KeyError, TypeError) as exc:
+                logger.error("%s: as-of QFQ conversion failed: %s", symbol, exc)
+        # Never use an unanchored qfq fallback after a factor failure.
 
     logger.error(
         "All endpoints failed for %s. Network may be restricted (403). "

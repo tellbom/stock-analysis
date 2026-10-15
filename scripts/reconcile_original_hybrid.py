@@ -48,14 +48,24 @@ def evaluate(out: Path, prices_path: Path, observed_through: dt.date, one_way_co
             raise ValueError(f"Missing holding-week prices: {missing[:8]}")
         index_return = float(lookup["000300", endpoint] / lookup["000300", entry] - 1)
         baseline_set = set(selected[(selected.strategy == "ordinary") & selected.in_equal_count_comparison].symbol)
+        experiment_rows = selected[selected.strategy == "hybrid_timeweighted"]
+        ordinary_rows = selected[selected.strategy == "ordinary"]
+        experiment_n = min(len(experiment_rows), len(ordinary_rows))
         for strategy, rows in selected.groupby("strategy", sort=False):
             diagnostic = strategy.endswith("_diagnostic") or (
                 "is_diagnostic" in rows and rows.is_diagnostic.any()
             )
-            for scope in ("equal_count", "full_selection"):
-                if diagnostic and scope == "equal_count":
-                    continue
-                subset = rows[rows.in_equal_count_comparison] if scope == "equal_count" else rows
+            experimental = strategy == "hybrid_timeweighted" or (
+                "is_experimental" in rows and rows.is_experimental.fillna(False).any()
+            )
+            scopes = ["full_selection"] if diagnostic or experimental else ["equal_count", "full_selection"]
+            if experiment_n and (experimental or strategy == "ordinary"):
+                scopes.append("experiment_pair")
+            for scope in scopes:
+                if scope == "experiment_pair":
+                    subset = rows.sort_values("recommendation_rank").head(experiment_n)
+                else:
+                    subset = rows[rows.in_equal_count_comparison] if scope == "equal_count" else rows
                 n = len(subset)
                 if n == 0:
                     raise ValueError("Empty comparison")
@@ -67,6 +77,7 @@ def evaluate(out: Path, prices_path: Path, observed_through: dt.date, one_way_co
                                     "scope": scope, "rank": row.recommendation_rank, "symbol": row.symbol,
                                     "name": row.name, "industry_name": row.industry_name,
                                     "entry_close": start_price, "observed_close": end_price, "gross_return": value,
+                                    "equal_weight": 1.0/n, "normalized_units": 1.0/(n*start_price),
                                     "net_if_exit": value - 2 * cost, "excess_if_exit": value - 2 * cost - index_return,
                                     "entry_date": entry.isoformat(), "end_date": endpoint.isoformat()})
                     values.append(value)
@@ -76,7 +87,11 @@ def evaluate(out: Path, prices_path: Path, observed_through: dt.date, one_way_co
                     benchmark = float(lookup["000300", date] / lookup["000300", entry] - 1)
                     curve.append(1 + gross)
                     daily.append({"horizon": h, "strategy": strategy, "scope": scope, "date": date.isoformat(),
-                                  "gross_return": gross, "net_if_exit": gross - 2 * cost, "benchmark_return": benchmark})
+                                  "gross_return": gross, "net_if_exit": gross - 2 * cost, "benchmark_return": benchmark,
+                                  "normalized_market_value": 1 + gross,
+                                  "cumulative_cost": cost * (2 if date == target else 1),
+                                  "normalized_nav": 1 + gross - cost * (2 if date == target else 1),
+                                  "is_exit_date": date == target})
                 gross = float(np.mean(values))
                 stats.append({"horizon": h, "strategy": strategy, "strategy_name": rows.strategy_name.iloc[0],
                               "scope": scope, "count": n, "gross_return": gross, "net_if_exit": gross - 2 * cost,
@@ -87,19 +102,20 @@ def evaluate(out: Path, prices_path: Path, observed_through: dt.date, one_way_co
                               "entry_date": entry.isoformat(), "end_date": endpoint.isoformat(),
                               "target_date": target.isoformat(), "complete": endpoint == target,
                               "status": "完整持有期" if endpoint == target else "阶段收益，尚未到期"})
-            if diagnostic:
+            if diagnostic or experimental:
                 continue
             equal_set = set(rows[rows.in_equal_count_comparison].symbol)
             overlaps.append({"horizon": h, "strategy": strategy, "count": len(equal_set),
                              "overlap_with_ordinary": len(equal_set & baseline_set),
                              "replacements_vs_ordinary": len(equal_set - baseline_set)})
     for h in (3, 5):
-        for scope in ("equal_count", "full_selection"):
+        for scope in ("equal_count", "full_selection", "experiment_pair"):
             rows = [s for s in stats if s["horizon"] == h and s["scope"] == scope]
             by_key = {s["strategy"]: s for s in rows}
             for s in rows:
                 s["return_delta_vs_ordinary"] = s["net_if_exit"] - by_key["ordinary"]["net_if_exit"]
-                s["flow_increment_vs_no_flow"] = by_key["hybrid_flow"]["net_if_exit"] - by_key["hybrid_no_flow"]["net_if_exit"]
+                if "hybrid_flow" in by_key and "hybrid_no_flow" in by_key:
+                    s["flow_increment_vs_no_flow"] = by_key["hybrid_flow"]["net_if_exit"] - by_key["hybrid_no_flow"]["net_if_exit"]
                 # 诊断臂：分数 Gate 的增量只做诊断参考，不参与主策略比较。
                 gate_key = "hybrid_flow_score_gate_diagnostic"
                 if gate_key in by_key:
@@ -108,9 +124,11 @@ def evaluate(out: Path, prices_path: Path, observed_through: dt.date, one_way_co
                     )
     result = {"signal_date": train["as_of"], "entry_date": entry.isoformat(),
               "observed_through": observed_through.isoformat(), "one_way_cost_bps": one_way_cost_bps,
-              "research_only": True, "retrospective_reconstruction": True,
+              "research_only": True, "retrospective_reconstruction": train.get("retrospective_reconstruction", True),
               "cost_convention": "gross minus two one-way costs; early endpoints assume exit",
               "comparison_n_rule": "minimum selected count across the three main arms (diagnostic arm excluded), fixed before reading returns",
+              "experiment_comparison_rule": "separate ordinary vs experiment pair with min selected count; frozen primary equal_count unchanged",
+              "daily_nav_convention": "equal initial notional; entry cost once, exit cost on target only; net_if_exit is hypothetical liquidation",
               "strategies": stats, "overlaps": overlaps}
     for name, data in (("stock_returns", details), ("daily_returns", daily), ("selection_overlap", overlaps)):
         pd.DataFrame(data).to_csv(out / f"{name}.csv", index=False, encoding="utf-8-sig")

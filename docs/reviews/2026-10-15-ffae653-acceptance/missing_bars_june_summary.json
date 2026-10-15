@@ -1,0 +1,16 @@
+{
+  "window": [
+    "2026-06-22",
+    "2026-06-26"
+  ],
+  "affected_symbols": 14,
+  "old_missing_rows": 70,
+  "current_positive_volume_rows": 70,
+  "independent_h5_present_rows": 70,
+  "classification": "historical cache gaps on real trading dates, restored from provider; original loss stage not proven",
+  "exchange_sources": [
+    "https://www.sse.com.cn/disclosure/announcement/general/c/c_20251222_10802507.shtml",
+    "https://www.szse.cn/disclosure/notice/general/t20260611_620979.html"
+  ],
+  "original_root_cause": "unresolved: contemporaneous raw responses/write logs unavailable; cannot distinguish upstream omission from local collection/write loss"
+}
