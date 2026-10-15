@@ -1,0 +1,30 @@
+{
+  "source_commit": "9b9409c0c6e749760171a5b060244b4511330e2f",
+  "files": {
+    ".gitattributes": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+    "calendar_week.csv": "63872295cb9553bc192d473726b9ec0a5e2baff5e1b6796470abb64cbbddd010",
+    "D3_benchmark.csv": "c2f025a24d26edd021a5a130ed70b31a1374bdb89841fd5e8b08025435b81efd",
+    "D3_prices.csv": "2f9cdb6dcebaeb0ba4173db768eb24a6a9d99c428561365bd8a7c4409edfe757",
+    "D3_reference_stock_returns.csv": "ca33eb845e362c464204c39b0e16383f62137abde5b69b591aaab00763859d52",
+    "D3_reference_summary.csv": "0350a2d71d729477491169349fc9b9351c2cf71f0bd1b3b8b18e88354b04ffc0",
+    "D3_reference_summary.json": "da77155af5a2b21ef122e74547159707b4e536f9548184d9af58e6e65291efaf",
+    "integration_fixtures.json": "0f33a9af045f784b3e089e10cef45a3e23ea8b03b15e844590c8f167392c4b6b",
+    "local_ohlcv_hashes.json": "29dac67263688b0d1da5a5ea446cc0bc89a3345ee8675f6d333cb906eea9a337",
+    "provider_availability.json": "9d5d026eaaa6267f8f7c272f6e560f469476596f4eaa2fd54c7fc48a67c7a793",
+    "pytest.xml": "72f45668479a5aa311605d6f92c3b78c187bfa788d0647590c3c0e68a3232227",
+    "replay.py": "35fd58f7f8e78af9a1011da34d89442588b7da7ad9ed5bb6e2247345635c1f48",
+    "saved_workbook_checks.json": "1ff38994ad055b1e43c5511f0cae3558df0f51fb302afec74ec71a2397276c71",
+    "sep30_D3_ordinary_official.csv": "5c42f469194387a207d150c5d5065a92f67c4d7796c455d541b6020134b7acc8",
+    "sep30_D3_ordinary_official_summary.json": "bab7a4036d8d8ae6de7f9bc1600249d5dfcd9f0c69d40cca50bd7631eb044974",
+    "test_summary.json": "eec5a57652d646b3191785f2a4e3acff0130c8db597cc8f07871dc132ba562f8",
+    "visual_verification.json": "cf3335215832de02fc391072ea36209bf680c9a47628070cc570d2305009367a",
+    "workbook_verification.json": "73fc14e50938861ff00febd0560ab74665beb5d09e08a3083ba08765c4b00230"
+  },
+  "frozen_picks_sha256": "8e1e05ddcc48d86db2883e4d29f22c74a534d2597c14462e7f7141a019386407",
+  "frozen_picks_hash_basis": "UTF-8 original bytes with CRLF normalized to LF",
+  "source_git_blob_sha256": {
+    "quant_platform/evaluation/stop_loss.py": "b0936ca96dbfd160f8e2c8d5b64458c6088b5089fe4a10962a473a1f2fb8b97d",
+    "scripts/evaluate_stop_loss.py": "68cb24f598a3e0a372e1a9d72c6cb9dcb37b4e7577dd369fecb11fc4d26064a6",
+    "tests/test_stop_loss.py": "338fd7831851a2a7a17d17b817c4a0b403e4d242b81dbfeabf4a5af011e48d05"
+  }
+}

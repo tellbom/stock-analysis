@@ -1,0 +1,10 @@
+{
+  "scope": "Only the new stop-loss module; no full-suite rerun claimed",
+  "totals": {
+    "tests": 9,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "duration_seconds": 0.635
+}

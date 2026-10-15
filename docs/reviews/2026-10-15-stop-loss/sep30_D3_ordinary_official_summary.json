@@ -1,0 +1,32 @@
+[
+  {
+    "rule_version": "stop-loss-v1",
+    "stop_pct": 0.08,
+    "n": 33,
+    "n_stopped": 8,
+    "trigger_rate": 0.24242424242424243,
+    "mean_ret_fixed": -0.01951432240127251,
+    "mean_ret_sl": -0.020951944044124295,
+    "mean_diff_sl_minus_fixed": -0.0014376216428517875,
+    "paired_t_stat": -0.1800743047033888,
+    "min_ret_fixed": -0.1787045666356012,
+    "min_ret_sl": -0.08075,
+    "worst10_mean_fixed": -0.14189938085215317,
+    "worst10_mean_sl": -0.08075
+  },
+  {
+    "rule_version": "stop-loss-v1",
+    "stop_pct": 0.05,
+    "n": 33,
+    "n_stopped": 16,
+    "trigger_rate": 0.48484848484848486,
+    "mean_ret_fixed": -0.01951432240127251,
+    "mean_ret_sl": -0.020015305920839912,
+    "mean_diff_sl_minus_fixed": -0.0005009835195674054,
+    "paired_t_stat": -0.05230128318620547,
+    "min_ret_fixed": -0.1787045666356012,
+    "min_ret_sl": -0.05075,
+    "worst10_mean_fixed": -0.14189938085215317,
+    "worst10_mean_sl": -0.050749999999999997
+  }
+]

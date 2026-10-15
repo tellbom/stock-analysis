@@ -1,0 +1,629 @@
+{
+  "requested_end": "2026-10-15",
+  "request_scope": "Frozen two-cohort symbol union, at most holding week",
+  "requested_stocks": 115,
+  "returned_cached_responses": 103,
+  "records": [
+    {
+      "symbol": "000300",
+      "market_code": "sh000300",
+      "daily_bar_last": "2026-10-15",
+      "daily_bar_has_20261015": true
+    },
+    {
+      "symbol": "600000",
+      "market_code": "sh600000",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600009",
+      "market_code": "sh600009",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600011",
+      "market_code": "sh600011",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600019",
+      "market_code": "sh600019",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600023",
+      "market_code": "sh600023",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600026",
+      "market_code": "sh600026",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600031",
+      "market_code": "sh600031",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600066",
+      "market_code": "sh600066",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600089",
+      "market_code": "sh600089",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600160",
+      "market_code": "sh600160",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600176",
+      "market_code": "sh600176",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600221",
+      "market_code": "sh600221",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600276",
+      "market_code": "sh600276",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600346",
+      "market_code": "sh600346",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600415",
+      "market_code": "sh600415",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600438",
+      "market_code": "sh600438",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600460",
+      "market_code": "sh600460",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600519",
+      "market_code": "sh600519",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600522",
+      "market_code": "sh600522",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600547",
+      "market_code": "sh600547",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600549",
+      "market_code": "sh600549",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600584",
+      "market_code": "sh600584",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600674",
+      "market_code": "sh600674",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600803",
+      "market_code": "sh600803",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600886",
+      "market_code": "sh600886",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600930",
+      "market_code": "sh600930",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "600941",
+      "market_code": "sh600941",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601012",
+      "market_code": "sh601012",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601018",
+      "market_code": "sh601018",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601021",
+      "market_code": "sh601021",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601100",
+      "market_code": "sh601100",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601127",
+      "market_code": "sh601127",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601138",
+      "market_code": "sh601138",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601328",
+      "market_code": "sh601328",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601633",
+      "market_code": "sh601633",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601689",
+      "market_code": "sh601689",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601698",
+      "market_code": "sh601698",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601728",
+      "market_code": "sh601728",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601766",
+      "market_code": "sh601766",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601800",
+      "market_code": "sh601800",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601857",
+      "market_code": "sh601857",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601898",
+      "market_code": "sh601898",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601916",
+      "market_code": "sh601916",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "601998",
+      "market_code": "sh601998",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "603260",
+      "market_code": "sh603260",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "603501",
+      "market_code": "sh603501",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "603893",
+      "market_code": "sh603893",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "603986",
+      "market_code": "sh603986",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "605117",
+      "market_code": "sh605117",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "688008",
+      "market_code": "sh688008",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "688036",
+      "market_code": "sh688036",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "688047",
+      "market_code": "sh688047",
+      "daily_bar_last": "2026-10-15",
+      "daily_bar_has_20261015": true
+    },
+    {
+      "symbol": "688072",
+      "market_code": "sh688072",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "000002",
+      "market_code": "sz000002",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "000157",
+      "market_code": "sz000157",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "000338",
+      "market_code": "sz000338",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "000425",
+      "market_code": "sz000425",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "000657",
+      "market_code": "sz000657",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "000708",
+      "market_code": "sz000708",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "000768",
+      "market_code": "sz000768",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "000792",
+      "market_code": "sz000792",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "000938",
+      "market_code": "sz000938",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "000963",
+      "market_code": "sz000963",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "000977",
+      "market_code": "sz000977",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "000988",
+      "market_code": "sz000988",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "001280",
+      "market_code": "sz001280",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002028",
+      "market_code": "sz002028",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002049",
+      "market_code": "sz002049",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002202",
+      "market_code": "sz002202",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002353",
+      "market_code": "sz002353",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002371",
+      "market_code": "sz002371",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002384",
+      "market_code": "sz002384",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002415",
+      "market_code": "sz002415",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002460",
+      "market_code": "sz002460",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002466",
+      "market_code": "sz002466",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002475",
+      "market_code": "sz002475",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002493",
+      "market_code": "sz002493",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002558",
+      "market_code": "sz002558",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002602",
+      "market_code": "sz002602",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002625",
+      "market_code": "sz002625",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002709",
+      "market_code": "sz002709",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002837",
+      "market_code": "sz002837",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002916",
+      "market_code": "sz002916",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002920",
+      "market_code": "sz002920",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "002938",
+      "market_code": "sz002938",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "300033",
+      "market_code": "sz300033",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "300124",
+      "market_code": "sz300124",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "300274",
+      "market_code": "sz300274",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "300308",
+      "market_code": "sz300308",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "300316",
+      "market_code": "sz300316",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "300408",
+      "market_code": "sz300408",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "300413",
+      "market_code": "sz300413",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "300433",
+      "market_code": "sz300433",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "300442",
+      "market_code": "sz300442",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "300450",
+      "market_code": "sz300450",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "300476",
+      "market_code": "sz300476",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "300502",
+      "market_code": "sz300502",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "300661",
+      "market_code": "sz300661",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "300750",
+      "market_code": "sz300750",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "300803",
+      "market_code": "sz300803",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "301165",
+      "market_code": "sz301165",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    },
+    {
+      "symbol": "301308",
+      "market_code": "sz301308",
+      "daily_bar_last": "2026-10-14",
+      "daily_bar_has_20261015": false
+    }
+  ],
+  "request_stopped_early": true,
+  "stop_reason": "Stock responses consistently lacked 2026-10-15 daily bar; avoided repeated identical retries",
+  "quote_snapshots_not_spliced_into_daily_bars": true
+}

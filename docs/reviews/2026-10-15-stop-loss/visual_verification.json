@@ -1,0 +1,12 @@
+{
+  "native_renderer_exit_code": -1073741819,
+  "fallback": "Saved-workbook grid previews via read-only openpyxl and PIL",
+  "visually_inspected_sheets": [
+    "D3比分",
+    "逐股计算",
+    "口径与问题"
+  ],
+  "main_summary_visible": true,
+  "code_and_date_values_checked": true,
+  "desktop_excel_wps_acceptance": false
+}
