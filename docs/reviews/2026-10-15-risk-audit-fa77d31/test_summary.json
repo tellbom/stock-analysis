@@ -1,0 +1,39 @@
+{
+  "source_commit": "fa77d31f611b9d2075e14f4f7ae53c60b6a0221a",
+  "command": "python -m pytest tests/ -q --junitxml=temp/risk_audit_fa77d31_pytest.xml",
+  "python_version": "3.13.0",
+  "totals": {
+    "tests": 468,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "risk_audit_test_cases": 22,
+  "risk_audit_case_names": [
+    "test_combine_passes_through_upstream_risk_flags",
+    "test_combine_falls_back_to_recent_flags_when_base_empty",
+    "test_combine_marks_unknown_instead_of_defaulting_safe",
+    "test_coalesce_union_semantics",
+    "test_coalesce_unknown_falls_back_to_secondary_veto",
+    "test_coalesce_two_valid_different_codes_keeps_both_with_time",
+    "test_coalesce_multi_code_strings_union_dedup",
+    "test_coalesce_aligns_misaligned_index",
+    "test_disagreement_threshold_is_pool_median",
+    "test_disagreement_flag_rank_gap_and_sign_clash",
+    "test_disagreement_flag_false_without_recent_model",
+    "test_reason_codes_merges_flags_and_unknown_when_empty",
+    "test_risk_data_status_levels",
+    "test_risk_data_status_rejects_future_timestamp",
+    "test_risk_data_status_rejects_unparsable_timestamp",
+    "test_risk_data_status_accepts_past_and_untimestamped_codes",
+    "test_risk_data_status_future_code_among_unknowns_is_invalid_not_partial",
+    "test_risk_data_status_accepts_datetime_as_of",
+    "test_annotate_picks_adds_all_audit_columns_without_changing_selection",
+    "test_attach_audit_columns_merges_all_eight_fields",
+    "test_attach_audit_columns_rejects_missing_columns",
+    "test_attach_audit_columns_rejects_symbol_mismatch"
+  ],
+  "console_summary": "468 passed, 97 warnings in 288.04s (0:04:48)",
+  "source_xml_sha256": "fb15a381ffbe4859f0ddc53da6874fd07a7d0206e665c00959b0c4cef3a7266f",
+  "source_log_sha256": "8bfb13737638de2800196cada51675be35e24b9ede9ca0407b06bfedd903f3c9"
+}

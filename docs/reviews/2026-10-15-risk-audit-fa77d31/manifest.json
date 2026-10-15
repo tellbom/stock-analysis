@@ -1,0 +1,23 @@
+{
+  "source_commit": "fa77d31f611b9d2075e14f4f7ae53c60b6a0221a",
+  "files": {
+    ".gitattributes": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+    "acceptance.json": "ad956e6594289945864d5b1f8c3538877a2fa0b67d06cdbf832e8e0824601b4c",
+    "claude_original.md": "4aea12e8f87775c9de53f0b4f8e8f6202fdf736f464e53e94384c12bd215afca",
+    "D3_comparison_audit.csv": "1ec063d1612974fbe2f7b3c357d2c06be170e4c3abe9236362a024ef31ee21d8",
+    "D3_json_selected_audit.csv": "1ec063d1612974fbe2f7b3c357d2c06be170e4c3abe9236362a024ef31ee21d8",
+    "D3_weekly_audit.csv": "1ec063d1612974fbe2f7b3c357d2c06be170e4c3abe9236362a024ef31ee21d8",
+    "D5_comparison_audit.csv": "1991739766d29a3618c149d926f5c8365149e74597cee8e7c3082b836b17e257",
+    "D5_json_selected_audit.csv": "1991739766d29a3618c149d926f5c8365149e74597cee8e7c3082b836b17e257",
+    "D5_weekly_audit.csv": "1991739766d29a3618c149d926f5c8365149e74597cee8e7c3082b836b17e257",
+    "pytest.xml": "fb15a381ffbe4859f0ddc53da6874fd07a7d0206e665c00959b0c4cef3a7266f",
+    "test_summary.json": "f6a177ee6dc2e21cc512dfccb8690bd02c121dcd88597bc973de156520ab5c9f"
+  },
+  "source_git_blob_sha256": {
+    "quant_platform/selection/risk_audit.py": "a30a4dd6fdeff10d013ce71bf1271397b66aaa03d3b92e9f173b1657007d8784",
+    "scripts/compare_original_hybrid.py": "f3692dd2dceafcc702070e6ac9f054d3d9a41e586debf70501737c0a10101df0",
+    "scripts/run_dual_horizon_rrf.py": "f2a29ca2f711937c41aa6b93097afefbd2d71889046943325bb9679100bd402e",
+    "tests/test_risk_audit.py": "baad38c30b91920428090c3b3d75cacfbffb6f57150037490339d886eabaca0e"
+  },
+  "source_hash_basis": "Exact Git blob bytes; evidence files preserve exact bytes using local .gitattributes"
+}
