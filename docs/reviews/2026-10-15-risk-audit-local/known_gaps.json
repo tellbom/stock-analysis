@@ -1,0 +1,77 @@
+{
+  "source_commit": "738412e",
+  "scope": "Focused actual weekly export with frozen training-result provider; not a full training/CLI run",
+  "weekly_exports": [
+    {
+      "horizon": 3,
+      "canonical_has_eight_fields": true,
+      "weekly_top_level_missing_fields": [
+        "disagreement_flag",
+        "risk_as_of",
+        "risk_data_status",
+        "risk_reason_codes",
+        "eligible",
+        "pre_filter_rank",
+        "post_filter_rank",
+        "rule_version"
+      ],
+      "weekly_summary_selected_missing_fields": [
+        "disagreement_flag",
+        "risk_as_of",
+        "risk_data_status",
+        "risk_reason_codes",
+        "eligible",
+        "pre_filter_rank",
+        "post_filter_rank",
+        "rule_version"
+      ]
+    },
+    {
+      "horizon": 5,
+      "canonical_has_eight_fields": true,
+      "weekly_top_level_missing_fields": [
+        "disagreement_flag",
+        "risk_as_of",
+        "risk_data_status",
+        "risk_reason_codes",
+        "eligible",
+        "pre_filter_rank",
+        "post_filter_rank",
+        "rule_version"
+      ],
+      "weekly_summary_selected_missing_fields": [
+        "disagreement_flag",
+        "risk_as_of",
+        "risk_data_status",
+        "risk_reason_codes",
+        "eligible",
+        "pre_filter_rank",
+        "post_filter_rank",
+        "rule_version"
+      ]
+    }
+  ],
+  "unknown_primary_valid_secondary": {
+    "risk_flags": "UNKNOWN",
+    "gate_tier": "A_MAIN",
+    "diagnostic_actionable_count": 1
+  },
+  "distinct_valid_flags": {
+    "risk_flags": "coverage@2026-10-14",
+    "gate_tier": "RISK_DOWNGRADE",
+    "diagnostic_actionable_count": 0
+  },
+  "future_flag_case": {
+    "annotation": {
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "OK",
+      "risk_reason_codes": "extreme_outflow@2026-10-16",
+      "eligible": true
+    },
+    "gate_outcome": {
+      "risk_flags": "extreme_outflow@2026-10-16",
+      "gate_tier": "RISK_VETO",
+      "diagnostic_actionable_count": 0
+    }
+  }
+}

@@ -1,0 +1,428 @@
+{
+  "source_commit": "738412e",
+  "scope": "Frozen score/selection replay; no retraining and no new returns",
+  "selection_checks": [
+    {
+      "horizon": 3,
+      "arm": "ordinary",
+      "count": 42,
+      "ordered_symbols_match": true,
+      "max_score_error": 0.0,
+      "all_eight_audit_fields": true,
+      "rank_gap_threshold": null,
+      "disagreement_count": 0,
+      "risk_data_status": [
+        "UNKNOWN"
+      ]
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_no_flow",
+      "count": 44,
+      "ordered_symbols_match": true,
+      "max_score_error": 0.0,
+      "all_eight_audit_fields": true,
+      "rank_gap_threshold": 69.0,
+      "disagreement_count": 16,
+      "risk_data_status": [
+        "UNKNOWN"
+      ]
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_flow",
+      "count": 42,
+      "ordered_symbols_match": true,
+      "max_score_error": 0.0,
+      "all_eight_audit_fields": true,
+      "rank_gap_threshold": 75.0,
+      "disagreement_count": 11,
+      "risk_data_status": [
+        "UNKNOWN"
+      ]
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_flow_score_gate_diagnostic",
+      "count": 35,
+      "ordered_symbols_match": true,
+      "max_score_error": 0.0,
+      "all_eight_audit_fields": true,
+      "rank_gap_threshold": 75.0,
+      "disagreement_count": 5,
+      "risk_data_status": [
+        "UNKNOWN"
+      ]
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_timeweighted",
+      "count": 47,
+      "ordered_symbols_match": true,
+      "max_score_error": 0.0,
+      "all_eight_audit_fields": true,
+      "rank_gap_threshold": 74.0,
+      "disagreement_count": 17,
+      "risk_data_status": [
+        "UNKNOWN"
+      ]
+    },
+    {
+      "horizon": 5,
+      "arm": "ordinary",
+      "count": 43,
+      "ordered_symbols_match": true,
+      "max_score_error": 0.0,
+      "all_eight_audit_fields": true,
+      "rank_gap_threshold": null,
+      "disagreement_count": 0,
+      "risk_data_status": [
+        "UNKNOWN"
+      ]
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_no_flow",
+      "count": 37,
+      "ordered_symbols_match": true,
+      "max_score_error": 0.0,
+      "all_eight_audit_fields": true,
+      "rank_gap_threshold": 64.0,
+      "disagreement_count": 1,
+      "risk_data_status": [
+        "UNKNOWN"
+      ]
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_flow",
+      "count": 38,
+      "ordered_symbols_match": true,
+      "max_score_error": 0.0,
+      "all_eight_audit_fields": true,
+      "rank_gap_threshold": 59.0,
+      "disagreement_count": 6,
+      "risk_data_status": [
+        "UNKNOWN"
+      ]
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_flow_score_gate_diagnostic",
+      "count": 38,
+      "ordered_symbols_match": true,
+      "max_score_error": 0.0,
+      "all_eight_audit_fields": true,
+      "rank_gap_threshold": 59.0,
+      "disagreement_count": 6,
+      "risk_data_status": [
+        "UNKNOWN"
+      ]
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_timeweighted",
+      "count": 49,
+      "ordered_symbols_match": true,
+      "max_score_error": 0.0,
+      "all_eight_audit_fields": true,
+      "rank_gap_threshold": 71.0,
+      "disagreement_count": 16,
+      "risk_data_status": [
+        "UNKNOWN"
+      ]
+    }
+  ],
+  "target_rows": [
+    {
+      "horizon": 3,
+      "arm": "ordinary",
+      "symbol": "688521",
+      "recommendation_rank": 1,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 1,
+      "post_filter_rank": 1,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 3,
+      "arm": "ordinary",
+      "symbol": "301308",
+      "recommendation_rank": 2,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 2,
+      "post_filter_rank": 2,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_no_flow",
+      "symbol": "688521",
+      "recommendation_rank": 1,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 1,
+      "post_filter_rank": 1,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_no_flow",
+      "symbol": "301308",
+      "recommendation_rank": 3,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 3,
+      "post_filter_rank": 3,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_flow",
+      "symbol": "688521",
+      "recommendation_rank": 1,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 1,
+      "post_filter_rank": 1,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_flow",
+      "symbol": "301308",
+      "recommendation_rank": 3,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 3,
+      "post_filter_rank": 3,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_flow_score_gate_diagnostic",
+      "symbol": "688521",
+      "recommendation_rank": 1,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 1,
+      "post_filter_rank": 1,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_flow_score_gate_diagnostic",
+      "symbol": "301308",
+      "recommendation_rank": 3,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 3,
+      "post_filter_rank": 3,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_timeweighted",
+      "symbol": "688521",
+      "recommendation_rank": 2,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 2,
+      "post_filter_rank": 2,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 3,
+      "arm": "hybrid_timeweighted",
+      "symbol": "301308",
+      "recommendation_rank": 24,
+      "disagreement_flag": true,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 24,
+      "post_filter_rank": 24,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 5,
+      "arm": "ordinary",
+      "symbol": "688521",
+      "recommendation_rank": 3,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 3,
+      "post_filter_rank": 3,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 5,
+      "arm": "ordinary",
+      "symbol": "301308",
+      "recommendation_rank": 1,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 1,
+      "post_filter_rank": 1,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_no_flow",
+      "symbol": "688521",
+      "recommendation_rank": 2,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 2,
+      "post_filter_rank": 2,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_no_flow",
+      "symbol": "301308",
+      "recommendation_rank": 4,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 4,
+      "post_filter_rank": 4,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_flow",
+      "symbol": "688521",
+      "recommendation_rank": 1,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 1,
+      "post_filter_rank": 1,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_flow",
+      "symbol": "301308",
+      "recommendation_rank": 3,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 3,
+      "post_filter_rank": 3,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_flow_score_gate_diagnostic",
+      "symbol": "688521",
+      "recommendation_rank": 1,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 1,
+      "post_filter_rank": 1,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_flow_score_gate_diagnostic",
+      "symbol": "301308",
+      "recommendation_rank": 3,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 3,
+      "post_filter_rank": 3,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_timeweighted",
+      "symbol": "688521",
+      "recommendation_rank": 6,
+      "disagreement_flag": false,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 6,
+      "post_filter_rank": 6,
+      "rule_version": "risk-observability-v1"
+    },
+    {
+      "horizon": 5,
+      "arm": "hybrid_timeweighted",
+      "symbol": "301308",
+      "recommendation_rank": 31,
+      "disagreement_flag": true,
+      "risk_as_of": "2026-10-14",
+      "risk_data_status": "UNKNOWN",
+      "risk_reason_codes": "UNKNOWN",
+      "eligible": true,
+      "pre_filter_rank": 31,
+      "post_filter_rank": 31,
+      "rule_version": "risk-observability-v1"
+    }
+  ],
+  "weekly_export_missing_fields": [
+    "disagreement_flag",
+    "risk_as_of",
+    "risk_data_status",
+    "risk_reason_codes",
+    "eligible",
+    "pre_filter_rank",
+    "post_filter_rank",
+    "rule_version"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "source_commit": "738412e300510017f083a4dd5e607f814e84f1c0",
+  "command": "python -m pytest -q tests --junitxml=temp/risk_audit_738412e_pytest.xml",
+  "python_version": "3.13.0",
+  "totals": {
+    "tests": 456,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "risk_audit_test_cases": 10,
+  "risk_audit_case_names": [
+    "test_combine_passes_through_upstream_risk_flags",
+    "test_combine_falls_back_to_recent_flags_when_base_empty",
+    "test_combine_marks_unknown_instead_of_defaulting_safe",
+    "test_coalesce_prefers_primary_then_secondary_then_unknown",
+    "test_disagreement_threshold_is_pool_median",
+    "test_disagreement_flag_rank_gap_and_sign_clash",
+    "test_disagreement_flag_false_without_recent_model",
+    "test_reason_codes_merges_flags_and_unknown_when_empty",
+    "test_risk_data_status_levels",
+    "test_annotate_picks_adds_all_audit_columns_without_changing_selection"
+  ],
+  "console_summary": "456 passed, 97 warnings in 352.16s (0:05:52)",
+  "source_log_sha256": "28f25e220e24bdfebe0460286a2e5bf0d53b5897ddb7e904a5284e43c5e31c0a",
+  "source_xml_sha256": "3ec07a82d2ee77a0ad1036ebf11ced2d7609e94bbd8114a520092b3781a936e8"
+}

@@ -1,0 +1,18 @@
+{
+  "source_commit": "738412e300510017f083a4dd5e607f814e84f1c0",
+  "files": {
+    ".gitattributes": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+    "acceptance.json": "ae20a37ab3fda9fd3d3599f4b7582c232b81a458d022508475259786506a1378",
+    "known_gaps.json": "35c905af248cbec5a8c512f328a1e730d175dc0903c05109e0ec67e876982041",
+    "pytest.xml": "3ec07a82d2ee77a0ad1036ebf11ced2d7609e94bbd8114a520092b3781a936e8",
+    "test_summary.json": "b2dc70457a3070318ea509cbfb570c1f37ffabdc7bd3fb76ea389ec171dec76f"
+  },
+  "source_git_blob_sha256": {
+    "quant_platform/selection/risk_audit.py": "dc38f69046c8ed215d3830981285e14f95aee2e0f3dc227c336470312c99a410",
+    "scripts/compare_original_hybrid.py": "339bacd2b5744bda0235a7fed1d6b3f04358c1f4de0cc2b053519cd55ee50519",
+    "scripts/run_dual_horizon_rrf.py": "fea3608cc047e3fe8f3780267a94372f05f1f893f36374268dbc4ee5224a2a7b",
+    "quant_platform/selection/gate_fusion.py": "911a17e0ca020279c541737b11458d6ffdd063e184f4cbf83777ef11925a037f",
+    "tests/test_risk_audit.py": "ef31e7b1d1724ca32290a3292f578deee370771de3028a0b9536b6025f322f3f"
+  },
+  "source_hash_basis": "Exact Git blob bytes, unaffected by working-tree newline conversion"
+}
