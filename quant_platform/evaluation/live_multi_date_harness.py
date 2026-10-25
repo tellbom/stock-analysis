@@ -45,6 +45,7 @@ import pandas as pd
 from quant_platform.core.logging import get_logger
 from quant_platform.evaluation.metrics import evaluate
 from quant_platform.evaluation.backtest import run_backtest, BacktestResult
+from quant_platform.evaluation.walk_forward import _trading_dates, _training_boundary
 from quant_platform.ingest.ohlcv_collector import OHLCVCollector, CollectorSummary
 
 logger = get_logger(__name__)
@@ -54,6 +55,7 @@ MIN_DATES_REQUIRED = 20  # task.md T4.2: report §7.4 asks for 20+
 
 @dataclass
 class LiveHarnessResult:
+    metadata: dict = field(default_factory=dict)
     n_dates: int = 0
     daily_ic: pd.Series = field(default_factory=pd.Series)   # indexed by date
     mean_daily_ic: float = float("nan")
@@ -113,6 +115,7 @@ def run_live_multi_date_harness(
     model_factory: Callable,
     cost_bps: float = 10.0,
     horizon: int = 5,
+    trading_calendar=None,
 ) -> LiveHarnessResult:
     """
     Train ONE fixed model on panel[date < train_end_date], score every
@@ -144,8 +147,25 @@ def run_live_multi_date_harness(
     panel["date"] = pd.to_datetime(panel["date"])
     train_end_date = pd.to_datetime(train_end_date)
     pred_dates = sorted(pd.to_datetime(d) for d in prediction_dates)
-
-    train = panel[panel["date"] < train_end_date].dropna(subset=feature_cols + [label_col])
+    if horizon < 1 or label_col != f"ret_fwd_{horizon}d":
+        raise ValueError("Fixed-model validation requires the exact raw label matching horizon")
+    if not pred_dates or len(set(pred_dates)) != len(pred_dates) or pred_dates[0] < train_end_date:
+        raise ValueError("Prediction dates must be unique, nonempty and at/after train_end_date")
+    if panel.duplicated(["symbol", "date"]).any():
+        raise ValueError("Fixed-model validation requires unique symbol/date rows")
+    if any(c.startswith(("ret_fwd_", "vol_fwd_", "mdd_fwd_", "excess_vs_", "label_end_")) for c in feature_cols):
+        raise ValueError("Forward labels cannot be model features")
+    dates = _trading_dates(panel, trading_calendar)
+    if not pd.DatetimeIndex(pred_dates).isin(dates).all():
+        raise ValueError("Prediction dates must be exchange sessions")
+    feature_cutoff, observable_through = _training_boundary(dates, train_end_date, horizon, 0)
+    if feature_cutoff is None:
+        raise ValueError("No mature training labels before train_end_date")
+    train = panel[panel["date"] <= feature_cutoff].dropna(subset=feature_cols + [label_col])
+    end_col = f"label_end_{horizon}d"
+    if end_col in train:
+        ends = pd.to_datetime(train[end_col], errors="coerce")
+        train = train[ends.notna() & (ends <= observable_through)]
     if train.empty:
         raise ValueError("run_live_multi_date_harness: empty training set before train_end_date")
 
@@ -193,6 +213,10 @@ def run_live_multi_date_harness(
         )
 
     result = LiveHarnessResult(
+        metadata={"training_observable_through": str(observable_through.date()),
+                  "max_train_feature_date": str(train.date.max().date()),
+                  "calendar_source": "exchange" if trading_calendar is not None else "observed_panel_dates_provisional",
+                  "backtest_scope": "legacy diagnostic long-short; not long-only round-trip execution"},
         n_dates=len(ic_series), daily_ic=ic_series,
         mean_daily_ic=mean_ic, ic_ir=ic_ir,
         backtest=backtest_result, pooled_predictions=pooled,

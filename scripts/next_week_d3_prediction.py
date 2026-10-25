@@ -3,10 +3,10 @@ next_week_d3_prediction.py
 ===========================
 Next-week D+3 stock recommendation pipeline.
 
-Uses the PRODUCTION model (trained once before prediction date, persisted to disk).
-No retraining. No synthetic data. Real market inference only.
+Fits a research challenger using labels observable at the signal close.
+Registers the candidate for review; never automatically promotes a champion.
 
-Prediction: 2026-07-03 (Friday) -> D+3 = 2026-07-08 (Wednesday next week)  [PIT: data <= T, labels observable at T close]
+Prediction and expiry dates use the stored exchange calendar (T+1 close entry).
 
 Output:
   A. Top 50 industry-neutral stock picks
@@ -15,7 +15,7 @@ Output:
   D. Wednesday review plan
 
 Usage:
-  cd E:/stock-analysis && PYTHONPATH=. python scripts/next_week_d3_prediction.py
+  python scripts/next_week_d3_prediction.py --prediction-date 2026-10-23 --horizon 3
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT = Path("E:/stock-analysis")
+ROOT = Path(__file__).resolve().parents[1]
 STORE_ROOT = ROOT / "models/data"
 OUTPUT_DIR = STORE_ROOT / "reports"
 
@@ -232,15 +232,47 @@ def _add_bdays(d: dt.date, n: int) -> dt.date:
     return np.busday_offset(np.datetime64(d, "D"), n, roll="forward").astype("O")
 
 
+def observable_training_panel(panel: pd.DataFrame, calendar: pd.DataFrame,
+                              as_of: dt.date, horizon: int) -> pd.DataFrame:
+    """Recompute only the requested raw target in memory from censored closes.
+
+    Cached labels may have been rebuilt after a historical signal date. Never
+    trust their non-null status as evidence that they were observable at T.
+    The entire forward exchange-session window must have a positive close.
+    """
+    if horizon < 1:
+        raise ValueError("horizon must be positive")
+    frame = panel.copy()
+    frame["date"] = pd.to_datetime(frame.date).dt.date
+    frame = frame[frame.date <= as_of].copy()
+    if frame.empty or frame.duplicated(["symbol", "date"]).any():
+        raise ValueError("Training panel must be nonempty with unique symbol/date rows")
+    dates = sorted(pd.to_datetime(calendar.loc[calendar.is_trading, "date"]).dt.date.unique())
+    dates = [d for d in dates if frame.date.min() <= d <= as_of]
+    if as_of not in dates or not set(frame.date).issubset(dates):
+        raise ValueError("Panel/signal dates must belong to the exchange calendar")
+    closes = frame.pivot(index="date", columns="symbol", values="close").reindex(dates)
+    target = closes.shift(-(horizon + 1)) / closes.shift(-1) - 1
+    complete = closes.notna() & (closes > 0)
+    for offset in range(1, horizon + 2):
+        complete &= closes.shift(-offset).notna() & (closes.shift(-offset) > 0)
+    row = closes.index.get_indexer(frame.date)
+    col = closes.columns.get_indexer(frame.symbol)
+    frame[f"ret_fwd_{horizon}d"] = target.where(complete).to_numpy()[row, col]
+    end_dates = pd.Series(dates, index=dates).shift(-(horizon + 1))
+    frame[f"label_end_{horizon}d"] = frame.date.map(end_dates)
+    return frame
+
+
 def _parse_args():
     import argparse
-    p = argparse.ArgumentParser(description="D+H stock recommendation pipeline")
+    p = argparse.ArgumentParser(description="D+H research challenger; no automatic champion promotion")
     p.add_argument("--horizon", type=int, default=3,
                    help="forward-return horizon in trading days (default 3)")
     p.add_argument("--prediction-date", type=dt.date.fromisoformat,
-                   default=dt.date(2026, 7, 3), help="signal date T (YYYY-MM-DD)")
+                   required=True, help="signal date T (YYYY-MM-DD)")
     p.add_argument("--train-end", type=dt.date.fromisoformat,
-                   default=dt.date(2026, 6, 30), help="training cutoff (exclusive)")
+                   default=None, help="optional stricter feature-date cutoff (exclusive); maturity is always enforced")
     return p.parse_args()
 
 
@@ -250,10 +282,17 @@ def main():
     args = _parse_args()
     HORIZON = args.horizon
     PREDICTION_DATE = args.prediction_date
-    TRAIN_END = args.train_end
-    D1_DATE = _add_bdays(PREDICTION_DATE, 1)
-    D3_DATE = _add_bdays(PREDICTION_DATE, 1 + HORIZON)
-    D5_DATE = _add_bdays(PREDICTION_DATE, 3 + HORIZON)
+    if HORIZON < 1:
+        raise ValueError("horizon must be positive")
+    TRAIN_END = args.train_end or PREDICTION_DATE
+    calendar = pd.read_parquet(STORE_ROOT / "calendar/trading_calendar.parquet")
+    trading_days = sorted(pd.to_datetime(calendar.loc[calendar.is_trading, "date"]).dt.date.unique())
+    if PREDICTION_DATE not in trading_days:
+        raise ValueError("prediction-date must be an exchange trading session")
+    future = [d for d in trading_days if d > PREDICTION_DATE]
+    if len(future) <= HORIZON + 2:
+        raise ValueError("Exchange calendar does not cover the requested target/comparison dates")
+    D1_DATE, D3_DATE, D5_DATE = future[0], future[HORIZON], future[HORIZON + 2]
     LABEL_COL = f"ret_fwd_{HORIZON}d"
     PREDICTION_LABEL = f"D{HORIZON}_Prediction_{PREDICTION_DATE.isoformat()}"
     REGISTERED_MODEL_NAME = f"quant_platform_d{HORIZON}_model"
@@ -273,12 +312,13 @@ def main():
     print(f"  {len(symbols)} symbols with OHLCV data")
     feature_set_id = ensure_registered_feature_set(symbols, max_date=PREDICTION_DATE)
     panel = build_panel(symbols, feature_set_id, max_date=PREDICTION_DATE)
+    panel = observable_training_panel(panel, calendar, PREDICTION_DATE, HORIZON)
 
     # Feature columns
     meta_cols = {"symbol", "date", "close", "volume", "open", "high", "low",
                  "amount", "outstanding_share", "turnover",
                  "industry_code", "industry_name", "concept_tags"}
-    label_prefixes = ("ret_fwd_", "vol_fwd_", "mdd_fwd_", "excess_vs_")
+    label_prefixes = ("ret_fwd_", "vol_fwd_", "mdd_fwd_", "excess_vs_", "label_end_")
     feature_cols = []
     for c in panel.columns:
         if c in meta_cols:
@@ -350,7 +390,7 @@ def main():
     print()
 
     # ---- 3. Train production model ----
-    print("[3/6] Training PRODUCTION model on aligned features...")
+    print("[3/6] Training RESEARCH CHALLENGER on mature labels and aligned features...")
     train = panel[(panel["date"] < TRAIN_END)].dropna(subset=feature_cols + [label_col])
     pred_day = pred_day.dropna(subset=feature_cols)
 
@@ -369,7 +409,7 @@ def main():
     import mlflow
     import mlflow.sklearn
     from quant_platform.training.tracking import get_or_create_experiment
-    from quant_platform.training.registry import register_model, promote_champion
+    from quant_platform.training.registry import register_model
 
     X_train = train[feature_cols].values
     y_train = train[label_col].values
@@ -402,6 +442,9 @@ def main():
             "n_train_rows": len(train),
             "n_features": len(feature_cols),
             "model_type": "Ridge(alpha=1.0)",
+            "model_role": "research_challenger",
+            "label_date_basis": "exchange_calendar_complete_forward_window",
+            "max_observed_label_end": str(train[f"label_end_{HORIZON}d"].max()),
         })
         mlflow.log_metrics({
             "train_pearson_corr": float(train_corr),
@@ -423,13 +466,15 @@ def main():
             "train_end": str(TRAIN_END),
             "feature_cols": feature_cols,
             "feature_set_id": feature_set_id,
+            "model_role": "research_challenger",
+            "promotion_eligible": False,
+            "label_date_basis": "exchange_calendar_complete_forward_window",
+            "max_observed_label_end": str(train[f"label_end_{HORIZON}d"].max()),
         },
         registered_name=REGISTERED_MODEL_NAME,
     )
-    promote_champion(STORE_ROOT, model_version, registered_name=REGISTERED_MODEL_NAME)
-
     print(f"  Model registered: {REGISTERED_MODEL_NAME} v{model_version} "
-          f"(run={run_id[:8]}), promoted to champion")
+          f"(run={run_id[:8]}), challenger only; independent OOS review required for promotion")
     print(f"  Training Pearson corr: {train_corr:+.4f}")
     print(f"  Prediction score range: [{preds.min():+.4f}, {preds.max():+.4f}]")
     # Create scored panel
@@ -508,7 +553,7 @@ def main():
     lines.append(f"# Next-Week D+{HORIZON} Stock Recommendation Report")
     lines.append(f"")
     lines.append(f"**Generated:** {dt.datetime.now().isoformat()}")
-    lines.append(f"**Status:** PRODUCTION MODEL INFERENCE — Real-market prediction, NOT backtest")
+    lines.append(f"**Status:** RESEARCH CHALLENGER — no champion promotion; in-sample correlation is diagnostic only")
     lines.append(f"")
     lines.append("---")
     lines.append("")
@@ -603,7 +648,7 @@ def main():
     lines.append(f"| Exposure flag | {exposure_flag} | diversified/balanced | {'PASS' if exposure_flag in ('diversified', 'balanced') else 'WARN'} |")
     lines.append(f"| Industry-neutral constraint | Yes (EqualTopK=3) | Required | PASS |")
     lines.append(f"| Universe constraint | CSI 300 only | Required | PASS |")
-    lines.append(f"| Model type | Ridge (linear) | Production | PASS |")
+    lines.append(f"| Model type | Ridge (linear) | Research challenger | OOS REVIEW REQUIRED |")
     lines.append("")
 
     trigger_warning = (
@@ -646,7 +691,7 @@ def main():
     lines.append("")
     lines.append(f"Run on/after {D3_DATE} after market close:")
     lines.append("```bash")
-    lines.append(f"cd E:/stock-analysis && PYTHONPATH=. python scripts/d3_wednesday_review.py "
+    lines.append(f"python scripts/d3_wednesday_review.py "
                  f"--horizon {HORIZON} --prediction-date {PREDICTION_DATE}")
     lines.append("```")
     lines.append("")

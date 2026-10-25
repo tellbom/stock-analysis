@@ -51,6 +51,7 @@ Usage
 from __future__ import annotations
 
 import datetime as dt
+import re
 from dataclasses import dataclass, field
 from typing import Callable
 
@@ -88,6 +89,8 @@ class WalkForwardWindow:
 
     # Independent period count: n_test_dates / horizon
     n_independent_periods: int = 0
+    max_train_label_end: str | None = None
+    training_observable_through: str | None = None
 
     def summary_dict(self) -> dict:
         return {
@@ -102,6 +105,8 @@ class WalkForwardWindow:
             "icir":         round(self.icir, 4),
             "sharpe":       round(self.sharpe, 4),
             "n_independent_periods": self.n_independent_periods,
+            "max_train_label_end": self.max_train_label_end,
+            "training_observable_through": self.training_observable_through,
         }
 
 
@@ -114,6 +119,7 @@ def _ic_at_lag(
     pred_col: str,
     close_col: str,
     lags: list[int],
+    trading_dates=None,
 ) -> dict[int, float]:
     """
     Compute cross-sectional Rank IC of ``pred_col`` vs the actual
@@ -121,7 +127,8 @@ def _ic_at_lag(
 
     Uses close prices from the panel to compute forward returns on the
     fly - so it only requires a 'close' column, not pre-built label cols.
-    Rows with missing close or predictions are skipped.
+    Uses the T+1 close convention: close(T+1+lag) / close(T+1)-1.
+    Missing exchange sessions remain NaN; they must not shorten a horizon.
     """
     result: dict[int, float] = {}
     if close_col not in panel.columns or pred_col not in panel.columns:
@@ -129,13 +136,21 @@ def _ic_at_lag(
 
     df = panel.sort_values(["symbol", "date"]).copy()
     df["date"] = pd.to_datetime(df["date"])
+    dates = _trading_dates(df, trading_dates)
+    if df.duplicated(["symbol", "date"]).any():
+        raise ValueError("IC decay requires unique symbol/date rows")
+    closes = df.pivot(index="date", columns="symbol", values=close_col).reindex(dates)
+    rows = closes.index.get_indexer(df.date)
+    cols = closes.columns.get_indexer(df.symbol)
 
     for lag in lags:
-        # Forward return at lag days (using close price shift within symbol)
-        df[f"_fwd_{lag}"] = (
-            df.groupby("symbol")[close_col]
-              .transform(lambda x: x.shift(-lag) / x.shift(-1) - 1)
-        )
+        if lag < 1:
+            raise ValueError("IC decay lags must be positive")
+        forward = closes.shift(-(lag + 1)) / closes.shift(-1) - 1
+        complete = closes.notna() & (closes > 0)
+        for offset in range(1, lag + 2):
+            complete &= closes.shift(-offset).notna() & (closes.shift(-offset) > 0)
+        df[f"_fwd_{lag}"] = forward.where(complete).to_numpy()[rows, cols]
         sub = df[[pred_col, f"_fwd_{lag}", "date"]].dropna()
         if sub.empty:
             result[lag] = float("nan")
@@ -153,6 +168,30 @@ def _ic_at_lag(
     return result
 
 
+def _trading_dates(panel: pd.DataFrame, calendar=None) -> pd.DatetimeIndex:
+    """Use an exchange calendar when supplied, otherwise observed panel dates."""
+    if isinstance(calendar, pd.DataFrame):
+        values = calendar.loc[calendar.is_trading, "date"] if "is_trading" in calendar else calendar["date"]
+    else:
+        values = panel["date"] if calendar is None else calendar
+    dates = pd.DatetimeIndex(pd.to_datetime(values)).normalize().unique().sort_values()
+    if dates.empty or dates.hasnans:
+        raise ValueError("Trading dates must be nonempty and non-null")
+    if not pd.DatetimeIndex(pd.to_datetime(panel.date)).isin(dates).all():
+        raise ValueError("Panel contains dates outside the trading calendar")
+    return dates
+
+
+def _training_boundary(trading_dates, test_start, horizon: int, embargo: int):
+    """Fit before the first test session; allow only already-mature labels."""
+    first_test = trading_dates.searchsorted(pd.Timestamp(test_start))
+    observable_pos = first_test - embargo - 1
+    last_feature_pos = observable_pos - horizon - 1
+    if last_feature_pos < 0:
+        return None, None
+    return trading_dates[last_feature_pos], trading_dates[observable_pos]
+
+
 # ---------------------------------------------------------------------------
 # Aggregate result
 # ---------------------------------------------------------------------------
@@ -161,6 +200,7 @@ def _ic_at_lag(
 class WalkForwardResult:
     """Aggregated results from all walk-forward windows."""
     windows: list[WalkForwardWindow] = field(default_factory=list)
+    metadata: dict = field(default_factory=dict)
 
     # Aggregate over ALL windows' OOS predictions (the headline metric)
     agg_rank_ic_mean: float = float("nan")
@@ -293,6 +333,10 @@ class WalkForwardEvaluator:
         self.embargo_extra    = embargo_extra
         self.min_train_months = min_train_months
         self.cost_bps         = cost_bps
+        if horizon < 1 or embargo_extra < 0:
+            raise ValueError("horizon must be positive and embargo_extra nonnegative")
+        if self.step_months != self.window_months:
+            raise ValueError("Only non-overlapping windows with step_months == window_months are supported")
 
     # ------------------------------------------------------------------
     # Public API
@@ -305,6 +349,7 @@ class WalkForwardEvaluator:
         label_col: str,
         model_factory: Callable = None,
         decay_lags: list[int] | None = None,
+        trading_calendar=None,
     ) -> WalkForwardResult:
         """
         Run the walk-forward evaluation.
@@ -330,6 +375,12 @@ class WalkForwardEvaluator:
         -------
         WalkForwardResult
         """
+        match = re.fullmatch(r"ret_fwd_(\d+)d", label_col)
+        if match and int(match.group(1)) != self.horizon:
+            raise ValueError("Label horizon does not match evaluator horizon")
+        forward_features = [c for c in feature_cols if c.startswith(("ret_fwd_", "vol_fwd_", "mdd_fwd_", "excess_vs_", "label_end_"))]
+        if label_col in feature_cols or forward_features:
+            raise ValueError("Forward labels cannot be used as model features")
         if model_factory is None:
             from quant_platform.training.lgbm_model import build_lgbm_pipeline
             model_factory = build_lgbm_pipeline
@@ -339,6 +390,9 @@ class WalkForwardEvaluator:
         panel = panel.copy()
         panel["date"] = pd.to_datetime(panel["date"])
         panel = panel.sort_values("date").reset_index(drop=True)
+        if panel.duplicated(["symbol", "date"]).any():
+            raise ValueError("Walk-forward requires unique symbol/date rows")
+        trading_dates = _trading_dates(panel, trading_calendar)
 
         all_dates = sorted(panel["date"].unique())
         if len(all_dates) < 2:
@@ -346,12 +400,20 @@ class WalkForwardEvaluator:
             return WalkForwardResult()
 
         # Build window boundaries (calendar-based)
-        windows = self._build_windows(all_dates)
+        windows = self._build_windows(all_dates, trading_dates)
         if not windows:
             logger.warning("walk_forward: could not build any valid windows")
             return WalkForwardResult()
 
-        result = WalkForwardResult()
+        result = WalkForwardResult(metadata={
+            "label_col": label_col, "horizon": self.horizon,
+            "label_convention": "close(T+1+h)/close(T+1)-1",
+            "calendar_source": "explicit_trading_calendar" if trading_calendar is not None else "observed_panel_dates",
+            "embargo_trading_sessions": self.embargo_extra,
+            "cost_bps": self.cost_bps,
+            "backtest_scope": "diagnostic_long_short_deciles_50_50",
+            "cost_scope": "legacy_one_way_new_position_turnover_only; not_round_trip_long_only_execution",
+        })
         all_oos_rows: list[pd.DataFrame] = []
         window_rics: list[float] = []
 
@@ -360,6 +422,7 @@ class WalkForwardEvaluator:
                 panel, feature_cols, label_col,
                 test_start, test_end, win_id,
                 model_factory,
+                trading_dates,
             )
             if win_result is None:
                 continue
@@ -405,8 +468,14 @@ class WalkForwardEvaluator:
 
                 # IC decay curve (requires 'close' column)
                 if "close" in oos_valid.columns:
+                    # Retain all raw price rows, including unlabeled tails and
+                    # missing-symbol sessions, when measuring forward decay.
+                    decay_panel = panel[["date", "symbol", "close"]].merge(
+                        oos_valid[["date", "symbol", "pred"]],
+                        on=["date", "symbol"], how="left", validate="one_to_one",
+                    )
                     result.ic_decay = _ic_at_lag(
-                        oos_valid, "pred", "close", decay_lags
+                        decay_panel, "pred", "close", decay_lags, trading_dates
                     )
 
         # Aggregate independent period count
@@ -443,6 +512,7 @@ class WalkForwardEvaluator:
     def _build_windows(
         self,
         all_dates: list,
+        trading_dates=None,
     ) -> list[tuple]:
         """
         Build (test_start, test_end) pairs working backwards from the
@@ -452,8 +522,10 @@ class WalkForwardEvaluator:
         n-1 is latest.  We require at least ``min_train_months`` of
         history before the first test window.
         """
+        all_dates = pd.DatetimeIndex(all_dates)
         max_date = all_dates[-1]
         min_date = all_dates[0]
+        trading_dates = pd.DatetimeIndex(trading_dates if trading_dates is not None else all_dates)
 
         windows = []
         # Build from the end backwards, then reverse
@@ -461,10 +533,9 @@ class WalkForwardEvaluator:
         for _ in range(self.n_windows):
             test_start = test_end - pd.DateOffset(months=self.window_months) + pd.Timedelta(days=1)
             # Check we have enough training history
-            purge_days   = self.horizon + self.embargo_extra
-            train_end_dt = test_start - pd.Timedelta(days=purge_days + 1)
+            train_end_dt, _ = _training_boundary(trading_dates, test_start, self.horizon, self.embargo_extra)
             min_train_end = min_date + pd.DateOffset(months=self.min_train_months)
-            if train_end_dt < min_train_end:
+            if train_end_dt is None or train_end_dt < min_train_end:
                 break  # not enough history for this window
             windows.append((test_start, test_end))
             test_end = test_start - pd.Timedelta(days=1)
@@ -481,13 +552,17 @@ class WalkForwardEvaluator:
         test_end,
         win_id: int,
         model_factory: Callable,
+        trading_dates=None,
     ) -> WalkForwardWindow | None:
         """Train on pre-window data, predict on window, return metrics."""
-        # Purge gap: horizon + embargo_extra trading days
-        purge_days = self.horizon + self.embargo_extra
-        train_end_dt = test_start - pd.Timedelta(days=purge_days + 1)
+        trading_dates = _trading_dates(panel, trading_dates)
+        train_end_dt, observable_through = _training_boundary(
+            trading_dates, test_start, self.horizon, self.embargo_extra,
+        )
+        if train_end_dt is None:
+            return None
 
-        train_mask = panel["date"] < train_end_dt
+        train_mask = panel["date"] <= train_end_dt
         test_mask  = (panel["date"] >= test_start) & (panel["date"] <= test_end)
 
         train = panel[train_mask].copy()
@@ -498,6 +573,11 @@ class WalkForwardEvaluator:
             return None
 
         train_valid = train[train[label_col].notna()]
+        label_end_col = f"label_end_{self.horizon}d"
+        if label_end_col in train_valid:
+            # Defense in depth for panels with explicit label observation dates.
+            observed = pd.to_datetime(train_valid[label_end_col], errors="coerce")
+            train_valid = train_valid[observed.notna() & (observed <= observable_through)]
         test_valid  = test[test[label_col].notna()]
 
         if len(train_valid) < 50 or len(test_valid) < 10:
@@ -546,8 +626,8 @@ class WalkForwardEvaluator:
 
         win = WalkForwardWindow(
             window_id=win_id,
-            train_start=str(train["date"].min().date()),
-            train_end=str(train["date"].max().date()),
+            train_start=str(train_valid["date"].min().date()),
+            train_end=str(train_valid["date"].max().date()),
             test_start=str(test_start.date() if hasattr(test_start, "date") else test_start),
             test_end=str(test_end.date() if hasattr(test_end, "date") else test_end),
             n_train=len(train_valid),
@@ -557,6 +637,8 @@ class WalkForwardEvaluator:
             icir=oos_eval.icir,
             sharpe=bt.sharpe,
             n_independent_periods=n_indep,
+            max_train_label_end=str(trading_dates[trading_dates.get_loc(train_valid["date"].max()) + self.horizon + 1].date()),
+            training_observable_through=str(observable_through.date()),
         )
         # Attach filtered OOS rows for aggregation (private attribute).
         oos_cols = ["date", "symbol", label_col]

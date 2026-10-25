@@ -34,6 +34,8 @@ CLI-style use with a saved panel:
 from __future__ import annotations
 
 import argparse
+import json
+import re
 from pathlib import Path
 from typing import Callable
 
@@ -56,6 +58,8 @@ def run_primary_verdict(
     window_months: int = 12,
     model_factory: Callable | None = None,
     store_root: Path | str | None = None,
+    trading_calendar: pd.DataFrame | None = None,
+    cost_bps: float = 10.0,
 ) -> WalkForwardResult:
     """
     Run the walk-forward evaluator as the primary offline verdict.
@@ -65,6 +69,12 @@ def run_primary_verdict(
     still gets the result, but is told explicitly not to trust it as a
     T4.1-grade verdict.
     """
+    if not re.fullmatch(r"ret_fwd_\d+d", label_col) or label_col != f"ret_fwd_{horizon}d":
+        raise ValueError("Primary verdict requires the exact raw ret_fwd_{horizon}d label")
+    if trading_calendar is None and store_root is not None:
+        calendar_path = Path(store_root) / "calendar/trading_calendar.parquet"
+        if calendar_path.exists():
+            trading_calendar = pd.read_parquet(calendar_path)
     if n_windows < MIN_WINDOWS_REQUIRED:
         logger.warning(
             "run_primary_verdict: n_windows=%d < %d -- task.md T4.1 requires "
@@ -74,12 +84,23 @@ def run_primary_verdict(
         n_windows = MIN_WINDOWS_REQUIRED
 
     evaluator = WalkForwardEvaluator(
-        n_windows=n_windows, window_months=window_months, horizon=horizon,
+        n_windows=n_windows, window_months=window_months, horizon=horizon, cost_bps=cost_bps,
     )
     result = evaluator.run(
         panel=panel, feature_cols=feature_cols, label_col=label_col,
         model_factory=model_factory,
+        trading_calendar=trading_calendar,
     )
+    result.metadata.update({
+        "required_windows": MIN_WINDOWS_REQUIRED,
+        "requested_windows": n_windows,
+        "completed_windows": result.n_windows(),
+        "verdict_status": "evaluation_complete_not_promotion_approval"
+        if result.n_windows() == n_windows and result.n_windows() >= MIN_WINDOWS_REQUIRED and trading_calendar is not None
+        else "preliminary",
+    })
+    if trading_calendar is None:
+        logger.warning("No exchange calendar supplied: observed panel dates are provisional; verdict remains PRELIMINARY")
 
     if result.n_windows() < MIN_WINDOWS_REQUIRED:
         logger.warning(
@@ -100,6 +121,7 @@ def run_primary_verdict(
         out_dir.mkdir(parents=True, exist_ok=True)
         out_path = out_dir / f"walk_forward_verdict_{label_col}_h{horizon}.csv"
         result.to_dataframe().to_csv(out_path, index=False)
+        out_path.with_suffix(".json").write_text(json.dumps(result.metadata, indent=2), encoding="utf-8")
         logger.info("Per-window verdict saved -> %s", out_path)
 
     return result
@@ -114,6 +136,10 @@ def _cli() -> None:
     parser.add_argument("--feature-cols-file", required=True,
                          help="Text file, one feature column name per line.")
     parser.add_argument("--store-root", default=None)
+    parser.add_argument("--calendar", help="Exchange-calendar parquet (otherwise try store-root/calendar/trading_calendar.parquet)")
+    parser.add_argument("--window-months", type=int, default=12)
+    parser.add_argument("--cost-bps", type=float, default=10.0,
+                        help="Legacy diagnostic long-short one-way turnover cost, not long-only round-trip cost")
     args = parser.parse_args()
 
     panel = pd.read_parquet(args.panel)
@@ -123,6 +149,8 @@ def _cli() -> None:
         panel, feature_cols, args.label_col,
         horizon=args.horizon, n_windows=args.n_windows,
         store_root=args.store_root,
+        window_months=args.window_months, cost_bps=args.cost_bps,
+        trading_calendar=pd.read_parquet(args.calendar) if args.calendar else None,
     )
 
 

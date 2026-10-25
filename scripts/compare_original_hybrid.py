@@ -200,6 +200,7 @@ def run(
     horizons: tuple[int, ...] = (3, 5),
     use_time_weight: bool = False,
     recent_window: int = 120,
+    include_robust_baseline: bool = False,
 ) -> dict:
     """每周对照实验入口。
 
@@ -299,6 +300,7 @@ def run(
         "flow_latest_date": flow.date.max().isoformat(), "horizons": {},
     }
     all_picks = []
+    expanded_picks = []
     attributes.to_csv(out / "prediction_attributes.csv", index=False)
     for h in horizons:
         label = f"ret_fwd_{h}d"
@@ -389,6 +391,38 @@ def run(
             }
         base.to_csv(out / f"D{h}_original_scores.csv", index=False)
         joblib.dump(model, out / f"D{h}_original_ridge.joblib")
+        robust_audit = {"enabled": False}
+        if include_robust_baseline:
+            from quant_platform.selection.robust_ridge import fit_predict_robust_ridge
+            robust_scores, robust_meta, robust_model = fit_predict_robust_ridge(
+                panel, as_of, label,
+                trading_days=calendar.loc[calendar.is_trading, "date"].tolist(),
+            )
+            if set(robust_scores.symbol) != set(base.symbol):
+                raise RuntimeError("Robust baseline must use the ordinary scoring universe")
+            robust_picks, _ = select(robust_scores, attributes, "base_score", sector_cap_tech)
+            robust_picks["horizon"] = h
+            robust_picks["strategy"] = "robust_ridge_v1"
+            robust_picks["strategy_name"] = "稳健Ridge基线（252日/裁剪/正则化）"
+            robust_picks["is_diagnostic"] = False
+            robust_picks["is_experimental"] = True
+            robust_picks["in_equal_count_comparison"] = False
+            robust_picks = annotate_picks(robust_picks, as_of=as_of, rank_gap_threshold=None)
+            robust_picks.to_csv(out / f"D{h}_robust_ridge_v1_picks.csv", index=False, encoding="utf-8-sig")
+            robust_scores.to_csv(out / f"D{h}_robust_ridge_v1_scores.csv", index=False)
+            joblib.dump(robust_model, out / f"D{h}_robust_ridge_v1.joblib")
+            # A new equal-count table keeps all frozen outputs byte-equivalent.
+            expanded_n = min(equal_n, len(robust_picks))
+            if expanded_n == 0:
+                raise RuntimeError("Empty robust-baseline comparison")
+            for picks in [p for p in all_picks if p.horizon.iloc[0] == h and p.strategy.iloc[0] in main_arms] + [robust_picks]:
+                expanded = picks.head(expanded_n).copy()
+                expanded["in_expanded_comparison"] = True
+                expanded_picks.append(expanded)
+            all_picks.append(robust_picks)
+            robust_audit = {"enabled": True, "meta": robust_meta, "expanded_equal_count_n": expanded_n,
+                            "expanded_comparison_arms": list(main_arms) + ["robust_ridge_v1"],
+                            "promotion_eligible": False}
         # ---- 实验臂：hybrid_timeweighted（P0 时间权重 + P1 短窗口）----
         # 在冻结臂全部处理完成后独立计算：不参与 equal_n、不进 selection_audit、
         # 不影响冻结臂的任何输出。默认关闭（use_time_weight=False 且 recent_window=120
@@ -475,10 +509,14 @@ def run(
             "equal_count_n": equal_n, "full_selection_counts": {key: len(p) for key, (p, _, _) in arms.items()},
             "selection_audit": selection_audit,
             "experiment": experiment_audit,
+            "robust_baseline": robust_audit,
         }
         print(f"D{h}: reference={reference_audit}; shared recent={len(recent_train)} rows/{recent_train.date.nunique()} dates; counts={summary['horizons'][str(h)]['full_selection_counts']}", flush=True)
     combined = pd.concat(all_picks, ignore_index=True)
     combined.to_csv(out / "all_picks.csv", index=False, encoding="utf-8-sig")
+    if expanded_picks:
+        pd.concat(expanded_picks, ignore_index=True).to_csv(
+            out / "expanded_comparison_picks.csv", index=False, encoding="utf-8-sig")
     (out / "requested_symbols.json").write_text(json.dumps(sorted(combined.symbol.unique()), indent=2), encoding="utf-8")
     (out / "training_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8")
     return summary
@@ -518,10 +556,13 @@ def main() -> None:
         help="P1 实验：hybrid_timeweighted 臂的 recent 模型 label 日期窗口。120=冻结基线口径； "
              "实验建议 60（约 3 个月，D+3 短线 regime 响应）。默认 120。",
     )
+    parser.add_argument("--include-robust-baseline", action="store_true",
+                        help="Add robust_ridge_v1 and a separate equal-count expanded comparison; preserve frozen arms")
     args = parser.parse_args()
     run(args.as_of, args.out_dir, args.original_reference, args.n_jobs,
         sector_cap_tech=args.sector_cap_tech, overwrite=args.overwrite,
-        use_time_weight=args.use_time_weight, recent_window=args.recent_window)
+        use_time_weight=args.use_time_weight, recent_window=args.recent_window,
+        include_robust_baseline=args.include_robust_baseline)
 
 
 if __name__ == "__main__":
